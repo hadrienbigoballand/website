@@ -198,16 +198,22 @@ a:hover {
   position: relative;
   width: 100%;
   height: 0;
-  padding-bottom: 56.25%; /* 16:9 aspect ratio */
+  padding-bottom: 133.33%; /* 3:4 aspect ratio */
   overflow: hidden;
 }
 
-.mesh-iframe {
+.iframe-wrapper {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
+}
+
+.mesh-iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
 }
 
 .nav-button {
@@ -229,4 +235,19 @@ a:hover {
 
 .nav-button.right {
   right: 10px;
+}
+
+/* Media query for larger screens */
+@media screen and (min-width: 768px) {
+  .mesh-container {
+      padding-bottom: 75%; /* 4:3 aspect ratio for larger screens */
+  }
+}
+
+/* Ensure minimum height on very small screens */
+@media screen and (max-height: 500px) {
+  .mesh-container {
+      height: 100vh;
+      padding-bottom: 0;
+  }
 }

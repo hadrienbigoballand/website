@@ -96,3 +96,23 @@ function navigateScene(direction) {
 
 // Call this function on initial load to set up the correct button visibility
 navigateScene(0);
+
+function resizeIframe() {
+  const container = document.querySelector('.mesh-container');
+  const iframe = document.getElementById('meshIframe');
+  const aspectRatio = window.innerWidth < 768 ? 4/3 : 3/4;
+  
+  if (window.innerHeight < 500) {
+      container.style.height = '100vh';
+      container.style.paddingBottom = '0';
+  } else {
+      const containerWidth = container.offsetWidth;
+      const containerHeight = containerWidth * aspectRatio;
+      container.style.height = '0';
+      container.style.paddingBottom = `${aspectRatio * 100}%`;
+  }
+}
+
+// Call on load and resize
+window.addEventListener('load', resizeIframe);
+window.addEventListener('resize', resizeIframe);
