@@ -1,20 +1,19 @@
-// Add any interactivity with Three.js if needed
-const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-const renderer = new THREE.WebGLRenderer();
-renderer.setSize(window.innerWidth, window.innerHeight);
+// app.js
 
-const geometry = new THREE.BoxGeometry();
-const material = new THREE.MeshBasicMaterial({ color: 0x3498db });
-const cube = new THREE.Mesh(geometry, material);
+function checkPhotoVisibility() {
+  const photo = document.querySelector('.photo');
+  const windowWidth = window.innerWidth;
 
-scene.add(cube);
-camera.position.z = 5;
-
-function animate() {
-  requestAnimationFrame(animate);
-  cube.rotation.x += 0.01;
-  cube.rotation.y += 0.01;
-  renderer.render(scene, camera);
+  // Show the photo if the width is greater than 480px, else hide it
+  if (windowWidth > 480) {
+      photo.classList.remove('hide-photo');
+  } else {
+      photo.classList.add('hide-photo');
+  }
 }
-animate();
+
+// Check on load
+checkPhotoVisibility();
+
+// Check on resize
+window.addEventListener('resize', checkPhotoVisibility);

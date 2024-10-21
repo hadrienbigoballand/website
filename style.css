@@ -6,84 +6,110 @@
 }
 
 body {
-  font-family: 'Work Sans', sans-serif;
-  background-color: #f8f8f8;
-  color: #333;
+  font-family: 'VT323', monospace; /* Use VT323 font for terminal look */
+  background-color: black; /* Terminal background */
+  color: white; /* Terminal green text */
+  line-height: 1.5; /* Improved readability */
 }
 
 header {
   text-align: center;
   padding: 2rem;
-  background-color: black;
-  color: white;
+}
+
+h1, h2, h3, h4 {
+  margin: 1rem 0; /* Spacing between headings */
 }
 
 h1 {
-  font-family: 'Arapey', serif;
-  font-size: 3rem;
-  font-weight: 400;
+  font-weight: bold;
 }
 
 h2 {
-  font-family: 'Work Sans', sans-serif;
-  font-weight: 300;
-  font-size: 1.25rem;
-  margin-top: 0.5rem;
+  font-weight: lighter;
 }
 
 section.about {
-  display: flex;
-  flex-direction: row;
-  margin: 2rem;
-  background-color: white;
-  border-radius: 10px;
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+  display: flex; /* Use flexbox for layout */
+  align-items: center; /* Center align items vertically */
+  margin: 2rem; /* Margin between sections */
+  padding: 2rem; /* Added padding inside the section */
+  background-color: black; /* Keep background black for terminal look */
+  border: 2px solid white; /* Green border for terminal effect */
+  border-radius: 10px; /* Slightly rounded corners */
 }
 
 .photo {
-  flex: 1;
-  padding: 1rem;
+  flex: 0 0 auto; /* Allow photo to keep its natural size */
+  padding: 1rem; /* Padding around the photo */
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
 .photo img {
-  max-width: 90%;
-  border-radius: 50%;
-  border: 5px solid black;
+  max-width: 100%; /* Adapt to width of the container */
+  height: auto; /* Maintain aspect ratio */
+  max-height: 150px; /* Limit height to keep image proportional */
+  border-radius: 50%; /* Circular image */
+  border: 2px solid white; /* Green border for the photo */
 }
 
 .bio {
-  flex: 2;
-  padding: 2rem;
-}
-
-.bio h3, .bio h4 {
-  font-family: 'Arapey', serif;
-  margin-bottom: 1rem;
-  font-weight: 400;
+  flex: 1; /* Take up remaining space */
+  padding: 2rem; /* Adjusted padding for better spacing */
 }
 
 ul {
   list-style: none;
   margin-top: 1rem;
-  font-weight: 300;
+  font-weight: 300; /* Slightly lighter weight for the list */
 }
 
 footer {
   text-align: center;
   padding: 1rem;
-  background-color: black;
-  color: white;
+  background-color: black; /* Keep footer background black */
+  color: white; /* Green text for footer */
   margin-top: 2rem;
+  border-top: 2px solid white; /* Green top border */
 }
 
 a {
-  color: white;
-  text-decoration: none;
+  color: white; /* Green link color */
+  text-decoration: none; /* Remove underline */
 }
 
 a:hover {
-  text-decoration: underline;
+  text-decoration: underline; /* Underline on hover */
+}
+
+/* Hide the photo on small screens */
+.hide-photo {
+  display: none; /* Class to hide photo */
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  section.about {
+    flex-direction: row; /* Keep elements in a row on small screens */
+    align-items: center; /* Center items vertically */
+    overflow: hidden; /* Prevent overflow */
+  }
+
+  .bio {
+    flex: 1; /* Allow bio to take the remaining space */
+    padding: 1rem; /* Less padding on small screens */
+  }
+}
+
+@media (max-width: 480px) {
+  section.about {
+    flex-direction: column; /* Stack on extra small screens */
+    align-items: flex-start; /* Align to the start */
+  }
+
+  .bio {
+    padding: 1rem; /* Adjusted padding for better spacing */
+  }
 }
