@@ -46,7 +46,7 @@ h2 {
 
 section.about {
   display: flex; /* Use flexbox for layout */
-  align-items: center; /* Center align items vertically */
+  align-items: stretch; /* Center align items vertically */
   margin: 2rem; /* Margin between sections */
   padding: 1rem; /* Added padding inside the section */
   background-color: black; /* Keep background black for terminal look */
