@@ -251,3 +251,24 @@ a:hover {
       padding-bottom: 0;
   }
 }
+
+.scroll-to-top-btn {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: rgba(0, 0, 0, 0.5);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  font-size: 24px;
+  cursor: pointer;
+  display: none;
+  z-index: 1000;
+  transition: opacity 0.3s, visibility 0.3s;
+}
+
+.scroll-to-top-btn:hover {
+  background-color: rgba(0, 0, 0, 0.7);
+}
