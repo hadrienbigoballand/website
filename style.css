@@ -79,6 +79,24 @@ footer {
   border-top: 2px solid white; /* Green top border */
 }
 
+.logo-container {
+  display: flex; /* Use flexbox to align logos */
+  justify-content: center; /* Center the logos */
+  margin-top: 1rem; /* Add some space above the logos */
+}
+
+.footer-logo {
+  height: 30px; /* Set a fixed height for all logos */
+  width: auto; /* Maintain aspect ratio */
+  filter: brightness(0) invert(1); /* Makes the logos white */
+  margin: 0 10px; /* Add space between logos */
+}
+
+/* Optional: Pixelization effect */
+.footer-logo {
+  image-rendering: pixelated; /* Ensures pixelation effect in some browsers */
+}
+
 a {
   color: white; /* Green link color */
   text-decoration: none; /* Remove underline */
