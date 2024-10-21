@@ -79,22 +79,20 @@ function toggleMenu() {
 
 // Function to navigate between scenes
 function navigateScene(direction) {
-    currentSceneIndex += direction; // Update the index based on direction
+  currentSceneIndex += direction;
 
-    // Ensure the index stays within bounds
-    if (currentSceneIndex < 0) {
-        currentSceneIndex = 0; // Prevent going to previous non-existing scene
-    } else if (currentSceneIndex >= scenes.length) {
-        currentSceneIndex = scenes.length - 1; // Prevent going to next non-existing scene
-    }
+  if (currentSceneIndex < 0) {
+      currentSceneIndex = 0;
+  } else if (currentSceneIndex >= scenes.length) {
+      currentSceneIndex = scenes.length - 1;
+  }
 
-    // Update the iframe source to the current scene
-    document.getElementById('meshIframe').src = scenes[currentSceneIndex];
+  document.getElementById('meshIframe').src = scenes[currentSceneIndex];
 
-    // Show or hide navigation buttons based on the current scene
-    document.getElementById('prevButton').style.display = currentSceneIndex > 0 ? 'flex' : 'none';
-    document.getElementById('nextButton').style.display = currentSceneIndex < scenes.length - 1 ? 'flex' : 'none';
+  // Update button visibility
+  document.getElementById('prevButton').style.display = currentSceneIndex > 0 ? 'block' : 'none';
+  document.getElementById('nextButton').style.display = currentSceneIndex < scenes.length - 1 ? 'block' : 'none';
 }
 
-// Check on initial load
-navigateScene(0); // Load the initial scene and set button visibility
+// Call this function on initial load to set up the correct button visibility
+navigateScene(0);

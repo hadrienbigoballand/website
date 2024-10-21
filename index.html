@@ -50,10 +50,11 @@
   <section id="meshes" class="meshes" style="display: none;">
     <h3 class="centered-title">Hand mesh</h3>
     <div class="mesh-container">
-        <button id="prevButton" class="nav-button" onclick="navigateScene(-1)" style="display: none;">←</button>
-        <iframe id="meshIframe" src="meshes/hand_scene.html" class="mesh-iframe" frameborder="0"></iframe>
-        <button id="nextButton" class="nav-button" onclick="navigateScene(1)">→</button>
-    </div>
+      <button id="prevButton" class="nav-button left" onclick="navigateScene(-1)">←</button>
+      <iframe id="meshIframe" src="meshes/hand_scene.html" class="mesh-iframe" frameborder="0"></iframe>
+      <button id="nextButton" class="nav-button right" onclick="navigateScene(1)">→</button>
+  </div>
+  
   </section>
 
   <footer>
