@@ -49,17 +49,22 @@ const scenes = [
     "third_scene.html" // Third scene
 ];
 
-// Function to navigate to a section and close the side menu
 function navigateTo(sectionId) {
-    // Hide all sections
-    document.querySelectorAll('section').forEach(section => {
-        section.style.display = 'none';
-    });
-    // Show the selected section
-    document.getElementById(sectionId).style.display = 'block';
-
-    // Close the side menu if it's open
-    toggleMenu();
+  // Hide all sections
+  document.querySelectorAll('section').forEach(section => {
+      section.style.display = 'none';
+  });
+  // Show the selected section
+  document.getElementById(sectionId).style.display = 'block';
+  // Close the side menu if it's open
+  toggleMenu();
+  // Scroll to the top of the page with a slight delay
+  setTimeout(() => {
+      window.scrollTo({
+          top: 0,
+          behavior: 'instant'
+      });
+  }, 1);
 }
 
 // Function to toggle the side menu
