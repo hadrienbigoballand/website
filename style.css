@@ -144,6 +144,8 @@ footer {
 a {
   color: white; /* Green link color */
   text-decoration: none; /* Remove underline */
+  font-family: 'VT323', monospace;
+  font-size: 1.5rem;
 }
 
 a:hover {
