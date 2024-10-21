@@ -65,9 +65,13 @@ section.about {
 }
 
 ul {
-  list-style: none;
+  list-style: disc;
+  padding-left: 20px;
   margin-top: 0rem;
   font-weight: 300; /* Slightly lighter weight for the list */
+}
+ul li {
+  margin-bottom: 0.0rem; /* Add space between list items */
 }
 
 footer {
