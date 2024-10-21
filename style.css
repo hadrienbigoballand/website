@@ -145,7 +145,6 @@ a {
   color: white; /* Green link color */
   text-decoration: none; /* Remove underline */
   font-family: 'VT323', monospace;
-  font-size: 1.5rem;
 }
 
 a:hover {
@@ -186,6 +185,7 @@ a:hover {
 .menu a {
   color: white; /* Link color */
   font-weight: bold; /* Bold font for links */
+  font-size: 1.5rem;
 }
 
 /* Responsive adjustments */
