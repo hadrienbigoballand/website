@@ -112,6 +112,22 @@ footer {
   image-rendering: pixelated; /* Ensures pixelation effect in some browsers */
 }
 
+.linkedin-container {
+  margin-top: 2rem; /* Espacement au-dessus de l'icône */
+  display: flex;
+  justify-content: center;
+}
+
+.linkedin-container img {
+  height: 35px; /* Ajuste la taille du logo */
+  width: auto;
+  transition: transform 0.3s;
+}
+
+.linkedin-container img:hover {
+  transform: scale(1.1); /* Légère animation au survol */
+}
+
 a {
   color: white; /* Green link color */
   text-decoration: none; /* Remove underline */
