@@ -6,7 +6,7 @@
 }
 
 body {
-  font-family: 'Raleway', sans-serif;
+  font-family: 'Work Sans', sans-serif;
   background-color: #f8f8f8;
   color: #333;
 }
@@ -19,12 +19,13 @@ header {
 }
 
 h1 {
-  font-family: 'Playfair Display', serif;
+  font-family: 'Arapey', serif;
   font-size: 3rem;
+  font-weight: 400;
 }
 
 h2 {
-  font-family: 'Raleway', sans-serif;
+  font-family: 'Work Sans', sans-serif;
   font-weight: 300;
   font-size: 1.25rem;
   margin-top: 0.5rem;
@@ -59,8 +60,9 @@ section.about {
 }
 
 .bio h3, .bio h4 {
-  font-family: 'Playfair Display', serif;
+  font-family: 'Arapey', serif;
   margin-bottom: 1rem;
+  font-weight: 400;
 }
 
 ul {
