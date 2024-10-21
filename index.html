@@ -5,12 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Hadrien Bigo-Balland</title>
   <link rel="stylesheet" href="style.css">
-  <link href="https://fonts.googleapis.com/css2?family=VT323&family=Open+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=VT323&family=Open+Sans:wght@400&display=swap" rel="stylesheet">
 </head>
 <body>
   <header>
     <div class="header-content">
-        <button class="menu-toggle" onclick="toggleMenu()">☰</button> <!-- Menu toggle button -->
+        <button class="menu-toggle" onclick="toggleMenu()">☰</button>
         <h1>Hadrien Bigo-Balland</h1>
         <h2>PhD in Applied Maths</h2>
     </div>
@@ -48,9 +48,12 @@
   </section>
 
   <section id="meshes" class="meshes" style="display: none;">
-    <h3 class="centered-title">Hand mesh</h3> <!-- Add a class for centering -->
-    <!-- Embed your 3D scene here -->
-    <iframe src="hand_scene.html" class="mesh-iframe" frameborder="0"></iframe> <!-- Added class for iframe -->
+    <h3 class="centered-title">Hand mesh</h3>
+    <div class="mesh-container">
+        <button id="prevButton" class="nav-button" onclick="navigateScene(-1)" style="display: none;">←</button>
+        <iframe id="meshIframe" src="meshes/hand_scene.html" class="mesh-iframe" frameborder="0"></iframe>
+        <button id="nextButton" class="nav-button" onclick="navigateScene(1)">→</button>
+    </div>
   </section>
 
   <footer>

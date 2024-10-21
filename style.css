@@ -28,36 +28,16 @@ header {
     cursor: pointer; /* Change cursor to pointer */
 }
 
-body {
-  font-family: 'Open Sans', sans-serif; /* Use Open Sans for body text */
-}
-
-h1, h2, h3, h4 {
-  font-family: 'VT323', monospace; /* Use VT323 for headings */
+h1, h2, h3 {
+  margin: rem 0; /* Spacing between headings */
 }
 
 h1 {
-  font-size: 2.5rem; /* Adjust as needed */
-  font-weight: 600; /* Bold */
+  font-weight: bold;
 }
 
 h2 {
-  font-size: 2rem; /* Adjust as needed */
-  font-weight: 600; /* Bold */
-}
-
-h3 {
-  font-size: 1.75rem; /* Adjust as needed */
-  font-weight: 600; /* Bold */
-}
-
-h4 {
-  font-size: 1.5rem; /* Adjust as needed */
-  font-weight: 600; /* Bold */
-}
-
-p, ul {
-  font-weight: 300; /* Light for body text */
+  font-weight: lighter;
 }
 
 .bio h4 {
@@ -173,14 +153,8 @@ a:hover {
 }
 
 .menu a {
-  font-family: 'VT323', monospace; /* Apply VT323 font to menu links */
-  font-weight: bold; /* You can adjust the weight if needed */
-  font-size: 1.75rem; /* Adjust font size as desired */
-  color: white; /* Ensure link color contrasts with background */
-}
-
-.menu a:hover {
-  text-decoration: underline; /* Underline on hover */
+  color: white; /* Link color */
+  font-weight: bold; /* Bold font for links */
 }
 
 /* Responsive adjustments */
@@ -199,12 +173,18 @@ a:hover {
 
 @media (max-width: 480px) {
   section.about {
-    flex-direction: column; /* Stack on extra small screens */
-    align-items: flex-start; /* Align to the start */
+    flex-direction: column; /* Stack elements on smaller screens */
+    align-items: center; /* Center items */
   }
 
   .bio {
-    padding: 1rem; /* Adjusted padding for better spacing */
+    flex: none; /* Allow bio to adjust based on content */
+    text-align: center; /* Center text in bio */
+  }
+
+  .photo {
+    padding: 0; /* Remove padding around photo */
+    margin-bottom: 1rem; /* Space below photo */
   }
 }
 
@@ -214,23 +194,29 @@ a:hover {
   margin: 1rem 0; /* Add some space above and below the title */
 }
 
-/* Styling the iframe */
-.mesh-iframe {
-  width: 100%; /* Full width */
-  height: 600px; /* Maintain your original height */
-  border: 2px solid white; /* White border */
-  border-radius: 10px; /* Rounded corners */
-  margin-top: 1rem; /* Space above the iframe */
+/* Navigation button styles */
+.nav-button {
+    background-color: transparent; /* Transparent background */
+    border: 2px solid white; /* White border */
+    color: white; /* Text color */
+    font-size: 2rem; /* Adjust size */
+    cursor: pointer; /* Pointer cursor */
+    padding: 0.5rem 1rem; /* Padding for better click area */
+    margin: 0 10px; /* Space around the buttons */
+    display: flex; /* Center button */
+    align-items: center; /* Center vertically */
+    justify-content: center; /* Center horizontally */
 }
 
-/* Additional styling for the meshes section to match the about section */
-section.meshes {
-  display: flex; /* Use flexbox to align items */
-  flex-direction: column; /* Stack items vertically */
-  align-items: center; /* Center items horizontally */
-  margin: 2rem; /* Margin between sections */
-  padding: 2rem; /* Added padding inside the section */
-  background-color: black; /* Keep background black for terminal look */
-  border: 0px solid black; /* Green border for terminal effect */
-  border-radius: 10px; /* Slightly rounded corners */
+.mesh-container {
+    display: flex; /* Flex container for buttons and iframe */
+    align-items: center; /* Center items vertically */
+    justify-content: center; /* Center items horizontally */
+    margin-top: 1rem; /* Space above the mesh */
+}
+
+.mesh-iframe {
+    width: 80%; /* Adjust the width */
+    height: 500px; /* Set the height */
+    border: none; /* No border */
 }
