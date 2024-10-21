@@ -48,9 +48,9 @@ section.about {
   display: flex; /* Use flexbox for layout */
   align-items: center; /* Center align items vertically */
   margin: 2rem; /* Margin between sections */
-  padding: 2rem; /* Added padding inside the section */
+  padding: 1rem; /* Added padding inside the section */
   background-color: black; /* Keep background black for terminal look */
-  border: 2px solid white; /* Green border for terminal effect */
+  border: 1px solid white; /* Green border for terminal effect */
   border-radius: 10px; /* Slightly rounded corners */
 }
 
@@ -67,7 +67,7 @@ section.about {
   height: auto; /* Maintain aspect ratio */
   max-height: 150px; /* Limit height to keep image proportional */
   border-radius: 50%; /* Circular image */
-  border: 2px solid white; /* Green border for the photo */
+  border: 1px solid white; /* Green border for the photo */
 }
 
 .bio {
