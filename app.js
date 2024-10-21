@@ -100,7 +100,7 @@ navigateScene(0);
 function resizeIframe() {
   const container = document.querySelector('.mesh-container');
   const iframe = document.getElementById('meshIframe');
-  const aspectRatio = window.innerWidth < 768 ? 4/3 : 3/4;
+  const aspectRatio = window.innerWidth < 768 ? 10/25 : 25/10;
   
   if (window.innerHeight < 1000) {
       container.style.height = '100vh';
