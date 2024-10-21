@@ -12,8 +12,9 @@ points = pv.read('hand_mesh/landmarks.ply').points
 plotter = pv.Plotter()
 
 # Add the voxelized mesh with the desired color and opacity
-plotter.add_mesh(mesh, color='white', opacity=0.5, smooth_shading=True)
-plotter.add_points(points, color='white', opacity=0.8, render_points_as_spheres = True, smooth_shading=True, point_size=15)
+# plotter.add_mesh(mesh, color='white', opacity=0.5, smooth_shading=True, wireframe=True)
+# plotter.add_points(points, color='white', opacity=0.8, render_points_as_spheres = True, smooth_shading=True, point_size=15)
+plotter.add_mesh(mesh, style="wireframe", line_width=1, color = 'white')
 
 # Set the background color to dark
 plotter.set_background('black')
@@ -31,4 +32,4 @@ plotter.camera.roll = 0
 
 # Show the plot
 # plotter.show()
-plotter.export_html('second_scene.html')
+plotter.export_html('third_scene.html')

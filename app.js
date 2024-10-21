@@ -45,8 +45,8 @@ window.addEventListener('resize', checkPhotoVisibility());
 let currentSceneIndex = 0; // Start with the first scene
 const scenes = [
     "hand_scene.html", // First scene
-    "second_scene.html", // Second scene
-    "third_scene.html" // Third scene
+    "third_scene.html", // Second scene
+    "second_scene.html" // Third scene
 ];
 
 function navigateTo(sectionId) {
