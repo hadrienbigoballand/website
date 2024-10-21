@@ -10,11 +10,22 @@ body {
   background-color: black; /* Terminal background */
   color: white; /* Terminal green text */
   line-height: 1.5; /* Improved readability */
+  position: relative; /* Allow for absolute positioning of menu */
 }
 
 header {
-  text-align: center;
-  padding: 2rem;
+    display: flex; /* Use flexbox for layout */
+    align-items: center; /* Center align items vertically */
+    justify-content: space-between; /* Space between items */
+    padding: 2rem;
+}
+
+.menu-toggle {
+    background: none; /* Remove default button styles */
+    border: none; /* Remove border */
+    color: white; /* White color for the icon */
+    font-size: 1.5rem; /* Adjust font size */
+    cursor: pointer; /* Change cursor to pointer */
 }
 
 h1, h2, h3 {
@@ -115,6 +126,37 @@ a:hover {
   display: none; /* Class to hide photo */
 }
 
+/* Side menu styles */
+.side-menu {
+  position: fixed; /* Fix position to the left */
+  top: 0;
+  left: -250px; /* Hide off-screen initially */
+  width: 250px; /* Set width of the menu */
+  height: 100%; /* Full height */
+  background-color: black; /* Background color of the menu */
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5); /* Add shadow for depth */
+  transition: left 0.3s ease; /* Smooth transition */
+  z-index: 1000; /* Ensure it appears above other content */
+}
+
+.side-menu.open {
+  left: 0; /* Show menu when open */
+}
+
+.menu {
+  list-style: none; /* Remove bullet points */
+  padding: 20px; /* Padding inside the menu */
+}
+
+.menu li {
+  margin: 15px 0; /* Spacing between menu items */
+}
+
+.menu a {
+  color: white; /* Link color */
+  font-weight: bold; /* Bold font for links */
+}
+
 /* Responsive adjustments */
 @media (max-width: 768px) {
   section.about {
@@ -138,4 +180,31 @@ a:hover {
   .bio {
     padding: 1rem; /* Adjusted padding for better spacing */
   }
+}
+
+/* Centering the title */
+.centered-title {
+  text-align: center; /* Center align the title text */
+  margin: 1rem 0; /* Add some space above and below the title */
+}
+
+/* Styling the iframe */
+.mesh-iframe {
+  width: 100%; /* Full width */
+  height: 600px; /* Maintain your original height */
+  border: 2px solid white; /* White border */
+  border-radius: 10px; /* Rounded corners */
+  margin-top: 1rem; /* Space above the iframe */
+}
+
+/* Additional styling for the meshes section to match the about section */
+section.meshes {
+  display: flex; /* Use flexbox to align items */
+  flex-direction: column; /* Stack items vertically */
+  align-items: center; /* Center items horizontally */
+  margin: 2rem; /* Margin between sections */
+  padding: 2rem; /* Added padding inside the section */
+  background-color: black; /* Keep background black for terminal look */
+  border: 2px solid white; /* Green border for terminal effect */
+  border-radius: 10px; /* Slightly rounded corners */
 }

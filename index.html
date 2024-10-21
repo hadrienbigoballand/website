@@ -9,11 +9,22 @@
 </head>
 <body>
   <header>
-    <h1>Hadrien Bigo-Balland</h1>
-    <h2>phd in applied maths</h2>
+    <div class="header-content">
+        <button class="menu-toggle" onclick="toggleMenu()">☰</button> <!-- Menu toggle button -->
+        <h1>Hadrien Bigo-Balland</h1>
+        <h2>PhD in Applied Maths</h2>
+    </div>
   </header>
 
-  <section class="about">
+  <nav class="side-menu" id="sideMenu">
+    <ul class="menu">
+      <li><a href="#about" onclick="navigateTo('about')">About Me</a></li>
+      <li><a href="#meshes" onclick="navigateTo('meshes')">Meshes</a></li>
+      <li><a href="javascript:void(0);" class="close" onclick="toggleMenu()">✖ Close</a></li>
+    </ul>
+  </nav>
+
+  <section id="about" class="about">
     <div class="photo">
       <img src="me.jpeg" alt="Hadrien's photo" />
     </div>
@@ -34,6 +45,12 @@
         <li>PhD CIFRE (2023 - ongoing) - Supervised by Pr. Stéphanie Allassonnière (Director) & Dr. Jean Feydy (Co-supervisor)</li>
       </ul>
     </div>
+  </section>
+
+  <section id="meshes" class="meshes" style="display: none;">
+    <h3 class="centered-title">Hand mesh</h3> <!-- Add a class for centering -->
+    <!-- Embed your 3D scene here -->
+    <iframe src="hand_scene.html" class="mesh-iframe" frameborder="0"></iframe> <!-- Added class for iframe -->
   </section>
 
   <footer>
