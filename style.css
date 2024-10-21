@@ -240,12 +240,12 @@ a:hover {
 /* Media query for larger screens */
 @media screen and (min-width: 768px) {
   .mesh-container {
-      padding-bottom: 75%; /* 4:3 aspect ratio for larger screens */
+      padding-bottom: 165%; /* 4:3 aspect ratio for larger screens */
   }
 }
 
 /* Ensure minimum height on very small screens */
-@media screen and (max-height: 500px) {
+@media screen and (max-height: 1000px) {
   .mesh-container {
       height: 100vh;
       padding-bottom: 0;

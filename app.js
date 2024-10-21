@@ -102,7 +102,7 @@ function resizeIframe() {
   const iframe = document.getElementById('meshIframe');
   const aspectRatio = window.innerWidth < 768 ? 4/3 : 3/4;
   
-  if (window.innerHeight < 500) {
+  if (window.innerHeight < 1000) {
       container.style.height = '100vh';
       container.style.paddingBottom = '0';
   } else {
