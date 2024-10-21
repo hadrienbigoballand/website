@@ -205,6 +205,6 @@ section.meshes {
   margin: 2rem; /* Margin between sections */
   padding: 2rem; /* Added padding inside the section */
   background-color: black; /* Keep background black for terminal look */
-  border: 2px solid white; /* Green border for terminal effect */
+  border: 0px solid black; /* Green border for terminal effect */
   border-radius: 10px; /* Slightly rounded corners */
 }
