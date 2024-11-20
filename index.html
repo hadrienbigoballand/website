@@ -19,7 +19,6 @@
   <nav class="side-menu" id="sideMenu">
     <ul class="menu">
       <li><a href="#about" onclick="navigateTo('about')">About Me</a></li>
-      <li><a href="#meshes" onclick="navigateTo('meshes')">Meshes</a></li>
       <li><a href="javascript:void(0);" class="close" onclick="toggleMenu()">✖ Close</a></li>
     </ul>
   </nav>
@@ -43,19 +42,6 @@
         <li>Baccalauréat S - Mention Très Bien</li>
         </ul>
     </div>
-  </section>
-
-  <section id="meshes" class="meshes" style="display: none;">
-    <h3 class="centered-title">Hand mesh</h3>
-    <div class="mesh-container">
-      <button id="prevButton" class="nav-button left" onclick="navigateScene(-1)">←</button>
-      <div class="iframe-wrapper">
-          <iframe id="meshIframe" src="meshes/hand_scene.html" class="mesh-iframe" frameborder="0"></iframe>
-      </div>
-      <button id="nextButton" class="nav-button right" onclick="navigateScene(1)">→</button>
-    </div>
-  
-  
   </section>
 
   <footer>
