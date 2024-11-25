@@ -11,6 +11,7 @@ body {
   color: black; /* Terminal green text */
   line-height: 1.5; /* Improved readability */
   position: relative; /* Allow for absolute positioning of menu */
+  font-weight: 300;
 }
 
 header {
@@ -32,7 +33,7 @@ h1 {
 
 h2 {
   font-family: "Montserrat", sans-serif;
-  font-weight: lighter;
+  font-weight: 300;
 }
 
 h3 {
@@ -52,7 +53,7 @@ section.about {
   margin: 2rem; /* Margin between sections */
   padding: 1rem; /* Added padding inside the section */
   background-color: white; /* Keep background black for terminal look */
-  border: 1px solid black; /* Green border for terminal effect */
+  border: 1px solid white; /* Green border for terminal effect */
   border-radius: 10px; /* Slightly rounded corners */
   font-size: 0.8rem;
 }
@@ -86,17 +87,19 @@ ul {
 }
 ul li {
   margin-bottom: 0.0rem; /* Add space between list items */
+  font-weight: 300;
 }
 
 footer {
   font-family: "Montserrat", sans-serif;
-  font-weight: bold;
+  font-weight: 300;
+  font-size: 0.9rem;
   text-align: center;
   padding: 1rem;
   background-color: white; /* Keep footer background black */
   color: black; /* Green text for footer */
   margin-top: 2rem;
-  border-top: 2px solid black; /* Green top border */
+  border-top: 1px solid black; /* Green top border */
 }
 
 .logo-container {
@@ -197,12 +200,12 @@ a:hover {
 @media (max-width: 480px) {
   section.about {
     flex-direction: column; /* Stack elements on smaller screens */
-    align-items: center; /* Center items */
+    align-items: left; /* Center items */
   }
 
   .bio {
     flex: none; /* Allow bio to adjust based on content */
-    text-align: center; /* Center text in bio */
+    text-align: left; /* Center text in bio */
   }
 
   .photo {
