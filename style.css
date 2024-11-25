@@ -34,7 +34,7 @@ h1 {
 
 h2 {
   font-family: "Montserrat", sans-serif;
-  font-weight: 300;
+  font-weight: 200;
   line-height: 1.2;
 }
 
@@ -99,7 +99,7 @@ footer {
   background-color: white; /* Keep footer background black */
   color: black; /* Green text for footer */
   margin-top: 2rem;
-  border-top: 1px solid black; /* Green top border */
+  border-top: 01px solid black; /* Green top border */
 }
 
 .logo-container {
