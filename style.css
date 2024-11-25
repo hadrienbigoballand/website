@@ -59,8 +59,8 @@ section.about {
   align-items: stretch; /* Center align items vertically */
   margin: 2rem; /* Margin between sections */
   padding: 1rem; /* Added padding inside the section */
-  background-color: black; /* Keep background black for terminal look */
-  border: 1px solid white; /* Green border for terminal effect */
+  background-color: white; /* Keep background black for terminal look */
+  border: 1px solid black; /* Green border for terminal effect */
   border-radius: 10px; /* Slightly rounded corners */
   font-size: 0.8rem;
 }
@@ -101,10 +101,10 @@ footer {
   font-weight: bold;
   text-align: center;
   padding: 1rem;
-  background-color: black; /* Keep footer background black */
-  color: white; /* Green text for footer */
+  background-color: white; /* Keep footer background black */
+  color: black; /* Green text for footer */
   margin-top: 2rem;
-  border-top: 2px solid white; /* Green top border */
+  border-top: 2px solid black; /* Green top border */
 }
 
 .logo-container {
@@ -142,7 +142,7 @@ footer {
 }
 
 a {
-  color: white; /* Green link color */
+  color: black; /* Green link color */
   text-decoration: none; /* Remove underline */
   font-family: 'EB+Garamond', monospace;
 }
@@ -163,7 +163,7 @@ a:hover {
   left: -250px; /* Hide off-screen initially */
   width: 250px; /* Set width of the menu */
   height: 100%; /* Full height */
-  background-color: black; /* Background color of the menu */
+  background-color: white; /* Background color of the menu */
   box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5); /* Add shadow for depth */
   transition: left 0.3s ease; /* Smooth transition */
   z-index: 1000; /* Ensure it appears above other content */
@@ -183,7 +183,7 @@ a:hover {
 }
 
 .menu a {
-  color: white; /* Link color */
+  color: black; /* Link color */
   font-weight: bold; /* Bold font for links */
   font-size: 1.5rem;
 }
@@ -252,7 +252,7 @@ a:hover {
   top: 50%;
   transform: translateY(-50%);
   background-color: rgba(0, 0, 0, 0.5);
-  color: white;
+  color: black;
   border: none;
   padding: 10px 15px;
   font-size: 18px;
@@ -288,7 +288,7 @@ a:hover {
   bottom: 20px;
   right: 20px;
   background-color: rgba(0, 0, 0, 0.5);
-  color: white;
+  color: black;
   border: none;
   border-radius: 50%;
   width: 50px;
@@ -301,5 +301,5 @@ a:hover {
 }
 
 .scroll-to-top-btn:hover {
-  background-color: rgba(0, 0, 0, 0.7);
+  background-color: rgba(255, 255, 255, 0.7);
 }
