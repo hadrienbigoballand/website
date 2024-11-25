@@ -6,7 +6,7 @@
 }
 
 body {
-  font-family: 'OpenSans', monospace; /* Use VT323 font for terminal look */
+  font-family: 'EB+Garamond', monospace; /* Use EB+Garamond font for terminal look */
   background-color: black; /* Terminal background */
   color: white; /* Terminal green text */
   line-height: 1.5; /* Improved readability */
@@ -14,7 +14,7 @@ body {
 }
 
 header {
-    font-family: 'VT323', monospace;
+    font-family: 'EB+Garamond', monospace;
     display: flex; /* Use flexbox for layout */
     align-items: center; /* Center align items vertically */
     justify-content: space-between; /* Space between items */
@@ -34,22 +34,22 @@ h1, h2, h3 {
 }
 
 h1 {
-  font-family: 'VT323', monospace;
+  font-family: 'EB+Garamond', monospace;
   font-weight: bold;
 }
 
 h2 {
-  font-family: 'VT323', monospace;
+  font-family: 'EB+Garamond', monospace;
   font-weight: lighter;
 }
 
 h3 {
-  font-family: 'VT323', monospace;
+  font-family: 'EB+Garamond', monospace;
   font-size: 1.2rem
 }
 
 .bio h4 {
-  font-family: 'VT323', monospace;
+  font-family: 'EB+Garamond', monospace;
   font-size: 1.2rem;
   margin-top: 1rem;
 }
@@ -97,7 +97,7 @@ ul li {
 }
 
 footer {
-  font-family: 'VT323', monospace;
+  font-family: 'EB+Garamond', monospace;
   font-weight: bold;
   text-align: center;
   padding: 1rem;
@@ -144,7 +144,7 @@ footer {
 a {
   color: white; /* Green link color */
   text-decoration: none; /* Remove underline */
-  font-family: 'VT323', monospace;
+  font-family: 'EB+Garamond', monospace;
 }
 
 a:hover {
