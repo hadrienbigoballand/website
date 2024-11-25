@@ -17,9 +17,9 @@ body {
 header {
   font-family: "Montserrat", sans-serif;
     display: flex; /* Use flexbox for layout */
-    align-items: center; /* Center align items vertically */
+    align-items: left; /* Center align items vertically */
     justify-content: space-between; /* Space between items */
-    padding: 2rem;
+    padding: 4rem;
 }
 
 h1, h2, h3 {
@@ -29,11 +29,13 @@ h1, h2, h3 {
 h1 {
   font-family: "Montserrat", sans-serif;
   font-weight: bold;
+  line-height: 1.2;
 }
 
 h2 {
   font-family: "Montserrat", sans-serif;
   font-weight: 300;
+  line-height: 1.2;
 }
 
 h3 {
@@ -50,11 +52,9 @@ h3 {
 section.about {
   display: flex; /* Use flexbox for layout */
   align-items: stretch; /* Center align items vertically */
-  margin: 2rem; /* Margin between sections */
-  padding: 1rem; /* Added padding inside the section */
+  margin: 0rem; /* Margin between sections */
+  padding: 3rem; /* Added padding inside the section */
   background-color: white; /* Keep background black for terminal look */
-  border: 1px solid white; /* Green border for terminal effect */
-  border-radius: 10px; /* Slightly rounded corners */
   font-size: 0.8rem;
 }
 
@@ -109,10 +109,28 @@ footer {
 }
 
 .footer-logo {
-  height: 30px; /* Set a fixed height for all logos */
+  height: auto; /* Allow height to adapt */
+  max-height: 30px; /* Set a maximum height */
   width: auto; /* Maintain aspect ratio */
-  filter: brightness(0) invert(1); /* Makes the logos white */
+  max-width: 100%; /* Ensure logos don't exceed container width */
+  filter: brightness(0); /* Makes the logos white */
   margin: 0 10px; /* Add space between logos */
+  transition: transform 0.3s ease; /* Add smooth resizing effect */
+}
+
+/* Adjust sizes for smaller screens */
+@media screen and (max-width: 768px) {
+  .footer-logo {
+    max-height: 25px; /* Reduce height slightly */
+    margin: 0 8px; /* Adjust spacing */
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .footer-logo {
+    max-height: 20px; /* Further reduce height for very small screens */
+    margin: 0 5px; /* Adjust spacing */
+  }
 }
 
 /* Optional: Pixelization effect */
