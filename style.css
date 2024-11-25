@@ -7,8 +7,8 @@
 
 body {
   font-family: 'EB+Garamond', monospace; /* Use EB+Garamond font for terminal look */
-  background-color: black; /* Terminal background */
-  color: white; /* Terminal green text */
+  background-color: white; /* Terminal background */
+  color: black; /* Terminal green text */
   line-height: 1.5; /* Improved readability */
   position: relative; /* Allow for absolute positioning of menu */
 }
