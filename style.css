@@ -20,6 +20,15 @@ header {
     align-items: left; /* Center align items vertically */
     justify-content: space-between; /* Space between items */
     padding: 4rem;
+    text-align: center;
+}
+
+.header-content video {
+  width: 100%; /* Adjust as needed */
+  height: auto; /* Maintain aspect ratio */
+  max-width: 200px; /* Prevent video from getting too large */
+  display: block;
+  margin: 0 auto;
 }
 
 h1, h2, h3 {
