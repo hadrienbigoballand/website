@@ -108,7 +108,7 @@ footer {
   background-color: white; /* Keep footer background black */
   color: black; /* Green text for footer */
   margin-top: 2rem;
-  border-top: 01px solid black; /* Green top border */
+  border-top: 0.5px solid grey; /* Green top border */
 }
 
 .logo-container {
