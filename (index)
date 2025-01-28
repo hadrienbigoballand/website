@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,7 +5,7 @@
   <!-- Basic Page Needs
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
   <meta charset="utf-8">
-  <title>Hadrien Bigo-Balland</title>
+  <title>Maddie Simens</title>
   <meta name="description" content="Product design at OpenAI"
   <meta name="author" content="">
 
@@ -46,7 +45,7 @@
 
 <script>
 // Set the date we're counting down to
-var countDownDate = new Date("Oct 02, 2023 09:00:00").getTime();
+var countDownDate = new Date("Nov 30, 2020 09:00:00").getTime();
 
 // Update the count down every 1 second
 var x = setInterval(function() {
@@ -112,20 +111,19 @@ var x = setInterval(function() {
     </div>
 
     <div class="six columns offset-by-three">
-      <h1 class="night">Hi, I'm Hadrien.</h1>
+      <h1 class="night">Hi, I'm Maddie.</h1>
 
       <div class="animated fadeIn two">
-       <p>I’ve been doing a PhD at <a href="https://myfit-solutions.com/" target="_blank" class="underline">MyFit Solutions</a>, with <a href="https://www.inria.fr/fr/centre-inria-de-paris" target="_blank" class="underline">INRIA Paris</a> and under supervision of <a href="https://sites.google.com/site/stephanieallassonniere/" target="_blank" class="underline">Professor Stéphanie Allassonnière</a> and <a href="https://www.jeanfeydy.com/" target="_blank" class="underline">Doctor Jean Feydy</a> for the last <span id="counter"><br></span>.</p>
+       <p>Some people call me Madeline. I’ve been designing at <a href="https://openai.com/" target="_blank" class="underline">OpenAI</a> for the last <span id="counter"><br></span>.</p>
 
-       <p> I also serve as a Teaching Assistant of Probability Theory at <a href="https://www.univ-lyon2.fr/" target="_blank" class="underline">Lyon 2 Lumière University</a>, where I have been collaborating with <a href="https://sites.google.com/site/stephanegchretien/home" target="_blank" class="underline">Professor Stephane Chretien</a> for three years.</p>
+       <p>I live in San Francisco by way of Boston by way of Cleveland. Keep up with me on <a href="https://www.instagram.com/maddiesimens/" target="_blank" class="underline">Instagram</a> or <a href="https://twitter.com/maddiesimens" target="_blank" class="underline">Twitter</a>.</p>
 
-       <p>I live in Lyon by way of Rhône by way of Auvergne-Rhône-Alpes.
 
       <div class="spacer48"></div>
 
       </div>
 
-      <h4 class="animated fadeIn three">EDUCATION</h4> 
+      <h4 class="animated fadeIn three">PREVIOUSLY</h4> 
 
     </div>
 
@@ -133,33 +131,34 @@ var x = setInterval(function() {
 
   <div class="row group">
     <div class="three columns offset-by-six animated fadeIn three">      
-      <h2 class="night"><a href="https://www.univ-lyon2.fr/" target="_blank" class="underline">Lyon 2 Lumière University</a></h2>
+      <h2 class="night"><a href="https://stripe.com/" target="_blank" class="underline">Stripe</a></h2>
     </div>  
     <div class="three columns animated fadeIn three">
-      <h3>Machine Learning for Artificial Intelligence</h3>
-      <h4>2022–2023</h4>
+      <h3>Product Designer</h3>
+      <h4>2016–2020</h4>
     </div>
   </div>
 
   <div class="row group">
     <div class="three columns offset-by-six animated fadeIn three">      
-      <h2 class="night"><a href="https://www.imo.universite-paris-saclay.fr/fr/" target="_blank" class="underline">Paris-Saclay University</a></h2>
+      <h2 class="night"><a href="https://wistia.com/" target="_blank" class="underline">Wistia</a></h2>
     </div>  
     <div class="three columns animated fadeIn three">
-      <h3>Mathematics of Randomness</h3>
-      <h4>2021–2022</h4>
+      <h3>Product Designer</h3>
+      <h4>2015–2016</h4>
     </div>
   </div>  
 
   <div class="row group">
-    <div class="three columns offset-by-six animated fadeIn three">      
-      <h2 class="night"><a href="https://www.imo.universite-paris-saclay.fr/fr/" target="_blank" class="underline">Paris-Saclay University</a></h2>
+    <div class="three columns offset-by-six animated fadeIn three">  
+        <h2 class="night underline-rdio">Rdio</h2>
+        <div id="rdio-psa">Acquired by Pandora</div>
     </div>  
     <div class="three columns animated fadeIn three">
-      <h3>Agrégation de Mathématiques</h3>
-      <h4>2020–2021</h4>
+      <h3>UX Design Co-op</h3>
+      <h4>2014</h4>
     </div>
-  </div>  
+  </div>
 
 
 </div>

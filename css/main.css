@@ -1,0 +1,254 @@
+
+/* #Basic elements
+================================================== */
+
+@font-face {
+	font-family: NeueHaas;
+	src: url(../fonts/NHaasGroteskTXPro-55Rg.ttf);
+}
+
+@font-face {
+	font-family: NeueHaasMedium;
+	src: url(../fonts/NHaasGroteskTXPro-65Md.ttf);
+}
+
+/* @font-face {
+	font-family: NeueHaasMedium;
+	src: url(../fonts/NHaasGroteskTXPro-75Bd.ttf);
+} */
+
+* {
+	-webkit-font-smoothing: antialiased;
+	margin:0;
+    padding: 0;
+}
+
+body.night a {
+	color: #fff;
+	font-family: NeueHaasMedium;
+	text-decoration: none;
+}
+
+body.day a {
+	color: #403E43;
+	font-family: NeueHaasMedium;
+	text-decoration: none;
+}
+
+.underline {
+  display: inline;
+  position: relative;
+  overflow: hidden;
+  width: 40px;
+}
+
+.underline:after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  left: 0;
+  right: 100%;
+  bottom: -3px;
+  background: #8A898C;
+  height: 1.5px;
+  transition-property: left right;
+  transition-duration: 0.2s;
+  transition-timing-function: ease-out;
+}
+.underline:hover:after,
+.underline:focus:after,
+.underline:active:after {
+  right: 0;
+}
+
+.underline-rdio {
+  display: inline;
+  position: relative;
+  overflow: hidden;
+  width: 40px;
+}
+
+.underline-rdio:after {
+  content: "";
+  position: absolute;
+  z-index: 1;
+  left: 0;
+  right: 100%;
+  bottom: 8px;
+  background: #221F26; /* 221F26 */
+  height: 1px;
+  transition-property: left right;
+  transition-duration: 0.175s;
+  transition-timing-function: ease-out;
+}
+.underline-rdio:hover:after,
+.underline-rdio:focus:after,
+.underline-rdio:active:after {
+  right: 0;
+}
+
+#rdio-psa {
+	color: #8A898C;
+	font-family: NeueHaas;
+	font-size: 12px;
+	letter-spacing: 0.75px;
+	line-height: 20px;
+	margin-top: 4px;
+	opacity: 0;
+	transition-duration: 0.4s;
+    transition-timing-function: ease-in;
+}
+
+.underline-rdio:hover + #rdio-psa {
+	opacity: 1;
+}
+
+
+body.night {	
+	background-color: #221F26;
+	color: #C8C8C9;
+	font-family: NeueHaas;
+	font-size: 16px;
+	line-height: 24px;
+}
+
+body.day {
+	background-color: #F6F6F7;
+	color: #403E43;
+	font-family: NeueHaas;
+	font-size: 16px;
+	line-height: 24px;
+}
+
+footer {
+	color: #9F9EA1;
+	font-family: NeueHaas;
+	font-size: 12px;
+	letter-spacing: 1px;
+	line-height: 20px;
+	margin-top: 128px;
+
+}
+
+body.night h1 {
+	color: #fff;
+	font-family: NeueHaasMedium;
+	font-size: 20px;
+	letter-spacing: .25px;
+	line-height: 28px;
+	padding-bottom: 48px;
+}
+
+body.day h1 {
+	color: #403E43;
+	font-family: NeueHaasMedium;
+	font-size: 20px;
+	letter-spacing: .25px;
+	line-height: 28px;
+	padding-bottom: 48px;
+}
+
+body.night h2 {
+	color: #fff;
+	font-family: NeueHaasMedium;
+	font-size: 16px;
+	letter-spacing: .25px;
+	line-height: 24px;
+	margin-bottom: 48px;
+}
+
+body.day h2 {
+	color: #403E43;
+	font-family: NeueHaasMedium;
+	font-size: 16px;
+	letter-spacing: .25px;
+	line-height: 24px;
+	margin-bottom: 48px;
+}
+
+body.night h3 {
+	color: #C8C8C9;
+	font-family: NeueHaas;
+	font-size: 16px;
+	letter-spacing: 0.35px;
+	line-height: 24px;
+	margin-bottom: 4px;
+}
+
+body.day h3 {
+	color: #403E43;
+	font-family: NeueHaas;
+	font-size: 16px;
+	letter-spacing: 0.35px;
+	line-height: 24px;
+	margin-bottom: 4px;
+}
+
+body.night h4 {
+	color: #8A898C;
+	font-family: NeueHaas;
+	font-size: 12px;
+	letter-spacing: 1.5px;
+	line-height: 20px;
+	margin-top: 0px;
+	text-transform: uppercase;
+}
+
+body.day h4 {
+	color: #9F9EA1;
+	font-family: NeueHaas;
+	font-size: 12px;
+	letter-spacing: 1.5px;
+	line-height: 20px;
+	margin-top: 0px;
+	text-transform: uppercase;
+}
+
+body.night #moon {
+	cursor: pointer;
+	width: 20px;
+}
+
+body.day #moon {
+	display: none;
+}
+
+body.night #sun {
+	display: none;
+}
+
+body.day #sun {
+	cursor: pointer;
+	width: 20px;
+}
+
+.spacer48 {
+	height: 48px;
+	width: 100%;
+}
+
+
+/* For devices smaller than 400px */
+@media (max-width: 550px) {
+body.night #moon {
+	margin-bottom: 80px;
+	padding-right: 8px;
+	width: 20px;
+	float: right
+}
+
+body.day #sun {
+	margin-bottom: 80px;
+	padding-right: 8px;
+	width: 20px;
+	float: right
+}
+
+
+
+
+/* Day mode styling */
+
+
+
+}
