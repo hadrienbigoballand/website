@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,7 +6,7 @@
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
   <meta charset="utf-8">
   <title>Hadrien Bigo-Balland</title>
-  <meta name="description" content="Product design at OpenAI"
+  <meta name="description" content="pHd">
   <meta name="author" content="">
 
   <!-- Mobile Specific Metas
@@ -39,10 +38,25 @@
           $("body").removeClass("day");
           $("body").addClass("night");
       });
+      
+      // Array of impressionist landscape paintings
+      const paintings = [
+        "https://uploads5.wikiart.org/images/claude-monet/impression-sunrise.jpg",
+        "https://uploads1.wikiart.org/images/vincent-van-gogh/wheat-field-with-cypresses-1889.jpg",
+        "https://uploads3.wikiart.org/images/paul-cezanne/mont-sainte-victoire-1887.jpg",
+        "https://uploads7.wikiart.org/images/claude-monet/woman-with-a-parasol-madame-monet-and-her-son-1875.jpg",
+        "https://uploads3.wikiart.org/images/camille-pissarro/the-boulevard-montmartre-at-night-1897.jpg",
+        "https://uploads8.wikiart.org/images/alfred-sisley/snow-at-louveciennes-1878.jpg",
+        "https://uploads4.wikiart.org/images/berthe-morisot/the-cradle-1872.jpg",
+      ];
+      
+      // Select a random painting
+      const randomPainting = paintings[Math.floor(Math.random() * paintings.length)];
+      
+      // Set the image src
+      $("#art-painting").attr("src", randomPainting);
   });
-
-</script>
-
+  </script>
 
 <script>
 // Set the date we're counting down to
@@ -196,8 +210,19 @@ var x = setInterval(function() {
       <h4>2023</h4>
     </div>
   </div>  
-
-</div>
+  
+  <!-- Add spacer before the art -->
+  <div class="spacer48"></div>
+  <div class="spacer48"></div>
+  
+  <!-- Art container moved here and centered -->
+  <div class="row group">
+    <div class="twelve columns">
+      <div class="art-container animated fadeIn four">
+        <img id="art-painting" class="impressionist-art" alt="Impressionist Landscape Painting">
+      </div>
+    </div>
+  </div>
 
 </div>
 </body>
