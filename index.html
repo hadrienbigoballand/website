@@ -54,6 +54,33 @@
       
       // Set the image src
       $("#art-painting").attr("src", randomPainting);
+      
+      // Add click functionality to change the painting
+      $("#art-painting").click(function() {
+        // Get current painting
+        const currentPainting = $(this).attr("src");
+        
+        // Create a filtered array without the current painting
+        const availablePaintings = paintings.filter(painting => painting !== currentPainting);
+        
+        // Select a new random painting from available options
+        const newPainting = availablePaintings[Math.floor(Math.random() * availablePaintings.length)];
+        
+        // Apply the transition animation
+        $(this).addClass("painting-fade-out");
+        
+        // After fade out completes, change image and fade back in
+        setTimeout(() => {
+          $(this).attr("src", newPainting);
+          $(this).removeClass("painting-fade-out");
+          $(this).addClass("painting-fade-in");
+          
+          // Remove the fade-in class after animation completes
+          setTimeout(() => {
+            $(this).removeClass("painting-fade-in");
+          }, 500);
+        }, 300);
+      });
   });
   </script>
 

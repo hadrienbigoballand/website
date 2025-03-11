@@ -244,11 +244,30 @@ body.day #sun {
 	max-width: 100%;
 	border-radius: 5px;
 	box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-	transition: transform 0.3s ease;
+	transition: transform 0.3s ease, box-shadow 0.3s ease;
+	cursor: pointer; /* Indicate it's clickable */
 }
 
 .impressionist-art:hover {
 	transform: scale(1.02);
+	box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+}
+
+/* Animation classes for painting transitions */
+.painting-fade-out {
+	opacity: 0;
+	transition: opacity 0.3s ease-out;
+}
+
+.painting-fade-in {
+	opacity: 1;
+	transition: opacity 0.5s ease-in;
+}
+
+/* Special effect when clicking the painting */
+.impressionist-art:active {
+	transform: scale(0.98);
+	transition: transform 0.1s ease;
 }
 
 body.day .impressionist-art {
