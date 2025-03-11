@@ -232,15 +232,16 @@ body.day #sun {
 
 /* Art painting styles */
 .art-container {
-	display: none; /* Hidden by default */
-	margin-top: 78px; /* Adjusted to align with the first paragraph */
-	width: 120%;
+	display: block; /* Always show it */
+	width: 100%; /* Match container width */
+	max-width: 704px; /* Same as container max-width in skeleton.css */
+	margin: 20px auto 60px auto; /* Center horizontally */
 	padding: 0;
 }
 
 .impressionist-art {
+	width: 100%; /* Fill container */
 	max-width: 100%;
-	width: 100%;
 	border-radius: 5px;
 	box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
 	transition: transform 0.3s ease;
@@ -280,20 +281,20 @@ body.day #sun {
 
 /* For larger screens, show the art */
 @media (min-width: 850px) {
-    .art-container {
-        display: block;
-    }
-    
     .three.columns.icon {
         margin-top: 0; /* Remove the top margin to prevent double spacing */
     }
 }
 
-/* For even larger screens, make the art even bigger */
+/* For even larger screens, use the same width constraints as the text */
 @media (min-width: 850px) {
+    .art-container {
+        width: 80%; /* Same as container width in skeleton.css for large screens */
+    }
+    
     .impressionist-art {
-        width: 150%; /* Slightly overflow the container for larger screens */
-        max-width: 150%;
-        margin-left: -5%;
+        width: 100%;
+        max-width: 100%;
+        margin-left: 0; /* Remove negative margin */
     }
 }
