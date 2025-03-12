@@ -39,51 +39,111 @@
           $("body").addClass("night");
       });
       
-      // Array of impressionist landscape paintings
+      // Array of impressionist landscape paintings with metadata
       const paintings = [
-        "https://upload.wikimedia.org/wikipedia/commons/5/5f/Pissarro_Jardin_a_Valhermeil.jpg",
-        "https://upload.wikimedia.org/wikipedia/commons/5/53/Camille_Pissarro_-_Sc%C3%A8ne_de_neige_%C3%A0_%C3%89ragny_%281884%29.jpg",
-        "https://upload.wikimedia.org/wikipedia/commons/a/a8/Camille_Pissarro_-_La_Seine_%C3%A0_Rouen%2C_l%E2%80%99%C3%AEle_Lacroix%2C_effet_de_brouillard_855.jpg",
-        "https://upload.wikimedia.org/wikipedia/commons/9/95/Pissarro_-_Les_glaneuses%2C_1889.jpg",
-        "https://upload.wikimedia.org/wikipedia/commons/6/64/Camille_Pissarro%2C_Charing_Cross_Bridge%2C_London%2C_1890%2C_NGA_66430.jpg",
-        "https://upload.wikimedia.org/wikipedia/commons/0/0b/Camille_Pissarro_-_P%C3%A2turage%2C_coucher_de_soleil%2C_Eragny_%28PD_880%29.jpg",
-        "https://upload.wikimedia.org/wikipedia/commons/1/14/Camille_Pissarro_-_Boulevard_Montmartre_at_Night_-_c_1897_-_National_Gallery_UK.jpg",
-        "https://upload.wikimedia.org/wikipedia/commons/d/db/Statue_d%27Henri_IV%2C_matin%2C_soleil_.jpg",
-        "https://upload.wikimedia.org/wikipedia/commons/f/f0/Camille_Pissarro_-_Le_Pont_de_la_Clef_%C3%A0_Bruges%2C_Belgique.jpg",
+        {
+          src: "https://upload.wikimedia.org/wikipedia/commons/5/5f/Pissarro_Jardin_a_Valhermeil.jpg",
+          title: "Le Jardin de Maubuisson, Pontoise",
+          artist: "Camille Pissarro",
+          year: "1881"
+        },
+        {
+          src: "https://upload.wikimedia.org/wikipedia/commons/5/53/Camille_Pissarro_-_Sc%C3%A8ne_de_neige_%C3%A0_%C3%89ragny_%281884%29.jpg",
+          title: "Scène de Neige à Éragny",
+          artist: "Camille Pissarro",
+          year: "1884"
+        },
+        {
+          src: "https://upload.wikimedia.org/wikipedia/commons/a/a8/Camille_Pissarro_-_La_Seine_%C3%A0_Rouen%2C_l%E2%80%99%C3%AEle_Lacroix%2C_effet_de_brouillard_855.jpg",
+          title: "La Seine à Rouen, l'Île Lacroix, Effet de Brouillard",
+          artist: "Camille Pissarro",
+          year: "1888"
+        },
+        {
+          src: "https://upload.wikimedia.org/wikipedia/commons/9/95/Pissarro_-_Les_glaneuses%2C_1889.jpg",
+          title: "Les Glaneuses",
+          artist: "Camille Pissarro",
+          year: "1889"
+        },
+        {
+          src: "https://upload.wikimedia.org/wikipedia/commons/6/64/Camille_Pissarro%2C_Charing_Cross_Bridge%2C_London%2C_1890%2C_NGA_66430.jpg",
+          title: "Charing Cross Bridge, London",
+          artist: "Camille Pissarro",
+          year: "1890"
+        },
+        {
+          src: "https://upload.wikimedia.org/wikipedia/commons/0/0b/Camille_Pissarro_-_P%C3%A2turage%2C_coucher_de_soleil%2C_Eragny_%28PD_880%29.jpg",
+          title: "Pâturage, Coucher de Soleil, Éragny",
+          artist: "Camille Pissarro",
+          year: "1890"
+        },
+        {
+          src: "https://upload.wikimedia.org/wikipedia/commons/1/14/Camille_Pissarro_-_Boulevard_Montmartre_at_Night_-_c_1897_-_National_Gallery_UK.jpg",
+          title: "Boulevard Montmartre at Night",
+          artist: "Camille Pissarro",
+          year: "1897"
+        },
+        {
+          src: "https://upload.wikimedia.org/wikipedia/commons/d/db/Statue_d%27Henri_IV%2C_matin%2C_soleil_.jpg",
+          title: "Statue d'Henri IV, Matin, Soleil",
+          artist: "Camille Pissarro",
+          year: "1901"
+        },
+        {
+          src: "https://upload.wikimedia.org/wikipedia/commons/f/f0/Camille_Pissarro_-_Le_Pont_de_la_Clef_%C3%A0_Bruges%2C_Belgique.jpg",
+          title: "Le Pont de la Clef à Bruges",
+          artist: "Camille Pissarro",
+          year: "1896"
+        }
       ];
       
       // Select a random painting
-      const randomPainting = paintings[Math.floor(Math.random() * paintings.length)];
+      const randomIndex = Math.floor(Math.random() * paintings.length);
+      const randomPainting = paintings[randomIndex];
       
-      // Set the image src
-      $("#art-painting").attr("src", randomPainting);
+      // Set the image src and legend
+      $("#art-painting").attr("src", randomPainting.src);
+      updatePaintingLegend(randomPainting);
       
       // Add click functionality to change the painting
       $("#art-painting").click(function() {
         // Get current painting
-        const currentPainting = $(this).attr("src");
+        const currentSrc = $(this).attr("src");
+        const currentIndex = paintings.findIndex(painting => painting.src === currentSrc);
         
         // Create a filtered array without the current painting
-        const availablePaintings = paintings.filter(painting => painting !== currentPainting);
+        const availablePaintings = paintings.filter((painting, index) => index !== currentIndex);
         
         // Select a new random painting from available options
         const newPainting = availablePaintings[Math.floor(Math.random() * availablePaintings.length)];
         
         // Apply the transition animation
         $(this).addClass("painting-fade-out");
+        $(".painting-legend").addClass("legend-fade-out");
         
         // After fade out completes, change image and fade back in
         setTimeout(() => {
-          $(this).attr("src", newPainting);
+          $(this).attr("src", newPainting.src);
+          updatePaintingLegend(newPainting);
           $(this).removeClass("painting-fade-out");
           $(this).addClass("painting-fade-in");
+          $(".painting-legend").removeClass("legend-fade-out");
+          $(".painting-legend").addClass("legend-fade-in");
           
-          // Remove the fade-in class after animation completes
+          // Remove the fade-in classes after animation completes
           setTimeout(() => {
             $(this).removeClass("painting-fade-in");
+            $(".painting-legend").removeClass("legend-fade-in");
           }, 500);
         }, 300);
       });
+      
+      // Function to update the painting legend
+      function updatePaintingLegend(painting) {
+        $(".painting-title").text(painting.title);
+        $(".painting-artist").text(painting.artist);
+        $(".painting-year").text(painting.year);
+      }
   });
   </script>
 
@@ -370,6 +430,11 @@ var x = setInterval(function() {
     <div class="twelve columns">
       <div class="art-container animated fadeIn four">
         <img id="art-painting" class="impressionist-art" alt="Impressionist Landscape Painting">
+        <div class="painting-legend">
+          <div class="legend-line"></div>
+          <p class="painting-title"></p>
+          <p><span class="painting-artist"></span> (<span class="painting-year"></span>)</p>
+        </div>
       </div>
     </div>
   </div>

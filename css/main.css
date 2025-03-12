@@ -323,6 +323,52 @@ body.night .impressionist-art {
 	box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
 }
 
+/* Painting legend styles */
+.painting-legend {
+  margin-top: 16px;
+  text-align: center;
+  transition: opacity 0.3s ease;
+  padding: 0 20px;
+}
+
+.legend-line {
+  width: 40px;
+  height: 1px;
+  margin: 0 auto 16px;
+  background: linear-gradient(90deg, transparent, currentColor, transparent);
+  opacity: 0.5;
+}
+
+.painting-title {
+  font-family: NeueHaasMedium;
+  font-size: 16px;
+  margin-bottom: 4px;
+  font-style: italic;
+}
+
+body.night .painting-title {
+  color: #fff;
+}
+
+body.day .painting-title {
+  color: #403E43;
+}
+
+.painting-artist, .painting-year {
+  font-family: NeueHaas;
+  font-size: 14px;
+}
+
+.legend-fade-out {
+  opacity: 0;
+  transition: opacity 0.3s ease-out;
+}
+
+.legend-fade-in {
+  opacity: 1;
+  transition: opacity 0.5s ease-in;
+}
+
 /* For devices smaller than 400px */
 @media (max-width: 550px) {
 body.night #moon {
