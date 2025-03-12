@@ -528,3 +528,78 @@ body.night .file-link:hover {
 .file-name {
 	font-family: NeueHaas;
 }
+
+/* Contact Section Styles */
+.contact-section {
+  margin-top: 16px;
+}
+
+.contact-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.contact-item {
+  display: flex;
+  align-items: flex-start;
+  transition: transform 0.3s ease;
+  padding: 8px 12px;  /* Increased padding */
+  border-radius: 5px;
+  width: 100%;  /* Ensure full width */
+  box-sizing: border-box; /* Include padding in width calculation */
+}
+
+.contact-item:hover {
+  transform: translateX(5px);
+  background-color: rgba(0, 0, 0, 0.03);
+}
+
+body.night .contact-item:hover {
+  background-color: rgba(255, 255, 255, 0.03);
+}
+
+.contact-icon {
+  font-size: 18px;
+  margin-right: 16px;
+  opacity: 0.8;
+  margin-top: 2px;
+  flex-shrink: 0; /* Prevent icon from shrinking */
+}
+
+.contact-info {
+  flex: 1;
+  min-width: 0; /* Allow proper flexbox text wrapping */
+  overflow: hidden; /* Prevent overflow */
+}
+
+.contact-label {
+  font-family: NeueHaasMedium;
+  font-size: 14px;
+  margin-bottom: 4px;
+  opacity: 0.7;
+}
+
+.contact-link {
+  font-family: NeueHaas;
+  position: relative;
+  display: inline-block;
+  transition: all 0.3s ease;
+  word-break: break-word; /* Allow breaking long email addresses */
+  max-width: 100%; /* Ensure text doesn't overflow container */
+}
+
+.contact-link::after {
+  content: "";
+  position: absolute;
+  width: 0;
+  height: 1px;
+  bottom: -2px;
+  left: 0;
+  background-color: currentColor;
+  transition: width 0.3s ease;
+}
+
+.contact-link:hover::after {
+  width: 100%;
+}
