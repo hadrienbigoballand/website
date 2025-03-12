@@ -136,6 +136,9 @@ body.night h1 {
 	letter-spacing: .25px;
 	line-height: 28px;
 	padding-bottom: 48px;
+	cursor: default;
+	transition: all 0.5s ease;
+	position: relative;
 }
 
 body.day h1 {
@@ -145,6 +148,48 @@ body.day h1 {
 	letter-spacing: .25px;
 	line-height: 28px;
 	padding-bottom: 48px;
+	cursor: default;
+	transition: all 0.5s ease;
+	position: relative;
+}
+
+/* Elegant hover effect for heading */
+body.night h1:hover {
+	text-shadow: 0 0 8px rgba(255, 255, 255, 0.4);
+	letter-spacing: 0.45px;
+	background: linear-gradient(45deg, #fff, #c8c8ff, #fff);
+	-webkit-background-clip: text;
+	background-clip: text;
+	-webkit-text-fill-color: transparent;
+	transform: translateY(-2px);
+}
+
+body.day h1:hover {
+	text-shadow: 0 0 8px rgba(64, 62, 67, 0.2);
+	letter-spacing: 0.45px;
+	background: linear-gradient(45deg, #403E43, #6a6875, #403E43);
+	-webkit-background-clip: text;
+	background-clip: text;
+	-webkit-text-fill-color: transparent;
+	transform: translateY(-2px);
+}
+
+/* Elegant decorative element that appears on hover */
+body.night h1:after, body.day h1:after {
+	content: "";
+	position: absolute;
+	width: 0;
+	height: 1px;
+	bottom: 40px;
+	left: 0;
+	background: linear-gradient(90deg, transparent, currentColor, transparent);
+	transition: width 0.5s ease;
+	opacity: 0;
+}
+
+body.night h1:hover:after, body.day h1:hover:after {
+	width: 100%;
+	opacity: 0.7;
 }
 
 body.night h2 {
