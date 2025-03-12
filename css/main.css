@@ -362,3 +362,123 @@ body.day #sun {
         margin-left: 0; /* Remove negative margin */
     }
 }
+
+/* File Downloads Section */
+.downloads-section {
+	margin-top: 16px;
+}
+
+.file-list {
+	list-style: none;
+	margin-top: 16px;
+}
+
+.file-item {
+	margin-bottom: 12px;
+	transition: transform 0.2s ease;
+}
+
+.file-item:hover {
+	transform: translateX(5px);
+}
+
+.file-link {
+	display: flex;
+	align-items: center;
+	padding: 8px 12px;
+	border-radius: 4px;
+	transition: all 0.3s ease;
+}
+
+body.day .file-link {
+	background-color: rgba(64, 62, 67, 0.05);
+}
+
+body.night .file-link {
+	background-color: rgba(255, 255, 255, 0.05);
+}
+
+body.day .file-link:hover {
+	background-color: rgba(64, 62, 67, 0.1);
+}
+
+body.night .file-link:hover {
+	background-color: rgba(255, 255, 255, 0.1);
+}
+
+.file-icon {
+	margin-right: 12px;
+	font-size: 18px;
+}
+
+.file-name {
+	font-family: NeueHaas;
+}
+
+/* Teaching Resources Section */
+.resources-group {
+	margin-bottom: 24px;
+}
+
+.resource-subtitle {
+	font-family: NeueHaasMedium;
+	margin-top: 20px;
+	margin-bottom: 12px;
+	font-size: 15px;
+}
+
+body.night .resource-subtitle {
+	color: #C8C8C9;
+}
+
+body.day .resource-subtitle {
+	color: #403E43;
+}
+
+.file-list {
+	list-style: none;
+	margin-top: 8px;
+	margin-left: 8px;
+}
+
+.file-item {
+	margin-bottom: 10px;
+	transition: transform 0.2s ease;
+}
+
+.file-item:hover {
+	transform: translateX(5px);
+}
+
+.file-link {
+	display: flex;
+	align-items: center;
+	padding: 8px 12px;
+	border-radius: 4px;
+	transition: all 0.3s ease;
+}
+
+body.day .file-link {
+	background-color: rgba(64, 62, 67, 0.05);
+}
+
+body.night .file-link {
+	background-color: rgba(255, 255, 255, 0.05);
+}
+
+body.day .file-link:hover {
+	background-color: rgba(64, 62, 67, 0.1);
+}
+
+body.night .file-link:hover {
+	background-color: rgba(255, 255, 255, 0.1);
+}
+
+.file-icon {
+	margin-right: 12px;
+	font-size: 18px;
+}
+
+.file-name {
+	font-family: NeueHaas;
+}
