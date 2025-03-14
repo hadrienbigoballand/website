@@ -603,3 +603,50 @@ body.night .contact-item:hover {
 .contact-link:hover::after {
   width: 100%;
 }
+
+/* Override Skeleton responsive grid for wider screens */
+@media (min-width: 550px) {
+  /* Container should stay centered with reasonable max width */
+  .container {
+    width: 85%;
+    max-width: 1000px;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 0 20px;
+  }
+  
+  /* Keep consistent column widths */
+  .three.columns.icon {
+    width: 100%;
+    text-align: right;
+    margin-bottom: 10px;
+  }
+  
+  /* Keep responsive six columns width */
+  .six.columns {
+    width: 100%;
+  }
+  
+  /* Remove the offset that causes text to be squeezed right */
+  .offset-by-three {
+    margin-left: 0;
+  }
+  
+  /* Maintain padding and positioning */
+  .row, .columns {
+    padding-left: 0;
+    padding-right: 0;
+  }
+  
+  /* Fix icon positioning */
+  #moon, #sun {
+    padding-right: 0;
+  }
+}
+
+/* For devices with larger screens */
+@media (min-width: 1200px) {
+  .container {
+    width: 75%;
+  }
+}
