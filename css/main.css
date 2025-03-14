@@ -369,6 +369,275 @@ body.day .painting-title {
   transition: opacity 0.5s ease-in;
 }
 
+/* Painting wrapper to position button */
+.painting-wrapper {
+  position: relative;
+  width: 100%;
+  display: block;
+}
+
+/* List button styling - redesigned for elegance */
+.painting-list-button {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 20px auto 0;
+  padding: 10px 20px;
+  border: none;
+  background: transparent;
+  font-family: NeueHaas; /* Changed from NeueHaasMedium to match regular text */
+  font-size: 14px;
+  letter-spacing: 0.35px; /* Adjusted to match regular text */
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  border-radius: 30px;
+  color: #403E43;
+  outline: none;
+}
+
+body.night .painting-list-button {
+  color: #C8C8C9;
+}
+
+/* Elegant hover effect */
+.painting-list-button:before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.05);
+  border-radius: 30px;
+  transform: scaleX(0.7);
+  opacity: 0;
+  transition: all 0.3s ease;
+}
+
+body.night .painting-list-button:before {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.painting-list-button:hover:before {
+  opacity: 1;
+  transform: scaleX(1);
+}
+
+.painting-list-button:active:before {
+  transform: scaleX(0.95);
+}
+
+/* List icon styling */
+.list-icon {
+  position: relative;
+  width: 12px;
+  height: 12px;
+  margin-left: 10px;
+}
+
+.list-icon:before, 
+.list-icon:after {
+  content: "";
+  position: absolute;
+  width: 10px;
+  height: 1px;
+  background-color: #403E43;
+  transition: all 0.3s ease;
+  left: 0;
+}
+
+.list-icon:before {
+  top: 4px;
+  transform: rotate(45deg);
+}
+
+.list-icon:after {
+  bottom: 3px;
+  transform: rotate(-45deg);
+}
+
+body.night .list-icon:before,
+body.night .list-icon:after {
+  background-color: #C8C8C9;
+}
+
+.painting-list-button:hover .list-icon:before {
+  width: 8px;
+  transform: translateX(1px) rotate(45deg);
+}
+
+.painting-list-button:hover .list-icon:after {
+  width: 8px;
+  transform: translateX(1px) rotate(-45deg);
+}
+
+/* Painting selection bubble */
+.painting-selection-bubble {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.95);
+  width: 90%;
+  max-width: 600px;
+  max-height: 0;
+  background-color: #fff;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+  z-index: 1000; /* Higher z-index to ensure visibility */
+}
+
+body.night .painting-selection-bubble {
+  background-color: #2D2D32;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+}
+
+.bubble-visible {
+  visibility: visible !important; /* Force visibility */
+}
+
+.bubble-expanded {
+  opacity: 1 !important; /* Force opacity */
+  max-height: 80vh !important; /* Force max height */
+  transform: translate(-50%, -50%) scale(1) !important; /* Force transform */
+}
+
+/* Bubble header */
+.bubble-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+body.night .bubble-header {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.bubble-header h5 {
+  font-family: NeueHaasMedium;
+  font-size: 16px;
+  margin: 0;
+}
+
+body.night .bubble-header h5 {
+  color: #fff;
+}
+
+.close-bubble {
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  padding: 0;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+}
+
+.close-bubble:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+body.night .close-bubble {
+  color: #fff;
+}
+
+body.night .close-bubble:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Painting grid */
+.painting-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 12px;
+  padding: 16px;
+  max-height: 60vh;
+  overflow-y: auto;
+}
+
+.painting-item {
+  cursor: pointer;
+  border-radius: 8px;
+  overflow: hidden;
+  transition: transform 0.2s ease;
+  position: relative;
+}
+
+.painting-item:hover {
+  transform: translateY(-3px);
+}
+
+.painting-item img {
+  width: 100%;
+  height: 100px;
+  object-fit: cover;
+  display: block;
+}
+
+.thumbnail-info {
+  padding: 8px;
+  background-color: rgba(255, 255, 255, 0.9);
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  transform: translateY(100%);
+  transition: transform 0.3s ease;
+}
+
+.painting-item:hover .thumbnail-info {
+  transform: translateY(0);
+}
+
+.thumbnail-title {
+  display: block;
+  font-family: NeueHaasMedium;
+  font-size: 10px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.thumbnail-artist {
+  display: block;
+  font-size: 9px;
+  opacity: 0.8;
+}
+
+body.night .thumbnail-info {
+  background-color: rgba(45, 45, 50, 0.9);
+  color: #fff;
+}
+
+/* Scrollbar styling for the painting grid */
+.painting-grid::-webkit-scrollbar {
+  width: 6px;
+}
+
+.painting-grid::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.painting-grid::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 20px;
+}
+
+body.night .painting-grid::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
 /* For devices smaller than 400px */
 @media (max-width: 550px) {
 body.night #moon {

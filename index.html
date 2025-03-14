@@ -184,6 +184,187 @@
         $(".painting-artist").text(painting.artist);
         $(".painting-year").text(painting.year);
       }
+
+      // Generate painting thumbnails for selection bubble
+      const paintingGrid = document.querySelector('.painting-grid');
+      paintings.forEach((painting, index) => {
+        const paintingItem = document.createElement('div');
+        paintingItem.classList.add('painting-item');
+        paintingItem.innerHTML = `
+          <img src="${painting.src}" alt="${painting.title}" loading="lazy">
+          <div class="thumbnail-info">
+            <span class="thumbnail-title">${painting.title}</span>
+            <span class="thumbnail-artist">${painting.artist}</span>
+          </div>
+        `;
+        paintingItem.addEventListener('click', () => selectPainting(index));
+        paintingGrid.appendChild(paintingItem);
+      });
+      
+      // List button click handler
+      $("#list-button").click(function(e) {
+        e.stopPropagation();
+        togglePaintingSelection();
+      });
+      
+      // Close bubble on close button click
+      $(".close-bubble").click(function(e) {
+        e.stopPropagation();
+        hidePaintingSelection();
+      });
+      
+      // Close bubble when clicking outside
+      $(document).click(function(e) {
+        if (!$(e.target).closest('#painting-selection, #list-button').length) {
+          hidePaintingSelection();
+        }
+      });
+      
+      // Toggle painting selection bubble
+      function togglePaintingSelection() {
+        const bubble = $('#painting-selection');
+        if (bubble.hasClass('bubble-visible')) {
+          hidePaintingSelection();
+        } else {
+          showPaintingSelection();
+        }
+      }
+      
+      // Show painting selection bubble with animation
+      function showPaintingSelection() {
+        const bubble = $('#painting-selection');
+        bubble.addClass('bubble-visible');
+        setTimeout(() => {
+          bubble.addClass('bubble-expanded');
+        }, 10);
+      }
+      
+      // Hide painting selection bubble with animation
+      function hidePaintingSelection() {
+        const bubble = $('#painting-selection');
+        bubble.removeClass('bubble-expanded');
+        setTimeout(() => {
+          bubble.removeClass('bubble-visible');
+        }, 300);
+      }
+      
+      // Select a painting from the bubble
+      function selectPainting(index) {
+        const selectedPainting = paintings[index];
+        
+        // Apply the transition animation
+        const artPainting = $("#art-painting");
+        artPainting.addClass("painting-fade-out");
+        $(".painting-legend").addClass("legend-fade-out");
+        
+        // Hide the selection bubble
+        hidePaintingSelection();
+        
+        // After fade out completes, change image and fade back in
+        setTimeout(() => {
+          artPainting.attr("src", selectedPainting.src);
+          updatePaintingLegend(selectedPainting);
+          artPainting.removeClass("painting-fade-out");
+          artPainting.addClass("painting-fade-in");
+          $(".painting-legend").removeClass("legend-fade-out");
+          $(".painting-legend").addClass("legend-fade-in");
+          
+          // Remove the fade-in classes after animation completes
+          setTimeout(() => {
+            artPainting.removeClass("painting-fade-in");
+            $(".painting-legend").removeClass("legend-fade-in");
+          }, 500);
+        }, 300);
+      }
+
+      // Make sure the painting grid is created correctly
+      // Create painting grid if it doesn't exist
+      const createPaintingGrid = function() {
+          console.log("Creating painting thumbnails");
+          const paintingGrid = document.querySelector('.painting-grid');
+          if(!paintingGrid) {
+              console.error("Painting grid not found");
+              return;
+          }
+          
+          // Clear existing content
+          paintingGrid.innerHTML = '';
+          
+          // Add paintings
+          paintings.forEach((painting, index) => {
+              const paintingItem = document.createElement('div');
+              paintingItem.classList.add('painting-item');
+              paintingItem.innerHTML = `
+                  <img src="${painting.src}" alt="${painting.title}" loading="lazy">
+                  <div class="thumbnail-info">
+                      <span class="thumbnail-title">${painting.title}</span>
+                      <span class="thumbnail-artist">${painting.artist}</span>
+                  </div>
+              `;
+              paintingItem.addEventListener('click', () => selectPainting(index));
+              paintingGrid.appendChild(paintingItem);
+          });
+      };
+      
+      // Create thumbnails on page load
+      createPaintingGrid();
+      
+      // Improved list button click handler with debugging
+      $("#list-button").click(function(e) {
+          console.log("Browse Collection button clicked");
+          e.preventDefault(); // Prevent any default behavior
+          e.stopPropagation();
+          togglePaintingSelection();
+      });
+      
+      // Close bubble on close button click
+      $(".close-bubble").click(function(e) {
+          console.log("Close button clicked");
+          e.preventDefault();
+          e.stopPropagation();
+          hidePaintingSelection();
+      });
+      
+      // Close bubble when clicking outside
+      $(document).click(function(e) {
+          if (!$(e.target).closest('#painting-selection, #list-button').length) {
+              hidePaintingSelection();
+          }
+      });
+      
+      // Toggle painting selection bubble with improved visibility
+      function togglePaintingSelection() {
+          console.log("Toggling painting selection");
+          const bubble = $('#painting-selection');
+          if (bubble.hasClass('bubble-expanded')) {
+              hidePaintingSelection();
+          } else {
+              showPaintingSelection();
+          }
+      }
+      
+      // Show painting selection bubble with improved animation
+      function showPaintingSelection() {
+          console.log("Showing painting selection");
+          const bubble = $('#painting-selection');
+          bubble.addClass('bubble-visible');
+          // Use a slightly longer timeout to ensure the visibility takes effect first
+          setTimeout(() => {
+              bubble.addClass('bubble-expanded');
+              console.log("Added bubble-expanded class");
+          }, 20);
+      }
+      
+      // Hide painting selection bubble with animation
+      function hidePaintingSelection() {
+          console.log("Hiding painting selection");
+          const bubble = $('#painting-selection');
+          bubble.removeClass('bubble-expanded');
+          setTimeout(() => {
+              bubble.removeClass('bubble-visible');
+              console.log("Removed bubble-visible class");
+          }, 400);
+      }
   });
   </script>
 
@@ -501,11 +682,31 @@ var x = setInterval(function() {
   <div class="row group">
     <div class="twelve columns">
       <div class="art-container animated fadeIn four">
-        <img id="art-painting" class="impressionist-art" alt="Impressionist Landscape Painting">
+        <div class="painting-wrapper">
+          <img id="art-painting" class="impressionist-art" alt="Impressionist Landscape Painting">
+        </div>
+        
         <div class="painting-legend">
           <div class="legend-line"></div>
           <p class="painting-title"></p>
           <p><span class="painting-artist"></span> (<span class="painting-year"></span>)</p>
+        </div>
+        
+        <!-- Button moved outside painting wrapper -->
+        <button id="list-button" class="painting-list-button" aria-label="Show painting list">
+          <span>Browse Collection</span>
+          <span class="list-icon"></span>
+        </button>
+        
+        <!-- Painting selection bubble menu -->
+        <div id="painting-selection" class="painting-selection-bubble">
+          <div class="bubble-header">
+            <h5>Choose a painting</h5>
+            <button class="close-bubble" aria-label="Close">×</button>
+          </div>
+          <div class="painting-grid">
+            <!-- Paintings will be added dynamically by JavaScript -->
+          </div>
         </div>
       </div>
     </div>
