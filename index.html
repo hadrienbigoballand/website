@@ -365,6 +365,14 @@
               console.log("Removed bubble-visible class");
           }, 400);
       }
+
+      // Add keyboard shortcut (ESC key) to close the painting selection bubble
+      $(document).keydown(function(e) {
+          // Check if key pressed is Escape (key code 27)
+          if (e.key === "Escape" || e.keyCode === 27) {
+              hidePaintingSelection();
+          }
+      });
   });
   </script>
 
