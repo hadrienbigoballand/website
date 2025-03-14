@@ -373,6 +373,36 @@
               hidePaintingSelection();
           }
       });
+
+      // Improved show painting selection bubble with smooth animation
+      function showPaintingSelection() {
+          const bubble = $('#painting-selection');
+          
+          // First make it visible but still transparent
+          bubble.addClass('bubble-visible');
+          
+          // Force browser to calculate layout before animation
+          // This prevents the position glitch by establishing dimensions
+          bubble[0].offsetHeight;
+          
+          // Then start the expansion animation after a very short delay
+          window.requestAnimationFrame(() => {
+              bubble.addClass('bubble-expanded');
+          });
+      }
+      
+      // Improved hide painting selection bubble with smooth animation
+      function hidePaintingSelection() {
+          const bubble = $('#painting-selection');
+          
+          // First remove the expansion
+          bubble.removeClass('bubble-expanded');
+          
+          // Then hide after animation completes
+          setTimeout(() => {
+              bubble.removeClass('bubble-visible');
+          }, 300);
+      }
   });
   </script>
 

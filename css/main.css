@@ -472,7 +472,7 @@ body.night .list-icon:after {
   transform: translateX(1px) rotate(-45deg);
 }
 
-/* Painting selection bubble */
+/* Painting selection bubble - improved animation */
 .painting-selection-bubble {
   position: fixed;
   top: 50%;
@@ -480,15 +480,19 @@ body.night .list-icon:after {
   transform: translate(-50%, -50%) scale(0.95);
   width: 90%;
   max-width: 600px;
-  max-height: 0;
   background-color: #fff;
   border-radius: 16px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
   overflow: hidden;
   opacity: 0;
   visibility: hidden;
-  transition: all 0.4s cubic-bezier(0.19, 1, 0.22, 1);
-  z-index: 1000; /* Higher z-index to ensure visibility */
+  pointer-events: none;
+  transition: opacity 0.3s cubic-bezier(0.19, 1, 0.22, 1), 
+              transform 0.3s cubic-bezier(0.19, 1, 0.22, 1),
+              visibility 0s linear 0.3s; /* Delay visibility change until after opacity */
+  z-index: 1000;
+  max-height: 80vh; /* Set max height initially to prevent layout shifts */
+  height: auto;
 }
 
 body.night .painting-selection-bubble {
@@ -497,13 +501,17 @@ body.night .painting-selection-bubble {
 }
 
 .bubble-visible {
-  visibility: visible !important; /* Force visibility */
+  opacity: 0;
+  visibility: visible;
+  pointer-events: auto;
+  transition: opacity 0.3s cubic-bezier(0.19, 1, 0.22, 1),
+              transform 0.3s cubic-bezier(0.19, 1, 0.22, 1),
+              visibility 0s linear; /* No delay on visibility when showing */
 }
 
 .bubble-expanded {
-  opacity: 1 !important; /* Force opacity */
-  max-height: 80vh !important; /* Force max height */
-  transform: translate(-50%, -50%) scale(1) !important; /* Force transform */
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
 }
 
 /* Bubble header */
