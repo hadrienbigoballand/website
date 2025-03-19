@@ -195,11 +195,14 @@
           .nice()
           .range([0, width]);
           
-        // Créer l'histogramme
+        // Créer l'histogramme avec un nombre de bins dépendant du nombre d'échantillons
+        // Utiliser la règle de la racine carrée: √numExperiments
+        const numBins = Math.min(Math.ceil(Math.sqrt(numExperiments)), isMobile() ? 30 : 60);
+        
         const histogram = d3.histogram()
           .value(d => d)
           .domain(x.domain())
-          .thresholds(x.ticks(isMobile() ? 15 : 30)); // Moins de barres sur mobile
+          .thresholds(x.ticks(numBins)); // Nombre de bins basé sur le nombre d'expériences
           
         const bins = histogram(means);
         if (bins.length === 0 || !bins[0]) return; // Protection contre les erreurs
