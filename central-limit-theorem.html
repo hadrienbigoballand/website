@@ -55,385 +55,6 @@
       }
   });
   </script>
-</head>
-<body class="day">
-  <div class="container">
-    <div class="row">
-      <div class="three columns icon">
-        <img src="images/moon.svg" id="moon">
-        <img src="images/sun.svg" id="sun">
-      </div>
-      
-      <div class="nine columns">
-        <button class="back-button" onclick="window.location.href='index.html'">Retour à l'accueil</button>
-      </div>
-    </div>
-    
-    <div class="clt-container animated fadeIn one">
-      <div class="clt-header">
-        <h1>Théorème Central Limite - Illustration</h1>
-        <p class="animated fadeIn two" style="text-align: justify;">Cette visualisation interactive illustre le théorème central limite avec un exemple simple : le lancer de pièce (pile ou face). Observez comment la distribution des moyennes d'échantillons se rapproche d'une distribution normale quand la taille des échantillons augmente.</p>
-      </div>
-      
-      <div class="info-panel animated fadeIn three">
-        <p>Imaginons que nous lancions une pièce équilibrée plusieurs fois et que nous calculions la moyenne des résultats (0 pour pile, 1 pour face). Selon le théorème central limite, la distribution de ces moyennes va tendre vers une loi normale quand nous répétons cette expérience un grand nombre de fois.</p>
-        <p>Si \(X_1, X_2, \ldots, X_n\) sont des variables aléatoires indépendantes et identiquement distribuées où chaque \(X_i\) vaut 0 (pile) ou 1 (face) avec probabilité 0.5, alors la somme normalisée:</p>
-        <p>\[ Z_n = \frac{\sum_{i=1}^{n} X_i - n \cdot 0.5}{\sqrt{n \cdot 0.5 \cdot 0.5}} \]</p>
-        <p>converge en loi vers une variable aléatoire normale centrée réduite \(\mathcal{N}(0,1)\) quand \(n\) tend vers l'infini.</p>
-      </div>
-      
-      <div class="controls-panel animated fadeIn three">
-        <div class="control-group">
-          <label for="sample-size">Taille de l'échantillon (nombre de lancers): <span id="sample-size-value">30</span></label>
-          <div class="slider-container">
-            <input type="range" id="sample-size" min="1" max="1000" value="30" step="1">
-          </div>
-        </div>
-      </div>
-      
-      <div class="visualization-single animated fadeIn four">
-        <div class="visualization-card">
-          <h3>Distribution des moyennes d'échantillons</h3>
-          <div id="sample-means-distribution" class="visualization-container"></div>
-          <p class="description">Ce graphique montre la distribution des moyennes obtenues pour chaque expérience (série de lancers). Observez comme elle se rapproche d'une distribution normale (courbe rouge en pointillé) lorsque la taille de l'échantillon augmente.</p>
-          <div class="stat-display">
-            <div class="stat-item">
-              <span class="stat-label">Moyenne théorique:</span>
-              <span id="theoretical-mean" class="stat-value">0.5</span>
-            </div>
-            <div class="stat-item">
-              <span class="stat-label">Écart-type théorique:</span>
-              <span id="theoretical-sd" class="stat-value">-</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  
-  <script>
-    // Détection du mode jour/nuit
-    function isDarkMode() {
-      return document.body.classList.contains('night');
-    }
-
-    // Synchronisation du mode thème avec la page principale
-    (function() {
-      const storedTheme = localStorage.getItem('theme');
-      if (storedTheme === 'night') {
-        document.body.classList.remove('day');
-        document.body.classList.add('night');
-      }
-    })();
-
-    document.addEventListener('DOMContentLoaded', function() {
-      // Variables et configurations
-      let sampleSize = parseInt(document.getElementById('sample-size').value);
-      const numExperiments = 10000; // Nombre d'expériences fixé à 10000
-      let svg, width, height;
-      
-      // Fonction pour initialiser ou rafraîchir la taille du SVG
-      function setupSvgDimensions() {
-        const container = document.getElementById('sample-means-distribution');
-        if (!container) return;
-        
-        // Nettoyer l'ancien SVG s'il existe
-        d3.select('#sample-means-distribution svg').remove();
-        
-        // Configurations des marges et dimensions
-        const margin = {
-          top: 20, 
-          right: 30, 
-          bottom: 40, 
-          left: isMobile() ? 40 : 50
-        };
-        
-        // Obtenir la taille du conteneur (peut changer lors du redimensionnement)
-        width = container.clientWidth - margin.left - margin.right;
-        height = container.clientHeight - margin.top - margin.bottom;
-        
-        // Vérifier que les dimensions sont valides (important sur mobile)
-        if (width <= 0 || height <= 0) {
-          console.log("Invalid dimensions, retrying...");
-          // Sur certains appareils, il faut un peu plus de temps pour que les dimensions soient calculées
-          setTimeout(setupSvgDimensions, 100);
-          return;
-        }
-        
-        // Créer le SVG avec les bonnes dimensions
-        svg = d3.select('#sample-means-distribution')
-          .append('svg')
-            .attr('width', width + margin.left + margin.right)
-            .attr('height', height + margin.top + margin.bottom)
-            .attr('viewBox', `0 0 ${width + margin.left + margin.right} ${height + margin.top + margin.bottom}`)
-            .attr('preserveAspectRatio', 'xMidYMid meet')
-          .append('g')
-            .attr('transform', `translate(${margin.left},${margin.top})`);
-            
-        // Générer la visualisation
-        updateVisualization();
-      }
-      
-      // Détecter si on est sur mobile
-      function isMobile() {
-        return window.innerWidth <= 768;
-      }
-      
-      // Tooltip pour les informations au survol
-      const tooltip = d3.select('body').append('div')
-        .attr('class', 'tooltip')
-        .style('opacity', 0);
-      
-      // Générer des échantillons pile ou face et calculer les moyennes
-      function generateSampleMeans(sampleSize, numExperiments) {
-        const means = [];
-        
-        for (let i = 0; i < numExperiments; i++) {
-          let sum = 0;
-          
-          // Simuler sampleSize lancers
-          for (let j = 0; j < sampleSize; j++) {
-            // 0 pour pile, 1 pour face avec probabilité 0.5
-            sum += (Math.random() < 0.5) ? 0 : 1;
-          }
-          
-          // Calculer la moyenne de cet échantillon
-          const mean = sum / sampleSize;
-          means.push(mean);
-        }
-        
-        return means;
-      }
-      
-      // Mettre à jour la visualisation des moyennes d'échantillons
-      function updateSampleMeansDistribution(means) {
-        if (!svg || !width || !height) return;
-        
-        svg.selectAll('*').remove();
-        
-        // Calcul des statistiques
-        const meanOfMeans = d3.mean(means);
-        const stdOfMeans = d3.deviation(means);
-        const theoreticalMean = 0.5; // Pour une pièce équilibrée
-        const theoreticalStd = Math.sqrt(0.25 / sampleSize); // sqrt(p*(1-p)/n)
-        
-        // Affichage de l'écart-type théorique
-        document.getElementById('theoretical-sd').textContent = theoreticalStd.toFixed(4);
-        
-        // Échelles
-        const xExtent = [
-          Math.min(d3.min(means), theoreticalMean - 3.5 * theoreticalStd),
-          Math.max(d3.max(means), theoreticalMean + 3.5 * theoreticalStd)
-        ];
-        
-        const x = d3.scaleLinear()
-          .domain(xExtent)
-          .nice()
-          .range([0, width]);
-          
-        // Créer l'histogramme avec un nombre de bins dépendant du nombre d'échantillons
-        // Utiliser la règle de la racine carrée: √numExperiments
-        const numBins = Math.min(Math.ceil(Math.sqrt(numExperiments)), isMobile() ? 30 : 60);
-        
-        const histogram = d3.histogram()
-          .value(d => d)
-          .domain(x.domain())
-          .thresholds(x.ticks(numBins)); // Nombre de bins basé sur le nombre d'expériences
-          
-        const bins = histogram(means);
-        if (bins.length === 0 || !bins[0]) return; // Protection contre les erreurs
-        
-        const binWidth = bins[0].x1 - bins[0].x0;
-        
-        const y = d3.scaleLinear()
-          .domain([0, d3.max(bins, d => d.length) / means.length * 1.1])
-          .nice()
-          .range([height, 0]);
-          
-        // Axes
-        svg.append('g')
-          .attr('class', 'axis')
-          .attr('transform', `translate(0,${height})`)
-          .call(d3.axisBottom(x).ticks(isMobile() ? 5 : 8)); // Moins de graduations sur mobile
-          
-        svg.append('g')
-          .attr('class', 'axis')
-          .call(d3.axisLeft(y).ticks(5).tickFormat(d3.format('.1%')));
-        
-        // Barres de l'histogramme
-        svg.selectAll('rect')
-          .data(bins)
-          .enter()
-          .append('rect')
-            .attr('class', 'histogram-rect')
-            .attr('x', d => x(d.x0) + 1)
-            .attr('y', d => y(d.length / means.length))
-            .attr('width', d => Math.max(0, x(d.x1) - x(d.x0) - 2))
-            .attr('height', d => height - y(d.length / means.length))
-            .attr('fill', isDarkMode() ? '#5d9cfa' : '#4a89dc')
-            .on('mouseover touchstart', showTooltip)
-            .on('mouseout touchend', hideTooltip);
-            
-        // Courbe normale théorique
-        const normalPoints = [];
-        for (let i = 0; i <= width; i++) {
-          const x0 = x.invert(i);
-          // Compute the PDF for the normal distribution and scale by bin width
-          const pdf = (1 / (theoreticalStd * Math.sqrt(2 * Math.PI))) *
-                    Math.exp(-0.5 * Math.pow((x0 - theoreticalMean) / theoreticalStd, 2));
-          const scaledPdf = pdf * binWidth; // Scale to match the histogram's relative frequencies
-          normalPoints.push([i, y(scaledPdf)]);
-        }
-        
-        const line = d3.line();
-        
-        // Ajout de la courbe avec animation
-        const path = svg.append('path')
-          .datum(normalPoints)
-          .attr('class', 'normal-curve')
-          .attr('d', line);
-          
-        // Animation de traçage de la courbe
-        const totalLength = path.node().getTotalLength();
-        path
-          .attr('stroke-dasharray', totalLength + ' ' + totalLength)
-          .attr('stroke-dashoffset', totalLength)
-          .transition()
-            .duration(800)
-            .ease(d3.easeLinear)
-            .attr('stroke-dashoffset', 0);
-            
-        // Légendes
-        svg.append('text')
-          .attr('transform', `translate(${width/2}, ${height + (isMobile() ? 30 : 35)})`)
-          .style('text-anchor', 'middle')
-          .attr('class', 'axis-label')
-          .text('Moyenne d\'échantillon');
-          
-        svg.append('text')
-          .attr('transform', 'rotate(-90)')
-          .attr('y', isMobile() ? -30 : -40)
-          .attr('x', -height/2)
-          .style('text-anchor', 'middle')
-          .attr('class', 'axis-label')
-          .text('Fréquence');
-          
-        // Ligne verticale pour la moyenne théorique
-        svg.append('line')
-          .attr('x1', x(theoreticalMean))
-          .attr('y1', 0)
-          .attr('x2', x(theoreticalMean))
-          .attr('y2', height)
-          .attr('stroke', isDarkMode() ? '#ff8787' : '#ff6b6b')
-          .attr('stroke-width', 2)
-          .attr('stroke-dasharray', '3,3');
-          
-        // Annotation de la moyenne théorique
-        svg.append('text')
-          .attr('x', x(theoreticalMean))
-          .attr('y', 10)
-          .attr('text-anchor', 'middle')
-          .style('font-family', 'NeueHaasMedium')
-          .style('font-size', '11px')
-          .text(`μ = 0.5`);
-          
-        // Légende pour la courbe normale - adaptée pour mobile
-        if (!isMobile()) {
-          svg.append('line')
-            .attr('x1', width - 120)
-            .attr('y1', 20)
-            .attr('x2', width - 80)
-            .attr('y2', 20)
-            .attr('stroke', isDarkMode() ? '#ff8787' : '#ff6b6b')
-            .attr('stroke-width', 2)
-            .attr('stroke-dasharray', '5,3');
-            
-          svg.append('text')
-            .attr('x', width - 70)
-            .attr('y', 24)
-            .style('font-size', '10px')
-            .text('Distribution normale théorique');
-        } else {
-          // Version compacte pour mobile
-          svg.append('line')
-            .attr('x1', width - 85)
-            .attr('y1', 15)
-            .attr('x2', width - 60)
-            .attr('y2', 15)
-            .attr('stroke', isDarkMode() ? '#ff8787' : '#ff6b6b')
-            .attr('stroke-width', 2)
-            .attr('stroke-dasharray', '5,3');
-            
-          svg.append('text')
-            .attr('x', width - 50)
-            .attr('y', 18)
-            .style('font-size', '8px')
-            .text('Normale théorique');
-        }
-      }
-      
-      // Fonction pour mettre à jour la visualisation
-      function updateVisualization() {
-        const means = generateSampleMeans(sampleSize, numExperiments);
-        updateSampleMeansDistribution(means);
-      }
-      
-      // Événements pour les contrôles
-      document.getElementById('sample-size').addEventListener('input', function() {
-        sampleSize = parseInt(this.value);
-        document.getElementById('sample-size-value').textContent = sampleSize;
-        updateVisualization();
-      });
-      
-      // Gestion du redimensionnement de la fenêtre
-      let resizeTimeout;
-      function handleResize() {
-        clearTimeout(resizeTimeout);
-        resizeTimeout = setTimeout(function() {
-          setupSvgDimensions();
-        }, 250);
-      }
-      
-      window.addEventListener('resize', handleResize);
-      
-      // Gérer les changements d'orientation sur mobile
-      window.addEventListener('orientationchange', function() {
-        // Attendre que le navigateur ait fini de recalculer les dimensions
-        setTimeout(setupSvgDimensions, 300);
-      });
-      
-      // Assurer une hauteur minimale pour le conteneur
-      const container = document.querySelector('.visualization-container');
-      if (container && isMobile()) {
-        container.style.height = '250px'; // Hauteur fixe plus petite sur mobile
-      }
-      
-      // Initialisation
-      // Attendre un peu pour s'assurer que le DOM est bien chargé et dimensionné
-      setTimeout(setupSvgDimensions, 100);
-    });
-
-    // Update tooltip handling to use smooth animations
-    function showTooltip(event, d) {
-      tooltip.html(`
-        <strong>Moyenne:</strong> ${((d.x0 + d.x1) / 2).toFixed(3)}<br>
-        <strong>Fréquence:</strong> ${(d.length / means.length * 100).toFixed(2)}%
-      `)
-      .style('left', (event.pageX ? event.pageX : event.changedTouches[0].pageX) + 'px')
-      .style('top', ((event.pageY ? event.pageY : event.changedTouches[0].pageY) - 28) + 'px')
-      .style('opacity', 1)
-      .classed('visible', true);
-      
-      d3.select(this).attr('opacity', 0.7);
-    }
-    
-    function hideTooltip() {
-      tooltip.classed('visible', false)
-        .style('opacity', 0);
-      d3.select(this).attr('opacity', 1);
-    }
-  </script>
-
   <style>
     /* Styles spécifiques à cette page */
     .visualization-single {
@@ -1070,6 +691,584 @@
         float: right;
       }
     }
+    
+    /* Coin flip animation styles */
+    .coin-animation-container {
+      height: 220px;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 30px auto 70px; /* Increased bottom margin from 40px to 70px */
+      perspective: 1000px;
+      position: relative;
+    }
+    
+    .coin {
+      position: relative;
+      width: 150px;
+      height: 150px;
+      transform-style: preserve-3d;
+      transition: transform 0.05s ease;
+      cursor: default;
+    }
+    
+    .coin-face {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      backface-visibility: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: NeueHaasMedium;
+      font-size: 28px;
+      box-shadow: 0 6px 25px rgba(0, 0, 0, 0.15);
+    }
+    
+    .coin-heads {
+      background: linear-gradient(45deg, #c0c0c0, #e0e0e0, #c0c0c0);
+      border: 8px solid #b0b0b0;
+      color: #555;
+    }
+    
+    .coin-tails {
+      background: linear-gradient(45deg, #d4af37, #f9d775, #d4af37);
+      border: 8px solid #c4a02f;
+      color: #885e00;
+      transform: rotateY(180deg);
+    }
+    
+    body.night .coin-heads {
+      background: linear-gradient(45deg, #505050, #707070, #505050);
+      border: 8px solid #454545;
+      color: #ddd;
+    }
+    
+    body.night .coin-tails {
+      background: linear-gradient(45deg, #b08f2d, #d3b764, #b08f2d);
+      border: 8px solid #9e7f28;
+      color: #fff4d1;
+    }
+    
+    .coin-shine {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      border-radius: 50%;
+      background: radial-gradient(
+        ellipse at center,
+        rgba(255, 255, 255, 0.7) 0%,
+        rgba(255, 255, 255, 0.5) 25%,
+        rgba(255, 255, 255, 0) 60%
+      );
+      pointer-events: none;
+    }
+    
+    body.night .coin-shine {
+      background: radial-gradient(
+        ellipse at center,
+        rgba(255, 255, 255, 0.3) 0%,
+        rgba(255, 255, 255, 0.2) 25%,
+        rgba(255, 255, 255, 0) 60%
+      );
+    }
+    
+    .coin-shadow {
+      position: absolute;
+      width: 150px;
+      height: 20px;
+      background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0) 70%);
+      border-radius: 50%;
+      bottom: -35px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: -1;
+      transition: all 0.3s ease;
+    }
+    
+    body.night .coin-shadow {
+      background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0) 70%);
+    }
+    
+    @media (max-width: 768px) {
+      .coin-animation-container {
+        height: 180px;
+        margin: 20px auto 50px; /* Increased bottom margin from 30px to 50px */
+      }
+      
+      .coin {
+        width: 120px;
+        height: 120px;
+      }
+      
+      .coin-shadow {
+        width: 120px;
+        bottom: -25px;
+      }
+      
+      .coin-face {
+        font-size: 24px;
+      }
+    }
   </style>
+</head>
+<body class="day">
+  <div class="container">
+    <div class="row">
+      <div class="three columns icon">
+        <img src="images/moon.svg" id="moon">
+        <img src="images/sun.svg" id="sun">
+      </div>
+      
+      <div class="nine columns">
+        <button class="back-button" onclick="window.location.href='index.html'">Retour à l'accueil</button>
+      </div>
+    </div>
+    
+    <div class="clt-container animated fadeIn one">
+      <div class="clt-header">
+        <h1>Théorème Central Limite - Illustration</h1>
+        <p class="animated fadeIn two" style="text-align: justify;">Cette visualisation interactive illustre le théorème central limite avec un exemple simple : le lancer de pièce (pile ou face). Observez comment la distribution des moyennes d'échantillons se rapproche d'une distribution normale quand la taille des échantillons augmente.</p>
+        
+        <!-- Add coin animation here -->
+        <div class="coin-animation-container animated fadeIn three">
+          <div class="coin">
+            <div class="coin-face coin-heads">
+              <span>P</span>
+              <div class="coin-shine"></div>
+            </div>
+            <div class="coin-face coin-tails">
+              <span>F</span>
+              <div class="coin-shine"></div>
+            </div>
+          </div>
+          <div class="coin-shadow"></div>
+        </div>
+        
+        <div class="info-panel animated fadeIn three">
+          <p>Imaginons que nous lancions une pièce équilibrée plusieurs fois et que nous calculions la moyenne des résultats (0 pour pile, 1 pour face). Selon le théorème central limite, la distribution de ces moyennes va tendre vers une loi normale quand nous répétons cette expérience un grand nombre de fois.</p>
+          <p>Si \(X_1, X_2, \ldots, X_n\) sont des variables aléatoires indépendantes et identiquement distribuées où chaque \(X_i\) vaut 0 (pile) ou 1 (face) avec probabilité 0.5, alors la somme normalisée:</p>
+          <p>\[ Z_n = \frac{\sum_{i=1}^{n} X_i - n \cdot 0.5}{\sqrt{n \cdot 0.5 \cdot 0.5}} \]</p>
+          <p>converge en loi vers une variable aléatoire normale centrée réduite \(\mathcal{N}(0,1)\) quand \(n\) tend vers l'infini.</p>
+        </div>
+        
+        <div class="controls-panel animated fadeIn three">
+          <div class="control-group">
+            <label for="sample-size">Taille de l'échantillon (nombre de lancers): <span id="sample-size-value">30</span></label>
+            <div class="slider-container">
+              <input type="range" id="sample-size" min="1" max="1000" value="30" step="1">
+            </div>
+          </div>
+        </div>
+        
+        <div class="visualization-single animated fadeIn four">
+          <div class="visualization-card">
+            <h3>Distribution des moyennes d'échantillons</h3>
+            <div id="sample-means-distribution" class="visualization-container"></div>
+            <p class="description">Ce graphique montre la distribution des moyennes obtenues pour chaque expérience (série de lancers). Observez comme elle se rapproche d'une distribution normale (courbe rouge en pointillé) lorsque la taille de l'échantillon augmente.</p>
+            <div class="stat-display">
+              <div class="stat-item">
+                <span class="stat-label">Moyenne théorique:</span>
+                <span id="theoretical-mean" class="stat-value">0.5</span>
+              </div>
+              <div class="stat-item">
+                <span class="stat-label">Écart-type théorique:</span>
+                <span id="theoretical-sd" class="stat-value">-</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <script>
+    // Détection du mode jour/nuit
+    function isDarkMode() {
+      return document.body.classList.contains('night');
+    }
+
+    // Synchronisation du mode thème avec la page principale
+    (function() {
+      const storedTheme = localStorage.getItem('theme');
+      if (storedTheme === 'night') {
+        document.body.classList.remove('day');
+        document.body.classList.add('night');
+      }
+    })();
+
+    document.addEventListener('DOMContentLoaded', function() {
+      // Variables et configurations
+      let sampleSize = parseInt(document.getElementById('sample-size').value);
+      const numExperiments = 10000; // Nombre d'expériences fixé à 10000
+      let svg, width, height;
+      
+      // Fonction pour initialiser ou rafraîchir la taille du SVG
+      function setupSvgDimensions() {
+        const container = document.getElementById('sample-means-distribution');
+        if (!container) return;
+        
+        // Nettoyer l'ancien SVG s'il existe
+        d3.select('#sample-means-distribution svg').remove();
+        
+        // Configurations des marges et dimensions
+        const margin = {
+          top: 20, 
+          right: 30, 
+          bottom: 40, 
+          left: isMobile() ? 40 : 50
+        };
+        
+        // Obtenir la taille du conteneur (peut changer lors du redimensionnement)
+        width = container.clientWidth - margin.left - margin.right;
+        height = container.clientHeight - margin.top - margin.bottom;
+        
+        // Vérifier que les dimensions sont valides (important sur mobile)
+        if (width <= 0 || height <= 0) {
+          console.log("Invalid dimensions, retrying...");
+          // Sur certains appareils, il faut un peu plus de temps pour que les dimensions soient calculées
+          setTimeout(setupSvgDimensions, 100);
+          return;
+        }
+        
+        // Créer le SVG avec les bonnes dimensions
+        svg = d3.select('#sample-means-distribution')
+          .append('svg')
+            .attr('width', width + margin.left + margin.right)
+            .attr('height', height + margin.top + margin.bottom)
+            .attr('viewBox', `0 0 ${width + margin.left + margin.right} ${height + margin.top + margin.bottom}`)
+            .attr('preserveAspectRatio', 'xMidYMid meet')
+          .append('g')
+            .attr('transform', `translate(${margin.left},${margin.top})`);
+            
+        // Générer la visualisation
+        updateVisualization();
+      }
+      
+      // Détecter si on est sur mobile
+      function isMobile() {
+        return window.innerWidth <= 768;
+      }
+      
+      // Tooltip pour les informations au survol
+      const tooltip = d3.select('body').append('div')
+        .attr('class', 'tooltip')
+        .style('opacity', 0);
+      
+      // Générer des échantillons pile ou face et calculer les moyennes
+      function generateSampleMeans(sampleSize, numExperiments) {
+        const means = [];
+        
+        for (let i = 0; i < numExperiments; i++) {
+          let sum = 0;
+          
+          // Simuler sampleSize lancers
+          for (let j = 0; j < sampleSize; j++) {
+            // 0 pour pile, 1 pour face avec probabilité 0.5
+            sum += (Math.random() < 0.5) ? 0 : 1;
+          }
+          
+          // Calculer la moyenne de cet échantillon
+          const mean = sum / sampleSize;
+          means.push(mean);
+        }
+        
+        return means;
+      }
+      
+      // Mettre à jour la visualisation des moyennes d'échantillons
+      function updateSampleMeansDistribution(means) {
+        if (!svg || !width || !height) return;
+        
+        svg.selectAll('*').remove();
+        
+        // Calcul des statistiques
+        const meanOfMeans = d3.mean(means);
+        const stdOfMeans = d3.deviation(means);
+        const theoreticalMean = 0.5; // Pour une pièce équilibrée
+        const theoreticalStd = Math.sqrt(0.25 / sampleSize); // sqrt(p*(1-p)/n)
+        
+        // Affichage de l'écart-type théorique
+        document.getElementById('theoretical-sd').textContent = theoreticalStd.toFixed(4);
+        
+        // Échelles
+        const xExtent = [
+          Math.min(d3.min(means), theoreticalMean - 3.5 * theoreticalStd),
+          Math.max(d3.max(means), theoreticalMean + 3.5 * theoreticalStd)
+        ];
+        
+        const x = d3.scaleLinear()
+          .domain(xExtent)
+          .nice()
+          .range([0, width]);
+          
+        // Créer l'histogramme avec un nombre de bins dépendant du nombre d'échantillons
+        // Utiliser la règle de la racine carrée: √numExperiments
+        const numBins = Math.min(Math.ceil(Math.sqrt(numExperiments)), isMobile() ? 30 : 60);
+        
+        const histogram = d3.histogram()
+          .value(d => d)
+          .domain(x.domain())
+          .thresholds(x.ticks(numBins)); // Nombre de bins basé sur le nombre d'expériences
+          
+        const bins = histogram(means);
+        if (bins.length === 0 || !bins[0]) return; // Protection contre les erreurs
+        
+        const binWidth = bins[0].x1 - bins[0].x0;
+        
+        const y = d3.scaleLinear()
+          .domain([0, d3.max(bins, d => d.length) / means.length * 1.1])
+          .nice()
+          .range([height, 0]);
+          
+        // Axes
+        svg.append('g')
+          .attr('class', 'axis')
+          .attr('transform', `translate(0,${height})`)
+          .call(d3.axisBottom(x).ticks(isMobile() ? 5 : 8)); // Moins de graduations sur mobile
+          
+        svg.append('g')
+          .attr('class', 'axis')
+          .call(d3.axisLeft(y).ticks(5).tickFormat(d3.format('.1%')));
+        
+        // Barres de l'histogramme
+        svg.selectAll('rect')
+          .data(bins)
+          .enter()
+          .append('rect')
+            .attr('class', 'histogram-rect')
+            .attr('x', d => x(d.x0) + 1)
+            .attr('y', d => y(d.length / means.length))
+            .attr('width', d => Math.max(0, x(d.x1) - x(d.x0) - 2))
+            .attr('height', d => height - y(d.length / means.length))
+            .attr('fill', isDarkMode() ? '#5d9cfa' : '#4a89dc')
+            .on('mouseover touchstart', showTooltip)
+            .on('mouseout touchend', hideTooltip);
+            
+        // Courbe normale théorique
+        const normalPoints = [];
+        for (let i = 0; i <= width; i++) {
+          const x0 = x.invert(i);
+          // Compute the PDF for the normal distribution and scale by bin width
+          const pdf = (1 / (theoreticalStd * Math.sqrt(2 * Math.PI))) *
+                    Math.exp(-0.5 * Math.pow((x0 - theoreticalMean) / theoreticalStd, 2));
+          const scaledPdf = pdf * binWidth; // Scale to match the histogram's relative frequencies
+          normalPoints.push([i, y(scaledPdf)]);
+        }
+        
+        const line = d3.line();
+        
+        // Ajout de la courbe avec animation
+        const path = svg.append('path')
+          .datum(normalPoints)
+          .attr('class', 'normal-curve')
+          .attr('d', line);
+          
+        // Animation de traçage de la courbe
+        const totalLength = path.node().getTotalLength();
+        path
+          .attr('stroke-dasharray', totalLength + ' ' + totalLength)
+          .attr('stroke-dashoffset', totalLength)
+          .transition()
+            .duration(800)
+            .ease(d3.easeLinear)
+            .attr('stroke-dashoffset', 0);
+            
+        // Légendes
+        svg.append('text')
+          .attr('transform', `translate(${width/2}, ${height + (isMobile() ? 30 : 35)})`)
+          .style('text-anchor', 'middle')
+          .attr('class', 'axis-label')
+          .text('Moyenne d\'échantillon');
+          
+        svg.append('text')
+          .attr('transform', 'rotate(-90)')
+          .attr('y', isMobile() ? -30 : -40)
+          .attr('x', -height/2)
+          .style('text-anchor', 'middle')
+          .attr('class', 'axis-label')
+          .text('Fréquence');
+          
+        // Ligne verticale pour la moyenne théorique
+        svg.append('line')
+          .attr('x1', x(theoreticalMean))
+          .attr('y1', 0)
+          .attr('x2', x(theoreticalMean))
+          .attr('y2', height)
+          .attr('stroke', isDarkMode() ? '#ff8787' : '#ff6b6b')
+          .attr('stroke-width', 2)
+          .attr('stroke-dasharray', '3,3');
+          
+        // Annotation de la moyenne théorique
+        svg.append('text')
+          .attr('x', x(theoreticalMean))
+          .attr('y', 10)
+          .attr('text-anchor', 'middle')
+          .style('font-family', 'NeueHaasMedium')
+          .style('font-size', '11px')
+          .text(`μ = 0.5`);
+          
+        // Légende pour la courbe normale - adaptée pour mobile
+        if (!isMobile()) {
+          svg.append('line')
+            .attr('x1', width - 120)
+            .attr('y1', 20)
+            .attr('x2', width - 80)
+            .attr('y2', 20)
+            .attr('stroke', isDarkMode() ? '#ff8787' : '#ff6b6b')
+            .attr('stroke-width', 2)
+            .attr('stroke-dasharray', '5,3');
+            
+          svg.append('text')
+            .attr('x', width - 70)
+            .attr('y', 24)
+            .style('font-size', '10px')
+            .text('Distribution normale théorique');
+        } else {
+          // Version compacte pour mobile
+          svg.append('line')
+            .attr('x1', width - 85)
+            .attr('y1', 15)
+            .attr('x2', width - 60)
+            .attr('y2', 15)
+            .attr('stroke', isDarkMode() ? '#ff8787' : '#ff6b6b')
+            .attr('stroke-width', 2)
+            .attr('stroke-dasharray', '5,3');
+            
+          svg.append('text')
+            .attr('x', width - 50)
+            .attr('y', 18)
+            .style('font-size', '8px')
+            .text('Normale théorique');
+        }
+      }
+      
+      // Fonction pour mettre à jour la visualisation
+      function updateVisualization() {
+        const means = generateSampleMeans(sampleSize, numExperiments);
+        updateSampleMeansDistribution(means);
+      }
+      
+      // Événements pour les contrôles
+      document.getElementById('sample-size').addEventListener('input', function() {
+        sampleSize = parseInt(this.value);
+        document.getElementById('sample-size-value').textContent = sampleSize;
+        updateVisualization();
+      });
+      
+      // Gestion du redimensionnement de la fenêtre
+      let resizeTimeout;
+      function handleResize() {
+        clearTimeout(resizeTimeout);
+        resizeTimeout = setTimeout(function() {
+          setupSvgDimensions();
+        }, 250);
+      }
+      
+      window.addEventListener('resize', handleResize);
+      
+      // Gérer les changements d'orientation sur mobile
+      window.addEventListener('orientationchange', function() {
+        // Attendre que le navigateur ait fini de recalculer les dimensions
+        setTimeout(setupSvgDimensions, 300);
+      });
+      
+      // Assurer une hauteur minimale pour le conteneur
+      const container = document.querySelector('.visualization-container');
+      if (container && isMobile()) {
+        container.style.height = '250px'; // Hauteur fixe plus petite sur mobile
+      }
+      
+      // Initialisation
+      // Attendre un peu pour s'assurer que le DOM est bien chargé et dimensionné
+      setTimeout(setupSvgDimensions, 100);
+    });
+
+    // Update tooltip handling to use smooth animations
+    function showTooltip(event, d) {
+      tooltip.html(`
+        <strong>Moyenne:</strong> ${((d.x0 + d.x1) / 2).toFixed(3)}<br>
+        <strong>Fréquence:</strong> ${(d.length / means.length * 100).toFixed(2)}%
+      `)
+      .style('left', (event.pageX ? event.pageX : event.changedTouches[0].pageX) + 'px')
+      .style('top', ((event.pageY ? event.pageY : event.changedTouches[0].pageY) - 28) + 'px')
+      .style('opacity', 1)
+      .classed('visible', true);
+      
+      d3.select(this).attr('opacity', 0.7);
+    }
+    
+    function hideTooltip() {
+      tooltip.classed('visible', false)
+        .style('opacity', 0);
+      d3.select(this).attr('opacity', 1);
+    }
+
+    // Coin flip animation controlled by scrolling
+    document.addEventListener('DOMContentLoaded', function() {
+      const coin = document.querySelector('.coin');
+      const coinContainer = document.querySelector('.coin-animation-container');
+      const coinShadow = document.querySelector('.coin-shadow');
+      let lastScrollTop = window.pageYOffset || document.documentElement.scrollTop;
+      let flipRotation = 0;
+      const flipFactor = 5; // How fast the coin flips during scroll
+      
+      // Set initial coin rotation
+      updateCoinRotation(0);
+      
+      // Listen for scroll events
+      window.addEventListener('scroll', function() {
+        if (!coinContainer) return;
+        
+        const containerRect = coinContainer.getBoundingClientRect();
+        const containerTop = containerRect.top;
+        const containerBottom = containerRect.bottom;
+        const windowHeight = window.innerHeight;
+        
+        // Check if coin is visible
+        if (containerTop < windowHeight && containerBottom > 0) {
+          const currentScrollTop = window.pageYOffset || document.documentElement.scrollTop;
+          const scrollDirection = currentScrollTop > lastScrollTop ? 1 : -1;
+          const scrollDelta = Math.abs(currentScrollTop - lastScrollTop);
+          
+          // Update coin rotation based on scroll direction and delta
+          if (scrollDelta > 1) { // Avoid tiny scroll adjustments
+            flipRotation += scrollDirection * scrollDelta * flipFactor;
+            updateCoinRotation(flipRotation);
+          }
+          
+          lastScrollTop = currentScrollTop;
+        }
+      }, { passive: true });
+      
+      // Function to update coin rotation and shadow
+      function updateCoinRotation(rotation) {
+        if (!coin || !coinShadow) return;
+        
+        const normalizedRotation = rotation % 360;
+        const isFaceUp = normalizedRotation < 90 || normalizedRotation > 270;
+        
+        // Rotate the coin
+        coin.style.transform = `rotateY(${rotation}deg)`;
+        
+        // Adjust shadow based on coin orientation
+        const shadowScale = Math.abs(Math.sin(rotation * Math.PI / 180)) * 0.3 + 0.7;
+        const shadowOpacity = isFaceUp ? 0.4 : 0.3;
+        
+        coinShadow.style.transform = `translateX(-50%) scale(${shadowScale}, 1)`;
+        coinShadow.style.opacity = shadowOpacity.toString();
+      }
+      
+      // Allow direct interaction with the coin as well
+      coin.addEventListener('click', function() {
+        flipRotation += 180;
+        updateCoinRotation(flipRotation);
+      });
+    });
+  </script>
 </body>
 </html>
