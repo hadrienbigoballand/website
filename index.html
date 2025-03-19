@@ -43,11 +43,25 @@
       $("#moon").click(function(){
           $("body").addClass("day");
           $("body").removeClass("night");
+          localStorage.setItem('theme', 'day'); // Save theme to localStorage
       });
       $("#sun").click(function(){
           $("body").removeClass("day");
           $("body").addClass("night");
+          localStorage.setItem('theme', 'night'); // Save theme to localStorage
       });
+      
+      // Appliquer le thème enregistré au chargement de la page
+      const storedTheme = localStorage.getItem('theme');
+      if (storedTheme) {
+          if (storedTheme === 'night') {
+              $("body").removeClass("day");
+              $("body").addClass("night");
+          } else {
+              $("body").addClass("day");
+              $("body").removeClass("night");
+          }
+      }
       
       // Array of impressionist landscape paintings with metadata
       const paintings = [

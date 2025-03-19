@@ -18,13 +18,56 @@
   <!-- D3.js pour les visualisations -->
   <script src="https://d3js.org/d3.v7.min.js"></script>
   
+  <!-- jQuery pour la gestion du thème jour/nuit -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+  
   <!-- MathJax pour les formules mathématiques -->
   <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
   <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  
+  <!-- Script pour la gestion du thème jour/nuit -->
+  <script>
+  $(document).ready(function(){
+      // Gestionnaires d'événements pour les boutons jour/nuit
+      $("#moon").click(function(){
+          $("body").addClass("day");
+          $("body").removeClass("night");
+          localStorage.setItem('theme', 'day');
+          updateVisualization(); // Rafraîchir la visualisation pour appliquer le nouveau thème
+      });
+      $("#sun").click(function(){
+          $("body").removeClass("day");
+          $("body").addClass("night");
+          localStorage.setItem('theme', 'night');
+          updateVisualization(); // Rafraîchir la visualisation pour appliquer le nouveau thème
+      });
+      
+      // Appliquer le thème enregistré
+      const storedTheme = localStorage.getItem('theme');
+      if (storedTheme) {
+          if (storedTheme === 'night') {
+              $("body").removeClass("day");
+              $("body").addClass("night");
+          } else {
+              $("body").addClass("day");
+              $("body").removeClass("night");
+          }
+      }
+  });
+  </script>
 </head>
 <body class="day">
   <div class="container">
-    <button class="back-button" onclick="window.location.href='index.html'">Retour à l'accueil</button>
+    <div class="row">
+      <div class="three columns icon">
+        <img src="images/moon.svg" id="moon">
+        <img src="images/sun.svg" id="sun">
+      </div>
+      
+      <div class="nine columns">
+        <button class="back-button" onclick="window.location.href='index.html'">Retour à l'accueil</button>
+      </div>
+    </div>
     
     <div class="clt-container animated fadeIn one">
       <div class="clt-header">
@@ -980,6 +1023,52 @@
     svg {
       width: 100% !important;
       height: 100% !important;
+    }
+    
+    /* Styles pour les boutons jour/nuit qui correspondent à ceux de la page d'accueil */
+    .three.columns.icon {
+      text-align: right;
+      margin-bottom: 20px;
+    }
+    
+    body.night #moon {
+      cursor: pointer;
+      width: 20px;
+      position: relative;
+      top: 0px;
+      display: inline-block;
+    }
+
+    body.day #moon {
+      display: none;
+    }
+
+    body.night #sun {
+      display: none;
+    }
+
+    body.day #sun {
+      cursor: pointer;
+      width: 20px;
+      position: relative;
+      top: 0px;
+      display: inline-block;
+    }
+    
+    @media (max-width: 550px) {
+      body.night #moon {
+        margin-bottom: 20px;
+        padding-right: 8px;
+        width: 20px;
+        float: right;
+      }
+
+      body.day #sun {
+        margin-bottom: 20px;
+        padding-right: 8px;
+        width: 20px;
+        float: right;
+      }
     }
   </style>
 </body>
