@@ -211,17 +211,64 @@
       background-color: #5d9cfa;
     }
     
-    /* Sample size value - make it more elegant */
+    /* Sample size value and input - make it more elegant */
+    .sample-size-display {
+      display: flex;
+      align-items: center;
+      margin-top: 4px;
+    }
+    
     #sample-size-value {
       font-weight: bold;
       color: #4a89dc;
       transition: all 0.3s ease;
-      display: inline-block;
-      min-width: 30px; /* Prevent layout jumps */
+      display: none; /* Hide the old display span */
+    }
+    
+    #sample-size-input {
+      width: 70px;
+      padding: 6px 10px;
+      border: 2px solid rgba(74, 137, 220, 0.3);
+      border-radius: 6px;
+      font-family: NeueHaasMedium;
+      font-size: 15px;
+      font-weight: bold;
+      color: #4a89dc;
+      background: rgba(74, 137, 220, 0.05);
+      text-align: center;
+      transition: all 0.3s ease;
+      margin-left: 10px;
+    }
+    
+    #sample-size-input:focus {
+      outline: none;
+      border-color: #4a89dc;
+      background: rgba(74, 137, 220, 0.1);
+      box-shadow: 0 0 0 3px rgba(74, 137, 220, 0.2);
     }
     
     body.night #sample-size-value {
       color: #5d9cfa;
+    }
+    
+    body.night #sample-size-input {
+      color: #5d9cfa;
+      border-color: rgba(93, 156, 250, 0.3);
+      background: rgba(93, 156, 250, 0.08);
+    }
+    
+    body.night #sample-size-input:focus {
+      border-color: #5d9cfa;
+      background: rgba(93, 156, 250, 0.15);
+      box-shadow: 0 0 0 3px rgba(93, 156, 250, 0.2);
+    }
+    
+    @media (max-width: 768px) {
+      #sample-size-input {
+        width: 60px;
+        padding: 5px 8px;
+        font-size: 14px;
+      }
     }
     
     .visualization-card {
@@ -858,7 +905,11 @@
         
         <div class="controls-panel animated fadeIn three">
           <div class="control-group">
-            <label for="sample-size">Taille de l'échantillon (nombre de lancers): <span id="sample-size-value">30</span></label>
+            <label for="sample-size">Taille de l'échantillon (nombre de lancers):</label>
+            <div class="sample-size-display">
+              <input type="number" id="sample-size-input" min="1" max="1000" value="30">
+              <span id="sample-size-value">30</span> <!-- This will be hidden but kept for compatibility -->
+            </div>
             <div class="slider-container">
               <input type="range" id="sample-size" min="1" max="1000" value="30" step="1">
             </div>
@@ -906,6 +957,53 @@
       let sampleSize = parseInt(document.getElementById('sample-size').value);
       const numExperiments = 10000; // Nombre d'expériences fixé à 10000
       let svg, width, height;
+      
+      // Setup the input field to sync with the slider
+      const sampleSizeSlider = document.getElementById('sample-size');
+      const sampleSizeInput = document.getElementById('sample-size-input');
+      
+      // Update input when slider changes
+      sampleSizeSlider.addEventListener('input', function() {
+        sampleSize = parseInt(this.value);
+        sampleSizeInput.value = sampleSize;
+        updateVisualization();
+      });
+      
+      // Update slider when input changes
+      sampleSizeInput.addEventListener('change', function() {
+        let value = parseInt(this.value);
+        
+        // Validate the input value
+        if (isNaN(value)) {
+          value = 30; // Default value
+        }
+        
+        // Enforce min and max constraints
+        value = Math.max(1, Math.min(1000, value));
+        
+        // Update the input field with the validated value
+        this.value = value;
+        
+        // Update the slider value
+        sampleSizeSlider.value = value;
+        sampleSize = value;
+        updateVisualization();
+      });
+      
+      // Prevent non-numeric input
+      sampleSizeInput.addEventListener('keypress', function(event) {
+        const charCode = (event.which) ? event.which : event.keyCode;
+        if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+          event.preventDefault();
+        }
+      });
+      
+      // Handle Enter key press
+      sampleSizeInput.addEventListener('keyup', function(event) {
+        if (event.key === 'Enter') {
+          this.blur(); // Remove focus to trigger the change event
+        }
+      });
       
       // Fonction pour initialiser ou rafraîchir la taille du SVG
       function setupSvgDimensions() {
