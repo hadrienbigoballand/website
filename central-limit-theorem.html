@@ -46,13 +46,6 @@
             <input type="range" id="sample-size" min="1" max="1000" value="30" step="1">
           </div>
         </div>
-        
-        <div class="control-group">
-          <label for="num-experiments">Nombre d'expériences: <span id="num-experiments-value">1000</span></label>
-          <div class="slider-container">
-            <input type="range" id="num-experiments" min="100" max="5000" value="1000" step="100">
-          </div>
-        </div>
       </div>
       
       <div class="visualization-single animated fadeIn four">
@@ -93,7 +86,7 @@
     document.addEventListener('DOMContentLoaded', function() {
       // Variables et configurations
       let sampleSize = parseInt(document.getElementById('sample-size').value);
-      let numExperiments = parseInt(document.getElementById('num-experiments').value);
+      const numExperiments = 10000; // Nombre d'expériences fixé à 10000
       let svg, width, height;
       
       // Fonction pour initialiser ou rafraîchir la taille du SVG
@@ -362,12 +355,6 @@
       document.getElementById('sample-size').addEventListener('input', function() {
         sampleSize = parseInt(this.value);
         document.getElementById('sample-size-value').textContent = sampleSize;
-        updateVisualization();
-      });
-      
-      document.getElementById('num-experiments').addEventListener('input', function() {
-        numExperiments = parseInt(this.value);
-        document.getElementById('num-experiments-value').textContent = numExperiments;
         updateVisualization();
       });
       
