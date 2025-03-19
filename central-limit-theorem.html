@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <title>Théorème Central Limite - Illustration avec Pile ou Face</title>
   <meta name="description" content="Illustration interactive du théorème central limite avec des lancers de pièce">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
   <!-- CSS -->
   <link rel="stylesheet" href="css/normalize.css">
@@ -94,19 +94,54 @@
       // Variables et configurations
       let sampleSize = parseInt(document.getElementById('sample-size').value);
       let numExperiments = parseInt(document.getElementById('num-experiments').value);
+      let svg, width, height;
       
-      // Configurations des marges et dimensions
-      const margin = {top: 20, right: 30, bottom: 40, left: 50};
-      const width = document.getElementById('sample-means-distribution').clientWidth - margin.left - margin.right;
-      const height = document.getElementById('sample-means-distribution').clientHeight - margin.top - margin.bottom;
+      // Fonction pour initialiser ou rafraîchir la taille du SVG
+      function setupSvgDimensions() {
+        const container = document.getElementById('sample-means-distribution');
+        if (!container) return;
+        
+        // Nettoyer l'ancien SVG s'il existe
+        d3.select('#sample-means-distribution svg').remove();
+        
+        // Configurations des marges et dimensions
+        const margin = {
+          top: 20, 
+          right: 30, 
+          bottom: 40, 
+          left: isMobile() ? 40 : 50
+        };
+        
+        // Obtenir la taille du conteneur (peut changer lors du redimensionnement)
+        width = container.clientWidth - margin.left - margin.right;
+        height = container.clientHeight - margin.top - margin.bottom;
+        
+        // Vérifier que les dimensions sont valides (important sur mobile)
+        if (width <= 0 || height <= 0) {
+          console.log("Invalid dimensions, retrying...");
+          // Sur certains appareils, il faut un peu plus de temps pour que les dimensions soient calculées
+          setTimeout(setupSvgDimensions, 100);
+          return;
+        }
+        
+        // Créer le SVG avec les bonnes dimensions
+        svg = d3.select('#sample-means-distribution')
+          .append('svg')
+            .attr('width', width + margin.left + margin.right)
+            .attr('height', height + margin.top + margin.bottom)
+            .attr('viewBox', `0 0 ${width + margin.left + margin.right} ${height + margin.top + margin.bottom}`)
+            .attr('preserveAspectRatio', 'xMidYMid meet')
+          .append('g')
+            .attr('transform', `translate(${margin.left},${margin.top})`);
+            
+        // Générer la visualisation
+        updateVisualization();
+      }
       
-      // Création du SVG pour la visualisation
-      const svg = d3.select('#sample-means-distribution')
-        .append('svg')
-          .attr('width', width + margin.left + margin.right)
-          .attr('height', height + margin.top + margin.bottom)
-        .append('g')
-          .attr('transform', `translate(${margin.left},${margin.top})`);
+      // Détecter si on est sur mobile
+      function isMobile() {
+        return window.innerWidth <= 768;
+      }
       
       // Tooltip pour les informations au survol
       const tooltip = d3.select('body').append('div')
@@ -136,6 +171,8 @@
       
       // Mettre à jour la visualisation des moyennes d'échantillons
       function updateSampleMeansDistribution(means) {
+        if (!svg || !width || !height) return;
+        
         svg.selectAll('*').remove();
         
         // Calcul des statistiques
@@ -162,9 +199,11 @@
         const histogram = d3.histogram()
           .value(d => d)
           .domain(x.domain())
-          .thresholds(x.ticks(30));
+          .thresholds(x.ticks(isMobile() ? 15 : 30)); // Moins de barres sur mobile
           
         const bins = histogram(means);
+        if (bins.length === 0 || !bins[0]) return; // Protection contre les erreurs
+        
         const binWidth = bins[0].x1 - bins[0].x0;
         
         const y = d3.scaleLinear()
@@ -176,7 +215,7 @@
         svg.append('g')
           .attr('class', 'axis')
           .attr('transform', `translate(0,${height})`)
-          .call(d3.axisBottom(x).ticks(8));
+          .call(d3.axisBottom(x).ticks(isMobile() ? 5 : 8)); // Moins de graduations sur mobile
           
         svg.append('g')
           .attr('class', 'axis')
@@ -193,7 +232,7 @@
             .attr('width', d => Math.max(0, x(d.x1) - x(d.x0) - 2))
             .attr('height', d => height - y(d.length / means.length))
             .attr('fill', isDarkMode() ? '#5d9cfa' : '#4a89dc')
-            .on('mouseover', function(event, d) {
+            .on('mouseover touchstart', function(event, d) {
               tooltip.transition()
                 .duration(200)
                 .style('opacity', 0.9);
@@ -201,11 +240,11 @@
                 <strong>Moyenne:</strong> ${((d.x0 + d.x1) / 2).toFixed(3)}<br>
                 <strong>Fréquence:</strong> ${(d.length / means.length * 100).toFixed(2)}%
               `)
-                .style('left', (event.pageX + 10) + 'px')
-                .style('top', (event.pageY - 28) + 'px');
+                .style('left', (event.pageX ? event.pageX : event.changedTouches[0].pageX) + 'px')
+                .style('top', ((event.pageY ? event.pageY : event.changedTouches[0].pageY) - 28) + 'px');
               d3.select(this).attr('opacity', 0.7);
             })
-            .on('mouseout', function() {
+            .on('mouseout touchend', function() {
               tooltip.transition()
                 .duration(500)
                 .style('opacity', 0);
@@ -243,14 +282,14 @@
             
         // Légendes
         svg.append('text')
-          .attr('transform', `translate(${width/2}, ${height + margin.bottom - 5})`)
+          .attr('transform', `translate(${width/2}, ${height + (isMobile() ? 30 : 35)})`)
           .style('text-anchor', 'middle')
           .attr('class', 'axis-label')
           .text('Moyenne d\'échantillon');
           
         svg.append('text')
           .attr('transform', 'rotate(-90)')
-          .attr('y', -margin.left + 15)
+          .attr('y', isMobile() ? -30 : -40)
           .attr('x', -height/2)
           .style('text-anchor', 'middle')
           .attr('class', 'axis-label')
@@ -275,21 +314,39 @@
           .style('font-size', '11px')
           .text(`μ = 0.5`);
           
-        // Légende pour la courbe normale
-        svg.append('line')
-          .attr('x1', width - 120)
-          .attr('y1', 20)
-          .attr('x2', width - 80)
-          .attr('y2', 20)
-          .attr('stroke', isDarkMode() ? '#ff8787' : '#ff6b6b')
-          .attr('stroke-width', 2)
-          .attr('stroke-dasharray', '5,3');
-          
-        svg.append('text')
-          .attr('x', width - 70)
-          .attr('y', 24)
-          .style('font-size', '10px')
-          .text('Distribution normale théorique');
+        // Légende pour la courbe normale - adaptée pour mobile
+        if (!isMobile()) {
+          svg.append('line')
+            .attr('x1', width - 120)
+            .attr('y1', 20)
+            .attr('x2', width - 80)
+            .attr('y2', 20)
+            .attr('stroke', isDarkMode() ? '#ff8787' : '#ff6b6b')
+            .attr('stroke-width', 2)
+            .attr('stroke-dasharray', '5,3');
+            
+          svg.append('text')
+            .attr('x', width - 70)
+            .attr('y', 24)
+            .style('font-size', '10px')
+            .text('Distribution normale théorique');
+        } else {
+          // Version compacte pour mobile
+          svg.append('line')
+            .attr('x1', width - 85)
+            .attr('y1', 15)
+            .attr('x2', width - 60)
+            .attr('y2', 15)
+            .attr('stroke', isDarkMode() ? '#ff8787' : '#ff6b6b')
+            .attr('stroke-width', 2)
+            .attr('stroke-dasharray', '5,3');
+            
+          svg.append('text')
+            .attr('x', width - 50)
+            .attr('y', 18)
+            .style('font-size', '8px')
+            .text('Normale théorique');
+        }
       }
       
       // Fonction pour mettre à jour la visualisation
@@ -298,7 +355,7 @@
         updateSampleMeansDistribution(means);
       }
       
-      // Événements
+      // Événements pour les contrôles
       document.getElementById('sample-size').addEventListener('input', function() {
         sampleSize = parseInt(this.value);
         document.getElementById('sample-size-value').textContent = sampleSize;
@@ -311,11 +368,32 @@
         updateVisualization();
       });
       
-      // Initialisation
-      window.addEventListener('resize', updateVisualization);
+      // Gestion du redimensionnement de la fenêtre
+      let resizeTimeout;
+      function handleResize() {
+        clearTimeout(resizeTimeout);
+        resizeTimeout = setTimeout(function() {
+          setupSvgDimensions();
+        }, 250);
+      }
       
-      // Première génération
-      updateVisualization();
+      window.addEventListener('resize', handleResize);
+      
+      // Gérer les changements d'orientation sur mobile
+      window.addEventListener('orientationchange', function() {
+        // Attendre que le navigateur ait fini de recalculer les dimensions
+        setTimeout(setupSvgDimensions, 300);
+      });
+      
+      // Assurer une hauteur minimale pour le conteneur
+      const container = document.querySelector('.visualization-container');
+      if (container && isMobile()) {
+        container.style.height = '250px'; // Hauteur fixe plus petite sur mobile
+      }
+      
+      // Initialisation
+      // Attendre un peu pour s'assurer que le DOM est bien chargé et dimensionné
+      setTimeout(setupSvgDimensions, 100);
     });
   </script>
 
@@ -325,6 +403,98 @@
       width: 100%;
       max-width: 800px;
       margin: 0 auto;
+    }
+    
+    .visualization-container {
+      width: 100%;
+      height: 300px;
+      overflow: hidden;
+      margin: 0 auto;
+      position: relative;
+    }
+    
+    /* Ajustements pour mobile */
+    @media (max-width: 768px) {
+      .visualization-container {
+        height: 250px; /* Plus compact sur mobile */
+      }
+      
+      .clt-container {
+        padding: 10px;
+      }
+      
+      .clt-header h1 {
+        font-size: 22px;
+        padding-bottom: 20px;
+      }
+      
+      .clt-header p {
+        font-size: 14px;
+      }
+      
+      .info-panel {
+        padding: 12px;
+        font-size: 14px;
+      }
+      
+      .info-panel p {
+        margin-bottom: 8px;
+      }
+      
+      .controls-panel {
+        padding: 15px;
+        margin-bottom: 20px;
+      }
+      
+      .visualization-card {
+        padding: 15px;
+      }
+      
+      .visualization-card h3 {
+        font-size: 16px;
+      }
+      
+      .description {
+        font-size: 13px;
+      }
+      
+      .control-group label {
+        font-size: 13px;
+      }
+      
+      .stat-display {
+        flex-direction: column;
+        gap: 8px;
+      }
+      
+      /* Améliorer l'expérience tactile sur mobile */
+      input[type="range"] {
+        height: 5px;
+      }
+      
+      input[type="range"]::-webkit-slider-thumb {
+        width: 22px;
+        height: 22px;
+      }
+      
+      /* Rendre le tooltip plus lisible sur mobile */
+      .tooltip {
+        padding: 10px 14px;
+        font-size: 13px;
+        max-width: 180px;
+      }
+    }
+    
+    /* Touch-specific styles */
+    @media (hover: none) {
+      /* Augmenter la taille des éléments interactifs pour faciliter les interactions tactiles */
+      .histogram-rect {
+        cursor: pointer;
+      }
+      
+      input[type="range"]::-webkit-slider-thumb {
+        transform: scale(1.2);
+      }
     }
     
     .stat-display {
@@ -373,6 +543,17 @@
     
     body.night .normal-curve {
       stroke: #ff8787;
+    }
+    
+    /* Amélioration du contraste pour la lisibilité */
+    .axis text {
+      font-weight: medium;
+    }
+    
+    /* Fix pour Safari/iOS */
+    svg {
+      width: 100% !important;
+      height: 100% !important;
     }
   </style>
 </body>
