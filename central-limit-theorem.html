@@ -365,16 +365,20 @@
     .modal-title {
       font-family: NeueHaasMedium;
       font-size: 18px;
-      margin-bottom: 15px;
+      margin-bottom: 10px;
       padding-right: 20px;
     }
 
-    body.day .modal-title {
-      color: #403E43;
+    /* Horizontal divider for modal */
+    .modal-divider {
+      height: 1px;
+      background-color: rgba(0, 0, 0, 0.1);
+      margin-bottom: 15px;
+      width: 100%;
     }
 
-    body.night .modal-title {
-      color: #fff;
+    body.night .modal-divider {
+      background-color: rgba(255, 255, 255, 0.1);
     }
 
     /* Modal content */
@@ -579,6 +583,7 @@
     <div class="info-modal">
       <button class="modal-close" id="modal-close">&times;</button>
       <h3 class="modal-title">Théorème Central Limite</h3>
+      <div class="modal-divider"></div>
       <div class="modal-content">
         <p>
           Le théorème central limite énonce que lorsqu'on répète un grand nombre de fois une même expérience aléatoire, la distribution des moyennes des résultats se rapproche d'une loi normale.
