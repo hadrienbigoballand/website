@@ -222,7 +222,7 @@
       line-height: 20px;
       font-style: italic;
       font-family: serif;
-      cursor: help;
+      cursor: help; /* Restored original cursor style */
       margin-left: 10px;
       position: relative;
     }
@@ -239,69 +239,139 @@
       border: 1px solid #666;
     }
 
+    .info-icon:hover {
+      transform: scale(1.1);
+    }
+
+    .info-icon:active {
+      transform: scale(0.95);
+    }
+
+    /* Hide the existing tooltip - we'll replace it with modal */
     .info-tooltip {
-      position: absolute;
-      width: 280px;
-      padding: 15px;
-      border-radius: 5px;
-      font-size: 13px;
-      line-height: 1.5;
-      font-family: NeueHaas;
-      font-weight: normal;
-      visibility: hidden;
+      display: none;
+    }
+
+    /* Modal overlay with blur */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: rgba(0, 0, 0, 0.2);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
       opacity: 0;
-      transition: opacity 0.3s ease, visibility 0s linear 0.3s;
-      text-align: left;
-      font-style: normal;
-      bottom: 30px;
-      left: 50%;
-      transform: translateX(-50%);
-      z-index: 100;
+      visibility: hidden;
+      transition: opacity 0.3s cubic-bezier(0.19, 1, 0.22, 1),
+                  backdrop-filter 0.3s cubic-bezier(0.19, 1, 0.22, 1),
+                  -webkit-backdrop-filter 0.3s cubic-bezier(0.19, 1, 0.22, 1),
+                  visibility 0s linear 0.3s;
+      z-index: 999;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
 
-    body.day .info-tooltip {
-      background: #fff;
-      color: #403E43;
-      border: 1px solid #ddd;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    body.night .modal-overlay {
+      background-color: rgba(0, 0, 0, 0.4);
     }
 
-    body.night .info-tooltip {
-      background: #333;
-      color: #C8C8C9;
-      border: 1px solid #555;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
-    }
-
-    .info-tooltip:after {
-      content: '';
-      position: absolute;
-      bottom: -6px;
-      left: 50%;
-      margin-left: -6px;
-      width: 0;
-      height: 0;
-      border-left: 6px solid transparent;
-      border-right: 6px solid transparent;
-    }
-
-    body.day .info-tooltip:after {
-      border-top: 6px solid #fff;
-    }
-
-    body.night .info-tooltip:after {
-      border-top: 6px solid #333;
-    }
-
-    .info-icon:hover .info-tooltip {
-      visibility: visible;
+    .modal-overlay.visible {
       opacity: 1;
-      transition-delay: 0s;
+      visibility: visible;
+      transition: opacity 0.3s cubic-bezier(0.19, 1, 0.22, 1),
+                  backdrop-filter 0.3s cubic-bezier(0.19, 1, 0.22, 1),
+                  -webkit-backdrop-filter 0.3s cubic-bezier(0.19, 1, 0.22, 1),
+                  visibility 0s linear;
     }
 
-    .info-tooltip strong {
+    /* Modal info bubble */
+    .info-modal {
+      position: relative;
+      width: 90%;
+      max-width: 550px;
+      background-color: #fff;
+      border-radius: 12px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+      padding: 25px;
+      transform: translateY(20px) scale(0.95);
+      opacity: 0;
+      transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
+                  opacity 0.3s ease;
+    }
+
+    body.night .info-modal {
+      background-color: #333;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+    }
+
+    .modal-overlay.visible .info-modal {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+
+    /* Modal close button */
+    .modal-close {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: rgba(0, 0, 0, 0.05);
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      transition: background 0.2s ease;
+    }
+
+    .modal-close:hover {
+      background: rgba(0, 0, 0, 0.1);
+    }
+
+    body.night .modal-close {
+      background: rgba(255, 255, 255, 0.1);
+      color: #ddd;
+    }
+
+    body.night .modal-close:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    /* Modal title */
+    .modal-title {
+      font-family: NeueHaasMedium;
+      font-size: 18px;
+      margin-bottom: 15px;
+      padding-right: 20px;
+    }
+
+    body.day .modal-title {
+      color: #403E43;
+    }
+
+    body.night .modal-title {
+      color: #fff;
+    }
+
+    /* Modal content */
+    .modal-content {
       font-family: NeueHaas;
-      font-weight: normal;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    body.day .modal-content {
+      color: #403E43;
+    }
+
+    body.night .modal-content {
+      color: #C8C8C9;
     }
 
     /* D3 Graph Styles */
@@ -474,15 +544,7 @@
       <div class="control-group">
         <label for="sample-size" class="control-label">
           Taille de l'échantillon (nombre de lancers):
-          <span class="info-icon">i
-            <div class="info-tooltip">
-              Le théorème central limite énonce que lorsqu'on répète un grand nombre de fois une même expérience aléatoire, la distribution des moyennes des résultats se rapproche d'une loi normale.
-              <br><br>
-              Ici, chaque expérience consiste à lancer une pièce équilibrée plusieurs fois. La moyenne d'une expérience est la proportion de faces obtenues (entre 0 et 1).
-              <br><br>
-              <strong>Note:</strong> La courbe en pointillés représente la distribution normale théorique vers laquelle tend la distribution des moyennes.
-            </div>
-          </span>
+          <span class="info-icon" id="sample-info">i</span>
         </label>
         <div style="display: flex; align-items: center;">
           <input type="range" id="sample-size" min="1" max="300" value="30" step="1" style="flex: 1; margin-right: 15px;">
@@ -492,6 +554,28 @@
     </div>
   </div>
   
+  <!-- Add modal overlay and info bubble -->
+  <div class="modal-overlay" id="info-modal-overlay">
+    <div class="info-modal">
+      <button class="modal-close" id="modal-close">&times;</button>
+      <h3 class="modal-title">Théorème Central Limite</h3>
+      <div class="modal-content">
+        <p>
+          Le théorème central limite énonce que lorsqu'on répète un grand nombre de fois une même expérience aléatoire, la distribution des moyennes des résultats se rapproche d'une loi normale.
+        </p>
+        <p style="margin-top: 15px;">
+          Ici, chaque expérience consiste à lancer une pièce équilibrée plusieurs fois. La moyenne d'une expérience est la proportion de faces obtenues (entre 0 et 1).
+        </p>
+        <p style="margin-top: 15px;">
+          <strong>Note:</strong> La courbe en pointillés représente la distribution normale théorique vers laquelle tend la distribution des moyennes.
+        </p>
+        <p style="margin-top: 15px;">
+          Plus la taille de l'échantillon est grande, plus la distribution ressemble à une courbe normale. Essayez de modifier la taille de l'échantillon pour voir cet effet !
+        </p>
+      </div>
+    </div>
+  </div>
+
   <script>
     // Détection du mode jour/nuit
     function isDarkMode() {
@@ -808,6 +892,35 @@
       
       // Initialisation
       setTimeout(setupSvgDimensions, 100);
+
+      // Add info button click handler
+      document.getElementById('sample-info').addEventListener('click', function() {
+        document.getElementById('info-modal-overlay').classList.add('visible');
+        document.body.style.overflow = 'hidden'; // Prevent scrolling
+      });
+      
+      // Close modal when close button is clicked
+      document.getElementById('modal-close').addEventListener('click', function() {
+        document.getElementById('info-modal-overlay').classList.remove('visible');
+        document.body.style.overflow = ''; // Restore scrolling
+      });
+      
+      // Close modal when clicking outside the info bubble
+      document.getElementById('info-modal-overlay').addEventListener('click', function(event) {
+        if (event.target === this) {
+          this.classList.remove('visible');
+          document.body.style.overflow = '';
+        }
+      });
+      
+      // Close modal on escape key press
+      document.addEventListener('keydown', function(event) {
+        if (event.key === 'Escape' && 
+            document.getElementById('info-modal-overlay').classList.contains('visible')) {
+          document.getElementById('info-modal-overlay').classList.remove('visible');
+          document.body.style.overflow = '';
+        }
+      });
     });
 
     // Make updateVisualization globally available for theme change
