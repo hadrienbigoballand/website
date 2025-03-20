@@ -54,6 +54,12 @@
       align-items: center;
       margin-bottom: 30px;
     }
+    
+    .back-info-container {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
 
     .header {
       display: flex;
@@ -118,10 +124,8 @@
 
     /* For devices smaller than 550px - align back button with theme toggle */
     @media (max-width: 550px) {
-      .back-link {
+      .back-info-container {
         margin-bottom: 80px;
-        margin-left: 8px; /* Changed from padding-left to margin-left */
-        float: left;
       }
     }
 
@@ -232,7 +236,6 @@
       font-style: italic;
       font-family: serif;
       cursor: help; /* Restored original cursor style */
-      margin-left: 10px;
       position: relative;
     }
 
@@ -540,7 +543,10 @@
 <body class="day">
   <div class="container">
     <div class="header-container">
-      <a href="index.html" class="back-link"></a>
+      <div class="back-info-container">
+        <a href="index.html" class="back-link"></a>
+        <span class="info-icon" id="sample-info">i</span>
+      </div>
       <div class="theme-toggle">
         <img src="images/moon.svg" id="moon">
         <img src="images/sun.svg" id="sun">
@@ -553,7 +559,6 @@
       <div class="control-group">
         <label for="sample-size" class="control-label">
           Taille de l'échantillon (nombre de lancers):
-          <span class="info-icon" id="sample-info">i</span>
         </label>
         <div style="display: flex; align-items: center;">
           <input type="range" id="sample-size" min="1" max="300" value="30" step="1" style="flex: 1; margin-right: 15px;">
