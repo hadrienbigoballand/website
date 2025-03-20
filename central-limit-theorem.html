@@ -27,7 +27,9 @@
   <style>
     /* Styles spécifiques à cette page */
     body {
-      font-family: NeueHaas, sans-serif;
+      font-family: NeueHaas;
+      font-size: 16px;
+      line-height: 24px;
       transition: all 0.3s ease;
     }
 
@@ -56,7 +58,9 @@
     .title {
       margin: 0;
       font-family: NeueHaasMedium;
-      font-size: 24px;
+      font-size: 20px;
+      letter-spacing: .25px;
+      line-height: 28px;
     }
 
     .back-link {
@@ -361,6 +365,32 @@
       display: flex;
       justify-content: flex-end;
     }
+
+    #statistics {
+      margin-top: 20px;
+      font-family: NeueHaas;
+    }
+    
+    .stat-label {
+      font-family: NeueHaasMedium;
+      font-size: 14px;
+      margin-bottom: 3px;
+    }
+    
+    .stat-value {
+      font-family: NeueHaas;
+      font-size: 14px;
+    }
+
+    .axis-label {
+      font-family: NeueHaas;
+      font-size: 11px;
+      fill: #777;
+    }
+
+    body.night .axis-label {
+      fill: #999;
+    }
   </style>
   
   <!-- Script pour la gestion du thème jour/nuit -->
@@ -417,25 +447,14 @@
               Le théorème central limite énonce que lorsqu'on répète un grand nombre de fois une même expérience aléatoire, la distribution des moyennes des résultats se rapproche d'une loi normale.
               <br><br>
               Ici, chaque expérience consiste à lancer une pièce équilibrée plusieurs fois. La moyenne d'une expérience est la proportion de faces obtenues (entre 0 et 1).
+              <br><br>
+              <strong>Note:</strong> La courbe en pointillés représente la distribution normale théorique vers laquelle tend la distribution des moyennes.
             </div>
           </span>
         </label>
         <div style="display: flex; align-items: center;">
           <input type="range" id="sample-size" min="1" max="300" value="30" step="1" style="flex: 1; margin-right: 15px;">
           <input type="number" id="sample-size-input" min="1" max="300" value="30">
-        </div>
-      </div>
-    </div>
-
-    <div id="statistics" style="margin-top: 20px;">
-      <div style="display: flex; gap: 20px;">
-        <div>
-          <span style="font-family: NeueHaasMedium; font-size: 14px;">Moyenne théorique: </span>
-          <span id="theoretical-mean">0.5</span>
-        </div>
-        <div>
-          <span style="font-family: NeueHaasMedium; font-size: 14px;">Écart-type théorique: </span>
-          <span id="theoretical-sd">-</span>
         </div>
       </div>
     </div>
@@ -590,9 +609,6 @@
         const theoreticalMean = 0.5;
         const theoreticalStd = Math.sqrt(0.25 / sampleSize);
         
-        // Affichage de l'écart-type théorique
-        document.getElementById('theoretical-sd').textContent = theoreticalStd.toFixed(4);
-        
         // Pour un lancer de pièce équilibrée, les moyennes possibles sont:
         // 0/n, 1/n, 2/n, ..., n/n où n est la taille de l'échantillon
         const thresholds = [];
@@ -720,7 +736,7 @@
           .attr('class', 'normal-curve')
           .attr('d', line);
             
-        // Légendes
+        // Légendes des axes
         svg.append('text')
           .attr('transform', `translate(${width/2}, ${height + 30})`)
           .style('text-anchor', 'middle')
@@ -735,37 +751,8 @@
           .attr('class', 'axis-label')
           .text('Fréquence');
         
-        // Légende pour la courbe normale
-        if (!isMobile()) {
-          svg.append('line')
-            .attr('x1', width - 120)
-            .attr('y1', 20)
-            .attr('x2', width - 80)
-            .attr('y2', 20)
-            .attr('class', 'normal-curve');
-            
-          svg.append('text')
-            .attr('x', width - 70)
-            .attr('y', 24)
-            .attr('class', 'axis-label')
-            .style('font-size', '10px')
-            .text('Distribution normale théorique');
-        } else {
-          // Version compacte pour mobile
-          svg.append('line')
-            .attr('x1', width - 85)
-            .attr('y1', 15)
-            .attr('x2', width - 60)
-            .attr('y2', 15)
-            .attr('class', 'normal-curve');
-            
-          svg.append('text')
-            .attr('x', width - 50)
-            .attr('y', 18)
-            .attr('class', 'axis-label')
-            .style('font-size', '8px')
-            .text('Normale théorique');
-        }
+        // Suppression de la légende pour la courbe normale
+        // La légende est désormais dans l'info-bulle
       }
       
       // Fonction pour mettre à jour la visualisation
