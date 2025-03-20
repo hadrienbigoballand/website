@@ -48,11 +48,17 @@
       padding: 20px;
     }
 
-    .header {
+    .header-container {
       display: flex;
       justify-content: space-between;
       align-items: center;
       margin-bottom: 30px;
+    }
+
+    .header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 0;
     }
 
     .title {
@@ -74,8 +80,14 @@
       border: 1px solid;
       transition: all 0.2s ease;
       background-color: transparent;
+      padding: 0;
+      margin: 0;
+      line-height: 1;
+      /* Shift the entire circle + arrow downward by 2px: */
+      transform: translateY(-40px);
     }
 
+    /* Remove the transform from the arrow itself */
     .back-link:before {
       content: "←";
       transition: transform 0.2s ease;
@@ -385,7 +397,7 @@
 
     .theme-toggle {
       display: flex;
-      justify-content: flex-end;
+      align-items: center;
     }
 
     #statistics {
@@ -448,13 +460,12 @@
 </head>
 <body class="day">
   <div class="container">
-    <div class="theme-toggle">
-      <img src="images/moon.svg" id="moon">
-      <img src="images/sun.svg" id="sun">
-    </div>
-
-    <div class="header">
+    <div class="header-container">
       <a href="index.html" class="back-link"></a>
+      <div class="theme-toggle">
+        <img src="images/moon.svg" id="moon">
+        <img src="images/sun.svg" id="sun">
+      </div>
     </div>
     
     <div id="sample-means-distribution" class="visualization-container"></div>
@@ -771,9 +782,6 @@
           .style('text-anchor', 'middle')
           .attr('class', 'axis-label')
           .text('Fréquence');
-        
-        // Suppression de la légende pour la courbe normale
-        // La légende est désormais dans l'info-bulle
       }
       
       // Fonction pour mettre à jour la visualisation
