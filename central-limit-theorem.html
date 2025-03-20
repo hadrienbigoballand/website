@@ -66,27 +66,42 @@
     .back-link {
       text-decoration: none;
       display: flex;
+      justify-content: center;
       align-items: center;
-      font-family: NeueHaas;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      border: 1px solid;
       transition: all 0.2s ease;
+      background-color: transparent;
     }
 
     .back-link:before {
       content: "←";
-      margin-right: 8px;
       transition: transform 0.2s ease;
+      font-size: 14px;
     }
 
     .back-link:hover:before {
-      transform: translateX(-3px);
+      transform: translateX(-2px);
     }
 
     body.day .back-link {
       color: #403E43;
+      border-color: #999;
     }
 
     body.night .back-link {
       color: #C8C8C9;
+      border-color: #666;
+    }
+
+    body.day .back-link:hover {
+      border-color: #666;
+    }
+
+    body.night .back-link:hover {
+      border-color: #999;
     }
 
     .visualization-container {
@@ -439,7 +454,7 @@
     </div>
 
     <div class="header">
-      <a href="index.html" class="back-link">Retour</a>
+      <a href="index.html" class="back-link"></a>
     </div>
     
     <div id="sample-means-distribution" class="visualization-container"></div>
