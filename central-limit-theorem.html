@@ -84,7 +84,7 @@
       margin: 0;
       line-height: 1;
       /* Shift the entire circle + arrow downward by 2px: */
-      transform: translateY(-42px);
+      transform: translateY(0px);
     }
 
     /* Remove the transform from the arrow itself */
@@ -114,6 +114,15 @@
 
     body.night .back-link:hover {
       border-color: #999;
+    }
+
+    /* For devices smaller than 550px - align back button with theme toggle */
+    @media (max-width: 550px) {
+      .back-link {
+        margin-bottom: 80px;
+        margin-left: 8px; /* Changed from padding-left to margin-left */
+        float: left;
+      }
     }
 
     .visualization-container {
