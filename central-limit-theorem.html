@@ -1013,12 +1013,12 @@
         // Nettoyer l'ancien SVG s'il existe
         d3.select('#sample-means-distribution svg').remove();
         
-        // Configurations des marges et dimensions
+        // Configurations des marges et dimensions - augmenté la marge gauche pour plus d'espace pour la légende
         const margin = {
           top: 20, 
           right: 30, 
           bottom: 40, 
-          left: isMobile() ? 40 : 50
+          left: isMobile() ? 45 : 60  // Augmenté de 40/50 à 45/60 pour donner plus d'espace
         };
         
         // Obtenir la taille du conteneur (peut changer lors du redimensionnement)
@@ -1246,9 +1246,10 @@
           .attr('class', 'axis-label')
           .text('Moyenne d\'échantillon');
           
+        // Position de la légende de l'axe y ajustée pour être plus lisible
         svg.append('text')
           .attr('transform', 'rotate(-90)')
-          .attr('y', isMobile() ? -30 : -40)
+          .attr('y', isMobile() ? -35 : -45)  // Augmenté davantage pour qu'elle soit plus à gauche
           .attr('x', -height/2)
           .style('text-anchor', 'middle')
           .attr('class', 'axis-label')
