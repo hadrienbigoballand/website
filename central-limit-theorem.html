@@ -329,30 +329,36 @@
       position: absolute;
       top: 15px;
       right: 15px;
-      width: 28px;
-      height: 28px;
+      width: 24px;
+      height: 24px;
       border-radius: 50%;
-      background: rgba(0, 0, 0, 0.05);
+      background: transparent;
       border: none;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 18px;
-      transition: background 0.2s ease;
+      font-size: 20px;
+      transition: transform 0.2s ease, opacity 0.2s ease;
+      opacity: 0.5;
+      padding: 0;
+      line-height: 1;
     }
 
     .modal-close:hover {
-      background: rgba(0, 0, 0, 0.1);
+      opacity: 0.8;
+      transform: scale(1.1);
+      background: transparent;
     }
 
     body.night .modal-close {
-      background: rgba(255, 255, 255, 0.1);
-      color: #ddd;
+      background: transparent;
+      color: #aaa;
     }
 
     body.night .modal-close:hover {
-      background: rgba(255, 255, 255, 0.2);
+      background: transparent;
+      color: #ddd;
     }
 
     /* Modal title */
