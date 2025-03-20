@@ -903,23 +903,23 @@
           <p>converge en loi vers une variable aléatoire normale centrée réduite \(\mathcal{N}(0,1)\) quand \(n\) tend vers l'infini.</p>
         </div>
         
-        <div class="controls-panel animated fadeIn three">
-          <div class="control-group">
-            <label for="sample-size">Taille de l'échantillon (nombre de lancers):</label>
-            <div class="sample-size-display">
-              <input type="number" id="sample-size-input" min="1" max="1000" value="30">
-              <span id="sample-size-value">30</span> <!-- This will be hidden but kept for compatibility -->
-            </div>
-            <div class="slider-container">
-              <input type="range" id="sample-size" min="1" max="1000" value="30" step="1">
-            </div>
-          </div>
-        </div>
-        
         <div class="visualization-single animated fadeIn four">
           <div class="visualization-card">
             <h3>Distribution des moyennes d'échantillons</h3>
             <div id="sample-means-distribution" class="visualization-container"></div>
+            
+            <!-- Add the slider controls here, below the visualization -->
+            <div class="control-group" style="margin-top: 20px;">
+              <label for="sample-size">Taille de l'échantillon (nombre de lancers):</label>
+              <div class="sample-size-display">
+                <input type="number" id="sample-size-input" min="1" max="1000" value="30">
+                <span id="sample-size-value">30</span>
+              </div>
+              <div class="slider-container">
+                <input type="range" id="sample-size" min="1" max="1000" value="30" step="1">
+              </div>
+            </div>
+            
             <p class="description">Ce graphique montre la distribution des moyennes obtenues pour chaque expérience (série de lancers). Observez comme elle se rapproche d'une distribution normale (courbe rouge en pointillé) lorsque la taille de l'échantillon augmente.</p>
             <div class="stat-display">
               <div class="stat-item">
