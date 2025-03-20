@@ -1093,41 +1093,72 @@
         // Affichage de l'écart-type théorique
         document.getElementById('theoretical-sd').textContent = theoreticalStd.toFixed(4);
         
-        // Échelles
-        const xExtent = [
-          Math.min(d3.min(means), theoreticalMean - 3.5 * theoreticalStd),
-          Math.max(d3.max(means), theoreticalMean + 3.5 * theoreticalStd)
-        ];
+        // Pour un lancer de pièce équilibrée, les moyennes possibles sont:
+        // 0/n, 1/n, 2/n, ..., n/n où n est la taille de l'échantillon
+        // Donc exactement n+1 valeurs possibles
         
+        // Créer des seuils explicites correspondant aux valeurs possibles
+        const thresholds = [];
+        for (let i = 0; i <= sampleSize; i++) {
+          thresholds.push(i / sampleSize);
+        }
+        
+        // Ajouter des valeurs légèrement en-dessous et au-dessus pour capture tout
+        const padding = 0.5 / sampleSize;
+        
+        // Échelles avec domaine adapté
         const x = d3.scaleLinear()
-          .domain(xExtent)
-          .nice()
+          .domain([-padding, 1 + padding])
           .range([0, width]);
-          
-        // Créer l'histogramme avec un nombre de bins dépendant du nombre d'échantillons
-        // Utiliser la règle de la racine carrée: √numExperiments
-        const numBins = Math.min(Math.ceil(Math.sqrt(numExperiments)), isMobile() ? 30 : 60);
         
+        // Créer l'histogramme avec exactement les seuils correspondant aux valeurs possibles
         const histogram = d3.histogram()
           .value(d => d)
           .domain(x.domain())
-          .thresholds(x.ticks(numBins)); // Nombre de bins basé sur le nombre d'expériences
+          .thresholds(thresholds);
           
         const bins = histogram(means);
         if (bins.length === 0 || !bins[0]) return; // Protection contre les erreurs
-        
-        const binWidth = bins[0].x1 - bins[0].x0;
-        
+                
         const y = d3.scaleLinear()
           .domain([0, d3.max(bins, d => d.length) / means.length * 1.1])
           .nice()
           .range([height, 0]);
           
-        // Axes
+        // Axes avec graduations adaptées à la taille de l'échantillon
+        const xAxis = d3.axisBottom(x);
+        
+        // Adapter le nombre de ticks en fonction de la taille de l'échantillon
+        if (sampleSize <= 20) {
+          // Pour les petits échantillons, montrer toutes les valeurs possibles
+          xAxis.tickValues(thresholds);
+        } else if (sampleSize <= 100) {
+          // Pour les échantillons moyens, montrer un sous-ensemble équilibré
+          const step = Math.ceil(sampleSize / 10);
+          const tickValues = [];
+          for (let i = 0; i <= sampleSize; i += step) {
+            tickValues.push(i / sampleSize);
+          }
+          // S'assurer que 0.5 est inclus
+          if (!tickValues.includes(0.5)) {
+            tickValues.push(0.5);
+          }
+          tickValues.sort((a, b) => a - b);
+          xAxis.tickValues(tickValues);
+        } else {
+          // Pour les grands échantillons, laisser D3 choisir
+          xAxis.ticks(isMobile() ? 5 : 10);
+        }
+        
+        // Format des ticks pour les grands nombres
+        if (sampleSize > 20) {
+          xAxis.tickFormat(d3.format('.2f'));
+        }
+        
         svg.append('g')
           .attr('class', 'axis')
           .attr('transform', `translate(0,${height})`)
-          .call(d3.axisBottom(x).ticks(isMobile() ? 5 : 8)); // Moins de graduations sur mobile
+          .call(xAxis);
           
         svg.append('g')
           .attr('class', 'axis')
@@ -1139,22 +1170,46 @@
           .enter()
           .append('rect')
             .attr('class', 'histogram-rect')
-            .attr('x', d => x(d.x0) + 1)
+            .attr('x', d => x(d.x0 - 0.5/sampleSize)) // Shift boxes to align with actual value
             .attr('y', d => y(d.length / means.length))
-            .attr('width', d => Math.max(0, x(d.x1) - x(d.x0) - 2))
+            .attr('width', d => {
+              // Calculate width properly accounting for the shift
+              // Each bin should have equal width of 1/sampleSize
+              return Math.max(1, x(d.x0 + 1/sampleSize) - x(d.x0));
+            })
             .attr('height', d => height - y(d.length / means.length))
             .attr('fill', isDarkMode() ? '#5d9cfa' : '#4a89dc')
-            .on('mouseover touchstart', showTooltip)
-            .on('mouseout touchend', hideTooltip);
+            .on('mouseover touchstart', function(event, d) {
+              const binMean = (d.x0 + d.x1) / 2;
+              const frequency = d.length / means.length;
+              
+              tooltip.html(`
+                <strong>Moyenne:</strong> ${binMean.toFixed(3)}<br>
+                <strong>Fréquence:</strong> ${(frequency * 100).toFixed(2)}%
+              `)
+              .style('left', (event.pageX || event.changedTouches?.[0]?.pageX) + 'px')
+              .style('top', ((event.pageY || event.changedTouches?.[0]?.pageY) - 28) + 'px')
+              .style('opacity', 1)
+              .classed('visible', true);
+              
+              d3.select(this).attr('opacity', 0.7);
+            })
+            .on('mouseout touchend', function() {
+              tooltip.classed('visible', false)
+                .style('opacity', 0);
+              d3.select(this).attr('opacity', 1);
+            });
             
-        // Courbe normale théorique
+        // Calculer les points de la courbe normale théorique adaptés aux bins
         const normalPoints = [];
-        for (let i = 0; i <= width; i++) {
+        for (let i = 0; i <= width; i += 2) { // Réduire le nombre de points pour plus d'efficacité
           const x0 = x.invert(i);
-          // Compute the PDF for the normal distribution and scale by bin width
+          // PDF pour la distribution normale
           const pdf = (1 / (theoreticalStd * Math.sqrt(2 * Math.PI))) *
                     Math.exp(-0.5 * Math.pow((x0 - theoreticalMean) / theoreticalStd, 2));
-          const scaledPdf = pdf * binWidth; // Scale to match the histogram's relative frequencies
+          // Mettre à l'échelle pour correspondre aux fréquences relatives
+          const binWidth = 1 / sampleSize;
+          const scaledPdf = pdf * binWidth;
           normalPoints.push([i, y(scaledPdf)]);
         }
         
