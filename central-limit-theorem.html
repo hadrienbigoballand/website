@@ -1140,41 +1140,37 @@
         // Axes avec graduations adaptées à la taille de l'échantillon
         const xAxis = d3.axisBottom(x);
         
-        // Adapter le nombre de ticks en fonction de la taille de l'échantillon
-        if (sampleSize <= 20) {
-          // Pour les petits échantillons, montrer toutes les valeurs possibles
-          xAxis.tickValues(thresholds);
-        } else if (sampleSize <= 100) {
-          // Pour les échantillons moyens, montrer un sous-ensemble équilibré
-          const step = Math.ceil(sampleSize / 10);
-          const tickValues = [];
-          for (let i = 0; i <= sampleSize; i += step) {
-            tickValues.push(i / sampleSize);
-          }
-          // S'assurer que 0.5 est inclus
-          if (!tickValues.includes(0.5)) {
-            tickValues.push(0.5);
-          }
-          tickValues.sort((a, b) => a - b);
-          xAxis.tickValues(tickValues);
+        // Définir les ticks en fonction de la taille de l'échantillon
+        const minValue = Math.round((xMin - padding) * 100) / 100;
+        const maxValue = Math.round((xMax + padding) * 100) / 100;
+        
+        // Pour les petits échantillons (<30), montrer seulement 3 ticks : min, 0.50, max
+        // Pour les échantillons plus grands (>=30), montrer 5 ticks : min, 0.45, 0.50, 0.55, max
+        let tickValues;
+        if (sampleSize < 30) {
+          tickValues = [minValue, 0.5, maxValue];
         } else {
-          // Pour les grands échantillons, laisser D3 choisir
-          xAxis.ticks(isMobile() ? 5 : 10);
+          tickValues = [minValue, 0.45, 0.5, 0.55, maxValue];
         }
         
-        // Format des ticks pour les grands nombres
-        if (sampleSize > 20) {
-          xAxis.tickFormat(d3.format('.2f'));
-        }
+        // Formater pour avoir au maximum 2 décimales
+        xAxis
+          .tickValues(tickValues)
+          .tickFormat(d3.format('.2f'));
         
         svg.append('g')
           .attr('class', 'axis')
           .attr('transform', `translate(0,${height})`)
           .call(xAxis);
           
+        // Modifier le format des pourcentages pour supprimer le ".0"
+        const percentFormat = function(d) {
+          return (d * 100 % 1 === 0) ? Math.round(d * 100) + '%' : d3.format('.1%')(d);
+        };
+        
         svg.append('g')
           .attr('class', 'axis')
-          .call(d3.axisLeft(y).ticks(5).tickFormat(d3.format('.1%')));
+          .call(d3.axisLeft(y).ticks(5).tickFormat(percentFormat));
         
         // Barres de l'histogramme
         svg.selectAll('rect')
