@@ -1257,26 +1257,7 @@
           .style('text-anchor', 'middle')
           .attr('class', 'axis-label')
           .text('Fréquence');
-          
-        // Ligne verticale pour la moyenne théorique
-        svg.append('line')
-          .attr('x1', x(theoreticalMean))
-          .attr('y1', 0)
-          .attr('x2', x(theoreticalMean))
-          .attr('y2', height)
-          .attr('stroke', isDarkMode() ? '#ff8787' : '#ff6b6b')
-          .attr('stroke-width', 2)
-          .attr('stroke-dasharray', '3,3');
-          
-        // Annotation de la moyenne théorique
-        svg.append('text')
-          .attr('x', x(theoreticalMean))
-          .attr('y', 10)
-          .attr('text-anchor', 'middle')
-          .style('font-family', 'NeueHaasMedium')
-          .style('font-size', '11px')
-          .text(`μ = 0.5`);
-          
+        
         // Légende pour la courbe normale - adaptée pour mobile
         if (!isMobile()) {
           svg.append('line')
