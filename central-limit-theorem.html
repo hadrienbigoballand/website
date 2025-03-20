@@ -912,11 +912,11 @@
             <div class="control-group" style="margin-top: 20px;">
               <label for="sample-size">Taille de l'échantillon (nombre de lancers):</label>
               <div class="sample-size-display">
-                <input type="number" id="sample-size-input" min="1" max="1000" value="30">
+                <input type="number" id="sample-size-input" min="1" max="300" value="30">
                 <span id="sample-size-value">30</span>
               </div>
               <div class="slider-container">
-                <input type="range" id="sample-size" min="1" max="1000" value="30" step="1">
+                <input type="range" id="sample-size" min="1" max="300" value="30" step="1">
               </div>
             </div>
             
@@ -979,7 +979,7 @@
         }
         
         // Enforce min and max constraints
-        value = Math.max(1, Math.min(1000, value));
+        value = Math.max(1, Math.min(300, value));// Changed from 1000 to 300
         
         // Update the input field with the validated value
         this.value = value;
@@ -1103,12 +1103,24 @@
           thresholds.push(i / sampleSize);
         }
         
-        // Ajouter des valeurs légèrement en-dessous et au-dessus pour capture tout
+        // Calculer les quantiles à 1% et 99% pour la loi normale
+        const quantile01 = theoreticalMean - 3.326 * theoreticalStd;
+        const quantile99 = theoreticalMean + 3.326 * theoreticalStd;
+        
+        // Déterminer la plus petite fenêtre entre les quantiles et la fenêtre fixe
+        const fixedRange = [-0.03, 1.03];
+        const normalRange = [quantile01, quantile99];
+        
+        // Choisir la fenêtre la plus petite
+        const xMin = Math.max(fixedRange[0], normalRange[0]);
+        const xMax = Math.min(fixedRange[1], normalRange[1]);
+        
+        // Ajouter un léger padding pour éviter de couper les barres
         const padding = 0.5 / sampleSize;
         
         // Échelles avec domaine adapté
         const x = d3.scaleLinear()
-          .domain([-padding, 1 + padding])
+          .domain([xMin - padding, xMax + padding])
           .range([0, width]);
         
         // Créer l'histogramme avec exactement les seuils correspondant aux valeurs possibles
