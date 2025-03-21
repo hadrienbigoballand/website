@@ -1107,14 +1107,13 @@ body.night .interactive-tool-link:hover {
 }
 
 .new-badge {
-  position: absolute; /* Changed from relative to absolute */
-  top: 50%; /* Center vertically */
-  right: 16px; /* Position on the right with padding */
-  transform: translateY(-50%); /* Perfect vertical centering */
+  position: absolute;
+  top: 50%;
+  right: 16px;
+  transform: translateY(-50%);
   font-size: 9px;
   font-family: NeueHaasMedium;
   text-transform: uppercase;
-  color: white;
   padding: 3px 7px;
   border-radius: 10px;
   z-index: 1;
@@ -1125,7 +1124,41 @@ body.night .interactive-tool-link:hover {
   display: inline-block;
   text-align: center;
   
-  /* Holographic base effect */
+  /* Set up for animations */
+  overflow: hidden;
+  
+  /* Multiple animation layers */
+  animation: 
+    holoBgShift 6s linear infinite,
+    holoBrightness 4s ease-in-out infinite;
+}
+
+/* Light mode styling */
+body.day .new-badge {
+  color: #221F26;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.8),
+    rgba(200, 225, 255, 0.7) 10%,
+    rgba(180, 200, 240, 0.7) 25%,
+    rgba(150, 175, 220, 0.7) 40%,
+    rgba(200, 215, 235, 0.7) 55%,
+    rgba(170, 190, 225, 0.7) 70%,
+    rgba(190, 210, 230, 0.7) 85%,
+    rgba(255, 255, 255, 0.8)
+  );
+  border: 1px solid rgba(120, 140, 180, 0.4);
+  box-shadow: 
+    0 2px 10px rgba(100, 120, 160, 0.3),
+    inset 0 0 4px rgba(255, 255, 255, 0.7);
+  text-shadow: 
+    0 0 2px rgba(255, 255, 255, 0.7),
+    0 0 3px rgba(100, 120, 160, 0.3);
+}
+
+/* Dark mode styling - preserved from original */
+body.night .new-badge {
+  color: white;
   background: linear-gradient(
     135deg,
     rgba(255, 255, 255, 0.4),
@@ -1137,41 +1170,29 @@ body.night .interactive-tool-link:hover {
     rgba(149, 202, 255, 0.6) 85%,
     rgba(255, 255, 255, 0.4)
   );
-  
-  /* Border and shadow effects */
   border: 1px solid rgba(255, 255, 255, 0.4);
   box-shadow: 
     0 2px 10px rgba(74, 137, 220, 0.5),
     inset 0 0 4px rgba(255, 255, 255, 0.7);
-  
-  /* Text effects */
   text-shadow: 
     0 0 2px rgba(0, 0, 0, 0.4),
     0 0 6px rgba(255, 255, 255, 0.4);
-  
-  /* Set up for animations */
-  overflow: hidden;
-  
-  /* Multiple animation layers */
-  animation: 
-    holoBgShift 6s linear infinite,
-    holoBrightness 4s ease-in-out infinite;
 }
 
-/* Base rainbow rotation */
+/* Base rainbow rotation - shared between modes */
 @keyframes holoBgShift {
   0% { background-position: 0% 50%; background-size: 200% 200%; }
   50% { background-position: 100% 50%; background-size: 200% 200%; }
   100% { background-position: 0% 50%; background-size: 200% 200%; }
 }
 
-/* Subtle brightness pulsation */
+/* Subtle brightness pulsation - shared between modes */
 @keyframes holoBrightness {
   0%, 100% { filter: brightness(1) contrast(1.05); }
   50% { filter: brightness(1.2) contrast(1.15); }
 }
 
-/* Holographic shine effect overlay */
+/* Holographic shine effect overlay - with mode specific colors */
 .new-badge::before {
   content: "";
   position: absolute;
@@ -1179,6 +1200,13 @@ body.night .interactive-tool-link:hover {
   left: -100%;
   width: 50%;
   height: 100%;
+  transform: skewX(-25deg);
+  animation: holoShine 2.5s linear infinite;
+  z-index: 2;
+}
+
+/* Light mode shine effect */
+body.day .new-badge::before {
   background: linear-gradient(
     90deg,
     transparent,
@@ -1186,12 +1214,24 @@ body.night .interactive-tool-link:hover {
     rgba(255, 255, 255, 0.85),
     rgba(255, 255, 255, 0)
   );
-  transform: skewX(-25deg);
-  animation: holoShine 2.5s linear infinite;
-  z-index: 2;
+}
+
+/* Dark mode shine effect */
+body.night .new-badge::before {
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0),
+    rgba(255, 255, 255, 0.85),
+    rgba(255, 255, 255, 0)
+  );
 }
 
 /* Diagonal shine animation */
+@keyframes holoShine {
+  0% { left: -100%; }
+  100% { left: 200%; }
+}
 
 .visualization-card {
   padding: 20px;
