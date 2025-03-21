@@ -1049,7 +1049,7 @@ body.night .modal-overlay {
 
 /* Interactive tools link styling */
 .interactive-tool-link {
-  position: relative;
+  position: relative; /* Ensure parent has relative positioning */
   display: flex;
   align-items: center;
   padding: 12px 16px !important;
@@ -1099,15 +1099,24 @@ body.night .interactive-tool-link:hover {
   z-index: 1;
 }
 
+/* Add right padding to the file name to reserve space for the badge */
+.interactive-tool-link .file-name {
+  margin-right: 50px; /* Reserve space for the badge */
+  display: inline-block; /* Ensure proper margin application */
+  padding-right: 5px; /* Extra padding */
+}
+
 .new-badge {
-  position: relative;
+  position: absolute; /* Changed from relative to absolute */
+  top: 50%; /* Center vertically */
+  right: 16px; /* Position on the right with padding */
+  transform: translateY(-50%); /* Perfect vertical centering */
   font-size: 9px;
   font-family: NeueHaasMedium;
   text-transform: uppercase;
   color: white;
   padding: 3px 7px;
   border-radius: 10px;
-  margin-left: 10px;
   z-index: 1;
   letter-spacing: 0.5px;
   
@@ -1505,4 +1514,22 @@ body.night .file-item:hover .icon-svg svg {
 .icon-svg.icon-chart {
   width: 22px;
   height: 22px;
+}
+
+/* Add responsive adjustments for small screens */
+@media (max-width: 480px) {
+  .interactive-tool-link {
+    padding: 12px 55px 12px 16px !important; /* Add extra right padding to contain the badge */
+  }
+  
+  .interactive-tool-link .file-name {
+    font-size: 14px; /* Slightly smaller font on mobile */
+    margin-right: 40px; /* Adjust spacing */
+  }
+  
+  .new-badge {
+    font-size: 8px; /* Smaller badge text on mobile */
+    min-width: 30px; /* Slightly narrower badge */
+    padding: 2px 6px; /* Smaller padding */
+  }
 }
