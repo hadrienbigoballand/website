@@ -662,6 +662,63 @@
       
       // Initialize
       updateActiveSection();
+
+      // Add modal overlay to the body if it doesn't exist
+      if ($('.modal-overlay').length === 0) {
+        $('body').append('<div class="modal-overlay"></div>');
+      }
+      
+      // Toggle painting selection bubble
+      function togglePaintingSelection() {
+        const bubble = $('#painting-selection');
+        const overlay = $('.modal-overlay');
+        
+        if (bubble.hasClass('bubble-expanded')) {
+          hidePaintingSelection();
+        } else {
+          showPaintingSelection();
+        }
+      }
+      
+      // Show painting selection bubble with animation
+      function showPaintingSelection() {
+        const bubble = $('#painting-selection');
+        const overlay = $('.modal-overlay');
+        
+        // First make overlay visible
+        overlay.addClass('overlay-visible');
+        
+        // Then make bubble visible but not expanded yet
+        bubble.addClass('bubble-visible');
+        
+        // Force browser to calculate layout before animation
+        bubble[0].offsetHeight;
+        
+        // Then start the expansion animation after a very short delay
+        setTimeout(() => {
+          bubble.addClass('bubble-expanded');
+        }, 50);
+      }
+      
+      // Hide painting selection bubble with animation
+      function hidePaintingSelection() {
+        const bubble = $('#painting-selection');
+        const overlay = $('.modal-overlay');
+        
+        // First collapse the bubble
+        bubble.removeClass('bubble-expanded');
+        
+        // Then hide bubble and overlay with proper delay for animations
+        setTimeout(() => {
+          bubble.removeClass('bubble-visible');
+          overlay.removeClass('overlay-visible');
+        }, 500);
+      }
+      
+      // Close bubble when clicking overlay
+      $(document).on('click', '.modal-overlay', function() {
+        hidePaintingSelection();
+      });
   });
   </script>
 

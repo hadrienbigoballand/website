@@ -487,9 +487,9 @@ body.night .list-icon:after {
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
-  transition: opacity 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), 
-              transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1),
-              visibility 0s linear 0.35s; /* Delay visibility change until after opacity */
+  transition: opacity 0.5s cubic-bezier(0.19, 1, 0.22, 1), 
+              transform 0.5s cubic-bezier(0.19, 1, 0.22, 1),
+              visibility 0s linear 0.5s; /* Delay visibility change until after opacity */
   z-index: 1000;
   max-height: 80vh; /* Set max height initially to prevent layout shifts */
   height: auto;
@@ -504,8 +504,8 @@ body.night .painting-selection-bubble {
   opacity: 0;
   visibility: visible;
   pointer-events: auto;
-  transition: opacity 0.35s cubic-bezier(0.34, 1.56, 0.64, 1),
-              transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1),
+  transition: opacity 0.5s cubic-bezier(0.19, 1, 0.22, 1),
+              transform 0.5s cubic-bezier(0.19, 1, 0.22, 1),
               visibility 0s linear; /* No delay on visibility when showing */
 }
 
@@ -1027,9 +1027,9 @@ body.night .contact-item:hover {
   -webkit-backdrop-filter: blur(4px);
   opacity: 0;
   visibility: hidden;
-  transition: opacity 0.5s cubic-bezier(0.22, 1, 0.36, 1), 
-              backdrop-filter 0.5s cubic-bezier(0.22, 1, 0.36, 1),
-              -webkit-backdrop-filter 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+  transition: opacity 0.5s cubic-bezier(0.19, 1, 0.22, 1), 
+              backdrop-filter 0.5s cubic-bezier(0.19, 1, 0.22, 1),
+              -webkit-backdrop-filter 0.5s cubic-bezier(0.19, 1, 0.22, 1),
               visibility 0s linear 0.5s;
   z-index: 999; /* Just below the painting bubble */
 }
@@ -1041,9 +1041,9 @@ body.night .modal-overlay {
 .overlay-visible {
   opacity: 1;
   visibility: visible;
-  transition: opacity 0.3s cubic-bezier(0.19, 1, 0.22, 1),
-              backdrop-filter 0.3s cubic-bezier(0.19, 1, 0.22, 1),
-              -webkit-backdrop-filter 0.3s cubic-bezier(0.19, 1, 0.22, 1),
+  transition: opacity 0.5s cubic-bezier(0.19, 1, 0.22, 1),
+              backdrop-filter 0.5s cubic-bezier(0.19, 1, 0.22, 1),
+              -webkit-backdrop-filter 0.5s cubic-bezier(0.19, 1, 0.22, 1),
               visibility 0s linear;
 }
 
