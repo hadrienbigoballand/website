@@ -1867,3 +1867,28 @@ html {
     transform: translateY(0);
   }
 }
+
+/* Mobile navigation menu items - increased spacing */
+.mobile-nav-item {
+  margin: 10px 0; /* Add vertical spacing between menu items */
+}
+
+.mobile-nav-item a {
+  font-size: 18px; /* Slightly larger text for better readability */
+  padding: 8px 16px; /* Add some padding around the links themselves */
+  display: block; /* Ensure the links are block elements for full clickable area */
+}
+
+/* For smaller screens, adjust spacing proportionally */
+@media (max-height: 600px) {
+  .mobile-nav-item {
+    margin: 6px 0; /* Less spacing on smaller screens */
+  }
+}
+
+/* For very small screens */
+@media (max-height: 480px) {
+  .mobile-nav-item {
+    margin: 6px 0; /* Minimal spacing on very small screens */
+  }
+}
