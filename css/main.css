@@ -1590,6 +1590,11 @@ body.night .mobile-nav-toggle span:after {
   transform: rotate(-45deg);
 }
 
+/* Fix for mobile menu close icon in night mode - ensure middle bar is hidden */
+body.night .mobile-nav-toggle.active span {
+  background: transparent; /* Make the middle bar disappear in night mode when active */
+}
+
 /* Content transition styles for smooth section changes */
 .content-transitioning .container {
   filter: blur(3px);
