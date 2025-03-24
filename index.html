@@ -417,6 +417,126 @@
               bubble.removeClass('bubble-visible');
           }, 300);
       }
+
+      // Side navigation functionality
+      const sections = ['intro', 'contact', 'teaching', 'education', 'degrees', 'art'];
+      const navItems = $('.nav-item');
+      const navProgress = $('.nav-progress');
+      let currentSection = 'intro';
+      
+      // Set up smooth scrolling for nav items
+      $('.nav-item').click(function(e) {
+          e.preventDefault();
+          const target = $(this).attr('data-target');
+          const $targetSection = $('#' + target);
+          
+          if ($targetSection.length) {
+              $('html, body').animate({
+                  scrollTop: $targetSection.offset().top - 50
+              }, 800);
+          }
+      });
+      
+      // Handle mobile navigation
+      $('.mobile-nav-item a').click(function(e) {
+          e.preventDefault();
+          const target = $(this).attr('href').substring(1); // Remove the #
+          
+          // Close the mobile menu
+          $('.mobile-nav').removeClass('visible');
+          $('.mobile-nav-toggle').removeClass('active');
+          
+          // Scroll to section
+          const $targetSection = $('#' + target);
+          if ($targetSection.length) {
+              $('html, body').animate({
+                  scrollTop: $targetSection.offset().top - 50
+              }, 800);
+          }
+      });
+      
+      // Toggle mobile menu
+      $('.mobile-nav-toggle').click(function() {
+          $(this).toggleClass('active');
+          $('.mobile-nav').toggleClass('visible');
+      });
+      
+      // Update active section on scroll
+      function updateActiveSection() {
+          let maxVisibleSection = '';
+          let maxVisiblePercentage = 0;
+          
+          sections.forEach(function(section) {
+              const $section = $('#' + section);
+              
+              if ($section.length) {
+                  const rect = $section[0].getBoundingClientRect();
+                  const windowHeight = $(window).height();
+                  
+                  // Calculate how much of the section is visible in the viewport
+                  const visibleHeight = Math.min(rect.bottom, windowHeight) - Math.max(rect.top, 0);
+                  const sectionHeight = rect.height;
+                  const visiblePercentage = (visibleHeight > 0) ? visibleHeight / sectionHeight : 0;
+                  
+                  if (visiblePercentage > maxVisiblePercentage) {
+                      maxVisiblePercentage = visiblePercentage;
+                      maxVisibleSection = section;
+                  }
+              }
+          });
+          
+          if (maxVisibleSection && maxVisibleSection !== currentSection) {
+              currentSection = maxVisibleSection;
+              updateNavUI(currentSection);
+          }
+          
+          // Update scroll progress
+          updateScrollProgress();
+      }
+      
+      // Update UI based on active section
+      function updateNavUI(activeSection) {
+          // Remove active class from all nav items
+          navItems.removeClass('active');
+          
+          // Add active class to current nav item
+          $(`.nav-item[data-target="${activeSection}"]`).addClass('active');
+          
+          // Update highlight position
+          updateHighlightPosition();
+      }
+      
+      // Position the highlight element based on active nav item
+      function updateHighlightPosition() {
+          const activeItem = $('.nav-item.active');
+          
+          if (activeItem.length) {
+              const position = activeItem.position();
+              const height = activeItem.height();
+              
+              $('.nav-highlight').css({
+                  'top': position.top,
+                  'height': height
+              });
+          }
+      }
+      
+      // Update scroll progress indicator
+      function updateScrollProgress() {
+          const scrollTop = $(window).scrollTop();
+          const docHeight = $(document).height();
+          const winHeight = $(window).height();
+          const scrollPercent = (scrollTop) / (docHeight - winHeight);
+          const progressHeight = Math.max(0, Math.min(100, scrollPercent * 100));
+          
+          navProgress.css('height', progressHeight + '%');
+      }
+      
+      // Initialize
+      updateActiveSection();
+      
+      // Bind events
+      $(window).on('scroll resize', updateActiveSection);
   });
   </script>
 
@@ -548,7 +668,7 @@ var x = setInterval(function() {
     </div>
 
     <div class="six columns">
-      <h1 class="night">Hi, I'm Hadrien.</h1>
+      <h1 id="intro" class="night section">Hi, I'm Hadrien.</h1>
 
       <div class="animated fadeIn two">
        <p>I am currently pursuring a PhD at <a href="https://myfit-solutions.com/" target="_blank" class="underline">MyFit Solutions</a>, in the HEKA team of <a href="https://www.inria.fr/fr/centre-inria-de-paris" target="_blank" class="underline">INRIA Paris</a> and under the supervision of <a href="https://sites.google.com/site/stephanieallassonniere/" target="_blank" class="underline">Professor Stéphanie Allassonnière</a> and <a href="https://www.jeanfeydy.com/" target="_blank" class="underline">Dr. Jean Feydy</a> for the last <span id="counter"><br></span>. I have also begun collaborating on <a href="https://github.com/scikit-shapes/scikit-shapes" target="_blank" class="underline">scikit-shapes</a>, a Python package dedicated to the analysis of 2D and 3D shape data.</p>
@@ -558,7 +678,7 @@ var x = setInterval(function() {
       <!-- Add contact section here -->
       <div class="spacer48"></div>
       
-      <h4 class="animated fadeIn three">CONTACT</h4>
+      <h4 id="contact" class="animated fadeIn three section">CONTACT</h4>
       <div class="contact-section animated fadeIn two">
         <div class="contact-grid">
           <div class="contact-item">
@@ -602,7 +722,7 @@ var x = setInterval(function() {
       <div class="spacer48"></div>
       <!-- End contact section -->
       
-      <h4 class="animated fadeIn three">TEACHING RESOURCES</h4>
+      <h4 id="teaching" class="animated fadeIn three section">TEACHING RESOURCES</h4>
       <div class="downloads-section animated fadeIn two">
         <p>Probability Theory course materials for Lyon 2 students (credit to Zied Gharbi):</p>
         
@@ -848,7 +968,7 @@ var x = setInterval(function() {
       <div class="spacer48"></div>
       <!-- End of new downloads section -->
 
-      <h4 class="animated fadeIn three">EDUCATION</h4> 
+      <h4 id="education" class="animated fadeIn three section">EDUCATION</h4> 
 
     </div>
 
@@ -888,7 +1008,7 @@ var x = setInterval(function() {
 
   <div class="row group">
     <div class="three columns offset-by-six animated fadeIn three">      
-      <h4 class="animated fadeIn three">DEGREES</h4> 
+      <h4 id="degrees" class="animated fadeIn three section">DEGREES</h4> 
     </div>
   </div>
 
@@ -929,7 +1049,7 @@ var x = setInterval(function() {
   <!-- Art container moved here and centered -->
   <div class="row group">
     <div class="twelve columns">
-      <div class="art-container animated fadeIn four">
+      <div id="art" class="art-container animated fadeIn four section">
         <div class="painting-wrapper">
           <img id="art-painting" class="impressionist-art" alt="Impressionist Landscape Painting">
         </div>
@@ -961,6 +1081,58 @@ var x = setInterval(function() {
   </div>
 
 </div>
+
+<!-- Side Navigation -->
+<nav class="side-nav">
+  <div class="nav-track">
+    <div class="nav-progress"></div>
+    <div class="nav-highlight"></div>
+    <div class="nav-items">
+      <div class="nav-item active" data-target="intro">
+        <div class="nav-dot"></div>
+        <div class="nav-label">Introduction</div>
+      </div>
+      <div class="nav-item" data-target="contact">
+        <div class="nav-dot"></div>
+        <div class="nav-label">Contact</div>
+      </div>
+      <div class="nav-item" data-target="teaching">
+        <div class="nav-dot"></div>
+        <div class="nav-label">Teaching Resources</div>
+      </div>
+      <div class="nav-item" data-target="education">
+        <div class="nav-dot"></div>
+        <div class="nav-label">Education</div>
+      </div>
+      <div class="nav-item" data-target="degrees">
+        <div class="nav-dot"></div>
+        <div class="nav-label">Degrees</div>
+      </div>
+      <div class="nav-item" data-target="art">
+        <div class="nav-dot"></div>
+        <div class="nav-label">Art I like</div>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- Mobile Navigation Toggle -->
+<div class="mobile-nav-toggle">
+  <span></span>
+</div>
+
+<!-- Mobile Navigation Menu -->
+<div class="mobile-nav">
+  <div class="mobile-nav-items">
+    <div class="mobile-nav-item"><a href="#intro">Introduction</a></div>
+    <div class="mobile-nav-item"><a href="#contact">Contact</a></div>
+    <div class="mobile-nav-item"><a href="#teaching">Teaching Resources</a></div>
+    <div class="mobile-nav-item"><a href="#education">Education</a></div>
+    <div class="mobile-nav-item"><a href="#degrees">Degrees</a></div>
+    <div class="mobile-nav-item"><a href="#art">Art I Like</a></div>
+  </div>
+</div>
+
 </body>
 
 
