@@ -11,11 +11,6 @@
 	src: url(../fonts/NHaasGroteskTXPro-65Md.ttf);
 }
 
-/* @font-face {
-	font-family: NeueHaasMedium;
-	src: url(../fonts/NHaasGroteskTXPro-75Bd.ttf);
-} */
-
 * {
 	-webkit-font-smoothing: antialiased;
 	margin:0;
@@ -74,7 +69,7 @@ body.day a {
   left: 0;
   right: 100%;
   bottom: 8px;
-  background: #221F26; /* 221F26 */
+  background: #221F26;
   height: 1px;
   transition-property: left right;
   transition-duration: 0.175s;
@@ -577,7 +572,7 @@ body.night .close-bubble:hover {
 /* Improved elegant painting item hover effects */
 .painting-item {
   cursor: pointer;
-  border-radius: 10px;
+  border-radius: 8px;
   overflow: hidden;
   position: relative;
   box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
@@ -661,60 +656,6 @@ body.day .thumbnail-info {
               rgba(0, 0, 0, 0) 100%);
 }
 
-.painting-item {
-  cursor: pointer;
-  border-radius: 8px;
-  overflow: hidden;
-  transition: transform 0.2s ease;
-  position: relative;
-}
-
-.painting-item:hover {
-  transform: translateY(-3px);
-}
-
-.painting-item img {
-  width: 100%;
-  height: 100px;
-  object-fit: cover;
-  display: block;
-}
-
-.thumbnail-info {
-  padding: 8px;
-  background-color: rgba(255, 255, 255, 0.9);
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  transform: translateY(100%);
-  transition: transform 0.3s ease;
-}
-
-.painting-item:hover .thumbnail-info {
-  transform: translateY(0);
-}
-
-.thumbnail-title {
-  display: block;
-  font-family: NeueHaasMedium;
-  font-size: 10px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.thumbnail-artist {
-  display: block;
-  font-size: 9px;
-  opacity: 0.8;
-}
-
-body.night .thumbnail-info {
-  background-color: rgba(45, 45, 50, 0.9);
-  color: #fff;
-}
-
 /* Scrollbar styling for the painting grid */
 .painting-grid::-webkit-scrollbar {
   width: 6px;
@@ -735,22 +676,19 @@ body.night .painting-grid::-webkit-scrollbar-thumb {
 
 /* For devices smaller than 400px */
 @media (max-width: 550px) {
-body.night #moon {
-	margin-bottom: 80px;
-	padding-right: 8px;
-	width: 20px;
-	float: right
-}
-
-body.day #sun {
-	margin-bottom: 80px;
-	padding-right: 8px;
-	width: 20px;
-	float: right
-}
-
-/* Day mode styling */
-
+  body.night #moon {
+    margin-bottom: 80px;
+    padding-right: 8px;
+    width: 20px;
+    float: right;
+  }
+  
+  body.day #sun {
+    margin-bottom: 80px;
+    padding-right: 8px;
+    width: 20px;
+    float: right;
+  }
 }
 
 /* For larger screens, show the art */
@@ -1031,7 +969,7 @@ body.night .contact-item:hover {
               backdrop-filter 0.5s cubic-bezier(0.19, 1, 0.22, 1),
               -webkit-backdrop-filter 0.5s cubic-bezier(0.19, 1, 0.22, 1),
               visibility 0s linear 0.5s;
-  z-index: 999; /* Just below the painting bubble */
+  z-index: 999;
 }
 
 body.night .modal-overlay {

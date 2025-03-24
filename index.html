@@ -40,18 +40,19 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
   <script>
   $(document).ready(function(){
+      // Theme toggling
       $("#moon").click(function(){
           $("body").addClass("day");
           $("body").removeClass("night");
-          localStorage.setItem('theme', 'day'); // Save theme to localStorage
+          localStorage.setItem('theme', 'day');
       });
       $("#sun").click(function(){
           $("body").removeClass("day");
           $("body").addClass("night");
-          localStorage.setItem('theme', 'night'); // Save theme to localStorage
+          localStorage.setItem('theme', 'night');
       });
       
-      // Appliquer le thème enregistré au chargement de la page
+      // Apply saved theme on page load
       const storedTheme = localStorage.getItem('theme');
       if (storedTheme) {
           if (storedTheme === 'night') {
@@ -201,28 +202,32 @@
 
       // Generate painting thumbnails for selection bubble
       const paintingGrid = document.querySelector('.painting-grid');
-      paintings.forEach((painting, index) => {
-        const paintingItem = document.createElement('div');
-        paintingItem.classList.add('painting-item');
-        paintingItem.innerHTML = `
-          <img src="${painting.src}" alt="${painting.title}" loading="lazy">
-          <div class="thumbnail-info">
-            <span class="thumbnail-title">${painting.title}</span>
-            <span class="thumbnail-artist">${painting.artist}</span>
-          </div>
-        `;
-        paintingItem.addEventListener('click', () => selectPainting(index));
-        paintingGrid.appendChild(paintingItem);
-      });
+      if (paintingGrid) {
+        paintings.forEach((painting, index) => {
+          const paintingItem = document.createElement('div');
+          paintingItem.classList.add('painting-item');
+          paintingItem.innerHTML = `
+            <img src="${painting.src}" alt="${painting.title}" loading="lazy">
+            <div class="thumbnail-info">
+              <span class="thumbnail-title">${painting.title}</span>
+              <span class="thumbnail-artist">${painting.artist}</span>
+            </div>
+          `;
+          paintingItem.addEventListener('click', () => selectPainting(index));
+          paintingGrid.appendChild(paintingItem);
+        });
+      }
       
       // List button click handler
       $("#list-button").click(function(e) {
+        e.preventDefault();
         e.stopPropagation();
         togglePaintingSelection();
       });
       
       // Close bubble on close button click
       $(".close-bubble").click(function(e) {
+        e.preventDefault();
         e.stopPropagation();
         hidePaintingSelection();
       });
@@ -234,441 +239,7 @@
         }
       });
       
-      // Toggle painting selection bubble
-      function togglePaintingSelection() {
-        const bubble = $('#painting-selection');
-        if (bubble.hasClass('bubble-visible')) {
-          hidePaintingSelection();
-        } else {
-          showPaintingSelection();
-        }
-      }
-      
-      // Show painting selection bubble with animation
-      function showPaintingSelection() {
-        const bubble = $('#painting-selection');
-        bubble.addClass('bubble-visible');
-        setTimeout(() => {
-          bubble.addClass('bubble-expanded');
-        }, 10);
-      }
-      
-      // Hide painting selection bubble with animation
-      function hidePaintingSelection() {
-        const bubble = $('#painting-selection');
-        bubble.removeClass('bubble-expanded');
-        setTimeout(() => {
-          bubble.removeClass('bubble-visible');
-        }, 300);
-      }
-      
-      // Select a painting from the bubble
-      function selectPainting(index) {
-        const selectedPainting = paintings[index];
-        
-        // Apply the transition animation
-        const artPainting = $("#art-painting");
-        artPainting.addClass("painting-fade-out");
-        $(".painting-legend").addClass("legend-fade-out");
-        
-        // Hide the selection bubble
-        hidePaintingSelection();
-        
-        // After fade out completes, change image and fade back in
-        setTimeout(() => {
-          artPainting.attr("src", selectedPainting.src);
-          updatePaintingLegend(selectedPainting);
-          artPainting.removeClass("painting-fade-out");
-          artPainting.addClass("painting-fade-in");
-          $(".painting-legend").removeClass("legend-fade-out");
-          $(".painting-legend").addClass("legend-fade-in");
-          
-          // Remove the fade-in classes after animation completes
-          setTimeout(() => {
-            artPainting.removeClass("painting-fade-in");
-            $(".painting-legend").removeClass("legend-fade-in");
-          }, 500);
-        }, 300);
-      }
-
-      // Make sure the painting grid is created correctly
-      // Create painting grid if it doesn't exist
-      const createPaintingGrid = function() {
-          console.log("Creating painting thumbnails");
-          const paintingGrid = document.querySelector('.painting-grid');
-          if(!paintingGrid) {
-              console.error("Painting grid not found");
-              return;
-          }
-          
-          // Clear existing content
-          paintingGrid.innerHTML = '';
-          
-          // Add paintings
-          paintings.forEach((painting, index) => {
-              const paintingItem = document.createElement('div');
-              paintingItem.classList.add('painting-item');
-              paintingItem.innerHTML = `
-                  <img src="${painting.src}" alt="${painting.title}" loading="lazy">
-                  <div class="thumbnail-info">
-                      <span class="thumbnail-title">${painting.title}</span>
-                      <span class="thumbnail-artist">${painting.artist}</span>
-                  </div>
-              `;
-              paintingItem.addEventListener('click', () => selectPainting(index));
-              paintingGrid.appendChild(paintingItem);
-          });
-      };
-      
-      // Create thumbnails on page load
-      createPaintingGrid();
-      
-      // Improved list button click handler with debugging
-      $("#list-button").click(function(e) {
-          console.log("Browse Collection button clicked");
-          e.preventDefault(); // Prevent any default behavior
-          e.stopPropagation();
-          togglePaintingSelection();
-      });
-      
-      // Close bubble on close button click
-      $(".close-bubble").click(function(e) {
-          console.log("Close button clicked");
-          e.preventDefault();
-          e.stopPropagation();
-          hidePaintingSelection();
-      });
-      
-      // Close bubble when clicking outside
-      $(document).click(function(e) {
-          if (!$(e.target).closest('#painting-selection, #list-button').length) {
-              hidePaintingSelection();
-          }
-      });
-      
-      // Toggle painting selection bubble with improved visibility
-      function togglePaintingSelection() {
-          console.log("Toggling painting selection");
-          const bubble = $('#painting-selection');
-          if (bubble.hasClass('bubble-expanded')) {
-              hidePaintingSelection();
-          } else {
-              showPaintingSelection();
-          }
-      }
-      
-      // Show painting selection bubble with improved animation
-      function showPaintingSelection() {
-          console.log("Showing painting selection");
-          const bubble = $('#painting-selection');
-          bubble.addClass('bubble-visible');
-          // Use a slightly longer timeout to ensure the visibility takes effect first
-          setTimeout(() => {
-              bubble.addClass('bubble-expanded');
-              console.log("Added bubble-expanded class");
-          }, 20);
-      }
-      
-      // Hide painting selection bubble with animation
-      function hidePaintingSelection() {
-          console.log("Hiding painting selection");
-          const bubble = $('#painting-selection');
-          bubble.removeClass('bubble-expanded');
-          setTimeout(() => {
-              bubble.removeClass('bubble-visible');
-              console.log("Removed bubble-visible class");
-          }, 400);
-      }
-
-      // Add keyboard shortcut (ESC key) to close the painting selection bubble
-      $(document).keydown(function(e) {
-          // Check if key pressed is Escape (key code 27)
-          if (e.key === "Escape" || e.keyCode === 27) {
-              hidePaintingSelection();
-          }
-      });
-
-      // Improved show painting selection bubble with smooth animation
-      function showPaintingSelection() {
-          const bubble = $('#painting-selection');
-          
-          // First make it visible but still transparent
-          bubble.addClass('bubble-visible');
-          
-          // Force browser to calculate layout before animation
-          // This prevents the position glitch by establishing dimensions
-          bubble[0].offsetHeight;
-          
-          // Then start the expansion animation after a very short delay
-          window.requestAnimationFrame(() => {
-              bubble.addClass('bubble-expanded');
-          });
-      }
-      
-      // Improved hide painting selection bubble with smooth animation
-      function hidePaintingSelection() {
-          const bubble = $('#painting-selection');
-          
-          // First remove the expansion
-          bubble.removeClass('bubble-expanded');
-          
-          // Then hide after animation completes
-          setTimeout(() => {
-              bubble.removeClass('bubble-visible');
-          }, 300);
-      }
-
-      // Side navigation functionality
-      const sections = ['intro', 'contact', 'teaching', 'education', 'degrees', 'art'];
-      const navItems = $('.nav-item');
-      const navProgress = $('.nav-progress');
-      let currentSection = 'intro';
-      
-      // Set up smooth scrolling for nav items
-      $('.nav-item').click(function(e) {
-          e.preventDefault();
-          const target = $(this).attr('data-target');
-          const $targetSection = $('#' + target);
-          
-          if ($targetSection.length) {
-              $('html, body').animate({
-                  scrollTop: $targetSection.offset().top - 50
-              }, 800);
-          }
-      });
-      
-      // Handle mobile navigation
-      $('.mobile-nav-item a').click(function(e) {
-          e.preventDefault();
-          const target = $(this).attr('href').substring(1); // Remove the #
-          
-          // Close the mobile menu
-          $('.mobile-nav').removeClass('visible');
-          $('.mobile-nav-toggle').removeClass('active');
-          
-          // Scroll to section
-          const $targetSection = $('#' + target);
-          if ($targetSection.length) {
-              $('html, body').animate({
-                  scrollTop: $targetSection.offset().top - 50
-              }, 800);
-          }
-      });
-      
-      // Toggle mobile menu
-      $('.mobile-nav-toggle').click(function() {
-          $(this).toggleClass('active');
-          $('.mobile-nav').toggleClass('visible');
-      });
-      
-      // Update active section on scroll
-      function updateActiveSection() {
-          let maxVisibleSection = '';
-          let maxVisiblePercentage = 0;
-          
-          sections.forEach(function(section) {
-              const $section = $('#' + section);
-              
-              if ($section.length) {
-                  const rect = $section[0].getBoundingClientRect();
-                  const windowHeight = $(window).height();
-                  
-                  // Calculate how much of the section is visible in the viewport
-                  const visibleHeight = Math.min(rect.bottom, windowHeight) - Math.max(rect.top, 0);
-                  const sectionHeight = rect.height;
-                  const visiblePercentage = (visibleHeight > 0) ? visibleHeight / sectionHeight : 0;
-                  
-                  if (visiblePercentage > maxVisiblePercentage) {
-                      maxVisiblePercentage = visiblePercentage;
-                      maxVisibleSection = section;
-                  }
-              }
-          });
-          
-          if (maxVisibleSection && maxVisibleSection !== currentSection) {
-              currentSection = maxVisibleSection;
-              updateNavUI(currentSection);
-          }
-          
-          // Update scroll progress
-          updateScrollProgress();
-      }
-      
-      // Update UI based on active section
-      function updateNavUI(activeSection) {
-          // Remove active class from all nav items
-          navItems.removeClass('active');
-          
-          // Add active class to current nav item
-          $(`.nav-item[data-target="${activeSection}"]`).addClass('active');
-          
-          // Update highlight position
-          updateHighlightPosition();
-      }
-      
-      // Position the highlight element based on active nav item
-      function updateHighlightPosition() {
-          const activeItem = $('.nav-item.active');
-          
-          if (activeItem.length) {
-              const position = activeItem.position();
-              const height = activeItem.height();
-              
-              $('.nav-highlight').css({
-                  'top': position.top,
-                  'height': height
-              });
-          }
-      }
-      
-      // Update scroll progress indicator
-      function updateScrollProgress() {
-          const scrollTop = $(window).scrollTop();
-          const docHeight = $(document).height();
-          const winHeight = $(window).height();
-          const scrollPercent = (scrollTop) / (docHeight - winHeight);
-          const progressHeight = Math.max(0, Math.min(100, scrollPercent * 100));
-          
-          navProgress.css('height', progressHeight + '%');
-      }
-      
-      // Initialize
-      updateActiveSection();
-      
-      // Bind events
-      $(window).on('scroll resize', updateActiveSection);
-
-      // Add scroll indicator to document
-      $('body').prepend('<div class="scroll-indicator"></div>');
-      
-      // Update scroll indicator width on scroll
-      $(window).on('scroll', function() {
-        const scrollTop = $(window).scrollTop();
-        const docHeight = $(document).height();
-        const winHeight = $(window).height();
-        const scrollPercent = (scrollTop) / (docHeight - winHeight);
-        const width = Math.max(0, Math.min(100, scrollPercent * 100));
-        requestAnimationFrame(() => {
-          $('.scroll-indicator').css('width', width + '%');
-        });
-      });
-
-      // Ultra-smooth scrolling for nav items with custom bezier curve
-      $('.nav-item').click(function(e) {
-          e.preventDefault();
-          const target = $(this).attr('data-target');
-          const $targetSection = $('#' + target);
-          
-          if ($targetSection.length) {
-              // Mark other sections
-              $('.section').removeClass('section-entering');
-              
-              // Calculate precise scroll position with offset
-              const scrollPosition = $targetSection.offset().top - 50;
-              
-              // Use RAF for smoother animation start
-              requestAnimationFrame(() => {
-                  // Smooth scroll with premium easing
-                  $('html, body').stop().animate({
-                      scrollTop: scrollPosition
-                  }, {
-                      duration: 1000,
-                      easing: 'cubicBezier',
-                      // Define custom easing function for ultimate smoothness
-                      cubicBezier: function(t) {
-                          // Return the value of custom cubic-bezier at time t
-                          return cubicBezier(0.22, 1, 0.36, 1, t);
-                      },
-                      complete: function() {
-                          // Add entrance animation class when scrolling completes
-                          $targetSection.addClass('section-entering');
-                      }
-                  });
-              });
-          }
-      });
-
-      // Custom cubicBezier implementation for maximum control
-      function cubicBezier(p1, p2, p3, p4, t) {
-          const t2 = t * t;
-          const t3 = t2 * t;
-          return p1 * (1 - 3 * t + 3 * t2 - t3) + 
-                 3 * p2 * (t - 2 * t2 + t3) + 
-                 3 * p3 * (t2 - t3) + 
-                 p4 * t3;
-      }
-      
-      // Add jQuery easing extension for ultra-smooth animations
-      jQuery.extend(jQuery.easing, {
-          cubicBezier: function (x, t, b, c, d, s) {
-              // Custom implementation of bezier curve
-              const ts = (t/=d)*t;
-              const tc = ts*t;
-              return b+c*(0.22*tc + -0.15*ts + 0.93*t);
-          }
-      });
-      
-      // Handle mobile navigation with the same smooth experience
-      $('.mobile-nav-item a').click(function(e) {
-          e.preventDefault();
-          const target = $(this).attr('href').substring(1); // Remove the #
-          
-          // Close the mobile menu with animation
-          $('.mobile-nav').removeClass('visible');
-          $('.mobile-nav-toggle').removeClass('active');
-          
-          // Scroll to section with the ultra-smooth animation
-          const $targetSection = $('#' + target);
-          if ($targetSection.length) {
-              // Remove existing animations
-              $('.section').removeClass('section-entering');
-              
-              // Calculate precise scroll position
-              const scrollPosition = $targetSection.offset().top - 50;
-              
-              // Use RAF for smoother animation initiation
-              requestAnimationFrame(() => {
-                  // Apply the premium smooth scroll
-                  $('html, body').stop().animate({
-                      scrollTop: scrollPosition
-                  }, {
-                      duration: 1000, 
-                      easing: 'cubicBezier',
-                      complete: function() {
-                          // Add entrance animation class
-                          $targetSection.addClass('section-entering');
-                      }
-                  });
-              });
-          }
-      });
-      
-      // Detect when sections enter viewport and add animation class
-      function handleSectionVisibility() {
-          $('.section').each(function() {
-              const $section = $(this);
-              const sectionTop = $section.offset().top;
-              const scrollPosition = $(window).scrollTop() + $(window).height() * 0.8;
-              
-              if (scrollPosition > sectionTop && !$section.hasClass('section-entering')) {
-                  $section.addClass('section-entering');
-              }
-          });
-      }
-      
-      // Run section visibility check on scroll and page load
-      $(window).on('scroll resize', handleSectionVisibility);
-      setTimeout(handleSectionVisibility, 100); // Check soon after page load
-      
-      // Initialize
-      updateActiveSection();
-
-      // Add modal overlay to the body if it doesn't exist
-      if ($('.modal-overlay').length === 0) {
-        $('body').append('<div class="modal-overlay"></div>');
-      }
-      
-      // Toggle painting selection bubble
+      // Toggle painting selection bubble with overlay
       function togglePaintingSelection() {
         const bubble = $('#painting-selection');
         const overlay = $('.modal-overlay');
@@ -715,10 +286,261 @@
         }, 500);
       }
       
+      // Select a painting from the bubble
+      function selectPainting(index) {
+        const selectedPainting = paintings[index];
+        
+        // Apply the transition animation
+        const artPainting = $("#art-painting");
+        artPainting.addClass("painting-fade-out");
+        $(".painting-legend").addClass("legend-fade-out");
+        
+        // Hide the selection bubble
+        hidePaintingSelection();
+        
+        // After fade out completes, change image and fade back in
+        setTimeout(() => {
+          artPainting.attr("src", selectedPainting.src);
+          updatePaintingLegend(selectedPainting);
+          artPainting.removeClass("painting-fade-out");
+          artPainting.addClass("painting-fade-in");
+          $(".painting-legend").removeClass("legend-fade-out");
+          $(".painting-legend").addClass("legend-fade-in");
+          
+          // Remove the fade-in classes after animation completes
+          setTimeout(() => {
+            artPainting.removeClass("painting-fade-in");
+            $(".painting-legend").removeClass("legend-fade-in");
+          }, 500);
+        }, 300);
+      }
+
+      // Add keyboard shortcut (ESC key) to close the painting selection bubble
+      $(document).keydown(function(e) {
+        if (e.key === "Escape" || e.keyCode === 27) {
+          hidePaintingSelection();
+        }
+      });
+      
       // Close bubble when clicking overlay
       $(document).on('click', '.modal-overlay', function() {
         hidePaintingSelection();
       });
+
+      // Side navigation functionality
+      const sections = ['intro', 'contact', 'teaching', 'education', 'degrees', 'art'];
+      const navItems = $('.nav-item');
+      const navProgress = $('.nav-progress');
+      let currentSection = 'intro';
+      
+      // Set up smooth scrolling for nav items
+      $('.nav-item').click(function(e) {
+        e.preventDefault();
+        const target = $(this).attr('data-target');
+        const $targetSection = $('#' + target);
+        
+        if ($targetSection.length) {
+          // Mark other sections
+          $('.section').removeClass('section-entering');
+          
+          // Calculate precise scroll position with offset
+          const scrollPosition = $targetSection.offset().top - 50;
+          
+          // Use RAF for smoother animation start
+          requestAnimationFrame(() => {
+            // Smooth scroll with premium easing
+            $('html, body').stop().animate({
+              scrollTop: scrollPosition
+            }, {
+              duration: 1000,
+              easing: 'cubicBezier',
+              // Define custom easing function for ultimate smoothness
+              cubicBezier: function(t) {
+                // Return the value of custom cubic-bezier at time t
+                return cubicBezier(0.22, 1, 0.36, 1, t);
+              },
+              complete: function() {
+                // Add entrance animation class when scrolling completes
+                $targetSection.addClass('section-entering');
+              }
+            });
+          });
+        }
+      });
+      
+      // Handle mobile navigation
+      $('.mobile-nav-item a').click(function(e) {
+        e.preventDefault();
+        const target = $(this).attr('href').substring(1); // Remove the #
+        
+        // Close the mobile menu with animation
+        $('.mobile-nav').removeClass('visible');
+        $('.mobile-nav-toggle').removeClass('active');
+        
+        // Scroll to section with the ultra-smooth animation
+        const $targetSection = $('#' + target);
+        if ($targetSection.length) {
+          // Remove existing animations
+          $('.section').removeClass('section-entering');
+          
+          // Calculate precise scroll position
+          const scrollPosition = $targetSection.offset().top - 50;
+          
+          // Use RAF for smoother animation initiation
+          requestAnimationFrame(() => {
+            // Apply the premium smooth scroll
+            $('html, body').stop().animate({
+              scrollTop: scrollPosition
+            }, {
+              duration: 1000, 
+              easing: 'cubicBezier',
+              complete: function() {
+                // Add entrance animation class
+                $targetSection.addClass('section-entering');
+              }
+            });
+          });
+        }
+      });
+      
+      // Toggle mobile menu
+      $('.mobile-nav-toggle').click(function() {
+        $(this).toggleClass('active');
+        $('.mobile-nav').toggleClass('visible');
+      });
+      
+      // Update active section on scroll
+      function updateActiveSection() {
+        let maxVisibleSection = '';
+        let maxVisiblePercentage = 0;
+        
+        sections.forEach(function(section) {
+          const $section = $('#' + section);
+          
+          if ($section.length) {
+            const rect = $section[0].getBoundingClientRect();
+            const windowHeight = $(window).height();
+            
+            // Calculate how much of the section is visible in the viewport
+            const visibleHeight = Math.min(rect.bottom, windowHeight) - Math.max(rect.top, 0);
+            const sectionHeight = rect.height;
+            const visiblePercentage = (visibleHeight > 0) ? visibleHeight / sectionHeight : 0;
+            
+            if (visiblePercentage > maxVisiblePercentage) {
+              maxVisiblePercentage = visiblePercentage;
+              maxVisibleSection = section;
+            }
+          }
+        });
+        
+        if (maxVisibleSection && maxVisibleSection !== currentSection) {
+          currentSection = maxVisibleSection;
+          updateNavUI(currentSection);
+        }
+        
+        // Update scroll progress
+        updateScrollProgress();
+      }
+      
+      // Update UI based on active section
+      function updateNavUI(activeSection) {
+        // Remove active class from all nav items
+        navItems.removeClass('active');
+        
+        // Add active class to current nav item
+        $(`.nav-item[data-target="${activeSection}"]`).addClass('active');
+        
+        // Update highlight position
+        updateHighlightPosition();
+      }
+      
+      // Position the highlight element based on active nav item
+      function updateHighlightPosition() {
+        const activeItem = $('.nav-item.active');
+        
+        if (activeItem.length) {
+          const position = activeItem.position();
+          const height = activeItem.height();
+          
+          $('.nav-highlight').css({
+            'top': position.top,
+            'height': height
+          });
+        }
+      }
+      
+      // Update scroll progress indicator
+      function updateScrollProgress() {
+        const scrollTop = $(window).scrollTop();
+        const docHeight = $(document).height();
+        const winHeight = $(window).height();
+        const scrollPercent = (scrollTop) / (docHeight - winHeight);
+        const progressHeight = Math.max(0, Math.min(100, scrollPercent * 100));
+        
+        navProgress.css('height', progressHeight + '%');
+      }
+
+      // Add scroll indicator to document
+      $('body').prepend('<div class="scroll-indicator"></div>');
+      
+      // Update scroll indicator width on scroll
+      $(window).on('scroll', function() {
+        const scrollTop = $(window).scrollTop();
+        const docHeight = $(document).height();
+        const winHeight = $(window).height();
+        const scrollPercent = (scrollTop) / (docHeight - winHeight);
+        const width = Math.max(0, Math.min(100, scrollPercent * 100));
+        requestAnimationFrame(() => {
+          $('.scroll-indicator').css('width', width + '%');
+        });
+      });
+
+      // Custom cubicBezier implementation
+      function cubicBezier(p1, p2, p3, p4, t) {
+        const t2 = t * t;
+        const t3 = t2 * t;
+        return p1 * (1 - 3 * t + 3 * t2 - t3) + 
+               3 * p2 * (t - 2 * t2 + t3) + 
+               3 * p3 * (t2 - t3) + 
+               p4 * t3;
+      }
+      
+      // Add jQuery easing extension for animations
+      jQuery.extend(jQuery.easing, {
+        cubicBezier: function (x, t, b, c, d, s) {
+          const ts = (t/=d)*t;
+          const tc = ts*t;
+          return b+c*(0.22*tc + -0.15*ts + 0.93*t);
+        }
+      });
+      
+      // Detect when sections enter viewport and add animation class
+      function handleSectionVisibility() {
+        $('.section').each(function() {
+          const $section = $(this);
+          const sectionTop = $section.offset().top;
+          const scrollPosition = $(window).scrollTop() + $(window).height() * 0.8;
+          
+          if (scrollPosition > sectionTop && !$section.hasClass('section-entering')) {
+            $section.addClass('section-entering');
+          }
+        });
+      }
+      
+      // Run section visibility check on scroll and page load
+      $(window).on('scroll resize', handleSectionVisibility);
+      setTimeout(handleSectionVisibility, 100);
+      
+      // Initialize
+      updateActiveSection();
+      
+      // Bind events for scroll and resize
+      $(window).on('scroll resize', updateActiveSection);
+      
+      // Add modal overlay if it doesn't exist
+      if ($('.modal-overlay').length === 0) {
+        $('body').append('<div class="modal-overlay"></div>');
+      }
   });
   </script>
 
@@ -728,7 +550,6 @@ var countDownDate = new Date("Oct 02, 2023 09:00:00").getTime();
 
 // Update the count down every 1 second
 var x = setInterval(function() {
-
     // Get todays date and time
     var now = new Date().getTime();
     
@@ -752,28 +573,25 @@ var x = setInterval(function() {
 }, 1000);
 </script>
 
-    <!-- Google Analytics
-    –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <!-- Google Analytics -->
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-48335777-1', 'auto');
+    ga('send', 'pageview');
+  </script>
 
   <script>
-        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-
-        ga('create', 'UA-48335777-1', 'auto');
-        ga('send', 'pageview');
-
-    </script>
-
-    <script>
-      var trackOutboundLink = function(url) {
-         ga('send', 'event', 'outbound', 'click', url, {
-           'transport': 'beacon',
-           'hitCallback': function(){document.location = url;}
-         });
-      }
-    </script>
+    var trackOutboundLink = function(url) {
+       ga('send', 'event', 'outbound', 'click', url, {
+         'transport': 'beacon',
+         'hitCallback': function(){document.location = url;}
+       });
+    }
+  </script>
 
   <style>
     /* File tooltip styles */
@@ -1330,10 +1148,5 @@ var x = setInterval(function() {
   }
 </script>
 
-</body>
-
-
-<!-- End Document
-  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
 </body>
 </html>
