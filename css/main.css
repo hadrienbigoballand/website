@@ -1803,6 +1803,22 @@ body.night .nav-highlight {
   top: 0;
   left: 0;
   height: 3px;
+  background: linear-gradient(90deg, #000000, #333333); /* Changed to black gradient */
+  z-index: 1000;
+  width: 0%;
+  transition: width 0.1s ease-out;
+}
+
+body.night .scroll-indicator {
+  background: linear-gradient(90deg, #ffffff, #dddddd); /* Changed to white gradient */
+}
+
+/* Scroll progression animation */
+.scroll-indicator {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
   background: linear-gradient(90deg, #4a89dc, #6aa2f1);
   z-index: 1000;
   width: 0%;
