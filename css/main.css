@@ -1027,10 +1027,10 @@ body.night .contact-item:hover {
   -webkit-backdrop-filter: blur(4px);
   opacity: 0;
   visibility: hidden;
-  transition: opacity 0.3s cubic-bezier(0.19, 1, 0.22, 1), 
-              backdrop-filter 0.3s cubic-bezier(0.19, 1, 0.22, 1),
-              -webkit-backdrop-filter 0.3s cubic-bezier(0.19, 1, 0.22, 1),
-              visibility 0s linear 0.3s;
+  transition: opacity 0.5s cubic-bezier(0.22, 1, 0.36, 1), 
+              backdrop-filter 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+              -webkit-backdrop-filter 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+              visibility 0s linear 0.5s;
   z-index: 999; /* Just below the painting bubble */
 }
 
@@ -1726,6 +1726,117 @@ body.night .mobile-nav-item a:after {
 }
 
 /* Make sure there are no duplicate rules below for mobile nav */
+
+/* Used for smooth scrolling */
+html {
+  scroll-behavior: smooth;
+  /* Enhanced smooth scroll with better cubic bezier curve */
+  scroll-behavior-timing-function: cubic-bezier(0.645, 0.045, 0.355, 1);
+}
+
+.section {
+  scroll-margin-top: 50px;
+  /* Add transition for section entrance animation */
+  transition: opacity 0.5s cubic-bezier(0.645, 0.045, 0.355, 1), 
+              transform 0.5s cubic-bezier(0.645, 0.045, 0.355, 1);
+}
+
+/* Section entrance animations */
+.section-entering {
+  animation: sectionFadeIn 1.2s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+@keyframes sectionFadeIn {
+  0% {
+    opacity: 0.7;
+    transform: translateY(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Smoother side navigation highlighting */
+.nav-highlight {
+  position: absolute;
+  width: 3px;
+  height: 0;
+  background: linear-gradient(to bottom, #4a89dc, #6aa2f1);
+  left: -0.5px;
+  top: 0;
+  border-radius: 1.5px;
+  transition: all 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+  opacity: 0;
+}
+
+body.night .nav-highlight {
+  background: linear-gradient(to bottom, #5d9cfa, #8bb7f9);
+}
+
+.side-nav:hover .nav-highlight {
+  opacity: 1;
+}
+
+/* Enhanced backdrop blur effect for modal */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.5s cubic-bezier(0.22, 1, 0.36, 1), 
+              backdrop-filter 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+              -webkit-backdrop-filter 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+              visibility 0s linear 0.5s;
+  z-index: 999; /* Just below the painting bubble */
+}
+
+/* Scroll progression animation */
+.scroll-indicator {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #4a89dc, #6aa2f1);
+  z-index: 1000;
+  width: 0%;
+  transition: width 0.1s ease-out;
+}
+
+body.night .scroll-indicator {
+  background: linear-gradient(90deg, #5d9cfa, #8bb7f9);
+}
+
+/* Enhance hover states for smoother transitions */
+.nav-item, .mobile-nav-item a {
+  transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Add subtle parallax effect for art section */
+.art-container {
+  transform: translateZ(0);
+  will-change: transform;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  
+  .section-entering {
+    animation: none;
+  }
+  
+  .scroll-indicator {
+    transition: none;
+  }
+}
 
 /* Used for smooth scrolling */
 html {

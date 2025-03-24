@@ -537,6 +537,131 @@
       
       // Bind events
       $(window).on('scroll resize', updateActiveSection);
+
+      // Add scroll indicator to document
+      $('body').prepend('<div class="scroll-indicator"></div>');
+      
+      // Update scroll indicator width on scroll
+      $(window).on('scroll', function() {
+        const scrollTop = $(window).scrollTop();
+        const docHeight = $(document).height();
+        const winHeight = $(window).height();
+        const scrollPercent = (scrollTop) / (docHeight - winHeight);
+        const width = Math.max(0, Math.min(100, scrollPercent * 100));
+        requestAnimationFrame(() => {
+          $('.scroll-indicator').css('width', width + '%');
+        });
+      });
+
+      // Ultra-smooth scrolling for nav items with custom bezier curve
+      $('.nav-item').click(function(e) {
+          e.preventDefault();
+          const target = $(this).attr('data-target');
+          const $targetSection = $('#' + target);
+          
+          if ($targetSection.length) {
+              // Mark other sections
+              $('.section').removeClass('section-entering');
+              
+              // Calculate precise scroll position with offset
+              const scrollPosition = $targetSection.offset().top - 50;
+              
+              // Use RAF for smoother animation start
+              requestAnimationFrame(() => {
+                  // Smooth scroll with premium easing
+                  $('html, body').stop().animate({
+                      scrollTop: scrollPosition
+                  }, {
+                      duration: 1000,
+                      easing: 'cubicBezier',
+                      // Define custom easing function for ultimate smoothness
+                      cubicBezier: function(t) {
+                          // Return the value of custom cubic-bezier at time t
+                          return cubicBezier(0.22, 1, 0.36, 1, t);
+                      },
+                      complete: function() {
+                          // Add entrance animation class when scrolling completes
+                          $targetSection.addClass('section-entering');
+                      }
+                  });
+              });
+          }
+      });
+
+      // Custom cubicBezier implementation for maximum control
+      function cubicBezier(p1, p2, p3, p4, t) {
+          const t2 = t * t;
+          const t3 = t2 * t;
+          return p1 * (1 - 3 * t + 3 * t2 - t3) + 
+                 3 * p2 * (t - 2 * t2 + t3) + 
+                 3 * p3 * (t2 - t3) + 
+                 p4 * t3;
+      }
+      
+      // Add jQuery easing extension for ultra-smooth animations
+      jQuery.extend(jQuery.easing, {
+          cubicBezier: function (x, t, b, c, d, s) {
+              // Custom implementation of bezier curve
+              const ts = (t/=d)*t;
+              const tc = ts*t;
+              return b+c*(0.22*tc + -0.15*ts + 0.93*t);
+          }
+      });
+      
+      // Handle mobile navigation with the same smooth experience
+      $('.mobile-nav-item a').click(function(e) {
+          e.preventDefault();
+          const target = $(this).attr('href').substring(1); // Remove the #
+          
+          // Close the mobile menu with animation
+          $('.mobile-nav').removeClass('visible');
+          $('.mobile-nav-toggle').removeClass('active');
+          
+          // Scroll to section with the ultra-smooth animation
+          const $targetSection = $('#' + target);
+          if ($targetSection.length) {
+              // Remove existing animations
+              $('.section').removeClass('section-entering');
+              
+              // Calculate precise scroll position
+              const scrollPosition = $targetSection.offset().top - 50;
+              
+              // Use RAF for smoother animation initiation
+              requestAnimationFrame(() => {
+                  // Apply the premium smooth scroll
+                  $('html, body').stop().animate({
+                      scrollTop: scrollPosition
+                  }, {
+                      duration: 1000, 
+                      easing: 'cubicBezier',
+                      complete: function() {
+                          // Add entrance animation class
+                          $targetSection.addClass('section-entering');
+                      }
+                  });
+              });
+          }
+      });
+      
+      // Detect when sections enter viewport and add animation class
+      function handleSectionVisibility() {
+          $('.section').each(function() {
+              const $section = $(this);
+              const sectionTop = $section.offset().top;
+              const scrollPosition = $(window).scrollTop() + $(window).height() * 0.8;
+              
+              if (scrollPosition > sectionTop && !$section.hasClass('section-entering')) {
+                  $section.addClass('section-entering');
+              }
+          });
+      }
+      
+      // Run section visibility check on scroll and page load
+      $(window).on('scroll resize', handleSectionVisibility);
+      setTimeout(handleSectionVisibility, 100); // Check soon after page load
+      
+      // Initialize
+      updateActiveSection();
   });
   </script>
 
@@ -1132,6 +1257,21 @@ var x = setInterval(function() {
     <div class="mobile-nav-item"><a href="#art">Art I Like</a></div>
   </div>
 </div>
+
+<!-- Add scroll-behavior polyfill for older browsers -->
+<script>
+  // Detect if the browser doesn't support smooth scrolling
+  if (!(CSS && CSS.supports && CSS.supports('scroll-behavior', 'smooth'))) {
+    // Create a script element to load the polyfill
+    var script = document.createElement('script');
+    script.src = 'https://unpkg.com/smoothscroll-polyfill@0.4.4/dist/smoothscroll-polyfill.min.js';
+    script.onload = function() {
+      // Initialize the polyfill
+      smoothscroll.polyfill();
+    };
+    document.head.appendChild(script);
+  }
+</script>
 
 </body>
 
