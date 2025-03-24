@@ -1590,24 +1590,49 @@ body.night .mobile-nav-toggle span:after {
   transform: rotate(-45deg);
 }
 
+/* Content transition styles for smooth section changes */
+.content-transitioning .container {
+  filter: blur(3px);
+  transition: filter 0.3s ease;
+}
+
+body.day.content-transitioning::after,
+body.night.content-transitioning::after {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.05);
+  z-index: 10;
+  pointer-events: none;
+  transition: opacity 0.5s ease;
+}
+
+body.night.content-transitioning::after {
+  background: rgba(0, 0, 0, 0.1);
+}
+
+/* Improve mobile navigation animation */
 .mobile-nav {
   display: block;
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
-  height: 100vh; /* Always full height */
+  height: 100vh;
   background: rgba(246, 246, 247, 0.95);
-  backdrop-filter: blur(5px); /* Add elegant blur effect */
+  backdrop-filter: blur(5px);
   -webkit-backdrop-filter: blur(5px);
   z-index: 999;
-  visibility: hidden; /* Start hidden */
-  opacity: 0; /* Start transparent */
-  transition: opacity 0.5s cubic-bezier(0.22, 1, 0.36, 1),
-              visibility 0.5s cubic-bezier(0.22, 1, 0.36, 1),
-              backdrop-filter 0.5s cubic-bezier(0.22, 1, 0.36, 1),
-              -webkit-backdrop-filter 0.5s cubic-bezier(0.22, 1, 0.36, 1);
-  overflow-y: auto; /* Allow scrolling if needed */
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+              visibility 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+              backdrop-filter 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+              -webkit-backdrop-filter 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+  overflow-y: auto;
 }
 
 body.night .mobile-nav {
@@ -1780,4 +1805,65 @@ body.night .nav-highlight {
 
 .side-nav:hover .nav-highlight {
   opacity: 1;
+}
+
+/* Content transition styles for instant section changes */
+.content-transitioning .container {
+  filter: blur(5px);
+  transition: filter 0.25s ease; /* Faster blur transition */
+}
+
+body.day.content-transitioning::after,
+body.night.content-transitioning::after {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.08); /* Slightly darker overlay */
+  z-index: 10;
+  pointer-events: none;
+  transition: opacity 0.25s ease; /* Faster overlay transition */
+}
+
+body.night.content-transitioning::after {
+  background: rgba(0, 0, 0, 0.15); /* Darker overlay for night mode */
+}
+
+/* Ensure no smooth scrolling for navigation links */
+html.navigating {
+  scroll-behavior: auto !important;
+}
+
+/* Override global scroll behavior for instant teleportation */
+html {
+  /* Keep smooth scrolling for normal interactions, but our JS will override it for nav clicks */
+  scroll-behavior: smooth;
+  scroll-behavior-timing-function: cubic-bezier(0.645, 0.045, 0.355, 1);
+}
+
+/* Mobile nav styling - improved animations */
+.mobile-nav {
+  /* ...existing code... */
+  transition: opacity 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+              visibility 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+              backdrop-filter 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+              -webkit-backdrop-filter 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Section entrance animations - enhanced for teleportation effect */
+.section-entering {
+  animation: instantSectionReveal 0.5s cubic-bezier(0.22, 1, 0.36, 1) forwards; /* Shorter reveal animation */
+}
+
+@keyframes instantSectionReveal {
+  0% {
+    opacity: 0.5;
+    transform: translateY(0);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }

@@ -368,43 +368,38 @@
         }
       });
       
-      // Handle mobile navigation
+      // Handle mobile navigation - updated for true instant teleportation
       $('.mobile-nav-item a').click(function(e) {
         e.preventDefault();
         const target = $(this).attr('href').substring(1); // Remove the #
-        
-        // First start the closing animation
-        $('.mobile-nav').removeClass('visible');
-        $('.mobile-nav-toggle').removeClass('active');
-        
-        // After short delay, restore body scroll
-        setTimeout(function() {
-          $('body').css('overflow', '');
-        }, 500); // Match the transition duration
-        
-        // Scroll to section with the ultra-smooth animation
         const $targetSection = $('#' + target);
+        
         if ($targetSection.length) {
+          // Store the target section position
+          const scrollPosition = $targetSection.offset().top - 50;
+          
+          // Start closing animation
+          $('.mobile-nav').removeClass('visible');
+          $('.mobile-nav-toggle').removeClass('active');
+          
+          // Add blur to the body content during transition
+          $('body').addClass('content-transitioning');
+          
+          // INSTANT teleportation - direct DOM manipulation with no animation
+          window.scrollTo(0, scrollPosition);
+          
           // Remove existing animations
           $('.section').removeClass('section-entering');
           
-          // Calculate precise scroll position
-          const scrollPosition = $targetSection.offset().top - 50;
+          // Add entrance effect to target section
+          $targetSection.addClass('section-entering');
           
-          // Use RAF for smoother animation initiation
-          requestAnimationFrame(() => {
-            // Apply the premium smooth scroll
-            $('html, body').stop().animate({
-              scrollTop: scrollPosition
-            }, {
-              duration: 1000, 
-              easing: 'cubicBezier',
-              complete: function() {
-                // Add entrance animation class
-                $targetSection.addClass('section-entering');
-              }
-            });
-          });
+          // After the fade animation completes - use shorter duration
+          setTimeout(function() {
+            // Remove blur effect
+            $('body').removeClass('content-transitioning');
+            $('body').css('overflow', '');
+          }, 300); // Reduced from 500ms to 300ms to match fade-in speed
         }
       });
       
@@ -420,7 +415,7 @@
           // Delay returning scroll ability to body until animation completes
           setTimeout(function() {
             $('body').css('overflow', '');
-          }, 500); // Match the transition duration
+          }, 300); // Reduced from 500ms to 300ms to match the new animation speed
         }
       });
       
@@ -1161,6 +1156,27 @@ var x = setInterval(function() {
     };
     document.head.appendChild(script);
   }
+</script>
+
+<!-- Override any global smooth scrolling settings -->
+<script>
+  // Disable smooth scrolling behavior for navigation links only
+  document.addEventListener('DOMContentLoaded', function() {
+    // Remove smooth scrolling for mobile navigation
+    document.querySelectorAll('.mobile-nav-item a').forEach(link => {
+      link.addEventListener('click', function(e) {
+        // This ensures that even if there's scroll-behavior in CSS, it won't apply
+        document.documentElement.style.scrollBehavior = 'auto';
+        
+        // The scrollTo happens in the jQuery handler
+        
+        // Reset after short timeout
+        setTimeout(() => {
+          document.documentElement.style.scrollBehavior = '';
+        }, 100);
+      });
+    });
+  });
 </script>
 
 </body>
