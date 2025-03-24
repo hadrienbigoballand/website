@@ -373,9 +373,14 @@
         e.preventDefault();
         const target = $(this).attr('href').substring(1); // Remove the #
         
-        // Close the mobile menu with animation
+        // First start the closing animation
         $('.mobile-nav').removeClass('visible');
         $('.mobile-nav-toggle').removeClass('active');
+        
+        // After short delay, restore body scroll
+        setTimeout(function() {
+          $('body').css('overflow', '');
+        }, 500); // Match the transition duration
         
         // Scroll to section with the ultra-smooth animation
         const $targetSection = $('#' + target);
@@ -407,6 +412,16 @@
       $('.mobile-nav-toggle').click(function() {
         $(this).toggleClass('active');
         $('.mobile-nav').toggleClass('visible');
+        
+        // If menu is opening, prevent body scrolling
+        if ($('.mobile-nav').hasClass('visible')) {
+          $('body').css('overflow', 'hidden');
+        } else {
+          // Delay returning scroll ability to body until animation completes
+          setTimeout(function() {
+            $('body').css('overflow', '');
+          }, 500); // Match the transition duration
+        }
       });
       
       // Update active section on scroll
