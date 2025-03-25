@@ -1897,3 +1897,71 @@ html {
     margin: 6px 0; /* Minimal spacing on very small screens */
   }
 }
+
+/* Education and Degrees side-by-side styling */
+.education-degrees-container {
+  display: block; /* Default stacked layout for mobile */
+}
+
+.institution-item {
+  margin-bottom: 48px;
+}
+
+.institution-item:last-child {
+  margin-bottom: 0;
+}
+
+/* Reduce space between institution name and degree name */
+.institution-item h2 {
+  margin-bottom: 16px !important; /* Reduced from 48px */
+}
+
+.section-column h4 {
+  margin-bottom: 48px;
+}
+
+/* For wider screens - side by side layout */
+@media (min-width: 768px) {
+  .education-degrees-container {
+    display: flex;
+    gap: 40px;
+    align-items: flex-start;
+    margin-bottom: 20px;
+  }
+  
+  .section-column {
+    flex: 1;
+  }
+  
+  /* Elegant separator between sections */
+  .section-column + .section-column {
+    position: relative;
+  }
+  
+  .section-column + .section-column:before {
+    content: "";
+    position: absolute;
+    left: -20px;
+    top: 0;
+    height: 100%;
+    width: 1px;
+    background: linear-gradient(to bottom, transparent, rgba(159, 158, 161, 0.2) 10%, rgba(159, 158, 161, 0.2) 90%, transparent);
+  }
+
+  /* Add extra breathing room on very large screens */
+  @media (min-width: 1200px) {
+    .section-column + .section-column:before {
+      left: -30px;
+    }
+    
+    .education-degrees-container {
+      gap: 60px;
+    }
+  }
+  
+  body.night .section-column + .section-column:before {
+    background: linear-gradient(to bottom, transparent, rgba(200, 200, 201, 0.1) 10%, rgba(200, 200, 201, 0.1) 90%, transparent);
+  }
+}
+
+/* Existing CSS continues... */
