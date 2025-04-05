@@ -443,6 +443,41 @@
         align-items: center;
       }
     }
+
+    /* MathJax responsive styles for better equation wrapping */
+    .card-content .MathJax {
+      max-width: 100%;
+      overflow-x: auto;
+      overflow-y: hidden;
+      vertical-align: middle;
+    }
+    
+    /* Special handling for large equations that should wrap */
+    .card-content .large-equation {
+      overflow-x: auto;
+      padding-bottom: 10px;
+      margin-top: 10px;
+      margin-bottom: 10px;
+    }
+    
+    /* For extra small screens, adjust card content padding to maximize space */
+    @media (max-width: 480px) {
+      .card-face {
+        padding: 15px 10px;
+      }
+      
+      .card-content {
+        font-size: 14px;
+        width: 100%;
+        overflow-wrap: break-word;
+      }
+      
+      /* Add horizontal scrolling for exceptionally large equations on mobile */
+      .card-content .MathJax_SVG_Display {
+        overflow-x: auto;
+        padding-bottom: 5px;
+      }
+    }
   </style>
   
   <!-- Script for day/night theme management - simplified and cleaned up -->
@@ -478,10 +513,29 @@
   <script>
     window.MathJax = {
       tex: {
-        inlineMath: [['$', '$'], ['\\(', '\\)']]
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        macros: {
+          // Add common abbreviations to save space
+          R: '{\\mathbb{R}}',
+          E: '{\\mathbb{E}}',
+          P: '{\\mathbb{P}}'
+        }
       },
       svg: {
         fontCache: 'global'
+      },
+      // Enable line breaks in equations
+      linebreaks: {
+        automatic: true,
+        width: "container"
+      },
+      // Make MathJax responsive
+      responsive: {
+        breakpoints: {
+          xs: 0,
+          sm: 480,
+          md: 768
+        }
       }
     };
   </script>
@@ -605,11 +659,11 @@
     },
     {
       question: "Quelle est la version conjointe de la formule des probabilités totales ?",
-      answer: "$P(A) = P(A \\cap B_1) + P(A \\cap B_2) + \\dots + P(A \\cap B_n)$, avec $(B_i)$ formant une partition."
+      answer: "Si $(B_i)$ forme une partition, alors:<div class='large-equation'>$P(A) = P(A \\cap B_1) + P(A \\cap B_2) + \\ldots + P(A \\cap B_n)$</div>"
     },
     {
       question: "Quelle est la version conditionnelle de la formule des probabilités totales ?",
-      answer: "$P(A) = P_{B_1}(A)P(B_1) + P_{B_2}(A)P(B_2) + \\dots + P_{B_n}(A)P(B_n)$"
+      answer: "Si $(B_i)$ forme une partition, alors:<div class='large-equation'>$P(A) = P_{B_1}(A)P(B_1) + P_{B_2}(A)P(B_2) + \\ldots + P_{B_n}(A)P(B_n)$</div>"
     },
     {
       question: "Énonce le théorème de Bayes.",
@@ -810,9 +864,21 @@
       
           // 👉 Trigger MathJax re-render
           if (window.MathJax) {
-            MathJax.typesetPromise();
+            MathJax.typesetPromise().then(() => {
+              // After rendering equations, check if any are overflowing
+              checkAndAddScrollIndicators();
+            }).catch((err) => console.log('MathJax error:', err));
           }
         }, 100);
+      }
+      
+      // Function to check for overflowing equations and add visual indicators if needed
+      function checkAndAddScrollIndicators() {
+        $('.card-content .MathJax_SVG_Display').each(function() {
+          if (this.scrollWidth > this.clientWidth) {
+            $(this).css('cursor', 'ew-resize');
+          }
+        });
       }
       
       function nextCard() {
