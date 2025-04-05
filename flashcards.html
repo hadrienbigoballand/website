@@ -362,6 +362,87 @@
         margin-bottom: 20px;
       }
     }
+
+    /* Keyboard shortcuts guide styling */
+    .keyboard-shortcuts {
+      width: 100%;
+      max-width: 400px;
+      margin: 40px auto 20px;
+      padding: 0;
+      text-align: center;
+      opacity: 0.7;
+      transition: opacity 0.3s ease;
+    }
+
+    .keyboard-shortcuts:hover {
+      opacity: 1;
+    }
+
+    .shortcuts-container {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin-top: 8px;
+    }
+
+    .shortcut-item {
+      display: flex;
+      align-items: center;
+      font-family: NeueHaas;
+      font-size: 14px;
+    }
+
+    .key {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 28px;
+      height: 28px;
+      padding: 0 6px;
+      margin-right: 8px;
+      border-radius: 4px;
+      font-family: NeueHaasMedium;
+      font-size: 13px;
+      letter-spacing: 0;
+      transition: all 0.2s ease;
+    }
+
+    body.day .key {
+      background-color: #f1f1f2;
+      border: 1px solid #ddd;
+      color: #403E43;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.05), inset 0 -1px 0 rgba(0,0,0,0.1);
+    }
+
+    body.night .key {
+      background-color: #333;
+      border: 1px solid #444;
+      color: #C8C8C9;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.2), inset 0 -1px 0 rgba(0,0,0,0.3);
+    }
+
+    .shortcut-label {
+      font-size: 13px;
+    }
+
+    /* Separating line */
+    .shortcut-separator {
+      margin: 10px 0 15px;
+      width: 40px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, currentColor, transparent);
+      opacity: 0.2;
+      margin: 10px auto 15px;
+    }
+
+    /* For smaller screens */
+    @media (max-width: 480px) {
+      .shortcuts-container {
+        flex-direction: column;
+        gap: 10px;
+        align-items: center;
+      }
+    }
   </style>
   
   <!-- Script for day/night theme management - simplified and cleaned up -->
@@ -451,6 +532,26 @@
       <!-- Progress bar -->
       <div class="progress-container">
         <div class="progress-bar"></div>
+      </div>
+    </div>
+    
+    <!-- Keyboard shortcuts guide -->
+    <div class="keyboard-shortcuts">
+      <div class="shortcut-separator"></div>
+      <div class="shortcuts-title">Raccourcis clavier</div>
+      <div class="shortcuts-container">
+        <div class="shortcut-item">
+          <span class="key">←</span>
+          <span class="shortcut-label">Précédent</span>
+        </div>
+        <div class="shortcut-item">
+          <span class="key">→</span>
+          <span class="shortcut-label">Suivant</span>
+        </div>
+        <div class="shortcut-item">
+          <span class="key">Espace</span>
+          <span class="shortcut-label">Retourner</span>
+        </div>
       </div>
     </div>
   </div>
@@ -608,24 +709,7 @@
       
       // Flip card
       $(".flashcard").click(function() {
-        isFlipped = !isFlipped;
-        
-        // Remove bounce hint after first click
-        $(".bounce-hint").fadeOut(300);
-        
-        if (isFlipped) {
-          $(this).addClass("flipped");
-        } else {
-          $(this).removeClass("flipped");
-        }
-        
-        // Fade effect for content during flip
-        setTimeout(function() {
-          $(".card-content").addClass("fade-in");
-          setTimeout(function() {
-            $(".card-content").removeClass("fade-in");
-          }, 500);
-        }, 200);
+        flipCard();
       });
       
       // Navigation
@@ -639,18 +723,74 @@
         previousCard();
       });
       
-      // Allow keyboard navigation
+      // Allow keyboard navigation - improved implementation
       $(document).keydown(function(e) {
-        if (e.key === "ArrowRight" || e.key === " " || e.key === "Space") {
+        // Right arrow or spacebar for next
+        if (e.key === "ArrowRight") {
           nextCard();
-        } else if (e.key === "ArrowLeft") {
+          highlightKey("→");
+        } 
+        // Left arrow for previous
+        else if (e.key === "ArrowLeft") {
           previousCard();
-        } else if (e.key === "ArrowUp" || e.key === "ArrowDown" || e.key === "Enter") {
-          $(".flashcard").click();
+          highlightKey("←");
+        } 
+        // Space, Enter, ArrowUp or ArrowDown to flip
+        else if (e.key === " " || e.key === "Space" || e.key === "Enter" || 
+                e.key === "ArrowUp" || e.key === "ArrowDown") {
+          flipCard();
+          highlightKey("Espace");
+          // Prevent page scroll on spacebar
+          if (e.key === " " || e.key === "Space") {
+            e.preventDefault();
+          }
         }
       });
       
       // Functions
+      function flipCard() {
+        isFlipped = !isFlipped;
+        
+        // Remove bounce hint after first click
+        $(".bounce-hint").fadeOut(300);
+        
+        if (isFlipped) {
+          $(".flashcard").addClass("flipped");
+        } else {
+          $(".flashcard").removeClass("flipped");
+        }
+        
+        // Fade effect for content during flip
+        setTimeout(function() {
+          $(".card-content").addClass("fade-in");
+          setTimeout(function() {
+            $(".card-content").removeClass("fade-in");
+          }, 500);
+        }, 200);
+      }
+
+      function highlightKey(keyName) {
+        // Find the key element with matching text content
+        $(".key").each(function() {
+          if ($(this).text() === keyName) {
+            const key = $(this);
+            // Add a highlight class
+            key.css({
+              "transform": "translateY(2px)",
+              "opacity": "0.7"
+            });
+            
+            // Remove it after animation completes
+            setTimeout(function() {
+              key.css({
+                "transform": "",
+                "opacity": ""
+              });
+            }, 200);
+          }
+        });
+      }
+      
       function updateCard() {
         if (isFlipped) {
           $(".flashcard").removeClass("flipped");
