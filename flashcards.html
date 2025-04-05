@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-BERXY0M3FY"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-BERXY0M3FY');
+  </script>
+
+  <!-- Basic Page Needs -->
+  <meta charset="utf-8">
+  <title>Flashcards Probabilités - Hadrien Bigo-Balland</title>
+  <meta name="description" content="Flashcards pour étudier les probabilités">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="css/normalize.css">
+  <link rel="stylesheet" href="css/skeleton.css">
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/animate.css">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="images/dot.png">
+
+  <!-- jQuery -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+  <style>
+    /* Flashcard specific styles */
+    .flashcard-container {
+      width: 100%;
+      max-width: 600px;
+      margin: 48px auto;
+      perspective: 1000px;
+      position: relative;
+    }
+
+    .flashcard {
+      width: 100%;
+      min-height: 300px;
+      transform-style: preserve-3d;
+      transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      position: relative;
+      margin: 0 auto;
+    }
+
+    .flipped {
+      transform: rotateY(180deg);
+    }
+
+    .card-face {
+      position: absolute;
+      width: 100%;
+      min-height: 300px;
+      height: 100%;
+      border-radius: 12px;
+      padding: 30px;
+      backface-visibility: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+      box-sizing: border-box;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+    }
+
+    body.day .card-face {
+      background-color: white;
+      color: #403E43;
+    }
+
+    body.night .card-face {
+      background-color: #2D2D32;
+      color: #C8C8C9;
+    }
+
+    .card-face.front {
+      z-index: 2;
+    }
+
+    .card-face.back {
+      transform: rotateY(180deg);
+    }
+
+    .card-content {
+      text-align: center;
+      max-width: 500px;
+      font-family: NeueHaas;
+      font-size: 18px;
+      line-height: 1.5;
+      transition: opacity 0.3s ease;
+    }
+
+    .card-number {
+      position: absolute;
+      bottom: 15px;
+      right: 15px;
+      font-size: 12px;
+      opacity: 0.6;
+      font-family: NeueHaasMedium;
+    }
+
+    .card-hint {
+      position: absolute;
+      bottom: 15px;
+      left: 15px;
+      font-size: 12px;
+      opacity: 0.6;
+      font-family: NeueHaas;
+    }
+
+    /* Navigation */
+    .card-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 30px;
+      width: 100%;
+    }
+
+    .nav-btn {
+      background: transparent;
+      border: none;
+      font-size: 16px;
+      cursor: pointer;
+      padding: 12px 24px;
+      border-radius: 30px;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      font-family: NeueHaas;
+    }
+
+    body.day .nav-btn {
+      color: #403E43;
+    }
+
+    body.night .nav-btn {
+      color: #C8C8C9;
+    }
+
+    .nav-btn:hover {
+      background-color: rgba(0, 0, 0, 0.05);
+    }
+
+    body.night .nav-btn:hover {
+      background-color: rgba(255, 255, 255, 0.05);
+    }
+
+    .nav-btn:active {
+      transform: scale(0.98);
+    }
+
+    .prev-btn:before {
+      content: "←";
+      margin-right: 8px;
+    }
+
+    .next-btn:after {
+      content: "→";
+      margin-left: 8px;
+    }
+
+    /* Progress bar */
+    .progress-container {
+      width: 100%;
+      height: 4px;
+      background: rgba(0, 0, 0, 0.1);
+      border-radius: 2px;
+      margin-top: 30px;
+      overflow: hidden;
+    }
+
+    body.night .progress-container {
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .progress-bar {
+      height: 100%;
+      background: linear-gradient(to right, #4a89dc, #6aa2f1);
+      border-radius: 2px;
+      transition: width 0.4s ease;
+    }
+
+    body.night .progress-bar {
+      background: linear-gradient(to right, #5d9cfa, #8bb7f9);
+    }
+
+    /* Header section - Matching central-limit-theorem.html styling */
+    .header-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+    }
+    
+    .back-info-container {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 0;
+    }
+
+    .title {
+      margin: 0;
+      font-family: NeueHaasMedium;
+      font-size: 20px;
+      letter-spacing: .25px;
+      line-height: 28px;
+    }
+
+    .back-link {
+      text-decoration: none;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      border: 1px solid;
+      transition: all 0.2s ease;
+      background-color: transparent;
+      padding: 0;
+      margin: 0;
+      line-height: 1;
+      transform: translateY(0px);
+    }
+
+    .back-link:before {
+      content: "←";
+      transition: transform 0.2s ease;
+      font-size: 14px;
+    }
+
+    .back-link:hover:before {
+      transform: translateX(-2px);
+    }
+
+    body.day .back-link {
+      color: #403E43;
+      border-color: #999;
+    }
+
+    body.night .back-link {
+      color: #C8C8C9;
+      border-color: #666;
+    }
+
+    body.day .back-link:hover {
+      border-color: #666;
+    }
+
+    body.night .back-link:hover {
+      border-color: #999;
+    }
+
+    /* Theme toggle - Fixed to prevent duplicate display */
+    .theme-toggle {
+      display: flex;
+      align-items: center;
+    }
+
+    body.night #moon {
+      display: none; /* Hide moon icon in night mode */
+    }
+
+    body.day #moon {
+      display: block; /* Show moon icon in day mode */
+      cursor: pointer;
+      width: 20px;
+    }
+
+    body.night #sun {
+      display: block; /* Show sun icon in night mode */
+      cursor: pointer;
+      width: 20px;
+    }
+
+    body.day #sun {
+      display: none; /* Hide sun icon in day mode */
+    }
+
+    /* Animations */
+    @keyframes bounce {
+      0%, 20%, 50%, 80%, 100% {
+        transform: translateY(0);
+      }
+      40% {
+        transform: translateY(-10px);
+      }
+      60% {
+        transform: translateY(-5px);
+      }
+    }
+
+    .bounce-hint {
+      animation: bounce 2s ease infinite;
+      position: absolute;
+      bottom: 50px;
+      left: calc(50% - 8px);
+      font-size: 16px;
+      opacity: 0.5;
+    }
+
+    /* Animation for card content */
+    .fade-in {
+      animation: fadeIn 0.5s ease-in;
+    }
+
+    @keyframes fadeIn {
+      0% { opacity: 0; transform: translateY(10px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+    
+    /* Responsive adjustments */
+    @media (max-width: 767px) {
+      .flashcard-container {
+        margin: 30px auto;
+      }
+      
+      .card-face {
+        padding: 20px;
+        min-height: 250px;
+      }
+      
+      .card-content {
+        font-size: 16px;
+      }
+      
+      .title {
+        font-size: 18px;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .card-face {
+        padding: 15px;
+        min-height: 230px;
+      }
+      
+      .card-content {
+        font-size: 15px;
+      }
+      
+      .nav-btn {
+        padding: 8px 16px;
+        font-size: 14px;
+      }
+    }
+    
+    /* For devices smaller than 550px - align back button with theme toggle */
+    @media (max-width: 550px) {
+      .back-info-container {
+        margin-bottom: 20px;
+      }
+    }
+  </style>
+  
+  <!-- Script for day/night theme management - simplified and cleaned up -->
+  <script>
+  $(document).ready(function(){
+      // Event handlers for day/night buttons
+      $("#moon").click(function(){
+          $("body").removeClass("day");
+          $("body").addClass("night");
+          localStorage.setItem('theme', 'night');
+      });
+      
+      $("#sun").click(function(){
+          $("body").removeClass("night");
+          $("body").addClass("day");
+          localStorage.setItem('theme', 'day');
+      });
+      
+      // Apply stored theme
+      const storedTheme = localStorage.getItem('theme');
+      if (storedTheme) {
+          if (storedTheme === 'night') {
+              $("body").removeClass("day");
+              $("body").addClass("night");
+          } else {
+              $("body").addClass("day");
+              $("body").removeClass("night");
+          }
+      }
+  });
+  </script>
+
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']]
+      },
+      svg: {
+        fontCache: 'global'
+      }
+    };
+  </script>
+  <script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+
+</head>
+
+<body class="day">
+  <div class="container">
+    <!-- Updated header to match central-limit-theorem.html -->
+    <div class="header-container">
+      <div class="back-info-container">
+        <a href="index.html" class="back-link"></a>
+      </div>
+      <div class="theme-toggle">
+        <img src="images/sun.svg" id="moon">
+        <img src="images/moon.svg" id="sun">
+      </div>
+    </div>
+
+    <!-- Title section -->
+    <div class="header">
+      <h1 class="title">Flashcards Probabilités</h1>
+    </div>
+
+    <!-- Flashcard container -->
+    <div class="flashcard-container">
+      <div class="flashcard">
+        <div class="card-face front">
+          <div class="card-content"></div>
+          <div class="card-number"></div>
+          <div class="card-hint">Cliquez pour voir la réponse</div>
+          <div class="bounce-hint">↓</div>
+        </div>
+        <div class="card-face back">
+          <div class="card-content"></div>
+          <div class="card-number"></div>
+          <div class="card-hint">Cliquez pour voir la question</div>
+        </div>
+      </div>
+      
+      <!-- Navigation buttons -->
+      <div class="card-nav">
+        <button class="nav-btn prev-btn">Précédent</button>
+        <button class="nav-btn next-btn">Suivant</button>
+      </div>
+      
+      <!-- Progress bar -->
+      <div class="progress-container">
+        <div class="progress-bar"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Tableau de données pour les flashcards
+    var flashcards = [
+    {
+      question: "Qu'est-ce qu'un événement aléatoire ?",
+      answer: "Un événement aléatoire est quelque chose qui peut se produire. On cherche à savoir quelle est la chance qu'il se produise. Par exemple, 'mon bus arrivera dans 2 min' est un événement aléatoire."
+    },
+    {
+      question: "Qu'est-ce qu'une probabilité ?",
+      answer: "C'est un nombre entre 0 et 1 qui indique à quel point un événement a de chance de se produire : 0 pour impossible, 1 pour quasi certain."
+    },
+    {
+      question: "Qu'est-ce que l'événement complémentaire d’un événement $A$ ?",
+      answer: "C'est l'événement qui correspond à 'A ne se produit pas'. Il est noté $\\overline{A}$, et sa probabilité vaut $P(\\overline{A}) = 1 - P(A)$."
+    },
+    {
+      question: "Quelle est la formule de la probabilité dans un cas équiprobable ?",
+      answer: "$P(\\text{événement}) = \\frac{\\text{nombre de cas favorables}}{\\text{nombre total de cas}}$"
+    },
+    {
+      question: "Qu’est-ce que l’intersection de deux événements $A$ et $B$ ?",
+      answer: "L’intersection $A \\cap B$ représente la situation où les deux événements se produisent en même temps."
+    },
+    {
+      question: "Qu’est-ce que l’union de deux événements $A$ et $B$ ?",
+      answer: "L’union $A \\cup B$ représente l’événement 'A ou B ou les deux se produisent'."
+    },
+    {
+      question: "Quelle est la formule pour l’union de deux événements $A$ et $B$ ?",
+      answer: "$P(A \\cup B) = P(A) + P(B) - P(A \\cap B)$"
+    },
+    {
+      question: "Qu’est-ce que des événements incompatibles ?",
+      answer: "Des événements sont incompatibles s'ils ne peuvent pas se produire ensemble : $P(A \\cap B) = 0$."
+    },
+    {
+      question: "Qu’est-ce que des événements indépendants ?",
+      answer: "Deux événements sont indépendants si la réalisation de l’un n'influence pas la probabilité de l’autre : $P_A(B) = P(B)$."
+    },
+    {
+      question: "Comment calcule-t-on une probabilité conjointe si les événements sont indépendants ?",
+      answer: "Si $A$ et $B$ sont indépendants, alors $P(A \\cap B) = P(A) \\times P(B)$."
+    },
+    {
+      question: "Quelle est la formule de la probabilité conditionnelle de $B$ sachant $A$ ?",
+      answer: "$P_A(B) = \\frac{P(A \\cap B)}{P(A)}$, si $P(A) \\ne 0$."
+    },
+    {
+      question: "Quelle est la version conjointe de la formule des probabilités totales ?",
+      answer: "$P(A) = P(A \\cap B_1) + P(A \\cap B_2) + \\dots + P(A \\cap B_n)$, avec $(B_i)$ formant une partition."
+    },
+    {
+      question: "Quelle est la version conditionnelle de la formule des probabilités totales ?",
+      answer: "$P(A) = P_{B_1}(A)P(B_1) + P_{B_2}(A)P(B_2) + \\dots + P_{B_n}(A)P(B_n)$"
+    },
+    {
+      question: "Énonce le théorème de Bayes.",
+      answer: "$P_B(A) = \\frac{P(A)P_A(B)}{P(B)} = \\frac{P(A \\cap B)}{P(B)}$"
+    },
+    {
+      question: "Qu’est-ce qu’un tableau de contingence ?",
+      answer: "C’est un tableau qui croise deux variables aléatoires pour représenter des probabilités conjointes et calculer les marginales et conditionnelles."
+    },
+    {
+      question: "Comment calcule-t-on une probabilité conditionnelle à partir d’un tableau de contingence ?",
+      answer: "En divisant une case par la somme de sa ligne ou colonne : $P_A(B) = \\frac{P(A \\cap B)}{P(A)}$"
+    },
+    {
+      question: "Qu'est-ce qu'un arbre de probabilité ?",
+      answer: "C'est une représentation graphique des différentes issues possibles d'une expérience aléatoire, avec les probabilités sur les branches."
+    },
+    {
+      question: "Quelle est la règle pour calculer la probabilité d’un chemin dans un arbre ?",
+      answer: "C’est le produit des probabilités le long du chemin."
+    },
+    {
+      question: "Quelle est la loi de Bernoulli ?",
+      answer: "Une variable $X \\sim \\mathcal{B}(p)$ prend 1 avec probabilité $p$ et 0 avec probabilité $1 - p$."
+    },
+    {
+      question: "Quelle est l’espérance et la variance d’une Bernoulli $\\mathcal{B}(p)$ ?",
+      answer: "$\\mathbb{E}(X) = p$, $\\text{Var}(X) = p(1 - p)$"
+    },
+    {
+      question: "Quelle est la loi binomiale ?",
+      answer: "$X \\sim \\mathcal{B}(n, p)$ modélise le nombre de succès dans $n$ répétitions indépendantes de Bernoulli."
+    },
+    {
+      question: "Quelle est la formule de masse de la loi binomiale ?",
+      answer: "$P(X = k) = \\binom{n}{k} p^k (1 - p)^{n - k}$"
+    },
+    {
+      question: "Quelle est l’espérance et la variance d’une loi binomiale $\\mathcal{B}(n, p)$ ?",
+      answer: "$\\mathbb{E}(X) = np$, $\\text{Var}(X) = np(1 - p)$"
+    },
+    {
+      question: "Qu'est-ce que la loi de Poisson ?",
+      answer: "Elle modélise un nombre d’événements rares dans un intervalle : $P(X = k) = \\frac{e^{-\\lambda} \\lambda^k}{k!}$"
+    },
+    {
+      question: "Quelle est l’espérance et la variance d’une loi de Poisson $\\mathcal{P}(\\lambda)$ ?",
+      answer: "$\\mathbb{E}(X) = \\lambda$, $\\text{Var}(X) = \\lambda$"
+    },
+    {
+      question: "Qu'est-ce qu'une loi uniforme continue $\\mathcal{U}(a,b)$ ?",
+      answer: "Une loi où toutes les valeurs entre $a$ et $b$ ont la même densité : $f(x) = \\frac{1}{b-a}$"
+    },
+    {
+      question: "Quelle est l’espérance et la variance d’une loi uniforme $\\mathcal{U}(a,b)$ ?",
+      answer: "$\\mathbb{E}(X) = \\frac{a + b}{2}$, $\\text{Var}(X) = \\frac{(b - a)^2}{12}$"
+    },
+    {
+      question: "Quelle est la densité de la loi normale $\\mathcal{N}(\\mu, \\sigma^2)$ ?",
+      answer: "$f(x) = \\frac{1}{\\sigma\\sqrt{2\\pi}} e^{-\\frac{1}{2} \\left( \\frac{x - \\mu}{\\sigma} \\right)^2}$"
+    },
+    {
+      question: "Quelle est l’espérance et la variance d’une loi normale $\\mathcal{N}(\\mu, \\sigma^2)$ ?",
+      answer: "$\\mathbb{E}(X) = \\mu$, $\\text{Var}(X) = \\sigma^2$"
+    },
+    {
+      question: "Quand utilise-t-on le test du $\\chi^2$ ?",
+      answer: "Pour tester si deux variables qualitatives sont indépendantes (dans un tableau de contingence)."
+    },
+    {
+      question: "Quelle est la formule de la statistique $\\chi^2$ ?",
+      answer: "$\\chi^2 = \\sum \\frac{(O_{ij} - E_{ij})^2}{E_{ij}}$"
+    },
+    {
+      question: "Quelle est la formule des effectifs attendus pour un test $\\chi^2$ ?",
+      answer: "$E_{ij} = \\frac{\\text{Total ligne}_i \\times \\text{Total colonne}_j}{\\text{Total général}}$"
+    },
+    {
+      question: "Quelle est la statistique du test de Student ?",
+      answer: "$t = \\frac{\\bar{x} - \\mu_0}{s / \\sqrt{n}}$"
+    },
+    {
+      question: "Quand utilise-t-on le test de Student ?",
+      answer: "Pour comparer la moyenne d’un échantillon à une moyenne théorique $\\mu_0$."
+    }
+  ];
+
+    $(document).ready(function() {
+      var currentCardIndex = 0;
+      var isFlipped = false;
+      
+      // Initialize
+      updateCard();
+      updateProgressBar();
+      
+      // Removed duplicate theme management code that was conflicting
+      
+      // Flip card
+      $(".flashcard").click(function() {
+        isFlipped = !isFlipped;
+        
+        // Remove bounce hint after first click
+        $(".bounce-hint").fadeOut(300);
+        
+        if (isFlipped) {
+          $(this).addClass("flipped");
+        } else {
+          $(this).removeClass("flipped");
+        }
+        
+        // Fade effect for content during flip
+        setTimeout(function() {
+          $(".card-content").addClass("fade-in");
+          setTimeout(function() {
+            $(".card-content").removeClass("fade-in");
+          }, 500);
+        }, 200);
+      });
+      
+      // Navigation
+      $(".next-btn").click(function(e) {
+        e.stopPropagation(); // Prevent triggering card flip
+        nextCard();
+      });
+      
+      $(".prev-btn").click(function(e) {
+        e.stopPropagation(); // Prevent triggering card flip
+        previousCard();
+      });
+      
+      // Allow keyboard navigation
+      $(document).keydown(function(e) {
+        if (e.key === "ArrowRight" || e.key === " " || e.key === "Space") {
+          nextCard();
+        } else if (e.key === "ArrowLeft") {
+          previousCard();
+        } else if (e.key === "ArrowUp" || e.key === "ArrowDown" || e.key === "Enter") {
+          $(".flashcard").click();
+        }
+      });
+      
+      // Functions
+      function updateCard() {
+        if (isFlipped) {
+          $(".flashcard").removeClass("flipped");
+          isFlipped = false;
+        }
+      
+        setTimeout(function () {
+          $(".front .card-content").html(flashcards[currentCardIndex].question);
+          $(".back .card-content").html(flashcards[currentCardIndex].answer);
+      
+          $(".card-number").text((currentCardIndex + 1) + " / " + flashcards.length);
+      
+          $(".card-content").addClass("fade-in");
+          setTimeout(function () {
+            $(".card-content").removeClass("fade-in");
+          }, 500);
+      
+          // 👉 Trigger MathJax re-render
+          if (window.MathJax) {
+            MathJax.typesetPromise();
+          }
+        }, 100);
+      }
+      
+      function nextCard() {
+        if (currentCardIndex < flashcards.length - 1) {
+          currentCardIndex++;
+          updateCard();
+          updateProgressBar();
+        }
+      }
+      
+      function previousCard() {
+        if (currentCardIndex > 0) {
+          currentCardIndex--;
+          updateCard();
+          updateProgressBar();
+        }
+      }
+      
+      function updateProgressBar() {
+        const progress = ((currentCardIndex + 1) / flashcards.length) * 100;
+        $(".progress-bar").css("width", progress + "%");
+      }
+    });
+  </script>
+</body>
+</html>
