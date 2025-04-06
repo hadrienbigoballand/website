@@ -759,6 +759,7 @@
     $(document).ready(function() {
       var currentCardIndex = 0;
       var isFlipped = false;
+      var animationInProgress = false;  // Flag to track animation state
       
       // Initialize
       updateCard();
@@ -768,22 +769,28 @@
       
       // Flip card
       $(".flashcard").click(function() {
+        // Prevent multiple clicks during animation
+        if (animationInProgress) return;
         flipCard();
       });
       
       // Navigation
       $(".next-btn").click(function(e) {
         e.stopPropagation(); // Prevent triggering card flip
+        if (animationInProgress) return; // Prevent interaction during animation
         nextCard();
       });
       
       $(".prev-btn").click(function(e) {
         e.stopPropagation(); // Prevent triggering card flip
+        if (animationInProgress) return; // Prevent interaction during animation
         previousCard();
       });
       
       // Allow keyboard navigation - improved implementation
       $(document).keydown(function(e) {
+        if (animationInProgress) return; // Prevent interaction during animation
+        
         // Right arrow or spacebar for next
         if (e.key === "ArrowRight") {
           nextCard();
@@ -808,15 +815,17 @@
       
       // Functions
       function flipCard() {
+        if (animationInProgress) return;
+        animationInProgress = true;
         isFlipped = !isFlipped;
         
-        // Remove bounce hint after first click
+        // Remove bounce hint after first flip
         $(".bounce-hint").fadeOut(300);
         
-        // First hide the content with a class
+        // Hide the content with opacity transition
         $(".front .card-content, .back .card-content").addClass("content-hidden");
         
-        // Then apply the flip after a brief delay
+        // After content is hidden, flip the card
         setTimeout(function() {
           if (isFlipped) {
             $(".flashcard").addClass("flipped");
@@ -824,16 +833,17 @@
             $(".flashcard").removeClass("flipped");
           }
           
-          // Show the content with animation after the flip starts
+          // Show the content after the card starts flipping
           setTimeout(function() {
             $(".front .card-content, .back .card-content").removeClass("content-hidden").addClass("fade-in");
             
-            // Remove animation class after it completes
+            // Animation complete
             setTimeout(function() {
               $(".front .card-content, .back .card-content").removeClass("fade-in");
+              animationInProgress = false; // Release the animation lock
             }, 500);
-          }, 100);
-        }, 50);
+          }, 150); // Slightly longer delay to ensure content appears after flip is in progress
+        }, 100);
       }
 
       function highlightKey(keyName) {
@@ -859,7 +869,10 @@
       }
       
       function updateCard() {
-        // Hide card content first
+        if (animationInProgress) return;
+        animationInProgress = true;
+        
+        // First hide card content
         $(".front .card-content, .back .card-content").addClass("content-hidden");
         
         if (isFlipped) {
@@ -877,25 +890,35 @@
           // Wait for MathJax to load and then reveal content with animation
           if (window.MathJax) {
             MathJax.typesetPromise().then(() => {
-              // After rendering equations, show content with animation
+              // Add a small delay after MathJax rendering completes
+              setTimeout(function() {
+                // After rendering equations, show content with animation
+                $(".front .card-content, .back .card-content").removeClass("content-hidden").addClass("fade-in");
+                
+                // Remove animation class after it completes
+                setTimeout(function() {
+                  $(".front .card-content, .back .card-content").removeClass("fade-in");
+                  animationInProgress = false; // Release the animation lock
+                }, 500);
+                
+                // Check for overflowing equations
+                checkAndAddScrollIndicators();
+              }, 50); // Short delay to ensure MathJax has fully rendered
+            }).catch((err) => {
+              console.log('MathJax error:', err);
+              animationInProgress = false; // Release the lock in case of error
+            });
+          } else {
+            // If MathJax isn't available, still show the content
+            setTimeout(function() {
               $(".front .card-content, .back .card-content").removeClass("content-hidden").addClass("fade-in");
               
               // Remove animation class after it completes
               setTimeout(function() {
                 $(".front .card-content, .back .card-content").removeClass("fade-in");
+                animationInProgress = false; // Release the animation lock
               }, 500);
-              
-              // Check for overflowing equations
-              checkAndAddScrollIndicators();
-            }).catch((err) => console.log('MathJax error:', err));
-          } else {
-            // If MathJax isn't available, still show the content
-            $(".front .card-content, .back .card-content").removeClass("content-hidden").addClass("fade-in");
-            
-            // Remove animation class after it completes
-            setTimeout(function() {
-              $(".front .card-content, .back .card-content").removeClass("fade-in");
-            }, 500);
+            }, 50);
           }
         }, 100);
       }
