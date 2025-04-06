@@ -665,14 +665,14 @@
       }
     }
 
-    /* Enhanced mobile experience - hide arrows and optimize for touch */
-    @media (max-width: 767px) {
-      /* Hide navigation arrows on mobile */
+    /* Enhanced mobile experience - using feature queries instead of just width */
+    @media (hover: none) and (pointer: coarse) {
+      /* Hide navigation arrows on touch devices */
       .nav-arrows {
         display: none;
       }
 
-      /* Hide keyboard shortcuts on mobile */
+      /* Hide keyboard shortcuts on touch devices */
       .keyboard-shortcuts {
         display: none;
       }
@@ -683,7 +683,7 @@
         min-height: 320px; /* Slightly reduce card height on mobile */
       }
       
-      /* Optimize card size for mobile viewing */
+      /* Optimize card size for touch viewing */
       .card-face {
         min-height: 260px; /* Slightly reduce card height */
       }
@@ -698,7 +698,7 @@
         transform: translate3d(-20px, 0, -30px) scale(0.85) rotate(3deg);
         opacity: 0.7; /* Make more visible as a swipe hint */
       }
-
+      
       /* Add swipe hint animation on page load */
       @keyframes swipeHint {
         0%, 100% { transform: translateX(0); }
@@ -732,7 +732,7 @@
         transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
       }
       
-      /* Make dots easier to tap */
+      /* Make dots easier to tap on touch devices */
       .carousel-dot {
         width: 10px;
         height: 10px;
@@ -741,22 +741,6 @@
       
       .carousel-dot.active {
         width: 28px;
-      }
-    }
-    
-    /* Very small screens - further optimization */
-    @media (max-width: 480px) {
-      .cards-carousel {
-        min-height: 300px;
-      }
-      
-      .card-face {
-        min-height: 240px;
-        padding: 15px 12px;
-      }
-      
-      .card-content {
-        font-size: 14px;
       }
     }
   </style>
@@ -789,14 +773,29 @@
           }
       }
 
-      // Add swipe hint only on mobile
-      if (window.innerWidth <= 767) {
-        $('.cards-carousel').append('<div class="swipe-hint">Swipez pour naviguer</div>');
-        
-        // Hide the swipe hint after 6 seconds
-        setTimeout(function() {
-          $('.swipe-hint').fadeOut(500);
-        }, 6000);
+      // Better mobile detection using feature detection
+      function isTouchDevice() {
+          return (('ontouchstart' in window) ||
+              (navigator.maxTouchPoints > 0) ||
+              (navigator.msMaxTouchPoints > 0));
+      }
+
+      // Alternative detection checking for mobile/tablet user agents
+      function isMobileUserAgent() {
+          return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+      }
+
+      // Combined check that's more reliable than just width
+      const isTouch = isTouchDevice() || isMobileUserAgent() || window.matchMedia('(hover: none) and (pointer: coarse)').matches;
+
+      // Add swipe hint only on touch devices
+      if (isTouch) {
+          $('.cards-carousel').append('<div class="swipe-hint">Swipez pour naviguer</div>');
+          
+          // Hide the swipe hint after 6 seconds
+          setTimeout(function() {
+              $('.swipe-hint').fadeOut(500);
+          }, 6000);
       }
   });
   </script>
@@ -1035,6 +1034,16 @@
   $(document).ready(function() {
     var currentCardIndex = 0;
     var animationInProgress = false;
+    
+    // More reliable touch device detection
+    const isTouchDevice = () => {
+      return (('ontouchstart' in window) ||
+          (navigator.maxTouchPoints > 0) ||
+          (navigator.msMaxTouchPoints > 0) ||
+          window.matchMedia('(hover: none) and (pointer: coarse)').matches);
+    };
+    
+    const isTouch = isTouchDevice() || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
     
     // Initialize carousel by creating all cards
     function initializeCarousel() {
@@ -1278,7 +1287,6 @@
     let touchEndX = 0;
     let touchEndY = 0;
     let swipeThreshold = 50; // Increase threshold for more deliberate swipes
-    let isMobile = window.innerWidth <= 767;
     
     $('.cards-carousel')
       .on('touchstart', function(e) {
@@ -1286,7 +1294,7 @@
         touchStartY = e.originalEvent.touches[0].clientY;
         
         // Add active state to improve touch feedback
-        if (isMobile) {
+        if (isTouch) {
           $(this).css('opacity', '0.98');
         }
       })
@@ -1296,7 +1304,7 @@
         
         // Optional: add a subtle real-time translation to follow finger
         // for more responsive feel on mobile
-        if (isMobile) {
+        if (isTouch) {
           const currentX = e.originalEvent.touches[0].clientX;
           const deltaX = currentX - touchStartX;
           
@@ -1315,7 +1323,7 @@
         if (animationInProgress) return;
         
         // Reset opacity
-        if (isMobile) {
+        if (isTouch) {
           $(this).css('opacity', '');
         }
         
@@ -1345,7 +1353,7 @@
         updateTrackPosition();
         
         // Reset opacity
-        if (isMobile) {
+        if (isTouch) {
           $(this).css('opacity', '');
         }
       });
@@ -1354,7 +1362,6 @@
     window.addEventListener('orientationchange', function() {
       // Wait for orientation change to complete
       setTimeout(function() {
-        isMobile = window.innerWidth <= 767;
         updateTrackPosition();
       }, 300);
     });
