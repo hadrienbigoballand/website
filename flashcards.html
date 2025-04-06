@@ -319,6 +319,11 @@
       0% { opacity: 0; transform: translateY(10px); }
       100% { opacity: 1; transform: translateY(0); }
     }
+
+    /* New style to hide content during transitions */
+    .content-hidden {
+      opacity: 0;
+    }
     
     /* Responsive adjustments */
     @media (max-width: 767px) {
@@ -808,19 +813,27 @@
         // Remove bounce hint after first click
         $(".bounce-hint").fadeOut(300);
         
-        if (isFlipped) {
-          $(".flashcard").addClass("flipped");
-        } else {
-          $(".flashcard").removeClass("flipped");
-        }
+        // First hide the content with a class
+        $(".front .card-content, .back .card-content").addClass("content-hidden");
         
-        // Fade effect for content during flip
+        // Then apply the flip after a brief delay
         setTimeout(function() {
-          $(".card-content").addClass("fade-in");
+          if (isFlipped) {
+            $(".flashcard").addClass("flipped");
+          } else {
+            $(".flashcard").removeClass("flipped");
+          }
+          
+          // Show the content with animation after the flip starts
           setTimeout(function() {
-            $(".card-content").removeClass("fade-in");
-          }, 500);
-        }, 200);
+            $(".front .card-content, .back .card-content").removeClass("content-hidden").addClass("fade-in");
+            
+            // Remove animation class after it completes
+            setTimeout(function() {
+              $(".front .card-content, .back .card-content").removeClass("fade-in");
+            }, 500);
+          }, 100);
+        }, 50);
       }
 
       function highlightKey(keyName) {
@@ -846,28 +859,43 @@
       }
       
       function updateCard() {
+        // Hide card content first
+        $(".front .card-content, .back .card-content").addClass("content-hidden");
+        
         if (isFlipped) {
           $(".flashcard").removeClass("flipped");
           isFlipped = false;
         }
       
+        // Short delay to ensure content is hidden before updating
         setTimeout(function () {
+          // Update the content
           $(".front .card-content").html(flashcards[currentCardIndex].question);
           $(".back .card-content").html(flashcards[currentCardIndex].answer);
-      
           $(".card-number").text((currentCardIndex + 1) + " / " + flashcards.length);
-      
-          $(".card-content").addClass("fade-in");
-          setTimeout(function () {
-            $(".card-content").removeClass("fade-in");
-          }, 500);
-      
-          // 👉 Trigger MathJax re-render
+          
+          // Wait for MathJax to load and then reveal content with animation
           if (window.MathJax) {
             MathJax.typesetPromise().then(() => {
-              // After rendering equations, check if any are overflowing
+              // After rendering equations, show content with animation
+              $(".front .card-content, .back .card-content").removeClass("content-hidden").addClass("fade-in");
+              
+              // Remove animation class after it completes
+              setTimeout(function() {
+                $(".front .card-content, .back .card-content").removeClass("fade-in");
+              }, 500);
+              
+              // Check for overflowing equations
               checkAndAddScrollIndicators();
             }).catch((err) => console.log('MathJax error:', err));
+          } else {
+            // If MathJax isn't available, still show the content
+            $(".front .card-content, .back .card-content").removeClass("content-hidden").addClass("fade-in");
+            
+            // Remove animation class after it completes
+            setTimeout(function() {
+              $(".front .card-content, .back .card-content").removeClass("fade-in");
+            }, 500);
           }
         }, 100);
       }
