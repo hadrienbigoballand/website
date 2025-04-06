@@ -29,13 +29,93 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
   <style>
+    /* Fix for horizontal scrolling issue */
+    html, body {
+      overflow-x: hidden;
+      width: 100%;
+      position: relative;
+    }
+
+    /* Flashcard container adjustments to prevent overflow */
+    .cards-carousel {
+      /* ...existing code... */
+      width: 100%;
+      max-width: 100%;
+      left: 0;
+      overflow: visible; /* Keep this to show adjacent cards */
+      /* Center the carousel with auto margins */
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    /* Prevent adjacent cards from causing horizontal scrolling */
+    .carousel-track {
+      /* ...existing code... */
+      /* Ensure track container doesn't expand beyond viewport width */
+      max-width: 100%;
+      overflow: visible;
+      transform-style: preserve-3d; /* Help with 3D transformations */
+    }
+
+    /* Fix positioning of the rotated cards to avoid horizontal scrollbar */
+    .flashcard-container.prev {
+      /* Use 3D transforms which don't affect document flow */
+      transform: translate3d(30px, 0, -50px) scale(0.85) rotate(-5deg);
+      z-index: 1;
+    }
+
+    .flashcard-container.next {
+      /* Use 3D transforms which don't affect document flow */
+      transform: translate3d(-30px, 0, -50px) scale(0.85) rotate(5deg);
+      z-index: 1;
+    }
+
+    .flashcard-container.active {
+      z-index: 2;
+      /* Use 3D transform to ensure proper stacking */
+      transform: translate3d(0, 0, 0) scale(1);
+    }
+
+    /* Adjust container to prevent overflow */
+    .container {
+      /* ...existing code... */
+      overflow-x: hidden; /* Prevent horizontal scrolling in container */
+      max-width: 100%; /* Ensure container doesn't exceed viewport width */
+    }
+    
+    /* Media query for mobile devices - adjusted positioning */
+    @media (max-width: 550px) {
+      .flashcard-container.prev {
+        transform: translate3d(15px, 0, -30px) scale(0.85) rotate(-3deg);
+      }
+      
+      .flashcard-container.next {
+        transform: translate3d(-15px, 0, -30px) scale(0.85) rotate(3deg);
+      }
+    }
+
     /* Flashcard specific styles */
     .flashcard-container {
-      width: 100%;
-      max-width: 600px;
-      margin: 48px auto;
+      min-width: 100%;
+      padding: 0 20px;
+      margin: 0;
+      box-sizing: border-box;
+      flex-shrink: 0;
       perspective: 1000px;
-      position: relative;
+      opacity: 0.3;
+      transform: scale(0.85);
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+
+    .flashcard-container.active {
+      opacity: 1;
+      transform: scale(1);
+    }
+    
+    .flashcard-container.prev,
+    .flashcard-container.next {
+      opacity: 0.6;
+      transform: scale(0.9);
     }
 
     .flashcard {
@@ -64,7 +144,8 @@
       align-items: center;
       overflow: hidden;
       box-sizing: border-box;
-      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+      border: 1px solid rgba(0, 0, 0, 0.08);
     }
 
     body.day .card-face {
@@ -75,6 +156,8 @@
     body.night .card-face {
       background-color: #2D2D32;
       color: #C8C8C9;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
     }
 
     .card-face.front {
@@ -110,83 +193,6 @@
       font-size: 12px;
       opacity: 0.6;
       font-family: NeueHaas;
-    }
-
-    /* Navigation */
-    .card-nav {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-top: 30px;
-      width: 100%;
-    }
-
-    .nav-btn {
-      background: transparent;
-      border: none;
-      font-size: 16px;
-      cursor: pointer;
-      padding: 12px 24px;
-      border-radius: 30px;
-      transition: all 0.3s ease;
-      display: flex;
-      align-items: center;
-      font-family: NeueHaas;
-    }
-
-    body.day .nav-btn {
-      color: #403E43;
-    }
-
-    body.night .nav-btn {
-      color: #C8C8C9;
-    }
-
-    .nav-btn:hover {
-      background-color: rgba(0, 0, 0, 0.05);
-    }
-
-    body.night .nav-btn:hover {
-      background-color: rgba(255, 255, 255, 0.05);
-    }
-
-    .nav-btn:active {
-      transform: scale(0.98);
-    }
-
-    .prev-btn:before {
-      content: "←";
-      margin-right: 8px;
-    }
-
-    .next-btn:after {
-      content: "→";
-      margin-left: 8px;
-    }
-
-    /* Progress bar */
-    .progress-container {
-      width: 100%;
-      height: 4px;
-      background: rgba(0, 0, 0, 0.1);
-      border-radius: 2px;
-      margin-top: 30px;
-      overflow: hidden;
-    }
-
-    body.night .progress-container {
-      background: rgba(255, 255, 255, 0.1);
-    }
-
-    .progress-bar {
-      height: 100%;
-      background: linear-gradient(to right, #4a89dc, #6aa2f1);
-      border-radius: 2px;
-      transition: width 0.4s ease;
-    }
-
-    body.night .progress-bar {
-      background: linear-gradient(to right, #5d9cfa, #8bb7f9);
     }
 
     /* Header section - Matching central-limit-theorem.html styling */
@@ -262,30 +268,30 @@
       border-color: #999;
     }
 
-    /* Theme toggle - Fixed to prevent duplicate display */
+    /* Theme toggle */
     .theme-toggle {
       display: flex;
       align-items: center;
     }
 
     body.night #moon {
-      display: none; /* Hide moon icon in night mode */
+      display: none;
     }
 
     body.day #moon {
-      display: block; /* Show moon icon in day mode */
+      display: block;
       cursor: pointer;
       width: 20px;
     }
 
     body.night #sun {
-      display: block; /* Show sun icon in night mode */
+      display: block;
       cursor: pointer;
       width: 20px;
     }
 
     body.day #sun {
-      display: none; /* Hide sun icon in day mode */
+      display: none;
     }
 
     /* Animations */
@@ -320,17 +326,13 @@
       100% { opacity: 1; transform: translateY(0); }
     }
 
-    /* New style to hide content during transitions */
+    /* Content transitions */
     .content-hidden {
       opacity: 0;
     }
     
     /* Responsive adjustments */
     @media (max-width: 767px) {
-      .flashcard-container {
-        margin: 30px auto;
-      }
-      
       .card-face {
         padding: 20px;
         min-height: 250px;
@@ -354,14 +356,8 @@
       .card-content {
         font-size: 15px;
       }
-      
-      .nav-btn {
-        padding: 8px 16px;
-        font-size: 14px;
-      }
     }
     
-    /* For devices smaller than 550px - align back button with theme toggle */
     @media (max-width: 550px) {
       .back-info-container {
         margin-bottom: 20px;
@@ -372,7 +368,7 @@
     .keyboard-shortcuts {
       width: 100%;
       max-width: 400px;
-      margin: 40px auto 20px;
+      margin: 20px auto;
       padding: 0;
       text-align: center;
       opacity: 0.7;
@@ -440,7 +436,6 @@
       margin: 10px auto 15px;
     }
 
-    /* For smaller screens */
     @media (max-width: 480px) {
       .shortcuts-container {
         flex-direction: column;
@@ -457,7 +452,6 @@
       vertical-align: middle;
     }
     
-    /* Special handling for large equations that should wrap */
     .card-content .large-equation {
       overflow-x: auto;
       padding-bottom: 10px;
@@ -465,7 +459,6 @@
       margin-bottom: 10px;
     }
     
-    /* For extra small screens, adjust card content padding to maximize space */
     @media (max-width: 480px) {
       .card-face {
         padding: 15px 10px;
@@ -477,15 +470,203 @@
         overflow-wrap: break-word;
       }
       
-      /* Add horizontal scrolling for exceptionally large equations on mobile */
       .card-content .MathJax_SVG_Display {
         overflow-x: auto;
         padding-bottom: 5px;
       }
     }
+
+    /* Card carousel container - completely removing any potential borders */
+    .cards-carousel {
+      position: relative;
+      width: 100%;
+      min-height: 350px;
+      overflow: visible; /* Keep this to show adjacent cards */
+      margin: 48px auto;
+      /* Remove all possible borders/frames */
+      border: none;
+      box-shadow: none;
+      background-color: transparent;
+      outline: none;
+    }
+    
+    /* Carousel track - ensuring no frame elements */
+    .carousel-track {
+      position: relative;
+      display: flex;
+      transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+      width: 100%;
+      height: 100%;
+      will-change: transform;
+      padding: 20px 0;
+      /* Remove any frame elements */
+      border: none;
+      outline: none;
+      box-shadow: none;
+      background-color: transparent;
+    }
+
+    /* Progress dots for carousel - enhanced styling */
+    .carousel-dots {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin: 30px 0 10px; /* Increased top margin now that bar is removed */
+      padding-bottom: 10px;
+    }
+    
+    .carousel-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background-color: rgba(0, 0, 0, 0.2);
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+    
+    body.night .carousel-dot {
+      background-color: rgba(255, 255, 255, 0.2);
+    }
+    
+    .carousel-dot.active {
+      width: 24px;
+      border-radius: 4px;
+      background-color: rgba(0, 0, 0, 0.5);
+    }
+    
+    body.night .carousel-dot.active {
+      background-color: rgba(255, 255, 255, 0.5);
+    }
+    
+    /* Navigation arrow buttons - positioned more visibly */
+    .nav-arrows {
+      position: absolute;
+      top: 0;
+      left: -50px; /* Extended outward to make more room */
+      width: calc(100% + 100px); /* Widened to accommodate the outward arrows */
+      height: 100%;
+      pointer-events: none;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      z-index: 10;
+    }
+    
+    .nav-arrow {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background-color: rgba(255, 255, 255, 0.95);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      pointer-events: auto;
+      transition: all 0.3s ease;
+      opacity: 0.7;
+    }
+    
+    body.night .nav-arrow {
+      background-color: rgba(50, 50, 55, 0.95);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+    }
+    
+    .nav-arrow:hover {
+      opacity: 1;
+      transform: scale(1.05);
+    }
+    
+    .nav-arrow:active {
+      transform: scale(0.98);
+    }
+    
+    .nav-arrow.prev::before {
+      content: "←";
+      font-size: 18px;
+    }
+    
+    .nav-arrow.next::before {
+      content: "→";
+      font-size: 18px;
+    }
+    
+    body.day .nav-arrow {
+      color: #403E43;
+    }
+    
+    body.night .nav-arrow {
+      color: #C8C8C9;
+    }
+
+    /* REMOVE side gradients completely as they're likely causing the frame effect */
+    .cards-carousel::before, .cards-carousel::after {
+      display: none;
+    }
+
+    /* Enhanced card visual cues to show adjacent cards better */
+    .flashcard-container.prev {
+      transform: translateX(30px) scale(0.85) rotate(-5deg);
+      z-index: 1;
+    }
+
+    .flashcard-container.next {
+      transform: translateX(-30px) scale(0.85) rotate(5deg);
+      z-index: 1;
+    }
+
+    .flashcard-container.active {
+      z-index: 2;
+    }
+
+    /* Remove any container boundaries */
+    .container {
+      overflow: visible; /* Ensure no clipping of rotated cards */
+      /* Remove potential window-causing elements */
+      border: none;
+      box-shadow: none;
+      background: none;
+    }
+
+    /* Ensure flashcard containers have no frames */
+    .flashcard-container {
+      /* Remove any potential borders */
+      border: none;
+      outline: none;
+      box-shadow: none;
+      background: none;
+    }
+    
+    /* Position the navigation outside the cards on wider screens */
+    @media (min-width: 768px) {
+      .cards-carousel {
+        width: 80%;
+      }
+      
+      .nav-arrows {
+        left: -60px;
+        width: calc(100% + 120px);
+      }
+    }
+    
+    /* Media query for mobile devices - simplified positioning */
+    @media (max-width: 550px) {
+      .nav-arrows {
+        left: -20px;
+        width: calc(100% + 40px);
+      }
+      
+      .flashcard-container.prev {
+        transform: translateX(15px) scale(0.85) rotate(-3deg);
+      }
+      
+      .flashcard-container.next {
+        transform: translateX(-15px) scale(0.85) rotate(3deg);
+      }
+    }
   </style>
   
-  <!-- Script for day/night theme management - simplified and cleaned up -->
+  <!-- Script for day/night theme management -->
   <script>
   $(document).ready(function(){
       // Event handlers for day/night buttons
@@ -550,7 +731,7 @@
 
 <body class="day">
   <div class="container">
-    <!-- Updated header to match central-limit-theorem.html -->
+    <!-- Header -->
     <div class="header-container">
       <div class="back-info-container">
         <a href="index.html" class="back-link"></a>
@@ -566,32 +747,22 @@
       <h1 class="title">Flashcards Probabilités</h1>
     </div>
 
-    <!-- Flashcard container -->
-    <div class="flashcard-container">
-      <div class="flashcard">
-        <div class="card-face front">
-          <div class="card-content"></div>
-          <div class="card-number"></div>
-          <div class="card-hint">Cliquez pour voir la réponse</div>
-          <div class="bounce-hint">↓</div>
-        </div>
-        <div class="card-face back">
-          <div class="card-content"></div>
-          <div class="card-number"></div>
-          <div class="card-hint">Cliquez pour voir la question</div>
-        </div>
+    <!-- Card carousel structure -->
+    <div class="cards-carousel">
+      <div class="carousel-track" id="carousel-track">
+        <!-- Flashcard containers will be inserted here dynamically -->
       </div>
       
-      <!-- Navigation buttons -->
-      <div class="card-nav">
-        <button class="nav-btn prev-btn">Précédent</button>
-        <button class="nav-btn next-btn">Suivant</button>
+      <!-- Navigation arrows -->
+      <div class="nav-arrows">
+        <div class="nav-arrow prev" id="prev-arrow"></div>
+        <div class="nav-arrow next" id="next-arrow"></div>
       </div>
-      
-      <!-- Progress bar -->
-      <div class="progress-container">
-        <div class="progress-bar"></div>
-      </div>
+    </div>
+    
+    <!-- Carousel dots indicator -->
+    <div class="carousel-dots" id="carousel-dots">
+      <!-- Dots will be generated dynamically -->
     </div>
     
     <!-- Keyboard shortcuts guide -->
@@ -627,7 +798,7 @@
       answer: "C'est un nombre entre 0 et 1 qui indique à quel point un événement a de chance de se produire : 0 pour impossible, 1 pour quasi certain."
     },
     {
-      question: "Qu'est-ce que l'événement complémentaire d’un événement $A$ ?",
+      question: "Qu'est-ce que l'événement complémentaire d'un événement $A$ ?",
       answer: "C'est l'événement qui correspond à 'A ne se produit pas'. Il est noté $\\overline{A}$, et sa probabilité vaut $P(\\overline{A}) = 1 - P(A)$."
     },
     {
@@ -635,24 +806,24 @@
       answer: "$P(\\text{événement}) = \\frac{\\text{nombre de cas favorables}}{\\text{nombre total de cas}}$"
     },
     {
-      question: "Qu’est-ce que l’intersection de deux événements $A$ et $B$ ?",
-      answer: "L’intersection $A \\cap B$ représente la situation où les deux événements se produisent en même temps."
+      question: "Qu'est-ce que l'intersection de deux événements $A$ et $B$ ?",
+      answer: "L'intersection $A \\cap B$ représente la situation où les deux événements se produisent en même temps."
     },
     {
-      question: "Qu’est-ce que l’union de deux événements $A$ et $B$ ?",
-      answer: "L’union $A \\cup B$ représente l’événement 'A ou B ou les deux se produisent'."
+      question: "Qu'est-ce que l'union de deux événements $A$ et $B$ ?",
+      answer: "L'union $A \\cup B$ représente l'événement 'A ou B ou les deux se produisent'."
     },
     {
-      question: "Quelle est la formule pour l’union de deux événements $A$ et $B$ ?",
+      question: "Quelle est la formule pour l'union de deux événements $A$ et $B$ ?",
       answer: "$P(A \\cup B) = P(A) + P(B) - P(A \\cap B)$"
     },
     {
-      question: "Qu’est-ce que des événements incompatibles ?",
+      question: "Qu'est-ce que des événements incompatibles ?",
       answer: "Des événements sont incompatibles s'ils ne peuvent pas se produire ensemble : $P(A \\cap B) = 0$."
     },
     {
-      question: "Qu’est-ce que des événements indépendants ?",
-      answer: "Deux événements sont indépendants si la réalisation de l’un n'influence pas la probabilité de l’autre : $P_A(B) = P(B)$."
+      question: "Qu'est-ce que des événements indépendants ?",
+      answer: "Deux événements sont indépendants si la réalisation de l'un n'influence pas la probabilité de l'autre : $P_A(B) = P(B)$."
     },
     {
       question: "Comment calcule-t-on une probabilité conjointe si les événements sont indépendants ?",
@@ -675,11 +846,11 @@
       answer: "$P_B(A) = \\frac{P(A)P_A(B)}{P(B)} = \\frac{P(A \\cap B)}{P(B)}$"
     },
     {
-      question: "Qu’est-ce qu’un tableau de contingence ?",
-      answer: "C’est un tableau qui croise deux variables aléatoires pour représenter des probabilités conjointes et calculer les marginales et conditionnelles."
+      question: "Qu'est-ce qu'un tableau de contingence ?",
+      answer: "C'est un tableau qui croise deux variables aléatoires pour représenter des probabilités conjointes et calculer les marginales et conditionnelles."
     },
     {
-      question: "Comment calcule-t-on une probabilité conditionnelle à partir d’un tableau de contingence ?",
+      question: "Comment calcule-t-on une probabilité conditionnelle à partir d'un tableau de contingence ?",
       answer: "En divisant une case par la somme de sa ligne ou colonne : $P_A(B) = \\frac{P(A \\cap B)}{P(A)}$"
     },
     {
@@ -687,15 +858,15 @@
       answer: "C'est une représentation graphique des différentes issues possibles d'une expérience aléatoire, avec les probabilités sur les branches."
     },
     {
-      question: "Quelle est la règle pour calculer la probabilité d’un chemin dans un arbre ?",
-      answer: "C’est le produit des probabilités le long du chemin."
+      question: "Quelle est la règle pour calculer la probabilité d'un chemin dans un arbre ?",
+      answer: "C'est le produit des probabilités le long du chemin."
     },
     {
       question: "Quelle est la loi de Bernoulli ?",
       answer: "Une variable $X \\sim \\mathcal{B}(p)$ prend 1 avec probabilité $p$ et 0 avec probabilité $1 - p$."
     },
     {
-      question: "Quelle est l’espérance et la variance d’une Bernoulli $\\mathcal{B}(p)$ ?",
+      question: "Quelle est l'espérance et la variance d'une Bernoulli $\\mathcal{B}(p)$ ?",
       answer: "$\\mathbb{E}(X) = p$, $\\text{Var}(X) = p(1 - p)$"
     },
     {
@@ -707,15 +878,15 @@
       answer: "$P(X = k) = \\binom{n}{k} p^k (1 - p)^{n - k}$"
     },
     {
-      question: "Quelle est l’espérance et la variance d’une loi binomiale $\\mathcal{B}(n, p)$ ?",
+      question: "Quelle est l'espérance et la variance d'une loi binomiale $\\mathcal{B}(n, p)$ ?",
       answer: "$\\mathbb{E}(X) = np$, $\\text{Var}(X) = np(1 - p)$"
     },
     {
       question: "Qu'est-ce que la loi de Poisson ?",
-      answer: "Elle modélise un nombre d’événements rares dans un intervalle : $P(X = k) = \\frac{e^{-\\lambda} \\lambda^k}{k!}$"
+      answer: "Elle modélise un nombre d'événements rares dans un intervalle : $P(X = k) = \\frac{e^{-\\lambda} \\lambda^k}{k!}$"
     },
     {
-      question: "Quelle est l’espérance et la variance d’une loi de Poisson $\\mathcal{P}(\\lambda)$ ?",
+      question: "Quelle est l'espérance et la variance d'une loi de Poisson $\\mathcal{P}(\\lambda)$ ?",
       answer: "$\\mathbb{E}(X) = \\lambda$, $\\text{Var}(X) = \\lambda$"
     },
     {
@@ -723,7 +894,7 @@
       answer: "Une loi où toutes les valeurs entre $a$ et $b$ ont la même densité : $f(x) = \\frac{1}{b-a}$"
     },
     {
-      question: "Quelle est l’espérance et la variance d’une loi uniforme $\\mathcal{U}(a,b)$ ?",
+      question: "Quelle est l'espérance et la variance d'une loi uniforme $\\mathcal{U}(a,b)$ ?",
       answer: "$\\mathbb{E}(X) = \\frac{a + b}{2}$, $\\text{Var}(X) = \\frac{(b - a)^2}{12}$"
     },
     {
@@ -731,7 +902,7 @@
       answer: "$f(x) = \\frac{1}{\\sigma\\sqrt{2\\pi}} e^{-\\frac{1}{2} \\left( \\frac{x - \\mu}{\\sigma} \\right)^2}$"
     },
     {
-      question: "Quelle est l’espérance et la variance d’une loi normale $\\mathcal{N}(\\mu, \\sigma^2)$ ?",
+      question: "Quelle est l'espérance et la variance d'une loi normale $\\mathcal{N}(\\mu, \\sigma^2)$ ?",
       answer: "$\\mathbb{E}(X) = \\mu$, $\\text{Var}(X) = \\sigma^2$"
     },
     {
@@ -752,207 +923,278 @@
     },
     {
       question: "Quand utilise-t-on le test de Student ?",
-      answer: "Pour comparer la moyenne d’un échantillon à une moyenne théorique $\\mu_0$."
+      answer: "Pour comparer la moyenne d'un échantillon à une moyenne théorique $\\mu_0$."
     }
   ];
 
-    $(document).ready(function() {
-      var currentCardIndex = 0;
-      var isFlipped = false;
-      var animationInProgress = false;  // Flag to track animation state
+  $(document).ready(function() {
+    var currentCardIndex = 0;
+    var animationInProgress = false;
+    
+    // Initialize carousel by creating all cards
+    function initializeCarousel() {
+      const carouselTrack = $('#carousel-track');
+      const dotContainer = $('#carousel-dots');
       
-      // Initialize
-      updateCard();
+      // Clear track
+      carouselTrack.empty();
+      dotContainer.empty();
+      
+      // Generate all flashcard elements
+      flashcards.forEach((card, index) => {
+        // Create flashcard container
+        const cardContainer = $(`
+          <div class="flashcard-container ${index === currentCardIndex ? 'active' : ''}">
+            <div class="flashcard">
+              <div class="card-face front">
+                <div class="card-content">${card.question}</div>
+                <div class="card-number">${index + 1} / ${flashcards.length}</div>
+                <div class="card-hint">Cliquez pour voir la réponse</div>
+                ${index === 0 ? '<div class="bounce-hint">↓</div>' : ''}
+              </div>
+              <div class="card-face back">
+                <div class="card-content">${card.answer}</div>
+                <div class="card-number">${index + 1} / ${flashcards.length}</div>
+                <div class="card-hint">Cliquez pour voir la question</div>
+              </div>
+            </div>
+          </div>
+        `);
+        
+        // Append card to track
+        carouselTrack.append(cardContainer);
+        
+        // Add corresponding dot
+        const dot = $(`<div class="carousel-dot ${index === currentCardIndex ? 'active' : ''}"></div>`);
+        dotContainer.append(dot);
+        
+        // Add click handler to dot
+        dot.on('click', function() {
+          if (!animationInProgress && index !== currentCardIndex) {
+            goToCard(index);
+          }
+        });
+      });
+      
+      // Add click handler to flip cards
+      $('.flashcard').on('click', function() {
+        const cardIndex = $(this).closest('.flashcard-container').index();
+        if (cardIndex === currentCardIndex) {
+          flipCurrentCard();
+        }
+      });
+      
+      // Set appropriate relative positions for prev/active/next cards
+      updateCardClasses();
+      
+      // Process MathJax for all cards at once
+      if (window.MathJax) {
+        MathJax.typesetPromise().then(() => {
+          // Add indicators for overflowing equations
+          checkAndAddScrollIndicators();
+        }).catch((err) => console.log('MathJax error:', err));
+      }
+    }
+    
+    // Update current card and adjacent card classes
+    function updateCardClasses() {
+      $('.flashcard-container').removeClass('active prev next');
+      
+      // Set active card
+      $(`.flashcard-container:eq(${currentCardIndex})`).addClass('active');
+      
+      // Set previous card if available
+      if (currentCardIndex > 0) {
+        $(`.flashcard-container:eq(${currentCardIndex - 1})`).addClass('prev');
+      }
+      
+      // Set next card if available
+      if (currentCardIndex < flashcards.length - 1) {
+        $(`.flashcard-container:eq(${currentCardIndex + 1})`).addClass('next');
+      }
+      
+      // Update track position to center the current card
+      updateTrackPosition();
+      
+      // Update dots
+      $('.carousel-dot').removeClass('active');
+      $(`.carousel-dot:eq(${currentCardIndex})`).addClass('active');
+    }
+    
+    // Position the track to center the current card
+    function updateTrackPosition() {
+      const translateX = -100 * currentCardIndex;
+      $('#carousel-track').css('transform', `translateX(${translateX}%)`);
+    }
+    
+    // Go to a specific card with animation
+    function goToCard(index) {
+      if (animationInProgress) return;
+      if (index < 0 || index >= flashcards.length) return;
+      
+      animationInProgress = true;
+      
+      // Update current card index
+      currentCardIndex = index;
+      
+      // Update card classes which handles the track position
+      updateCardClasses();
+      
+      // Ensure card is showing front face
+      $(`.flashcard-container:eq(${currentCardIndex})`).find('.flashcard').removeClass('flipped');
+      
+      // Update progress bar
       updateProgressBar();
       
-      // Removed duplicate theme management code that was conflicting
+      // Release animation lock after transition completes
+      setTimeout(() => {
+        animationInProgress = false;
+      }, 600); // Match the transition duration
+    }
+    
+    // Flip the current card
+    function flipCurrentCard() {
+      if (animationInProgress) return;
       
-      // Flip card
-      $(".flashcard").click(function() {
-        // Prevent multiple clicks during animation
-        if (animationInProgress) return;
-        flipCard();
-      });
+      const currentCard = $(`.flashcard-container:eq(${currentCardIndex})`).find('.flashcard');
+      const isFrontVisible = !currentCard.hasClass('flipped');
       
-      // Navigation
-      $(".next-btn").click(function(e) {
-        e.stopPropagation(); // Prevent triggering card flip
-        if (animationInProgress) return; // Prevent interaction during animation
-        nextCard();
-      });
+      // Remove bounce hint after first click
+      $(".bounce-hint").fadeOut(300);
       
-      $(".prev-btn").click(function(e) {
-        e.stopPropagation(); // Prevent triggering card flip
-        if (animationInProgress) return; // Prevent interaction during animation
-        previousCard();
-      });
-      
-      // Allow keyboard navigation - improved implementation
-      $(document).keydown(function(e) {
-        if (animationInProgress) return; // Prevent interaction during animation
-        
-        // Right arrow or spacebar for next
-        if (e.key === "ArrowRight") {
-          nextCard();
-          highlightKey("→");
-        } 
-        // Left arrow for previous
-        else if (e.key === "ArrowLeft") {
-          previousCard();
-          highlightKey("←");
-        } 
-        // Space, Enter, ArrowUp or ArrowDown to flip
-        else if (e.key === " " || e.key === "Space" || e.key === "Enter" || 
-                e.key === "ArrowUp" || e.key === "ArrowDown") {
-          flipCard();
-          highlightKey("Espace");
-          // Prevent page scroll on spacebar
-          if (e.key === " " || e.key === "Space") {
-            e.preventDefault();
-          }
-        }
-      });
-      
-      // Functions
-      function flipCard() {
-        if (animationInProgress) return;
-        animationInProgress = true;
-        isFlipped = !isFlipped;
-        
-        // Remove bounce hint after first flip
-        $(".bounce-hint").fadeOut(300);
-        
-        // Hide the content with opacity transition
-        $(".front .card-content, .back .card-content").addClass("content-hidden");
-        
-        // After content is hidden, flip the card
-        setTimeout(function() {
-          if (isFlipped) {
-            $(".flashcard").addClass("flipped");
-          } else {
-            $(".flashcard").removeClass("flipped");
-          }
+      // Flip the card
+      if (isFrontVisible) {
+        currentCard.addClass('flipped');
+      } else {
+        currentCard.removeClass('flipped');
+      }
+    }
+    
+    // Go to next card
+    function nextCard() {
+      if (currentCardIndex < flashcards.length - 1) {
+        goToCard(currentCardIndex + 1);
+      }
+    }
+    
+    // Go to previous card
+    function previousCard() {
+      if (currentCardIndex > 0) {
+        goToCard(currentCardIndex - 1);
+      }
+    }
+    
+    // Update progress bar - remove this function as we no longer have a progress bar
+    function updateProgressBar() {
+      // Progress bar was removed, so this function can be empty
+      // We keep it to avoid breaking existing code that calls it
+    }
+    
+    // Highlight key animation
+    function highlightKey(keyName) {
+      // Find the key element with matching text content
+      $(".key").each(function() {
+        if ($(this).text() === keyName) {
+          const key = $(this);
+          // Add a highlight class
+          key.css({
+            "transform": "translateY(2px)",
+            "opacity": "0.7"
+          });
           
-          // Show the content after the card starts flipping
+          // Remove it after animation completes
           setTimeout(function() {
-            $(".front .card-content, .back .card-content").removeClass("content-hidden").addClass("fade-in");
-            
-            // Animation complete
-            setTimeout(function() {
-              $(".front .card-content, .back .card-content").removeClass("fade-in");
-              animationInProgress = false; // Release the animation lock
-            }, 500);
-          }, 150); // Slightly longer delay to ensure content appears after flip is in progress
-        }, 100);
-      }
-
-      function highlightKey(keyName) {
-        // Find the key element with matching text content
-        $(".key").each(function() {
-          if ($(this).text() === keyName) {
-            const key = $(this);
-            // Add a highlight class
             key.css({
-              "transform": "translateY(2px)",
-              "opacity": "0.7"
+              "transform": "",
+              "opacity": ""
             });
-            
-            // Remove it after animation completes
-            setTimeout(function() {
-              key.css({
-                "transform": "",
-                "opacity": ""
-              });
-            }, 200);
-          }
-        });
-      }
-      
-      function updateCard() {
-        if (animationInProgress) return;
-        animationInProgress = true;
-        
-        // First hide card content
-        $(".front .card-content, .back .card-content").addClass("content-hidden");
-        
-        if (isFlipped) {
-          $(".flashcard").removeClass("flipped");
-          isFlipped = false;
+          }, 200);
         }
-      
-        // Short delay to ensure content is hidden before updating
-        setTimeout(function () {
-          // Update the content
-          $(".front .card-content").html(flashcards[currentCardIndex].question);
-          $(".back .card-content").html(flashcards[currentCardIndex].answer);
-          $(".card-number").text((currentCardIndex + 1) + " / " + flashcards.length);
-          
-          // Wait for MathJax to load and then reveal content with animation
-          if (window.MathJax) {
-            MathJax.typesetPromise().then(() => {
-              // Add a small delay after MathJax rendering completes
-              setTimeout(function() {
-                // After rendering equations, show content with animation
-                $(".front .card-content, .back .card-content").removeClass("content-hidden").addClass("fade-in");
-                
-                // Remove animation class after it completes
-                setTimeout(function() {
-                  $(".front .card-content, .back .card-content").removeClass("fade-in");
-                  animationInProgress = false; // Release the animation lock
-                }, 500);
-                
-                // Check for overflowing equations
-                checkAndAddScrollIndicators();
-              }, 50); // Short delay to ensure MathJax has fully rendered
-            }).catch((err) => {
-              console.log('MathJax error:', err);
-              animationInProgress = false; // Release the lock in case of error
-            });
-          } else {
-            // If MathJax isn't available, still show the content
-            setTimeout(function() {
-              $(".front .card-content, .back .card-content").removeClass("content-hidden").addClass("fade-in");
-              
-              // Remove animation class after it completes
-              setTimeout(function() {
-                $(".front .card-content, .back .card-content").removeClass("fade-in");
-                animationInProgress = false; // Release the animation lock
-              }, 500);
-            }, 50);
-          }
-        }, 100);
-      }
-      
-      // Function to check for overflowing equations and add visual indicators if needed
-      function checkAndAddScrollIndicators() {
-        $('.card-content .MathJax_SVG_Display').each(function() {
-          if (this.scrollWidth > this.clientWidth) {
-            $(this).css('cursor', 'ew-resize');
-          }
-        });
-      }
-      
-      function nextCard() {
-        if (currentCardIndex < flashcards.length - 1) {
-          currentCardIndex++;
-          updateCard();
-          updateProgressBar();
+      });
+    }
+    
+    // Check for overflowing equations
+    function checkAndAddScrollIndicators() {
+      $('.card-content .MathJax_SVG_Display').each(function() {
+        if (this.scrollWidth > this.clientWidth) {
+          $(this).css('cursor', 'ew-resize');
         }
-      }
-      
-      function previousCard() {
-        if (currentCardIndex > 0) {
-          currentCardIndex--;
-          updateCard();
-          updateProgressBar();
-        }
-      }
-      
-      function updateProgressBar() {
-        const progress = ((currentCardIndex + 1) / flashcards.length) * 100;
-        $(".progress-bar").css("width", progress + "%");
+      });
+    }
+    
+    // Initialize the carousel
+    initializeCarousel();
+    updateProgressBar();
+    
+    // Set up navigation arrow handlers
+    $('#prev-arrow').on('click', function() {
+      if (!animationInProgress) {
+        previousCard();
+        highlightKey("←");
       }
     });
+    
+    $('#next-arrow').on('click', function() {
+      if (!animationInProgress) {
+        nextCard();
+        highlightKey("→");
+      }
+    });
+    
+    // Keyboard navigation
+    $(document).keydown(function(e) {
+      if (animationInProgress) return;
+      
+      // Right arrow for next
+      if (e.key === "ArrowRight") {
+        nextCard();
+        highlightKey("→");
+      } 
+      // Left arrow for previous
+      else if (e.key === "ArrowLeft") {
+        previousCard();
+        highlightKey("←");
+      } 
+      // Space, Enter, ArrowUp or ArrowDown to flip
+      else if (e.key === " " || e.key === "Space" || e.key === "Enter" || 
+              e.key === "ArrowUp" || e.key === "ArrowDown") {
+        flipCurrentCard();
+        highlightKey("Espace");
+        // Prevent page scroll on spacebar
+        if (e.key === " " || e.key === "Space") {
+          e.preventDefault();
+        }
+      }
+    });
+    
+    // Add touch swipe support
+    let touchStartX = 0;
+    let touchEndX = 0;
+    
+    $('.cards-carousel').on('touchstart', function(e) {
+      touchStartX = e.originalEvent.touches[0].clientX;
+    });
+    
+    $('.cards-carousel').on('touchend', function(e) {
+      if (animationInProgress) return;
+      
+      touchEndX = e.originalEvent.changedTouches[0].clientX;
+      
+      // Calculate swipe distance
+      const swipeDistance = touchEndX - touchStartX;
+      
+      // Minimum swipe distance to trigger navigation (20px)
+      if (Math.abs(swipeDistance) > 20) {
+        if (swipeDistance > 0) {
+          // Swipe right - go to previous card
+          previousCard();
+        } else {
+          // Swipe left - go to next card
+          nextCard();
+        }
+      }
+    });
+  });
   </script>
 </body>
 </html>
