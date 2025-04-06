@@ -664,6 +664,101 @@
         transform: translateX(-15px) scale(0.85) rotate(3deg);
       }
     }
+
+    /* Enhanced mobile experience - hide arrows and optimize for touch */
+    @media (max-width: 767px) {
+      /* Hide navigation arrows on mobile */
+      .nav-arrows {
+        display: none;
+      }
+
+      /* Hide keyboard shortcuts on mobile */
+      .keyboard-shortcuts {
+        display: none;
+      }
+      
+      /* Make carousel more touch-friendly */
+      .cards-carousel {
+        touch-action: pan-y; /* Allow vertical scrolling but improve horizontal swipe detection */
+        min-height: 320px; /* Slightly reduce card height on mobile */
+      }
+      
+      /* Optimize card size for mobile viewing */
+      .card-face {
+        min-height: 260px; /* Slightly reduce card height */
+      }
+      
+      /* Make sure adjacent cards are visible as swipe cues */
+      .flashcard-container.prev {
+        transform: translate3d(20px, 0, -30px) scale(0.85) rotate(-3deg);
+        opacity: 0.7; /* Make more visible as a swipe hint */
+      }
+      
+      .flashcard-container.next {
+        transform: translate3d(-20px, 0, -30px) scale(0.85) rotate(3deg);
+        opacity: 0.7; /* Make more visible as a swipe hint */
+      }
+
+      /* Add swipe hint animation on page load */
+      @keyframes swipeHint {
+        0%, 100% { transform: translateX(0); }
+        50% { transform: translateX(-15px); }
+      }
+      
+      .swipe-hint {
+        position: absolute;
+        bottom: -40px;
+        left: 0;
+        width: 100%;
+        text-align: center;
+        font-size: 12px;
+        opacity: 0.6;
+        animation: swipeHint 1.5s ease-in-out 3;
+        font-family: NeueHaas;
+        pointer-events: none;
+      }
+      
+      /* Style swipe hint for dark/light theme */
+      body.day .swipe-hint {
+        color: #403E43;
+      }
+      
+      body.night .swipe-hint {
+        color: #C8C8C9;
+      }
+      
+      /* Optimize animations for performance */
+      .carousel-track {
+        transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+      }
+      
+      /* Make dots easier to tap */
+      .carousel-dot {
+        width: 10px;
+        height: 10px;
+        margin: 0 5px;
+      }
+      
+      .carousel-dot.active {
+        width: 28px;
+      }
+    }
+    
+    /* Very small screens - further optimization */
+    @media (max-width: 480px) {
+      .cards-carousel {
+        min-height: 300px;
+      }
+      
+      .card-face {
+        min-height: 240px;
+        padding: 15px 12px;
+      }
+      
+      .card-content {
+        font-size: 14px;
+      }
+    }
   </style>
   
   <!-- Script for day/night theme management -->
@@ -692,6 +787,16 @@
               $("body").addClass("day");
               $("body").removeClass("night");
           }
+      }
+
+      // Add swipe hint only on mobile
+      if (window.innerWidth <= 767) {
+        $('.cards-carousel').append('<div class="swipe-hint">Swipez pour naviguer</div>');
+        
+        // Hide the swipe hint after 6 seconds
+        setTimeout(function() {
+          $('.swipe-hint').fadeOut(500);
+        }, 6000);
       }
   });
   </script>
@@ -1169,31 +1274,92 @@
     
     // Add touch swipe support
     let touchStartX = 0;
+    let touchStartY = 0;
     let touchEndX = 0;
+    let touchEndY = 0;
+    let swipeThreshold = 50; // Increase threshold for more deliberate swipes
+    let isMobile = window.innerWidth <= 767;
     
-    $('.cards-carousel').on('touchstart', function(e) {
-      touchStartX = e.originalEvent.touches[0].clientX;
-    });
-    
-    $('.cards-carousel').on('touchend', function(e) {
-      if (animationInProgress) return;
-      
-      touchEndX = e.originalEvent.changedTouches[0].clientX;
-      
-      // Calculate swipe distance
-      const swipeDistance = touchEndX - touchStartX;
-      
-      // Minimum swipe distance to trigger navigation (20px)
-      if (Math.abs(swipeDistance) > 20) {
-        if (swipeDistance > 0) {
-          // Swipe right - go to previous card
-          previousCard();
-        } else {
-          // Swipe left - go to next card
-          nextCard();
+    $('.cards-carousel')
+      .on('touchstart', function(e) {
+        touchStartX = e.originalEvent.touches[0].clientX;
+        touchStartY = e.originalEvent.touches[0].clientY;
+        
+        // Add active state to improve touch feedback
+        if (isMobile) {
+          $(this).css('opacity', '0.98');
         }
-      }
+      })
+      .on('touchmove', function(e) {
+        // If we're in a transition, don't interfere
+        if (animationInProgress) return;
+        
+        // Optional: add a subtle real-time translation to follow finger
+        // for more responsive feel on mobile
+        if (isMobile) {
+          const currentX = e.originalEvent.touches[0].clientX;
+          const deltaX = currentX - touchStartX;
+          
+          // Only if the swipe is more horizontal than vertical
+          const currentY = e.originalEvent.touches[0].clientY;
+          const deltaY = Math.abs(currentY - touchStartY);
+          
+          if (Math.abs(deltaX) > deltaY && Math.abs(deltaX) < 50) {
+            // Small visual feedback while dragging
+            const trackTransform = -100 * currentCardIndex + (deltaX * 0.1);
+            $('#carousel-track').css('transform', `translateX(${trackTransform}%)`);
+          }
+        }
+      })
+      .on('touchend', function(e) {
+        if (animationInProgress) return;
+        
+        // Reset opacity
+        if (isMobile) {
+          $(this).css('opacity', '');
+        }
+        
+        touchEndX = e.originalEvent.changedTouches[0].clientX;
+        touchEndY = e.originalEvent.changedTouches[0].clientY;
+        
+        // Calculate swipe distance
+        const swipeDistanceX = touchEndX - touchStartX;
+        const swipeDistanceY = Math.abs(touchEndY - touchStartY);
+        
+        // Only proceed if swipe was more horizontal than vertical and exceeded threshold
+        if (Math.abs(swipeDistanceX) > swipeDistanceY && Math.abs(swipeDistanceX) > swipeThreshold) {
+          if (swipeDistanceX > 0) {
+            // Swipe right - go to previous card
+            previousCard();
+          } else {
+            // Swipe left - go to next card
+            nextCard();
+          }
+        } else {
+          // Reset position if swipe wasn't significant
+          updateTrackPosition();
+        }
+      })
+      .on('touchcancel', function() {
+        // Reset position on touch cancel
+        updateTrackPosition();
+        
+        // Reset opacity
+        if (isMobile) {
+          $(this).css('opacity', '');
+        }
+      });
+    
+    // Handle orientation change to optimize layout
+    window.addEventListener('orientationchange', function() {
+      // Wait for orientation change to complete
+      setTimeout(function() {
+        isMobile = window.innerWidth <= 767;
+        updateTrackPosition();
+      }, 300);
     });
+    
+    // ...rest of your existing code...
   });
   </script>
 </body>
