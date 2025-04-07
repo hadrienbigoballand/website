@@ -781,6 +781,72 @@
     }
 
     /* Remove animations and dismiss button styles as they're no longer needed */
+
+    /* Enhanced mobile hints styling */
+    .mobile-hints {
+      position: absolute;
+      bottom: -60px;
+      left: 0;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      pointer-events: none;
+    }
+    
+    .swipe-hint, .tap-hint {
+      width: 100%;
+      text-align: center;
+      font-size: 12px;
+      opacity: 0.7;
+      font-family: NeueHaas;
+    }
+    
+    /* Style hints for dark/light theme */
+    body.day .swipe-hint, body.day .tap-hint {
+      color: #403E43;
+    }
+    
+    body.night .swipe-hint, body.night .tap-hint {
+      color: #C8C8C9;
+    }
+    
+    /* Improved swipe animation that continues indefinitely */
+    @keyframes swipeHint {
+      0%, 100% { transform: translateX(0); }
+      50% { transform: translateX(-15px); }
+    }
+    
+    .swipe-hint {
+      animation: swipeHint 2s ease-in-out infinite;
+    }
+    
+    /* New tap animation that continues indefinitely */
+    @keyframes tapHint {
+      0%, 100% { transform: translateY(0); }
+      40% { transform: translateY(-3px); }
+      60% { transform: translateY(0); }
+    }
+    
+    .tap-hint {
+      animation: tapHint 2s ease-in-out infinite;
+    }
+    
+    /* Ensure hints only show on touch devices */
+    .mobile-hints {
+      display: none;
+    }
+    
+    @media (hover: none) and (pointer: coarse) {
+      .mobile-hints {
+        display: flex;
+      }
+      
+      .cards-carousel {
+        margin-bottom: 70px; /* Add space for the hints */
+      }
+    }
   </style>
   
   <!-- Script for day/night theme management -->
@@ -826,17 +892,21 @@
       // Combined check that's more reliable than just width
       const isTouch = isTouchDevice() || isMobileUserAgent() || window.matchMedia('(hover: none) and (pointer: coarse)').matches;
 
-      // Add swipe hint only on touch devices
+      // Add mobile hints for touch devices
       if (isTouch) {
-          $('.cards-carousel').append('<div class="swipe-hint">Swipez pour naviguer</div>');
-          
-          // Hide the swipe hint after 6 seconds
-          setTimeout(function() {
-              $('.swipe-hint').fadeOut(500);
-          }, 6000);
-          
-          // Show mobile disclaimer - always display it
-          showMobileDisclaimer();
+        // Replace the old swipe hint with new persistent hints container
+        $('.cards-carousel').append(`
+          <div class="mobile-hints">
+            <div class="swipe-hint">Swipez pour naviguer</div>
+            <div class="tap-hint">Tapotez pour retourner la carte</div>
+          </div>
+        `);
+        
+        // Don't set timeout to hide the hint anymore
+        // (Remove the setTimeout that was hiding the swipe-hint)
+        
+        // Show mobile disclaimer - always display it
+        showMobileDisclaimer();
       }
 
       // Function to show mobile disclaimer - simplified for always-on version
@@ -1171,6 +1241,9 @@
           checkAndAddScrollIndicators();
         }).catch((err) => console.log('MathJax error:', err));
       }
+
+      // Remove bounce hint since we have persistent hints now
+      $('.bounce-hint').remove();
     }
     
     // Update current card and adjacent card classes
@@ -1235,9 +1308,6 @@
       
       const currentCard = $(`.flashcard-container:eq(${currentCardIndex})`).find('.flashcard');
       const isFrontVisible = !currentCard.hasClass('flipped');
-      
-      // Remove bounce hint after first click
-      $(".bounce-hint").fadeOut(300);
       
       // Flip the card
       if (isFrontVisible) {
