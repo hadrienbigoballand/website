@@ -1044,133 +1044,6 @@ body.night .interactive-tool-link:hover {
   padding-right: 5px; /* Extra padding */
 }
 
-.new-badge {
-  position: absolute;
-  top: 12px;
-  right: 12px;
-  transform: none;
-  font-size: 9px;
-  font-family: NeueHaasMedium;
-  text-transform: uppercase;
-  padding: 3px 7px;
-  border-radius: 10px;
-  z-index: 3;
-  letter-spacing: 0.5px;
-  
-  /* Fixed width to ensure the text fits properly */
-  min-width: 34px;
-  display: inline-block;
-  text-align: center;
-  
-  /* Set up for animations */
-  overflow: hidden;
-  
-  /* Multiple animation layers */
-  animation: 
-    holoBgShift 6s linear infinite,
-    holoBrightness 4s ease-in-out infinite;
-}
-
-/* Light mode styling */
-body.day .new-badge {
-  color: #221F26;
-  background: linear-gradient(
-    135deg,
-    rgba(255, 255, 255, 0.8),
-    rgba(200, 225, 255, 0.7) 10%,
-    rgba(180, 200, 240, 0.7) 25%,
-    rgba(150, 175, 220, 0.7) 40%,
-    rgba(200, 215, 235, 0.7) 55%,
-    rgba(170, 190, 225, 0.7) 70%,
-    rgba(190, 210, 230, 0.7) 85%,
-    rgba(255, 255, 255, 0.8)
-  );
-  border: 1px solid rgba(120, 140, 180, 0.4);
-  box-shadow: 
-    0 2px 10px rgba(100, 120, 160, 0.3),
-    inset 0 0 4px rgba(255, 255, 255, 0.7);
-  text-shadow: 
-    0 0 2px rgba(255, 255, 255, 0.7),
-    0 0 3px rgba(100, 120, 160, 0.3);
-}
-
-/* Dark mode styling - preserved from original */
-body.night .new-badge {
-  color: white;
-  background: linear-gradient(
-    135deg,
-    rgba(255, 255, 255, 0.4),
-    rgba(125, 185, 232, 0.6) 10%,
-    rgba(125, 105, 232, 0.6) 25%,
-    rgba(229, 82, 185, 0.6) 40%,
-    rgba(255, 222, 149, 0.6) 55%,
-    rgba(149, 255, 246, 0.6) 70%,
-    rgba(149, 202, 255, 0.6) 85%,
-    rgba(255, 255, 255, 0.4)
-  );
-  border: 1px solid rgba(255, 255, 255, 0.4);
-  box-shadow: 
-    0 2px 10px rgba(74, 137, 220, 0.5),
-    inset 0 0 4px rgba(255, 255, 255, 0.7);
-  text-shadow: 
-    0 0 2px rgba(0, 0, 0, 0.4),
-    0 0 6px rgba(255, 255, 255, 0.4);
-}
-
-/* Base rainbow rotation - shared between modes */
-@keyframes holoBgShift {
-  0% { background-position: 0% 50%; background-size: 200% 200%; }
-  50% { background-position: 100% 50%; background-size: 200% 200%; }
-  100% { background-position: 0% 50%; background-size: 200% 200%; }
-}
-
-/* Subtle brightness pulsation - shared between modes */
-@keyframes holoBrightness {
-  0%, 100% { filter: brightness(1) contrast(1.05); }
-  50% { filter: brightness(1.2) contrast(1.15); }
-}
-
-/* Holographic shine effect overlay - with mode specific colors */
-.new-badge::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 50%;
-  height: 100%;
-  transform: skewX(-25deg);
-  animation: holoShine 2.5s linear infinite;
-  z-index: 2;
-}
-
-/* Light mode shine effect */
-body.day .new-badge::before {
-  background: linear-gradient(
-    90deg,
-    transparent,
-    rgba(255, 255, 255, 0),
-    rgba(255, 255, 255, 0.85),
-    rgba(255, 255, 255, 0)
-  );
-}
-
-/* Dark mode shine effect */
-body.night .new-badge::before {
-  background: linear-gradient(
-    90deg,
-    transparent,
-    rgba(255, 255, 255, 0),
-    rgba(255, 255, 255, 0.85),
-    rgba(255, 255, 255, 0)
-  );
-}
-
-/* Diagonal shine animation */
-@keyframes holoShine {
-  0% { left: -100%; }
-  100% { left: 200%; }
-}
-
 .visualization-card {
   padding: 20px;
   border-radius: 12px;
@@ -2213,84 +2086,6 @@ body.night .card-title {
   height: 100%;
 }
 
-/* Card details styling */
-.card-details {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-}
-
-.card-title {
-  font-family: NeueHaasMedium;
-  font-size: 16px !important;
-  line-height: 1.3 !important;
-  margin-bottom: 8px !important;
-  transition: all 0.3s ease;
-}
-
-body.day .card-title {
-  color: #333;
-}
-
-body.night .card-title {
-  color: #fff;
-}
-
-/* Improved card description with better visibility on hover */
-.card-description {
-  font-family: NeueHaas;
-  font-size: 14px;
-  line-height: 1.4;
-  opacity: 0.75;
-  margin-bottom: 0;
-  max-height: 0;
-  overflow: hidden;
-  transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
-  display: -webkit-box;
-  -webkit-line-clamp: 3; /* Limit to 3 lines by default */
-  -webkit-box-orient: vertical;
-}
-
-/* Smart dynamic height adjustment on hover */
-.resource-card {
-  /* ...existing card styles... */
-  height: 160px;
-  transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1), height 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
-}
-
-.resource-card:hover {
-  /* ...existing hover styles... */
-  height: auto;
-  min-height: 160px;
-  max-height: 240px; /* Allow more space for expanded description */
-}
-
-.resource-card:hover .card-description {
-  max-height: 80px; /* Increased from 60px to allow for longer text */
-  opacity: 0.9;
-  margin-bottom: 8px;
-  overflow: visible; /* Allow text to be fully visible on hover */
-  display: block; /* Override webkit-box to show full text */
-}
-
-/* Ensure card content adjusts with card */
-.card-content {
-  /* ...existing code... */
-  transition: height 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
-  height: 100%;
-}
-
-/* Ensure overlay covers expanded content */
-.card-overlay {
-  /* ...existing code... */
-  transition: opacity 0.3s ease, height 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
-}
-
-.resource-card:hover .card-overlay {
-  /* ...existing code... */
-  height: 100%;
-}
-
 /* Enhanced mobile view for card descriptions */
 @media (max-width: 768px) {
   .resource-card:hover {
@@ -2665,4 +2460,310 @@ body.night .resource-subtitle-minor {
   margin-bottom: 0;
 }
 
-/* Existing CSS continues... */
+/* Featured Resource Cards - Enhanced Styling
+================================================== */
+.resource-card.featured {
+  position: relative;
+  overflow: visible; /* Allow elements to overflow for special effects */
+  transform: translateY(-2px);
+  transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+}
+
+body.night .resource-card.featured {
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+}
+
+/* Special background pattern for featured cards */
+.resource-card.featured::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 12px;
+  background-image: 
+    radial-gradient(circle at 10% 90%, rgba(74, 137, 220, 0.05) 0%, transparent 30%),
+    radial-gradient(circle at 90% 10%, rgba(74, 137, 220, 0.05) 0%, transparent 30%);
+  z-index: 0;
+  opacity: 0.8;
+  transition: opacity 0.4s ease;
+}
+
+body.night .resource-card.featured::before {
+  background-image: 
+    radial-gradient(circle at 10% 90%, rgba(93, 156, 250, 0.08) 0%, transparent 30%),
+    radial-gradient(circle at 90% 10%, rgba(93, 156, 250, 0.08) 0%, transparent 30%);
+}
+
+/* Enhanced hover effects for featured cards */
+.resource-card.featured:hover {
+  transform: translateY(-6px) scale(1.03);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.18);
+}
+
+body.night .resource-card.featured:hover {
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.35);
+}
+
+/* Enhance background effect on hover */
+.resource-card.featured:hover::before {
+  opacity: 1;
+}
+
+/* Elegant border for featured cards */
+.resource-card.featured::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 12px;
+  padding: 2px;
+  background: linear-gradient(135deg, 
+    rgba(74, 137, 220, 0.5) 0%, 
+    rgba(74, 137, 220, 0.2) 50%, 
+    rgba(74, 137, 220, 0.1) 100%);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+body.night .resource-card.featured::after {
+  background: linear-gradient(135deg, 
+    rgba(93, 156, 250, 0.6) 0%, 
+    rgba(93, 156, 250, 0.3) 50%, 
+    rgba(93, 156, 250, 0.15) 100%);
+}
+
+/* Featured badge */
+.featured-badge {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.4),
+    rgba(74, 137, 220, 0.6) 10%,
+    rgba(74, 137, 180, 0.6) 25%,
+    rgba(93, 156, 220, 0.6) 40%,
+    rgba(125, 185, 232, 0.6) 55%,
+    rgba(93, 156, 220, 0.6) 70%,
+    rgba(74, 137, 180, 0.6) 85%,
+    rgba(255, 255, 255, 0.4)
+  );
+  color: white;
+  font-family: NeueHaasMedium;
+  font-size: 10px;
+  padding: 6px 12px;
+  border-radius: 20px;
+  letter-spacing: 0.5px;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15);
+  z-index: 2;
+  transform: rotate(5deg);
+  text-transform: uppercase;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  text-shadow: 0 0 2px rgba(0, 0, 0, 0.4);
+  
+  /* Holographic animations */
+  animation: 
+    holoBgShift 6s linear infinite,
+    holoBrightness 4s ease-in-out infinite,
+    badgePulse 2s infinite;
+  
+  /* For shine effect */
+  overflow: hidden;
+}
+
+@keyframes badgePulse {
+  0%, 100% { transform: rotate(5deg) scale(1); }
+  50% { transform: rotate(5deg) scale(1.05); }
+}
+
+body.night .featured-badge {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.4),
+    rgba(125, 185, 232, 0.6) 10%,
+    rgba(125, 105, 232, 0.6) 25%,
+    rgba(149, 202, 255, 0.6) 40%,
+    rgba(149, 255, 246, 0.6) 55%,
+    rgba(149, 202, 255, 0.6) 70%,
+    rgba(125, 105, 232, 0.6) 85%,
+    rgba(255, 255, 255, 0.4)
+  );
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.25);
+}
+
+/* Holographic shine effect overlay for featured badge */
+.featured-badge::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 50%;
+  height: 100%;
+  transform: skewX(-25deg);
+  animation: holoShine 2.5s linear infinite;
+  z-index: 2;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0),
+    rgba(255, 255, 255, 0.85),
+    rgba(255, 255, 255, 0)
+  );
+}
+
+/* Responsive adjustments for featured badges */
+@media (max-width: 768px) {
+  .featured-badge {
+    font-size: 9px;
+    padding: 4px 10px;
+  }
+}
+
+/* Featured cards showing more description text on hover */
+.resource-card.featured:hover .card-description {
+  max-height: 100px; /* Increased height for featured descriptions */
+}
+
+/* Custom card style for interactive tools */
+.resource-card.featured.interactive {
+  overflow: visible !important; /* Ensure the card doesn't crop its overflow elements */
+}
+
+.resource-card.featured.interactive .card-content {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.95));
+  border-radius: 11px;
+  overflow: hidden; /* Only hide overflow within the content, not the badge */
+}
+
+body.night .resource-card.featured.interactive .card-content {
+  background: linear-gradient(135deg, rgba(45, 45, 50, 0.75), rgba(45, 45, 50, 0.9));
+}
+
+/* Make sure interactive card badges are fully visible */
+.resource-card.featured.interactive .featured-badge {
+  z-index: 100 !important; /* Higher z-index to ensure it's above all other elements */
+  position: absolute !important; /* Ensure positioning is respected */
+  top: -8px !important;
+  right: -8px !important;
+}
+
+/* Interactive dots position adjustment to avoid clipping */
+.resource-card.featured.interactive .interactive-dots {
+  z-index: 5; /* Lower than the badge but higher than other elements */
+}
+
+/* Interactive tool indicator dots */
+.interactive-dots {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  display: flex;
+  gap: 4px;
+  z-index: 2;
+}
+
+.interactive-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: #4a89dc;
+  opacity: 0.7;
+}
+
+.interactive-dot:nth-child(1) { animation: dotPulse 1.5s infinite 0s; }
+.interactive-dot:nth-child(2) { animation: dotPulse 1.5s infinite 0.5s; }
+.interactive-dot:nth-child(3) { animation: dotPulse 1.5s infinite 1s; }
+
+@keyframes dotPulse {
+  0%, 100% { transform: scale(1); opacity: 0.7; }
+  50% { transform: scale(1.3); opacity: 1; }
+}
+
+body.night .interactive-dot {
+  background-color: #5d9cfa;
+}
+
+/* Ensure content stays above background effects */
+.resource-card.featured .card-content {
+  position: relative;
+  z-index: 1;
+}
+
+/* Special tooltip style for featured items */
+.resource-card.featured .card-link[data-tooltip]:before {
+  width: 250px;
+  border: 1px solid rgba(74, 137, 220, 0.3);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+}
+
+body.night .resource-card.featured .card-link[data-tooltip]:before {
+  border: 1px solid rgba(93, 156, 250, 0.3);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.35);
+}
+
+/* Responsive adjustments for featured cards */
+@media (max-width: 768px) {
+  .resource-card.featured:hover {
+    transform: translateY(-5px) scale(1.02);
+  }
+  
+  .featured-badge {
+    font-size: 9px;
+    padding: 4px 10px;
+  }
+}
+
+/* Maintain consistent height on mobile */
+@media (max-width: 550px) {
+  .resource-card.featured {
+    height: 160px;
+  }
+}
+
+/* EMERGENCY FIX FOR BADGE CROPPING - ADD AT THE VERY END OF THE FILE */
+
+/* Ultimate badge fix - this will override everything */
+.resource-card {
+  position: relative !important;
+}
+
+/* Make sure all featured cards can display overflowing content */
+.resource-card.featured.interactive {
+  overflow: visible !important;
+  position: relative !important;
+  z-index: 1 !important;
+}
+
+/* Force badges to be positioned correctly and visible */
+.featured-badge {
+  position: absolute !important;
+  top: -8px !important;
+  right: -8px !important;
+  z-index: 9999 !important; /* Super high z-index to override everything */
+  transform: rotate(5deg) !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  pointer-events: none !important; /* Prevent badge from intercepting clicks */
+}
+
+/* Override any card content styles that might cause clipping */
+.resource-card.featured.interactive .card-content {
+  overflow: visible !important;
+  position: relative !important;
+  z-index: 1 !important;
+}
+
+/* Make sure parent containers don't clip content */
+.resource-grid, .resources-group {
+  overflow: visible !important;
+}
+
+/* Additional safeguard - ensure parent elements never clip their children */
+.featured-badge {
+  transform-origin: center !important; /* Ensure rotation works properly */
+  margin: 0 !important; /* Reset any margin that might affect positioning */
+}
