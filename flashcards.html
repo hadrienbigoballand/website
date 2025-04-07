@@ -1169,6 +1169,53 @@
         padding: 4px 6px; /* Minimum viable padding */
       }
     }
+
+    /* Enhanced mobile experience with improved layout */
+    @media (hover: none) and (pointer: coarse) {
+      /* Adjust carousel bottom margin to accommodate repositioned elements */
+      .cards-carousel {
+        margin-bottom: 30px; /* Reduced from 70px since we'll reposition elements */
+      }
+      
+      /* Reposition the navigation for mobile */
+      .carousel-nav {
+        margin-top: 25px; /* Space between cards and navbar */
+        margin-bottom: 20px; /* Space between navbar and mobile hints */
+        padding: 0 20px; /* Slightly increased padding for better appearance */
+      }
+      
+      /* Reposition mobile hints below the navigation */
+      .mobile-hints {
+        position: relative; /* Change from absolute to relative */
+        bottom: auto; /* Remove absolute positioning */
+        margin-bottom: 25px; /* Add bottom margin */
+        gap: 5px; /* Reduce gap between hints for more compact appearance */
+      }
+      
+      /* Adjust visual style of mobile hints for more compact appearance */
+      .swipe-hint, .tap-hint {
+        font-size: 11px; /* Slightly smaller text */
+        line-height: 1.3; /* Tighter line height */
+        opacity: 0.8; /* Slightly more visible */
+        letter-spacing: -0.2px; /* Tighter letter spacing */
+      }
+      
+      /* Make the overall container taller to accommodate all elements */
+      .container {
+        padding-bottom: 20px; /* Add some bottom padding */
+      }
+      
+      /* Override the nav position indicator placement for better mobile appearance */
+      .position-indicator {
+        top: -25px; /* Move up slightly */
+        font-size: 12px; /* Slightly smaller for mobile */
+      }
+      
+      /* Make the progress track slightly thicker on mobile for better touch targets */
+      .progress-track {
+        height: 5px;
+      }
+    }
   </style>
   
   <!-- Script for day/night theme management -->
