@@ -1263,22 +1263,14 @@
 
       // Add mobile hints for touch devices
       if (isTouch) {
-        // Replace the old swipe hint with new persistent hints container
-        $('.cards-carousel').append(`
-          <div class="mobile-hints">
-            <div class="swipe-hint">Swipez pour naviguer</div>
-            <div class="tap-hint">Tapotez pour retourner la carte</div>
-          </div>
-        `);
-        
-        // Don't set timeout to hide the hint anymore
-        // (Remove the setTimeout that was hiding the swipe-hint)
+        // Remove the old approach of appending to cards-carousel
+        // We'll now insert the hints after the disclaimer in showMobileDisclaimer()
         
         // Show mobile disclaimer - always display it
         showMobileDisclaimer();
       }
 
-      // Function to show mobile disclaimer - simplified for always-on version
+      // Function to show mobile disclaimer - modified to include hints
       function showMobileDisclaimer() {
           const disclaimer = $(`
               <div class="mobile-disclaimer">
@@ -1287,8 +1279,19 @@
               </div>
           `);
           
+          // Create hints to be placed below disclaimer
+          const hints = $(`
+              <div class="mobile-top-hints">
+                  <div class="top-tap-hint">Tapotez pour retourner la carte</div>
+                  <div class="top-swipe-hint">Swipez pour naviguer</div>
+              </div>
+          `);
+          
           // Insert after header
           $('.header').after(disclaimer);
+          
+          // Insert hints after disclaimer
+          disclaimer.after(hints);
           
           // Show with subtle fade-in
           disclaimer.fadeIn(400);
@@ -2033,6 +2036,44 @@
     });
     
     // ...rest of your existing code...
+    // Add CSS for new mobile top hints
+    $('head').append(`
+      <style>
+        .mobile-top-hints {
+          display: none; /* Hidden by default, only shown on mobile */
+          margin: -5px auto 25px;
+          text-align: center;
+          font-family: NeueHaas;
+          font-size: 13px;
+        }
+        
+        .top-tap-hint, .top-swipe-hint {
+          display: inline-block;
+          margin: 0 10px;
+          opacity: 0.8;
+        }
+        
+        body.day .mobile-top-hints {
+          color: #403E43;
+        }
+        
+        body.night .mobile-top-hints {
+          color: #C8C8C9;
+        }
+        
+        /* Only show on touch devices */
+        @media (hover: none) and (pointer: coarse) {
+          .mobile-top-hints {
+            display: block;
+          }
+          
+          /* Hide the bottom mobile hints since we now show them at the top */
+          .mobile-hints {
+            display: none;
+          }
+        }
+      </style>
+    `);
   });
   </script>
 </body>
