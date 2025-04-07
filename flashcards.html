@@ -744,94 +744,43 @@
       }
     }
 
-    /* Mobile disclaimer styling */
+    /* Redesigned mobile disclaimer styling for a more discreet appearance */
     .mobile-disclaimer {
-      display: none; /* Hidden by default */
-      position: relative;
-      margin: 0 auto 20px;
-      padding: 15px 20px;
-      border-radius: 10px;
+      display: none; /* Hidden by default, shown via JS for mobile only */
+      margin: 10px auto 20px;
+      padding: 10px 15px;
+      border-radius: 8px;
       font-family: NeueHaas;
-      font-size: 14px;
+      font-size: 13px;
       line-height: 1.4;
-      animation: fadeSlideIn 0.5s ease-out forwards;
       max-width: 100%;
       box-sizing: border-box;
       transition: all 0.3s ease;
+      text-align: center;
+      border-width: 1px;
+      border-style: solid;
+      opacity: 0.85; /* More transparent for subtlety */
     }
 
     body.day .mobile-disclaimer {
-      background-color: rgba(64, 62, 67, 0.05);
-      border: 1px solid rgba(64, 62, 67, 0.1);
-      color: #403E43;
+      background-color: rgba(64, 62, 67, 0.03);
+      border-color: rgba(64, 62, 67, 0.08);
+      color: #6a6875;
     }
 
     body.night .mobile-disclaimer {
-      background-color: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      color: #C8C8C9;
-    }
-
-    @keyframes fadeSlideIn {
-      from {
-        opacity: 0;
-        transform: translateY(-10px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    .dismiss-disclaimer {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      width: 24px;
-      height: 24px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 50%;
-      cursor: pointer;
-      font-size: 16px;
-      transition: all 0.2s ease;
-      border: none;
-      background: none;
-      padding: 0;
-    }
-
-    body.day .dismiss-disclaimer {
-      color: #403E43;
-    }
-
-    body.night .dismiss-disclaimer {
-      color: #C8C8C9;
-    }
-
-    .dismiss-disclaimer:hover {
-      background-color: rgba(0, 0, 0, 0.05);
-    }
-
-    body.night .dismiss-disclaimer:hover {
-      background-color: rgba(255, 255, 255, 0.05);
+      background-color: rgba(255, 255, 255, 0.03);
+      border-color: rgba(255, 255, 255, 0.08);
+      color: #a7a7a8;
     }
 
     .disclaimer-emoji {
-      margin-right: 8px;
-      font-size: 16px;
+      font-size: 13px;
+      margin-right: 5px;
+      opacity: 0.8;
     }
 
-    .disclaimer-content {
-      flex: 1;
-    }
-
-    @media (max-width: 480px) {
-      .mobile-disclaimer {
-        font-size: 13px;
-        padding: 12px 18px;
-      }
-    }
+    /* Remove animations and dismiss button styles as they're no longer needed */
   </style>
   
   <!-- Script for day/night theme management -->
@@ -886,37 +835,24 @@
               $('.swipe-hint').fadeOut(500);
           }, 6000);
           
-          // Show mobile disclaimer
-          const disclaimerDismissed = localStorage.getItem('flashcards-disclaimer-dismissed');
-          if (!disclaimerDismissed) {
-              showMobileDisclaimer();
-          }
+          // Show mobile disclaimer - always display it
+          showMobileDisclaimer();
       }
 
-      // Function to show mobile disclaimer
+      // Function to show mobile disclaimer - simplified for always-on version
       function showMobileDisclaimer() {
           const disclaimer = $(`
               <div class="mobile-disclaimer">
-                  <span class="disclaimer-emoji">💡</span>
-                  <div class="disclaimer-content">
-                      Cette application a été conçue principalement pour ordinateur. La version mobile avec navigation tactile peut présenter quelques bugs. Pour une meilleure expérience, préférez un ordinateur.
-                  </div>
-                  <button class="dismiss-disclaimer">×</button>
+                  <span class="disclaimer-emoji">💻</span>
+                  Version optimisée pour ordinateur. Navigation tactile disponible.
               </div>
           `);
           
           // Insert after header
           $('.header').after(disclaimer);
           
-          // Add dismiss handler
-          $('.dismiss-disclaimer').on('click', function() {
-              $(this).parent().slideUp(300, function() {
-                  $(this).remove();
-              });
-              
-              // Remember dismissal
-              localStorage.setItem('flashcards-disclaimer-dismissed', 'true');
-          });
+          // Show with subtle fade-in
+          disclaimer.fadeIn(400);
       }
   });
   </script>
