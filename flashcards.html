@@ -847,6 +847,59 @@
         margin-bottom: 70px; /* Add space for the hints */
       }
     }
+
+    /* Enhanced swipe effect and feedback */
+    .carousel-track.swiping {
+      transition: none; /* Remove transition during active swiping for immediate feedback */
+    }
+    
+    /* Visual indicator for active swipe direction */
+    .swipe-direction-indicator {
+      position: absolute;
+      top: 50%;
+      opacity: 0;
+      background-color: rgba(0, 0, 0, 0.1);
+      height: 50px;
+      width: 50px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      color: #fff;
+      z-index: 50;
+      pointer-events: none;
+      transform: translateY(-50%);
+      transition: opacity 0.2s ease;
+    }
+    
+    body.night .swipe-direction-indicator {
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+    
+    .swipe-left-indicator {
+      left: 20px;
+    }
+    
+    .swipe-right-indicator {
+      right: 20px;
+    }
+    
+    .swipe-left-indicator.active,
+    .swipe-right-indicator.active {
+      opacity: 0.8;
+      animation: pulse 0.8s infinite alternate;
+    }
+    
+    @keyframes pulse {
+      0% { transform: translateY(-50%) scale(1); }
+      100% { transform: translateY(-50%) scale(1.1); }
+    }
+    
+    /* Flashcard transition enhancement */
+    .flashcard-container.fast-transition {
+      transition: all 0.25s cubic-bezier(0.19, 1, 0.22, 1) !important;
+    }
   </style>
   
   <!-- Script for day/night theme management -->
@@ -1414,51 +1467,114 @@
       }
     });
     
-    // Add touch swipe support
+    // Add touch swipe support - enhanced version
     let touchStartX = 0;
     let touchStartY = 0;
     let touchEndX = 0;
     let touchEndY = 0;
-    let swipeThreshold = 50; // Increase threshold for more deliberate swipes
+    let swipeThreshold = 30; // Lower threshold for more permissive detection
+    let swipeDirectionDetermined = false;
+    let isHorizontalSwipe = false;
+    let activeSwipeDirection = null;
+    
+    // Add swipe direction indicators to the carousel
+    $('.cards-carousel').append(`
+      <div class="swipe-direction-indicator swipe-left-indicator">→</div>
+      <div class="swipe-direction-indicator swipe-right-indicator">←</div>
+    `);
     
     $('.cards-carousel')
       .on('touchstart', function(e) {
+        if (animationInProgress) return;
+        
         touchStartX = e.originalEvent.touches[0].clientX;
         touchStartY = e.originalEvent.touches[0].clientY;
         
-        // Add active state to improve touch feedback
+        // Reset swipe detection state
+        swipeDirectionDetermined = false;
+        isHorizontalSwipe = false;
+        activeSwipeDirection = null;
+        
+        // Add active state for touch feedback
         if (isTouch) {
           $(this).css('opacity', '0.98');
+          // Mark track as being swiped for immediate visual feedback
+          $('#carousel-track').addClass('swiping');
         }
+        
+        // Hide direction indicators initially
+        $('.swipe-direction-indicator').removeClass('active');
       })
       .on('touchmove', function(e) {
-        // If we're in a transition, don't interfere
         if (animationInProgress) return;
         
-        // Optional: add a subtle real-time translation to follow finger
-        // for more responsive feel on mobile
-        if (isTouch) {
-          const currentX = e.originalEvent.touches[0].clientX;
-          const deltaX = currentX - touchStartX;
+        const currentX = e.originalEvent.touches[0].clientX;
+        const currentY = e.originalEvent.touches[0].clientY;
+        const deltaX = currentX - touchStartX;
+        const deltaY = Math.abs(currentY - touchStartY);
+        
+        // Determine swipe direction early if not yet determined
+        if (!swipeDirectionDetermined) {
+          // If we've moved enough to determine direction
+          if (Math.abs(deltaX) > 10 || deltaY > 10) {
+            isHorizontalSwipe = Math.abs(deltaX) > deltaY;
+            swipeDirectionDetermined = true;
+          }
+        }
+        
+        // If it's a horizontal swipe, add enhanced visual feedback
+        if (isHorizontalSwipe) {
+          e.preventDefault(); // Prevent page scroll for horizontal swipes
           
-          // Only if the swipe is more horizontal than vertical
-          const currentY = e.originalEvent.touches[0].clientY;
-          const deltaY = Math.abs(currentY - touchStartY);
+          // Significant drag - show direction indicator
+          if (Math.abs(deltaX) > 20) {
+            if (deltaX > 0) {
+              activeSwipeDirection = 'right';
+              $('.swipe-right-indicator').addClass('active');
+              $('.swipe-left-indicator').removeClass('active');
+            } else {
+              activeSwipeDirection = 'left';
+              $('.swipe-left-indicator').addClass('active');
+              $('.swipe-right-indicator').removeClass('active');
+            }
+          } else {
+            // Reset indicators if swipe isn't significant yet
+            activeSwipeDirection = null;
+            $('.swipe-direction-indicator').removeClass('active');
+          }
           
-          if (Math.abs(deltaX) > deltaY && Math.abs(deltaX) < 50) {
-            // Small visual feedback while dragging
-            const trackTransform = -100 * currentCardIndex + (deltaX * 0.1);
-            $('#carousel-track').css('transform', `translateX(${trackTransform}%)`);
+          // Apply drag effect to track - more responsive with larger multiplier
+          const trackTransform = -100 * currentCardIndex + (deltaX * 0.3);
+          $('#carousel-track').css('transform', `translateX(${trackTransform}%)`);
+          
+          // Also adjust opacity of adjacent cards based on swipe direction
+          if (deltaX > 0 && currentCardIndex > 0) {
+            // Swiping right, highlight previous card
+            $(`.flashcard-container:eq(${currentCardIndex-1})`).css('opacity', 0.6 + (deltaX * 0.002));
+            if (currentCardIndex < flashcards.length - 1) {
+              $(`.flashcard-container:eq(${currentCardIndex+1})`).css('opacity', 0.6 - (deltaX * 0.001));
+            }
+          } else if (deltaX < 0 && currentCardIndex < flashcards.length - 1) {
+            // Swiping left, highlight next card
+            $(`.flashcard-container:eq(${currentCardIndex+1})`).css('opacity', 0.6 + (Math.abs(deltaX) * 0.002));
+            if (currentCardIndex > 0) {
+              $(`.flashcard-container:eq(${currentCardIndex-1})`).css('opacity', 0.6 - (Math.abs(deltaX) * 0.001));
+            }
           }
         }
       })
       .on('touchend', function(e) {
         if (animationInProgress) return;
         
-        // Reset opacity
-        if (isTouch) {
-          $(this).css('opacity', '');
-        }
+        // Reset opacity and remove swiping class
+        $(this).css('opacity', '');
+        $('#carousel-track').removeClass('swiping');
+        
+        // Hide direction indicators
+        $('.swipe-direction-indicator').removeClass('active');
+        
+        // Reset adjacent cards opacity
+        $('.flashcard-container').css('opacity', '');
         
         touchEndX = e.originalEvent.changedTouches[0].clientX;
         touchEndY = e.originalEvent.changedTouches[0].clientY;
@@ -1467,8 +1583,13 @@
         const swipeDistanceX = touchEndX - touchStartX;
         const swipeDistanceY = Math.abs(touchEndY - touchStartY);
         
-        // Only proceed if swipe was more horizontal than vertical and exceeded threshold
-        if (Math.abs(swipeDistanceX) > swipeDistanceY && Math.abs(swipeDistanceX) > swipeThreshold) {
+        // More permissive criteria for horizontal swipes:
+        // 1. If we already determined it's a horizontal swipe
+        // 2. If the horizontal distance exceeds the threshold and is greater than vertical
+        if (isHorizontalSwipe && Math.abs(swipeDistanceX) > swipeThreshold) {
+          // Add fast transition class to all cards for snappier response
+          $('.flashcard-container').addClass('fast-transition');
+          
           if (swipeDistanceX > 0) {
             // Swipe right - go to previous card
             previousCard();
@@ -1476,21 +1597,28 @@
             // Swipe left - go to next card
             nextCard();
           }
+          
+          // Remove fast transition class after animation completes
+          setTimeout(() => {
+            $('.flashcard-container').removeClass('fast-transition');
+          }, 300);
         } else {
-          // Reset position if swipe wasn't significant
+          // Reset position if swipe wasn't valid
           updateTrackPosition();
         }
+        
+        // Reset swipe direction
+        activeSwipeDirection = null;
       })
       .on('touchcancel', function() {
-        // Reset position on touch cancel
+        // Reset everything on touch cancel
         updateTrackPosition();
-        
-        // Reset opacity
-        if (isTouch) {
-          $(this).css('opacity', '');
-        }
+        $(this).css('opacity', '');
+        $('#carousel-track').removeClass('swiping');
+        $('.swipe-direction-indicator').removeClass('active');
+        $('.flashcard-container').css('opacity', '');
       });
-    
+
     // Handle orientation change to optimize layout
     window.addEventListener('orientationchange', function() {
       // Wait for orientation change to complete
