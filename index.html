@@ -34,10 +34,13 @@
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
   <link rel="icon" type="image/png" href="images/dot.png">
 
-  <!-- jsQuery
-    –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-
+  <!-- jQuery
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+  
+  <!-- Custom scripts -->
+  <script src="js/simple-tooltip.js"></script>
+
   <script>
   $(document).ready(function(){
       // Theme toggling
@@ -612,62 +615,11 @@ var x = setInterval(function() {
   </script>
 
   <style>
-    /* File tooltip styles */
-    .file-link {
-      position: relative;
-    }
-    
-    .file-link[data-tooltip]:before {
-      content: attr(data-tooltip);
-      position: absolute;
-      bottom: calc(100% + 10px);
-      left: 50%;
-      transform: translateX(-50%) translateY(8px);
-      width: 280px;
-      padding: 10px 14px;
-      border-radius: 8px;
-      background: rgba(255, 255, 255, 0.95);
-      color: #403E43;
-      text-align: center;
-      font-family: NeueHaas;
-      font-size: 13px;
-      line-height: 1.4;
-      opacity: 0;
-      pointer-events: none;
-      transition: all 0.3s ease;
-      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.12);
-      z-index: 100;
-    }
-    
-    body.night .file-link[data-tooltip]:before {
-      background: rgba(45, 45, 50, 0.95);
-      color: #C8C8C9;
-      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
-    }
-    
-    .file-link[data-tooltip]:after {
-      content: "";
-      position: absolute;
-      bottom: calc(100% + 2px);
-      left: 50%;
-      transform: translateX(-50%) translateY(8px);
-      border-width: 8px 8px 0 8px;
-      border-style: solid;
-      border-color: rgba(255, 255, 255, 0.95) transparent transparent transparent;
-      opacity: 0;
-      pointer-events: none;
-      transition: all 0.3s ease;
-      z-index: 100;
-    }
-    
-    body.night .file-link[data-tooltip]:after {
-      border-color: rgba(45, 45, 50, 0.95) transparent transparent transparent;
-    }
-    
-    .file-link[data-tooltip]:hover:before, 
-    .file-link[data-tooltip]:hover:after {
-      opacity: 1;
-      transform: translateX(-50%) translateY(0);
+    /* Remove all tooltip behaviors */
+    [data-tooltip]::before,
+    [data-tooltip]::after {
+      display: none !important;
+      content: none !important;
     }
   </style>
 
@@ -1458,6 +1410,9 @@ var x = setInterval(function() {
     });
   });
 </script>
+
+<!-- Add this script to fix tooltip position dynamically -->
+<script src="js/simple-tooltip.js"></script>
 
 </body>
 </html>
