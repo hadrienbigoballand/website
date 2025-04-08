@@ -2486,11 +2486,8 @@ body.night .resource-card.featured.interactive .card-icon {
   border: 1px solid rgba(255, 255, 255, 0.4);
   text-shadow: 0 0 2px rgba(0, 0, 0, 0.4);
   pointer-events: none;
-  animation: 
-    holoBgShift 6s linear infinite,
-    holoBrightness 4s ease-in-out infinite,
-    badgePulse 2s infinite;
   overflow: hidden;
+  /* Animations removed */
 }
 
 body.night .featured-badge {
@@ -2508,47 +2505,16 @@ body.night .featured-badge {
   box-shadow: 0 3px 8px rgba(0, 0, 0, 0.25);
 }
 
-/* Badge animation keyframes */
-@keyframes badgePulse {
-  0%, 100% { transform: rotate(5deg) scale(1); }
-  50% { transform: rotate(5deg) scale(1.05); }
-}
+/* Remove badge animation keyframes */
+/* @keyframes badgePulse, @keyframes holoBgShift, @keyframes holoBrightness - not needed anymore */
 
-@keyframes holoBgShift {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
-}
-
-@keyframes holoBrightness {
-  0%, 100% { filter: brightness(1); }
-  50% { filter: brightness(1.2); }
-}
-
-/* Holographic shine effect for badge */
+/* Remove holographic shine effect for badge */
 .featured-badge::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 50%;
-  height: 100%;
-  transform: skewX(-25deg);
-  animation: holoShine 2.5s linear infinite;
-  z-index: 2;
-  background: linear-gradient(
-    90deg,
-    transparent,
-    rgba(255, 255, 255, 0),
-    rgba(255, 255, 255, 0.85),
-    rgba(255, 255, 255, 0)
-  );
+  display: none; /* Hide the animated shine effect */
 }
 
-@keyframes holoShine {
-  0% { left: -100%; }
-  100% { left: 200%; }
-}
+/* Remove holoShine animation */
+/* @keyframes holoShine - not needed anymore */
 
 /* Responsive adjustments */
 @media (max-width: 768px) {
