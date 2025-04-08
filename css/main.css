@@ -2601,3 +2601,169 @@ body.night .featured-badge {
     max-height: 180px !important; /* More space for text on mobile */
   }
 }
+
+/* Enhanced Card Icon Animations
+================================================== */
+.resource-card .card-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 16px;
+  transition: all 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+}
+
+/* Refined icon hover transformation */
+.resource-card:hover .card-icon {
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06);
+}
+
+body.night .resource-card:hover .card-icon {
+  box-shadow: 0 4px 10px rgba(255, 255, 255, 0.07);
+}
+
+/* Elegant icon SVG animation */
+.resource-card .card-icon .icon-svg svg {
+  transition: all 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
+  will-change: transform, opacity;
+}
+
+.resource-card:hover .card-icon .icon-svg svg {
+  transform: scale(1.08);
+  opacity: 1;
+}
+
+/* Sophisticated background effect for card icons */
+.resource-card .card-icon:before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(
+    circle at center,
+    rgba(255, 255, 255, 0.1) 0%, 
+    rgba(255, 255, 255, 0) 70%
+  );
+  opacity: 0;
+  transform: scale(0.8);
+  transition: all 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+.resource-card:hover .card-icon:before {
+  opacity: 1;
+  transform: scale(1.5);
+}
+
+/* Premium animation for featured cards */
+.resource-card.featured .card-icon {
+  transition: all 0.6s cubic-bezier(0.19, 1, 0.22, 1);
+  overflow: visible;
+}
+
+.resource-card.featured:hover .card-icon {
+  transform: translateY(-5px) scale(1.08);
+}
+
+/* Elegant glow effect for featured card icons */
+.resource-card.featured .card-icon:after {
+  content: "";
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  border-radius: 11px;
+  z-index: -1;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(74, 137, 220, 0.1) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  opacity: 0;
+  filter: blur(6px);
+  transition: all 0.6s cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+.resource-card.featured:hover .card-icon:after {
+  opacity: 1;
+  animation: subtleRotateGlow 3s infinite alternate cubic-bezier(0.455, 0.03, 0.515, 0.955);
+}
+
+body.night .resource-card.featured .card-icon:after {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(93, 156, 250, 0.15) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+}
+
+@keyframes subtleRotateGlow {
+  0% {
+    opacity: 0.4;
+    transform: rotate(-3deg) scale(1);
+    filter: blur(6px);
+  }
+  50% {
+    opacity: 0.8;
+    transform: rotate(0deg) scale(1.1);
+    filter: blur(7px);
+  }
+  100% {
+    opacity: 0.4;
+    transform: rotate(3deg) scale(1);
+    filter: blur(6px);
+  }
+}
+
+/* Day mode icon color enhancement */
+body.day .resource-card:hover .card-icon .icon-svg svg {
+  fill: #403E43;
+}
+
+/* Night mode icon color enhancement */
+body.night .resource-card:hover .card-icon .icon-svg svg {
+  fill: #fff;
+}
+
+/* Special highlight cards with premium icon effect */
+body.day .resource-card.featured:hover .card-icon.highlight .icon-svg svg {
+  fill: #4a89dc;
+  filter: drop-shadow(0 0 1px rgba(74, 137, 220, 0.3));
+}
+
+body.night .resource-card.featured:hover .card-icon.highlight .icon-svg svg {
+  fill: #5d9cfa;
+  filter: drop-shadow(0 0 1px rgba(93, 156, 250, 0.4));
+}
+
+/* Additional micro-interaction for icons */
+.resource-card .card-icon .icon-svg {
+  position: relative;
+  transition: transform 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+.resource-card:hover .card-icon .icon-svg {
+  animation: subtleFloatIcon 2s infinite alternate cubic-bezier(0.455, 0.03, 0.515, 0.955);
+}
+
+@keyframes subtleFloatIcon {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(-2px);
+  }
+}
+
+/* ...existing code... */
