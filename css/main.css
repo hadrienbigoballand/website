@@ -2766,4 +2766,450 @@ body.night .resource-card.featured:hover .card-icon.highlight .icon-svg svg {
   }
 }
 
-/* ...existing code... */
+/* Enhanced Global Animation Effects
+================================================== */
+@keyframes subtle-glow {
+  0%, 100% {
+    filter: drop-shadow(0 0 3px rgba(74, 137, 220, 0.2));
+  }
+  50% {
+    filter: drop-shadow(0 0 6px rgba(74, 137, 220, 0.4));
+  }
+}
+
+body.night @keyframes subtle-glow {
+  0%, 100% {
+    filter: drop-shadow(0 0 3px rgba(93, 156, 250, 0.2));
+  }
+  50% {
+    filter: drop-shadow(0 0 6px rgba(93, 156, 250, 0.5));
+  }
+}
+
+/* Enhanced heading animation with elegant glow */
+body.night h1 {
+  transition: all 0.6s cubic-bezier(0.19, 1, 0.22, 1);
+  position: relative;
+  overflow: visible;
+}
+
+body.day h1 {
+  transition: all 0.6s cubic-bezier(0.19, 1, 0.22, 1);
+  position: relative;
+  overflow: visible;
+}
+
+body.night h1:hover {
+  text-shadow: 0 0 12px rgba(255, 255, 255, 0.5);
+  letter-spacing: 0.45px;
+  background: linear-gradient(45deg, #fff, #c8c8ff, #fff);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  transform: translateY(-2px);
+}
+
+body.day h1:hover {
+  text-shadow: 0 0 12px rgba(64, 62, 67, 0.25);
+  letter-spacing: 0.45px;
+  background: linear-gradient(45deg, #403E43, #6a6875, #403E43);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  transform: translateY(-2px);
+}
+
+/* Add glow effect to h1 on hover */
+body.night h1:hover::before,
+body.day h1:hover::before {
+  content: "";
+  position: absolute;
+  top: -10px;
+  left: -20px;
+  right: -20px;
+  bottom: -10px;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(255, 255, 255, 0.1) 0%,
+    rgba(255, 255, 255, 0) 70%
+  );
+  z-index: -1;
+  opacity: 0;
+  animation: heading-glow 2.5s infinite alternate cubic-bezier(0.455, 0.03, 0.515, 0.955);
+}
+
+body.night h1:hover::before {
+  animation: heading-glow-night 2.5s infinite alternate cubic-bezier(0.455, 0.03, 0.515, 0.955);
+}
+
+@keyframes heading-glow {
+  0% {
+    opacity: 0.1;
+    transform: scale(0.95);
+  }
+  100% {
+    opacity: 0.4;
+    transform: scale(1.05);
+  }
+}
+
+@keyframes heading-glow-night {
+  0% {
+    opacity: 0.2;
+    transform: scale(0.95);
+  }
+  100% {
+    opacity: 0.6;
+    transform: scale(1.05);
+  }
+}
+
+/* Enhanced link animation effects */
+.underline {
+  position: relative;
+  overflow: visible; /* Allow glow to be visible */
+  transition: all 0.3s cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+.underline:before {
+  content: "";
+  position: absolute;
+  bottom: -3px;
+  left: 0;
+  width: 100%;
+  height: 1.5px;
+  background: #8A898C;
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+  z-index: -1;
+}
+
+.underline:hover:before {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+.underline:after {
+  background: #8A898C;
+  height: 1.5px;
+  transition: all 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+.underline:hover {
+  transform: translateY(-1px);
+}
+
+body.night .underline:hover {
+  text-shadow: 0 0 8px rgba(255, 255, 255, 0.4);
+  animation: subtle-glow 3s infinite alternate;
+}
+
+body.day .underline:hover {
+  text-shadow: 0 0 5px rgba(64, 62, 67, 0.2);
+  animation: subtle-glow 3s infinite alternate;
+}
+
+/* Enhance theme toggle buttons with glow effect */
+body.night #moon {
+  transition: all 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+body.day #sun {
+  transition: all 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+body.night #moon:hover, 
+body.day #sun:hover {
+  transform: scale(1.1) rotate(15deg);
+  cursor: pointer;
+  filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.6));
+}
+
+body.day #sun:hover {
+  filter: drop-shadow(0 0 8px rgba(255, 196, 0, 0.6));
+}
+
+/* Enhanced contact icons with matching glow effects */
+.contact-item {
+  overflow: visible; /* Allow glow to overflow */
+  transition: all 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+.contact-item:hover {
+  transform: translateX(5px) translateY(-2px) !important;
+  background-color: rgba(0, 0, 0, 0.03);
+}
+
+body.night .contact-item:hover {
+  background-color: rgba(255, 255, 255, 0.03);
+}
+
+.contact-item .icon-svg {
+  transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+  position: relative;
+}
+
+.contact-item:hover .icon-svg {
+  transform: scale(1.1);
+  animation: subtle-float-icon 2s infinite alternate cubic-bezier(0.455, 0.03, 0.515, 0.955);
+}
+
+@keyframes subtle-float-icon {
+  0% {
+    transform: translateY(0) scale(1.1);
+  }
+  100% {
+    transform: translateY(-3px) scale(1.15);
+  }
+}
+
+/* Add a glowing effect to contact icons */
+.contact-item .icon-svg::after {
+  content: "";
+  position: absolute;
+  top: -8px;
+  left: -8px;
+  right: -8px;
+  bottom: -8px;
+  background: radial-gradient(
+    circle at center,
+    rgba(74, 137, 220, 0.15) 0%, 
+    rgba(74, 137, 220, 0) 70%
+  );
+  border-radius: 50%;
+  z-index: -1;
+  opacity: 0;
+  transform: scale(0.8);
+  transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+body.night .contact-item .icon-svg::after {
+  background: radial-gradient(
+    circle at center,
+    rgba(93, 156, 250, 0.2) 0%, 
+    rgba(93, 156, 250, 0) 70%
+  );
+}
+
+.contact-item:hover .icon-svg::after {
+  opacity: 1;
+  transform: scale(1.2);
+  animation: pulse-glow 3s infinite alternate cubic-bezier(0.455, 0.03, 0.515, 0.955);
+}
+
+@keyframes pulse-glow {
+  0% {
+    opacity: 0.6;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.3);
+  }
+  100% {
+    opacity: 0.6;
+    transform: scale(1);
+  }
+}
+
+/* Enhanced Contact Link Animation */
+.contact-link {
+  transition: all 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+.contact-link:hover {
+  letter-spacing: 0.2px;
+}
+
+.contact-link::after {
+  transition: all 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+  background: linear-gradient(90deg, currentColor, currentColor, transparent); 
+}
+
+/* Add subtle glow to contact links */
+body.night .contact-link:hover {
+  text-shadow: 0 0 6px rgba(255, 255, 255, 0.3);
+}
+
+body.day .contact-link:hover {
+  text-shadow: 0 0 4px rgba(64, 62, 67, 0.2);
+}
+
+/* Enhanced navigation elements with glow */
+.mobile-nav-toggle {
+  transition: all 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+  overflow: visible;
+}
+
+.mobile-nav-toggle:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+body.night .mobile-nav-toggle:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5), 0 0 15px rgba(200, 200, 201, 0.4);
+}
+
+body.day .mobile-nav-toggle:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15), 0 0 15px rgba(64, 62, 67, 0.2);
+}
+
+.mobile-nav-toggle span,
+.mobile-nav-toggle span:before,
+.mobile-nav-toggle span:after {
+  transition: all 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+/* Add glow effect to the mobile nav items */
+.mobile-nav-item a {
+  transition: all 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+  position: relative;
+  overflow: visible;
+}
+
+.mobile-nav-item a:hover {
+  transform: translateX(5px) translateY(-1px);
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.4);
+}
+
+body.day .mobile-nav-item a:hover {
+  text-shadow: 0 0 8px rgba(64, 62, 67, 0.25);
+}
+
+/* Enhanced art section */
+.impressionist-art {
+  transition: transform 0.5s cubic-bezier(0.19, 1, 0.22, 1), 
+              box-shadow 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+.impressionist-art:hover {
+  transform: scale(1.02) translateY(-5px);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.25);
+}
+
+body.night .impressionist-art:hover {
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4), 0 0 40px rgba(255, 255, 255, 0.1);
+}
+
+body.day .impressionist-art:hover {
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15), 0 0 40px rgba(64, 62, 67, 0.08);
+}
+
+/* Enhanced painting button with glow */
+.painting-list-button {
+  transition: all 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+  overflow: visible;
+}
+
+.painting-list-button:hover {
+  transform: translateY(-2px);
+  text-shadow: 0 0 5px rgba(64, 62, 67, 0.2);
+}
+
+body.night .painting-list-button:hover {
+  text-shadow: 0 0 8px rgba(255, 255, 255, 0.4);
+}
+
+.painting-list-button:hover:before {
+  opacity: 1;
+  transform: scaleX(1.1) scaleY(1.2);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+body.night .painting-list-button:hover:before {
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25), 0 0 15px rgba(255, 255, 255, 0.1);
+}
+
+/* Enhanced section headings with subtle glow */
+h4 {
+  position: relative;
+  transition: all 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+h4:after {
+  content: "";
+  position: absolute;
+  bottom: -5px;
+  left: 0;
+  width: 30px;
+  height: 2px;
+  background: linear-gradient(90deg, currentColor 70%, transparent);
+  transform: scaleX(0.7);
+  transform-origin: left;
+  opacity: 0.3;
+  transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+h4:hover:after {
+  transform: scaleX(1);
+  opacity: 0.6;
+  width: 50px;
+}
+
+body.night h4:hover {
+  text-shadow: 0 0 8px rgba(138, 137, 140, 0.3);
+  color: #9f9ea1;
+}
+
+body.day h4:hover {
+  text-shadow: 0 0 8px rgba(159, 158, 161, 0.2);
+  color: #8A898C;
+}
+
+/* Subtle page entrance animations */
+.animated.fadeIn {
+  animation-duration: 1.2s;
+  animation-fill-mode: both;
+  animation-timing-function: cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+.animated.fadeIn.one {
+  animation-delay: 0.1s;
+}
+
+.animated.fadeIn.two {
+  animation-delay: 0.3s;
+}
+
+.animated.fadeIn.three {
+  animation-delay: 0.5s;
+}
+
+.animated.fadeIn.four {
+  animation-delay: 0.7s;
+}
+
+/* Enhanced scroll indicator */
+.scroll-indicator {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  z-index: 1000;
+  width: 0%;
+  transition: width 0.15s cubic-bezier(0.19, 1, 0.22, 1);
+  background: linear-gradient(90deg, 
+    rgba(64, 62, 67, 0.5), 
+    rgba(64, 62, 67, 0.8) 50%, 
+    rgba(64, 62, 67, 0.5)
+  );
+  box-shadow: 0 0 10px rgba(64, 62, 67, 0.2);
+}
+
+body.night .scroll-indicator {
+  background: linear-gradient(90deg, 
+    rgba(255, 255, 255, 0.5), 
+    rgba(255, 255, 255, 0.8) 50%, 
+    rgba(255, 255, 255, 0.5)
+  );
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+}
+
+/* Reduce animations for people who prefer reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation: none !important;
+    transition-duration: 0.1s !important;
+  }
+}
