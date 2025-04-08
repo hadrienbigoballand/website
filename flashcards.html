@@ -175,6 +175,8 @@
       font-size: 18px;
       line-height: 1.5;
       transition: opacity 0.3s ease;
+      display: inline-block;
+      width: 100%;
     }
 
     .card-number {
@@ -1449,7 +1451,7 @@
       },
       // Enable line breaks in equations
       linebreaks: {
-        automatic: true,
+        automatic: false,  // Changed from true to false to prevent automatic line breaks
         width: "container"
       },
       // Make MathJax responsive
@@ -1459,6 +1461,16 @@
           sm: 480,
           md: 768
         }
+      },
+      // Additional MathJax configuration to improve inline display
+      displayAlign: 'center',
+      displayIndent: '0',
+      extensions: ["tex2jax.js"],
+      "HTML-CSS": { 
+        linebreaks: { automatic: false }  // Disable automatic linebreaks here too
+      },
+      CommonHTML: {
+        linebreaks: { automatic: false }  // Disable automatic linebreaks in CommonHTML output
       }
     };
   </script>
