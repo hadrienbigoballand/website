@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Mesh Visualizer</title>
+    <style>
+        body { margin: 0; overflow: hidden; }
+        canvas { display: block; }
+    </style>
+</head>
+<body>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.132.2/build/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.132.2/examples/js/controls/OrbitControls.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.132.2/examples/js/loaders/OBJLoader.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.132.2/examples/js/loaders/PLYLoader.js"></script>
+    <script>
+        // Initialize the scene
+        const scene = new THREE.Scene();
+        scene.background = new THREE.Color(0xf0f0f0);
+        
+        // Initialize the camera
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 10000);
+        camera.position.z = 1500; // Position camera far enough to see the large mesh
+        
+        // Initialize the renderer
+        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.sortObjects = true; // Important for transparency
+        document.body.appendChild(renderer.domElement);
+        
+        // Add lights
+        const ambientLight = new THREE.AmbientLight(0x404040);
+        scene.add(ambientLight);
+        
+        const directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
+        directionalLight.position.set(1, 1, 1);
+        scene.add(directionalLight);
+        
+        // Add OrbitControls
+        const controls = new THREE.OrbitControls(camera, renderer.domElement);
+        controls.enableDamping = true;
+        controls.dampingFactor = 0.05;
+        
+        // Store offset for consistent transforms
+        let meshCenter = null;
+        let meshLoaded = false;
+        let landmarksToLoad = 6; // Total number of landmarks to load
+        let landmarksLoaded = 0; // Counter for loaded landmarks
+        
+        // Function to check if both models are loaded and ready
+        function checkAllLoaded() {
+            if (meshLoaded && landmarksLoaded === landmarksToLoad) {
+                // Adjust camera position based on mesh size
+                const maxDim = Math.max(meshSize.x, meshSize.y, meshSize.z);
+                camera.position.z = maxDim * 1.5;
+                controls.target.set(0, 0, 0);
+                controls.update();
+            }
+        }
+        
+        // Create a variable to store mesh size
+        let meshSize = new THREE.Vector3();
+        
+        // Load the OBJ file
+        const objLoader = new THREE.OBJLoader();
+        objLoader.load(
+            'mesh_arm.obj',
+            function (object) {
+                // Calculate bounding box to center the mesh
+                const boundingBox = new THREE.Box3().setFromObject(object);
+                meshCenter = boundingBox.getCenter(new THREE.Vector3());
+                meshSize = boundingBox.getSize(new THREE.Vector3());
+                                
+                // Apply semi-transparent material to all mesh children
+                object.traverse(function(child) {
+                    if (child instanceof THREE.Mesh) {
+                        // Create new transparent material
+                        child.material = new THREE.MeshPhongMaterial({
+                            color: 0x88ccff,
+                            transparent: true,
+                            opacity: 0.4,
+                            side: THREE.DoubleSide
+                        });
+                    }
+                });
+                
+                // Add the object to the scene
+                scene.add(object);
+                meshLoaded = true;
+                checkAllLoaded();
+            },
+            function (xhr) {
+                console.log('Mesh: ' + (xhr.loaded / xhr.total * 100) + '% loaded');
+            },
+            function (error) {
+                console.error('Error loading the mesh:', error);
+            }
+        );
+        
+        // Define landmarks with their corresponding colors
+        const landmarks = [
+            { file: 'landmark_wrist.ply', color: 0xff0000 }, // Red
+            { file: 'landmark_armpit.ply', color: 0x00ff00 }, // Green
+            { file: 'landmark_biceps.ply', color: 0x0000ff }, // Blue
+            { file: 'landmark_elbow.ply', color: 0xffff00 }, // Yellow
+            { file: 'landmark_intermediate_forearm.ply', color: 0x800080 }, // Purple
+            { file: 'landmark_maximum_forearm.ply', color: 0xff8000 } // Orange
+        ];
+        
+        // Load all landmark PLY files
+        const plyLoader = new THREE.PLYLoader();
+        landmarks.forEach(function(landmark) {
+            plyLoader.load(
+                landmark.file,
+                function (geometry) {
+                    // Create a material for the landmark with the specified color
+                    const material = new THREE.PointsMaterial({ 
+                        color: landmark.color, 
+                        size: 10,
+                        sizeAttenuation: true
+                    });
+                    
+                    // Create a mesh from the geometry and material
+                    const points = new THREE.Points(geometry, material);
+                    
+                    // Apply the same transformation as the mesh (if mesh is loaded)
+                    if (meshCenter) {
+                        points.position.x = -meshCenter.x;
+                        points.position.y = -meshCenter.y;
+                        points.position.z = -meshCenter.z;
+                    }
+                      
+                    // Add the landmark to the scene
+                    scene.add(points);
+                    landmarksLoaded++;
+                    checkAllLoaded();
+                },
+                function (xhr) {
+                    console.log(landmark.file + ': ' + (xhr.loaded / xhr.total * 100) + '% loaded');
+                },
+                function (error) {
+                    console.error('Error loading ' + landmark.file + ':', error);
+                    landmarksLoaded++; // Still increment counter even if there's an error
+                    checkAllLoaded();
+                }
+            );
+        });
+        
+        // Handle window resize
+        window.addEventListener('resize', function () {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+        
+        // Animation loop
+        function animate() {
+            requestAnimationFrame(animate);
+            controls.update();
+            renderer.render(scene, camera);
+        }
+        animate();
+    </script>
+</body>
+</html>
