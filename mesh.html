@@ -47,7 +47,7 @@
         let meshSize = new THREE.Vector3();
         let landmarksToLoad = 6;
         let landmarksLoaded = 0;
-        const loadedLandmarkPoints = [];
+        const loadedLandmarkSpheres = [];
 
         // Define landmarks
         const landmarks = [
@@ -68,10 +68,10 @@
                 controls.update();
 
                 // Now reposition landmarks relative to mesh center
-                loadedLandmarkPoints.forEach(points => {
-                    points.position.x = -meshCenter.x;
-                    points.position.y = -meshCenter.y;
-                    points.position.z = -meshCenter.z;
+                loadedLandmarkSpheres.forEach(sphereGroup => {
+                    sphereGroup.position.x = -meshCenter.x;
+                    sphereGroup.position.y = -meshCenter.y;
+                    sphereGroup.position.z = -meshCenter.z;
                 });
             }
         }
@@ -117,15 +117,32 @@
             plyLoader.load(
                 landmark.file,
                 function (geometry) {
-                    const material = new THREE.PointsMaterial({ 
-                        color: landmark.color, 
-                        size: 10,
-                        sizeAttenuation: true
+                    const sphereRadius = 5; // Size of the sphere
+                    const sphereGeometry = new THREE.SphereGeometry(sphereRadius, 16, 16);
+                    const material = new THREE.MeshPhongMaterial({ 
+                        color: landmark.color,
+                        shininess: 80
                     });
 
-                    const points = new THREE.Points(geometry, material);
-                    scene.add(points);
-                    loadedLandmarkPoints.push(points);
+                    // Create a group to hold all spheres for this landmark
+                    const sphereGroup = new THREE.Group();
+                    
+                    // Get vertices from the loaded PLY geometry
+                    const positions = geometry.getAttribute('position').array;
+                    
+                    // Create a sphere for each vertex in the PLY file
+                    for (let i = 0; i < positions.length; i += 3) {
+                        const x = positions[i];
+                        const y = positions[i + 1];
+                        const z = positions[i + 2];
+                        
+                        const sphere = new THREE.Mesh(sphereGeometry, material);
+                        sphere.position.set(x, y, z);
+                        sphereGroup.add(sphere);
+                    }
+                    
+                    scene.add(sphereGroup);
+                    loadedLandmarkSpheres.push(sphereGroup);
 
                     landmarksLoaded++;
                     checkAllLoaded();
