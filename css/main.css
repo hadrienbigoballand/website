@@ -2124,10 +2124,8 @@ body.night .card-title {
   opacity: 0;
   transition: opacity 0.3s ease;
   z-index: -1;
-}
-
-.resource-card:hover .card-overlay {
-  opacity: 1;
+  height: 100%; /* Ensure it's always 100% of the parent */
+  pointer-events: none; /* Prevent intercepting clicks */
 }
 
 body.night .card-overlay {
@@ -2352,17 +2350,42 @@ body.night .resource-subtitle-minor {
 ================================================== */
 .resource-card.featured {
   position: relative;
-  overflow: visible; /* Allow elements to overflow for special effects */
+  overflow: visible !important; /* Allow badge to overflow */
+  height: 160px;
+  border-radius: 12px;
   transform: translateY(-2px);
   transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+  background-position: 50% 50%;
+  z-index: 2; /* Slightly higher z-index than regular cards */
 }
 
 body.night .resource-card.featured {
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
 }
 
-/* Special background pattern for featured cards */
+/* Apply consistent styling to all featured cards */
+.resource-card.featured.interactive {
+  overflow: visible !important;
+  height: 160px;
+  background: none;
+}
+
+/* Card content styling */
+.resource-card.featured .card-content,
+.resource-card.featured.interactive .card-content {
+  position: relative;
+  height: 100%;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  z-index: 1;
+  border-radius: 11px;
+  background: none;
+  overflow: visible !important;
+}
+
+/* Subtle gradient background for cards */
 .resource-card.featured::before {
   content: "";
   position: absolute;
@@ -2395,12 +2418,11 @@ body.night .resource-card.featured:hover {
   box-shadow: 0 15px 30px rgba(0, 0, 0, 0.35);
 }
 
-/* Enhance background effect on hover */
 .resource-card.featured:hover::before {
   opacity: 1;
 }
 
-/* Elegant border for featured cards */
+/* Elegant card border */
 .resource-card.featured::after {
   content: "";
   position: absolute;
@@ -2424,11 +2446,22 @@ body.night .resource-card.featured::after {
     rgba(93, 156, 250, 0.15) 100%);
 }
 
-/* Featured badge */
+/* Card icon styling */
+.resource-card.featured .card-icon,
+.resource-card.featured.interactive .card-icon {
+  background-color: rgba(74, 137, 220, 0.1);
+}
+
+body.night .resource-card.featured .card-icon,
+body.night .resource-card.featured.interactive .card-icon {
+  background-color: rgba(93, 156, 250, 0.15);
+}
+
+/* Keep the badge styling exactly the same */
 .featured-badge {
-  position: absolute;
-  top: -8px;
-  right: -8px;
+  position: absolute !important;
+  top: -8px !important;
+  right: -8px !important;
   background: linear-gradient(
     135deg,
     rgba(255, 255, 255, 0.4),
@@ -2447,25 +2480,17 @@ body.night .resource-card.featured::after {
   border-radius: 20px;
   letter-spacing: 0.5px;
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15);
-  z-index: 2;
+  z-index: 10 !important;
   transform: rotate(5deg);
   text-transform: uppercase;
   border: 1px solid rgba(255, 255, 255, 0.4);
   text-shadow: 0 0 2px rgba(0, 0, 0, 0.4);
-  
-  /* Holographic animations */
+  pointer-events: none;
   animation: 
     holoBgShift 6s linear infinite,
     holoBrightness 4s ease-in-out infinite,
     badgePulse 2s infinite;
-  
-  /* For shine effect */
   overflow: hidden;
-}
-
-@keyframes badgePulse {
-  0%, 100% { transform: rotate(5deg) scale(1); }
-  50% { transform: rotate(5deg) scale(1.05); }
 }
 
 body.night .featured-badge {
@@ -2483,7 +2508,24 @@ body.night .featured-badge {
   box-shadow: 0 3px 8px rgba(0, 0, 0, 0.25);
 }
 
-/* Holographic shine effect overlay for featured badge */
+/* Badge animation keyframes */
+@keyframes badgePulse {
+  0%, 100% { transform: rotate(5deg) scale(1); }
+  50% { transform: rotate(5deg) scale(1.05); }
+}
+
+@keyframes holoBgShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes holoBrightness {
+  0%, 100% { filter: brightness(1); }
+  50% { filter: brightness(1.2); }
+}
+
+/* Holographic shine effect for badge */
 .featured-badge::before {
   content: "";
   position: absolute;
@@ -2503,97 +2545,12 @@ body.night .featured-badge {
   );
 }
 
-/* Responsive adjustments for featured badges */
-@media (max-width: 768px) {
-  .featured-badge {
-    font-size: 9px;
-    padding: 4px 10px;
-  }
+@keyframes holoShine {
+  0% { left: -100%; }
+  100% { left: 200%; }
 }
 
-/* Featured cards showing more description text on hover */
-.resource-card.featured:hover .card-description {
-  max-height: 100px; /* Increased height for featured descriptions */
-}
-
-/* Custom card style for interactive tools */
-.resource-card.featured.interactive {
-  overflow: visible !important; /* Ensure the card doesn't crop its overflow elements */
-}
-
-.resource-card.featured.interactive .card-content {
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.95));
-  border-radius: 11px;
-  overflow: hidden; /* Only hide overflow within the content, not the badge */
-}
-
-body.night .resource-card.featured.interactive .card-content {
-  background: linear-gradient(135deg, rgba(45, 45, 50, 0.75), rgba(45, 45, 50, 0.9));
-}
-
-/* Make sure interactive card badges are fully visible */
-.resource-card.featured.interactive .featured-badge {
-  z-index: 100 !important; /* Higher z-index to ensure it's above all other elements */
-  position: absolute !important; /* Ensure positioning is respected */
-  top: -8px !important;
-  right: -8px !important;
-}
-
-/* Interactive dots position adjustment to avoid clipping */
-.resource-card.featured.interactive .interactive-dots {
-  z-index: 5; /* Lower than the badge but higher than other elements */
-}
-
-/* Interactive tool indicator dots */
-.interactive-dots {
-  position: absolute;
-  bottom: 10px;
-  right: 10px;
-  display: flex;
-  gap: 4px;
-  z-index: 2;
-}
-
-.interactive-dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background-color: #4a89dc;
-  opacity: 0.7;
-}
-
-.interactive-dot:nth-child(1) { animation: dotPulse 1.5s infinite 0s; }
-.interactive-dot:nth-child(2) { animation: dotPulse 1.5s infinite 0.5s; }
-.interactive-dot:nth-child(3) { animation: dotPulse 1.5s infinite 1s; }
-
-@keyframes dotPulse {
-  0%, 100% { transform: scale(1); opacity: 0.7; }
-  50% { transform: scale(1.3); opacity: 1; }
-}
-
-body.night .interactive-dot {
-  background-color: #5d9cfa;
-}
-
-/* Ensure content stays above background effects */
-.resource-card.featured .card-content {
-  position: relative;
-  z-index: 1;
-}
-
-/* Special tooltip style for featured items */
-.resource-card.featured .card-link[data-tooltip]:before {
-  width: 250px;
-  border: 1px solid rgba(74, 137, 220, 0.3);
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
-}
-
-body.night .resource-card.featured .card-link[data-tooltip]:before {
-  border: 1px solid rgba(93, 156, 250, 0.3);
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.35);
-}
-
-/* Responsive adjustments for featured cards */
+/* Responsive adjustments */
 @media (max-width: 768px) {
   .resource-card.featured:hover {
     transform: translateY(-5px) scale(1.02);
@@ -2605,187 +2562,19 @@ body.night .resource-card.featured .card-link[data-tooltip]:before {
   }
 }
 
-/* Maintain consistent height on mobile */
-@media (max-width: 550px) {
-  .resource-card.featured {
-    height: 160px;
-  }
-}
-
-/* EMERGENCY FIX FOR BADGE CROPPING - ADD AT THE VERY END OF THE FILE */
-
-/* Ultimate badge fix - this will override everything */
-.resource-card {
-  position: relative !important;
-}
-
-/* Make sure all featured cards can display overflowing content */
+/* Override any positioning issues - critical for badge visibility */
+.resource-card,
+.resource-card.featured,
 .resource-card.featured.interactive {
-  overflow: visible !important;
   position: relative !important;
-  z-index: 1 !important;
-}
-
-/* Force badges to be positioned correctly and visible */
-.featured-badge {
-  position: absolute !important;
-  top: -8px !important;
-  right: -8px !important;
-  z-index: 9999 !important; /* Super high z-index to override everything */
-  transform: rotate(5deg) !important;
-  visibility: visible !important;
-  opacity: 1 !important;
-  pointer-events: none !important; /* Prevent badge from intercepting clicks */
-}
-
-/* Override any card content styles that might cause clipping */
-.resource-card.featured.interactive .card-content {
-  overflow: visible !important;
-  position: relative !important;
-  z-index: 1 !important;
-}
-
-/* Make sure parent containers don't clip content */
-.resource-grid, .resources-group {
   overflow: visible !important;
 }
 
-/* Additional safeguard - ensure parent elements never clip their children */
-.featured-badge {
-  transform-origin: center !important; /* Ensure rotation works properly */
-  margin: 0 !important; /* Reset any margin that might affect positioning */
-}
-
-/* EMERGENCY FIX FOR TOOLTIP DISPLAY - ADD AT THE VERY END OF THE FILE */
-/* Force tooltips to display properly */
-.resource-card .card-link[data-tooltip] {
+.resource-grid,
+.resources-group {
   overflow: visible !important;
 }
 
-.resource-card .card-link[data-tooltip]:before,
-.resource-card .card-link[data-tooltip]:after {
-  overflow: visible !important;
-  pointer-events: none !important;
-}
-
-/* Fix tooltip positioning for cards at the top of the screen */
-.resource-card:nth-child(-n+3) .card-link[data-tooltip]:before {
-  top: auto;
-  bottom: -10px;
-  transform: translateX(-50%) translateY(0);
-}
-
-.resource-card:nth-child(-n+3) .card-link[data-tooltip]:after {
-  top: auto;
-  bottom: -10px;
-  transform: translateX(-50%) rotate(0deg);
-}
-
-.resource-card:nth-child(-n+3) .card-link[data-tooltip]:hover:before {
-  transform: translateX(-50%) translateY(8px);
-}
-
-.resource-card:nth-child(-n+3) .card-link[data-tooltip]:hover:after {
-  transform: translateX(-50%) rotate(0deg) translateY(8px);
-}
-
-/* Ensure hover states work correctly with new positioning */
-.resource-card .card-content {
-  z-index: 1;
-}
-
-/* TOOLTIP SYSTEM COMPLETE REPLACEMENT - REMOVE ALL EXISTING TOOLTIP STYLES */
-/* Remove all tooltip-related styles that might be causing the issue */
-.resource-card .card-link[data-tooltip]:before,
-.resource-card .card-link[data-tooltip]:after,
-.file-link[data-tooltip]:before,
-.file-link[data-tooltip]:after {
-  content: none !important;
-  display: none !important;
-}
-
-/* New custom tooltip system */
-.custom-tooltip {
-  position: absolute;
-  z-index: 10000;
-  background-color: rgba(255, 255, 255, 0.95);
-  color: #403E43;
-  padding: 10px 14px;
-  border-radius: 8px;
-  font-family: NeueHaas;
-  font-size: 13px;
-  line-height: 1.4;
-  text-align: center;
-  max-width: 280px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
-  pointer-events: none;
-  opacity: 0;
-  transform: translateY(10px);
-  transition: opacity 0.25s ease, transform 0.25s ease;
-  visibility: hidden;
-}
-
-/* Night mode styling for tooltip */
-body.night .custom-tooltip {
-  background-color: rgba(45, 45, 50, 0.95);
-  color: #C8C8C9;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.35);
-}
-
-/* Arrow styling */
-.custom-tooltip:after {
-  content: "";
-  position: absolute;
-  width: 0;
-  height: 0;
-  border-style: solid;
-}
-
-.custom-tooltip.arrow-bottom:after {
-  top: 100%;
-  left: 50%;
-  transform: translateX(-50%);
-  border-width: 8px 8px 0 8px;
-  border-color: rgba(255, 255, 255, 0.95) transparent transparent transparent;
-}
-
-.custom-tooltip.arrow-top:after {
-  bottom: 100%;
-  left: 50%;
-  transform: translateX(-50%);
-  border-width: 0 8px 8px 8px;
-  border-color: transparent transparent rgba(255, 255, 255, 0.95) transparent;
-}
-
-body.night .custom-tooltip.arrow-bottom:after {
-  border-color: rgba(45, 45, 50, 0.95) transparent transparent transparent;
-}
-
-body.night .custom-tooltip.arrow-top:after {
-  border-color: transparent transparent rgba(45, 45, 50, 0.95) transparent;
-}
-
-/* Visible state */
-.custom-tooltip.visible {
-  opacity: 1;
-  transform: translateY(0);
-  visibility: visible;
-}
-
-/* Ensure card link overflow is properly handled */
-.resource-card {
-  overflow: hidden;
-}
-
-.resource-card.featured {
-  overflow: visible;
-}
-
-.resource-card .card-link {
-  overflow: visible !important;
-}
-
-/* Override any problematic positioning that might cause issues */
 .resource-card .card-link {
   position: absolute !important;
   top: 0 !important;
@@ -2793,136 +2582,56 @@ body.night .custom-tooltip.arrow-top:after {
   width: 100% !important;
   height: 100% !important;
   z-index: 5 !important;
-}
-
-/* DELETE ANY EXISTING EMERGENCY TOOLTIP FIX STYLES THAT MIGHT CONFLICT */
-/* Add new emergency fix at the bottom to override any conflicting styles */
-.resource-card, 
-.resource-card .card-link,
-.resource-card .card-content,
-[data-tooltip] {
-  overflow: visible !important;
-}
-
-/* Ensure tooltips are never clipped */
-body {
-  overflow-x: hidden;
-}
-
-/* SUPPRIMER COMPLÈTEMENT TOUS LES STYLES DE TOOLTIPS EXISTANTS */
-/* Remplacé par un système simple et fiable */
-
-/* Supprimer absolument tous les styles tooltip des cartes */
-.resource-card .card-link[data-tooltip]:before,
-.resource-card .card-link[data-tooltip]:after,
-.file-link[data-tooltip]:before,
-.file-link[data-tooltip]:after,
-.custom-tooltip,
-.tooltip {
-  display: none !important;
-  content: none !important;
-  opacity: 0 !important;
-  visibility: hidden !important;
-  position: static !important;
-}
-
-/* À AJOUTER À LA FIN DU FICHIER CSS */
-/* Nouveau système de tooltip extrêmement simple */
-#simple-tooltip {
-  position: fixed;
-  z-index: 10000;
-  background-color: rgba(255, 255, 255, 0.95);
-  color: #403E43;
-  padding: 8px 12px;
-  border-radius: 6px;
-  font-family: NeueHaas;
-  font-size: 13px;
-  line-height: 1.4;
-  text-align: center;
-  max-width: 280px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
-  pointer-events: none;
-  opacity: 0;
-  transition: opacity 0.2s ease;
-  transform: translateY(0);
-  margin: 0;
-  border: none;
-}
-
-body.night #simple-tooltip {
-  background-color: rgba(45, 45, 50, 0.95);
-  color: #C8C8C9;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.35);
-}
-
-/* Assurer que les cartes ne sont pas affectées par d'autres éléments */
-.resource-card {
-  position: relative;
-}
-
-.resource-card .card-link {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 5;
   background: transparent !important;
-  border: none !important;
-  outline: none !important;
-  box-shadow: none !important;
-  text-shadow: none !important;
 }
 
-.resource-card .card-link:before,
-.resource-card .card-link:after {
-  display: none !important;
-  content: none !important;
+/* Featured Card Design - Height Fix */
+.resource-card.featured {
+  position: relative;
+  overflow: visible !important;
+  height: 160px;
+  border-radius: 12px;
+  transform: translateY(-2px);
+  transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+  background-position: 50% 50%;
+  z-index: 2;
 }
 
-/* Garantir qu'aucun effet bizarre n'apparaît au survol */
-.resource-card:hover .card-link:before,
-.resource-card:hover .card-link:after {
-  display: none !important;
-  content: none !important;
-  opacity: 0 !important;
-  visibility: hidden !important;
+/* Fix for featured card hover - ensure it grows in height */
+.resource-card.featured:hover {
+  transform: translateY(-6px) scale(1.03);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.18);
+  height: auto !important; /* Allow height to grow */
+  min-height: 160px !important;
+  max-height: 300px !important; /* Increased max-height for more text */
 }
 
-/* EMERGENCY FIX - DISABLE ALL TOOLTIPS EXCEPT OUR ULTRA SIMPLE VERSION */
-.card-link[data-tooltip]:before,
-.card-link[data-tooltip]:after,
-.file-link[data-tooltip]:before, 
-.file-link[data-tooltip]:after,
-.tooltip,
-.custom-tooltip,
-#simple-tooltip,
-*[data-tooltip]:before,
-*[data-tooltip]:after {
-  content: none !important;
-  display: none !important;
-  opacity: 0 !important;
-  visibility: hidden !important;
-  pointer-events: none !important;
-  position: fixed !important;
-  top: -9999px !important;
-  left: -9999px !important;
-  width: 0 !important;
-  height: 0 !important;
-  overflow: hidden !important;
+/* Make the card description fully visible on hover */
+.resource-card.featured:hover .card-description {
+  max-height: 150px !important; /* Much higher limit for featured cards */
+  opacity: 1;
+  margin-bottom: 8px;
+  overflow: visible !important;
+  display: block;
 }
 
-/* Only allow our ultra-simple-tooltip */
-#ultra-simple-tooltip {
-  display: none;
-  position: fixed !important;
-  z-index: 99999 !important;
+/* Ensure the card content can grow with the card */
+.resource-card.featured .card-content {
+  transition: height 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+  height: 100% !important;
+  max-height: none !important; /* Remove any max-height restriction */
 }
 
-/* Make sure cards don't have unexpected behavior */
-.resource-card, 
-.resource-card .card-link,
-.resource-card:hover,
-.resource-card:hover .card-link {
-  overflow: hidden !important;
+/* Mobile-specific adjustments for featured cards */
+@media (max-width: 768px) {
+  .resource-card.featured:hover {
+    height: auto !important;
+    min-height: 160px !important;
+    max-height: 320px !important; /* Even more space on mobile */
+  }
+  
+  .resource-card.featured:hover .card-description {
+    max-height: 180px !important; /* More space for text on mobile */
+  }
 }
