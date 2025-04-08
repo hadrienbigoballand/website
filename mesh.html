@@ -311,6 +311,14 @@
           // Default theme
           $("body").addClass("day");
       }
+      
+      // Call updateSceneBackground after the Three.js scene is initialized
+      // Use a small timeout to ensure the Three.js script has had time to run
+      setTimeout(function() {
+          if (typeof updateThreeBackground === 'function') {
+              updateThreeBackground();
+          }
+      }, 100);
   });
 
   function updateSceneBackground() {
@@ -355,10 +363,8 @@
   <script>
       // Initialize the scene
       const scene = new THREE.Scene();
-      // Initial background color - will be updated based on theme
-      scene.background = new THREE.Color(0xf5f5f7); // Light theme background
       
-      // Function to update the scene background based on the current theme
+      // Create updateThreeBackground function before it might be called
       function updateThreeBackground() {
           const isNightMode = document.body.classList.contains('night');
           if (isNightMode) {
@@ -368,7 +374,7 @@
           }
       }
       
-      // Run once to set initial background
+      // Initial background color - immediately set based on current theme
       updateThreeBackground();
       
       // Initialize the camera
