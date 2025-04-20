@@ -565,8 +565,21 @@
       justify-content: center;
       cursor: pointer;
       pointer-events: auto;
-      transition: all 0.3s ease;
+      transition: all 0.3s ease, opacity 0.3s ease, visibility 0.3s ease;
       opacity: 0.7;
+      /* Add absolute positioning to both arrows */
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+    
+    /* Position each arrow at its respective side */
+    .nav-arrow.prev {
+      left: 0;
+    }
+    
+    .nav-arrow.next {
+      right: 0;
     }
     
     body.night .nav-arrow {
@@ -576,11 +589,9 @@
     
     .nav-arrow:hover {
       opacity: 1;
-      transform: scale(1.05);
     }
     
     .nav-arrow:active {
-      transform: scale(0.98);
     }
     
     .nav-arrow.prev::before {
@@ -1352,6 +1363,14 @@
         font-size: 20px;
       }
     }
+
+    /* Enhanced hidden state with !important flags for stronger hiding */
+    .nav-arrow.hidden {
+      opacity: 0 !important;
+      visibility: hidden !important;
+      pointer-events: none !important;
+      display: none !important; /* Force complete hiding */
+    }
   </style>
   
   <!-- Script for day/night theme management -->
@@ -1755,6 +1774,12 @@
 
       // Remove bounce hint since we have persistent hints now
       $('.bounce-hint').remove();
+
+      // Initialize arrow visibility immediately
+      setTimeout(function() {
+        updateArrowVisibility();
+        console.log("Initial arrow visibility updated");
+      }, 100); // Small delay to ensure DOM is ready
     }
     
     // Create new progress bar navigation
@@ -1876,6 +1901,9 @@
 
       // Also update progress navigation
       updateNavigation();
+      
+      // Update navigation arrow visibility based on current index
+      updateArrowVisibility();
     }
     
     // Position the track to center the current card
@@ -2334,6 +2362,78 @@
         resetFlashcardsNavigation();
       }
     }, 3000);
+
+    // Function to update the visibility of navigation arrows - improved version
+    function updateArrowVisibility() {
+      console.log("Updating arrow visibility. Current card index:", currentCardIndex);
+      
+      // Hide left arrow on first card
+      if (currentCardIndex === 0) {
+        console.log("Hiding prev arrow");
+        $('#prev-arrow').addClass('hidden');
+        // Use visibility instead of display to preserve layout
+        $('#prev-arrow').css({
+          'opacity': '0',
+          'visibility': 'hidden',
+          'pointer-events': 'none'
+          // Don't hide with display:none as it shifts layout
+        });
+      } else {
+        console.log("Showing prev arrow");
+        $('#prev-arrow').removeClass('hidden');
+        $('#prev-arrow').css({
+          'opacity': '',
+          'visibility': '',
+          'pointer-events': ''
+        });
+      }
+      
+      // Hide right arrow on last card
+      if (currentCardIndex === flashcards.length - 1) {
+        console.log("Hiding next arrow");
+        $('#next-arrow').addClass('hidden');
+        $('#next-arrow').css({
+          'opacity': '0',
+          'visibility': 'hidden',
+          'pointer-events': 'none'
+          // Don't hide with display:none as it shifts layout
+        });
+      } else {
+        console.log("Showing next arrow");
+        $('#next-arrow').removeClass('hidden');
+        $('#next-arrow').css({
+          'opacity': '',
+          'visibility': '',
+          'pointer-events': ''
+        });
+      }
+    }
+
+    // After page is loaded, ensure arrows are properly hidden/shown
+    $(document).ready(function() {
+      // Make sure arrows visibility is checked after everything is loaded
+      setTimeout(function() {
+        updateArrowVisibility();
+        console.log("Document ready arrow visibility updated");
+      }, 500);
+    });
+
+    // Function to update the visibility of navigation arrows
+    function updateArrowVisibility() {
+      // Hide left arrow on first card
+      if (currentCardIndex === 0) {
+        $('#prev-arrow').addClass('hidden');
+      } else {
+        $('#prev-arrow').removeClass('hidden');
+      }
+      
+      // Hide right arrow on last card
+      if (currentCardIndex === flashcards.length - 1) {
+        $('#next-arrow').addClass('hidden');
+      } else {
+        $('#next-arrow').removeClass('hidden');
+      }
+    }
   });
   </script>
 </body>
