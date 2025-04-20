@@ -1685,6 +1685,7 @@
   $(document).ready(function() {
     var currentCardIndex = 0;
     var animationInProgress = false;
+    var navigationFailSafeTimer = null;
     
     // More reliable touch device detection
     const isTouchDevice = () => {
@@ -1888,7 +1889,18 @@
       if (animationInProgress) return;
       if (index < 0 || index >= flashcards.length) return;
       
+      // Clear any existing fail-safe timer
+      if (navigationFailSafeTimer) {
+        clearTimeout(navigationFailSafeTimer);
+      }
+      
       animationInProgress = true;
+      
+      // Set a fail-safe timer to reset animation state if something goes wrong
+      navigationFailSafeTimer = setTimeout(() => {
+        console.log("Navigation fail-safe triggered");
+        animationInProgress = false;
+      }, 1500); // Longer than transition to ensure it only triggers if something goes wrong
       
       // Update current card index
       currentCardIndex = index;
@@ -1901,10 +1913,29 @@
       
       // Update progress bar
       updateProgressBar();
+
+      // Listen for transition end and reset animation flag
+      const carouselTrack = document.getElementById('carousel-track');
       
-      // Release animation lock after transition completes
+      // Using both setTimeout and transitionend for redundancy
+      const onTransitionComplete = function() {
+        animationInProgress = false;
+        if (navigationFailSafeTimer) {
+          clearTimeout(navigationFailSafeTimer);
+          navigationFailSafeTimer = null;
+        }
+        carouselTrack.removeEventListener('transitionend', onTransitionComplete);
+      };
+      
+      carouselTrack.addEventListener('transitionend', onTransitionComplete, { once: true });
+      
+      // Backup timeout in case transitionend doesn't fire
       setTimeout(() => {
         animationInProgress = false;
+        if (navigationFailSafeTimer) {
+          clearTimeout(navigationFailSafeTimer);
+          navigationFailSafeTimer = null;
+        }
       }, 600); // Match the transition duration
     }
     
@@ -1980,44 +2011,88 @@
     initializeCarousel();
     updateProgressBar();
     
-    // Set up navigation arrow handlers
-    $('#prev-arrow').on('click', function() {
-      if (!animationInProgress) {
-        previousCard();
-        highlightKey("←");
-      }
-    });
-    
-    $('#next-arrow').on('click', function() {
-      if (!animationInProgress) {
-        nextCard();
-        highlightKey("→");
-      }
-    });
-    
-    // Keyboard navigation
-    $(document).keydown(function(e) {
-      if (animationInProgress) return;
-      
-      // Right arrow for next
-      if (e.key === "ArrowRight") {
-        nextCard();
-        highlightKey("→");
-      } 
-      // Left arrow for previous
-      else if (e.key === "ArrowLeft") {
-        previousCard();
-        highlightKey("←");
-      } 
-      // Space, Enter, ArrowUp or ArrowDown to flip
-      else if (e.key === " " || e.key === "Space" || e.key === "Enter" || 
-              e.key === "ArrowUp" || e.key === "ArrowDown") {
-        flipCurrentCard();
-        highlightKey("Espace");
-        // Prevent page scroll on spacebar
-        if (e.key === " " || e.key === "Space") {
-          e.preventDefault();
+    // Set up navigation arrow handlers with improved error handling
+    $('#prev-arrow').on('click', function(e) {
+      try {
+        e.stopPropagation(); // Prevent event bubbling
+        
+        // Force navigation if stuck for too long
+        if (animationInProgress && Date.now() - lastNavigationTime > 2000) {
+          console.log("Forcing navigation - animation state was stuck");
+          animationInProgress = false;
         }
+        
+        if (!animationInProgress) {
+          lastNavigationTime = Date.now();
+          previousCard();
+          highlightKey("←");
+        }
+      } catch (err) {
+        console.error("Error in prev button:", err);
+        animationInProgress = false; // Reset on error
+      }
+    });
+    
+    $('#next-arrow').on('click', function(e) {
+      try {
+        e.stopPropagation(); // Prevent event bubbling
+        
+        // Force navigation if stuck for too long
+        if (animationInProgress && Date.now() - lastNavigationTime > 2000) {
+          console.log("Forcing navigation - animation state was stuck");
+          animationInProgress = false;
+        }
+        
+        if (!animationInProgress) {
+          lastNavigationTime = Date.now();
+          nextCard();
+          highlightKey("→");
+        }
+      } catch (err) {
+        console.error("Error in next button:", err);
+        animationInProgress = false; // Reset on error
+      }
+    });
+    
+    // Add variable to track last navigation time
+    var lastNavigationTime = Date.now();
+    
+    // Enhanced keyboard navigation with error recovery
+    $(document).keydown(function(e) {
+      try {
+        // Force navigation if stuck for too long
+        if (animationInProgress && Date.now() - lastNavigationTime > 2000) {
+          console.log("Forcing navigation - animation state was stuck");
+          animationInProgress = false;
+        }
+        
+        if (animationInProgress) return;
+        
+        // Right arrow for next
+        if (e.key === "ArrowRight") {
+          lastNavigationTime = Date.now();
+          nextCard();
+          highlightKey("→");
+        } 
+        // Left arrow for previous
+        else if (e.key === "ArrowLeft") {
+          lastNavigationTime = Date.now();
+          previousCard();
+          highlightKey("←");
+        } 
+        // Space, Enter, ArrowUp or ArrowDown to flip
+        else if (e.key === " " || e.key === "Space" || e.key === "Enter" || 
+                e.key === "ArrowUp" || e.key === "ArrowDown") {
+          flipCurrentCard();
+          highlightKey("Espace");
+          // Prevent page scroll on spacebar
+          if (e.key === " " || e.key === "Space") {
+            e.preventDefault();
+          }
+        }
+      } catch (err) {
+        console.error("Error in keyboard navigation:", err);
+        animationInProgress = false; // Reset on error
       }
     });
     
@@ -2039,25 +2114,36 @@
     
     $('.cards-carousel')
       .on('touchstart', function(e) {
-        if (animationInProgress) return;
-        
-        touchStartX = e.originalEvent.touches[0].clientX;
-        touchStartY = e.originalEvent.touches[0].clientY;
-        
-        // Reset swipe detection state
-        swipeDirectionDetermined = false;
-        isHorizontalSwipe = false;
-        activeSwipeDirection = null;
-        
-        // Add active state for touch feedback
-        if (isTouch) {
-          $(this).css('opacity', '0.98');
-          // Mark track as being swiped for immediate visual feedback
-          $('#carousel-track').addClass('swiping');
+        try {
+          // Force navigation if stuck for too long
+          if (animationInProgress && Date.now() - lastNavigationTime > 2000) {
+            console.log("Forcing navigation - animation state was stuck");
+            animationInProgress = false;
+          }
+          
+          if (animationInProgress) return;
+          
+          touchStartX = e.originalEvent.touches[0].clientX;
+          touchStartY = e.originalEvent.touches[0].clientY;
+          
+          // Reset swipe detection state
+          swipeDirectionDetermined = false;
+          isHorizontalSwipe = false;
+          activeSwipeDirection = null;
+          
+          // Add active state for touch feedback
+          if (isTouch) {
+            $(this).css('opacity', '0.98');
+            // Mark track as being swiped for immediate visual feedback
+            $('#carousel-track').addClass('swiping');
+          }
+          
+          // Hide direction indicators initially
+          $('.swipe-direction-indicator').removeClass('active');
+        } catch (err) {
+          console.error("Error in touchstart:", err);
+          animationInProgress = false; // Reset on error
         }
-        
-        // Hide direction indicators initially
-        $('.swipe-direction-indicator').removeClass('active');
       })
       .on('touchmove', function(e) {
         if (animationInProgress) return;
@@ -2220,6 +2306,34 @@
         }
       </style>
     `);
+    
+    // Function to manually reset animation state - can be called by user
+    window.resetFlashcardsNavigation = function() {
+      console.log("Manual navigation reset triggered");
+      animationInProgress = false;
+      if (navigationFailSafeTimer) {
+        clearTimeout(navigationFailSafeTimer);
+        navigationFailSafeTimer = null;
+      }
+      // Reset the carousel to current position
+      updateTrackPosition();
+      updateCardClasses();
+    };
+    
+    // Add a double-click handler on the body to reset navigation if needed
+    $('body').on('dblclick', function() {
+      if (animationInProgress) {
+        resetFlashcardsNavigation();
+      }
+    });
+    
+    // Add automatic periodic check for stuck animation state
+    setInterval(function() {
+      if (animationInProgress && Date.now() - lastNavigationTime > 3000) {
+        console.log("Auto-recovery: Animation state stuck for too long");
+        resetFlashcardsNavigation();
+      }
+    }, 3000);
   });
   </script>
 </body>
