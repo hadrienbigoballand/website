@@ -49,6 +49,10 @@
       display: block;
       border-radius: 10px;
       transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      background-color: #f5f5f5;
+    }
+    body.night .art-thumb img {
+      background-color: #333;
     }
     /* Simple elegant hover effect without blur or text */
     .art-thumb:hover, .art-thumb:focus {
@@ -114,14 +118,15 @@
       border-radius: 18px;
       display: block;
       margin: 0 auto;
-      background: #eee;
+      background: #eee url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="50" height="50"><circle cx="50" cy="50" r="40" stroke="%23ccc" stroke-width="8" fill="none" stroke-dasharray="60 20" stroke-linecap="round"><animateTransform attributeName="transform" attributeType="XML" type="rotate" from="0 50 50" to="360 50 50" dur="1s" repeatCount="indefinite"/></circle></svg>') center center no-repeat;
       box-shadow: 0 2px 24px rgba(0,0,0,0.10);
       object-fit: contain;
       width: auto;
       height: auto;
+      transition: opacity 0.3s ease;
     }
     body.night .art-modal img {
-      background: #222;
+      background: #222 url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="50" height="50"><circle cx="50" cy="50" r="40" stroke="%23444" stroke-width="8" fill="none" stroke-dasharray="60 20" stroke-linecap="round"><animateTransform attributeName="transform" attributeType="XML" type="rotate" from="0 50 50" to="360 50 50" dur="1s" repeatCount="indefinite"/></circle></svg>') center center no-repeat;
     }
     /* Modal legend text sizing improvements - ensure visibility */
     .art-modal .modal-legend {
@@ -556,12 +561,49 @@
         },
       ];
 
+      // Function to create a thumbnail URL from a Wikimedia URL
+      function getThumbnailUrl(originalUrl, size) {
+        // Pattern: replace /wikipedia/commons/ with /wikipedia/commons/thumb/ and add /size-px at the end
+        const urlParts = originalUrl.split('/');
+        const filename = urlParts[urlParts.length - 1];
+        
+        // Check if URL already contains 'thumb'
+        if (originalUrl.includes('/thumb/')) {
+          // Already a thumbnail, just change the size
+          const baseUrlParts = originalUrl.split('/');
+          baseUrlParts.pop(); // Remove the size part
+          return baseUrlParts.join('/') + '/' + size + 'px-' + filename;
+        }
+        
+        // Find the position of "commons" or a similar pattern
+        let insertPosition = -1;
+        for (let i = 0; i < urlParts.length; i++) {
+          if (urlParts[i] === 'commons') {
+            insertPosition = i + 1;
+            break;
+          }
+        }
+        
+        if (insertPosition !== -1) {
+          // Insert 'thumb' after 'commons'
+          urlParts.splice(insertPosition, 0, 'thumb');
+          // Add the size specification
+          return urlParts.join('/') + '/' + size + 'px-' + filename;
+        } else {
+          // If we can't determine where to insert 'thumb', return the original URL
+          return originalUrl;
+        }
+      }
+
       // Render gallery - keep the thumb-legend div for consistency but it will be hidden by CSS
       const grid = $(".art-gallery-grid");
       paintings.forEach((painting, idx) => {
+        const thumbnailSize = 200; // Size for thumbnails (adjust based on design needs)
+        const thumbnailUrl = getThumbnailUrl(painting.src, thumbnailSize);
+        
         const thumb = $(`
           <div class="art-thumb" tabindex="0" data-idx="${idx}">
-            <img src="${painting.src}" alt="${painting.title}">
+            <img src="${thumbnailUrl}" alt="${painting.title}" loading="lazy">
             <div class="thumb-legend">
               <div class="thumb-title">${painting.title}</div>
               <div class="thumb-artist">${painting.artist} <span class="thumb-year">(${painting.year})</span></div>
@@ -571,20 +613,32 @@
         grid.append(thumb);
       });
 
-      // Modal logic
+      // Modal logic with lazy loading of high-res images
       function showModal(idx) {
         const painting = paintings[idx];
-        $(".art-modal-img").attr("src", painting.src).attr("alt", painting.title);
+        
+        // First show loading state or blank image
+        $(".art-modal-img").attr("src", "").attr("alt", painting.title);
         $(".art-modal-title").text(painting.title);
         $(".art-modal-artist").text(painting.artist);
         $(".art-modal-year").text(painting.year);
         $(".modal-overlay").addClass("visible");
         $("body").css("overflow", "hidden");
+        
+        // Preload the high-resolution image
+        const highResImage = new Image();
+        highResImage.onload = function() {
+          // Once loaded, update the modal image
+          $(".art-modal-img").attr("src", this.src);
+        };
+        highResImage.src = painting.src;
       }
+      
       function hideModal() {
         $(".modal-overlay").removeClass("visible");
         $("body").css("overflow", "");
       }
+      
       // Click on thumb
       grid.on("click", ".art-thumb", function() {
         showModal($(this).data("idx"));
