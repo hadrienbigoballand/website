@@ -976,7 +976,7 @@ body.night .modal-overlay {
   background-color: rgba(0, 0, 0, 0.4);
 }
 
-.overlay-visible {
+overlay-visible {
   opacity: 1;
   visibility: visible;
   transition: opacity 0.5s cubic-bezier(0.19, 1, 0.22, 1),
@@ -3871,4 +3871,148 @@ body.night .nav-loader::before {
     font-size: 18px;
     padding: 10px 16px;
   }
+}
+
+/* Collapsible Section Styling
+================================================== */
+.collapsible-section {
+  margin-bottom: 20px;
+}
+
+.collapsible-header {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: all 0.3s cubic-bezier(0.19, 1, 0.22, 1);
+  padding: 5px 0;
+  position: relative;
+  overflow: visible;
+}
+
+.collapsible-header:hover h4 {
+  transform: translateX(5px);
+}
+
+.collapsible-header:hover .collapse-icon {
+  transform: rotate(180deg);
+}
+
+.collapse-icon {
+  position: relative;
+  width: 24px;
+  height: 24px;
+  transition: all 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.7;
+  border-radius: 50%;
+}
+
+.collapse-icon:before,
+.collapse-icon:after {
+  content: '';
+  position: absolute;
+  background-color: currentColor;
+  transition: all 0.3s cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+.collapse-icon:before {
+  width: 12px;
+  height: 2px;
+}
+
+.collapse-icon:after {
+  width: 2px;
+  height: 12px;
+  transform: rotate(0deg);
+}
+
+.collapsible-header.active .collapse-icon {
+  transform: rotate(180deg);
+}
+
+.collapsible-header.active .collapse-icon:after {
+  transform: rotate(90deg);
+  opacity: 0;
+}
+
+.collapsible-content {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+  opacity: 0;
+}
+
+.collapsible-content.expanded {
+  max-height: 10000px; /* Large enough to contain all content */
+  opacity: 1;
+  transition: max-height 0.7s cubic-bezier(0.19, 1, 0.22, 1), 
+              opacity 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+.collapsible-content-inner {
+  padding-top: 20px;
+  transform: translateY(-10px);
+  opacity: 0;
+  transition: all 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+  transition-delay: 0.1s;
+}
+
+.collapsible-content.expanded .collapsible-content-inner {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+/* Enhanced visual feedback for collapsible header */
+.collapsible-header::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, currentColor, transparent);
+  opacity: 0.2;
+  transition: all 0.3s ease;
+  transform: scaleX(0.3);
+  transform-origin: left;
+}
+
+.collapsible-header:hover::after {
+  transform: scaleX(1);
+  opacity: 0.4;
+}
+
+body.night .collapsible-header h4 {
+  color: #8A898C;
+}
+
+body.day .collapsible-header h4 {
+  color: #9F9EA1;
+}
+
+body.night .collapsible-header:hover h4 {
+  color: #C8C8C9;
+}
+
+body.day .collapsible-header:hover h4 {
+  color: #8A898C;
+}
+
+/* Subtle animation for when section expands */
+@keyframes fadeInExpandContent {
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.collapsible-content.expanded .collapsible-content-inner {
+  animation: fadeInExpandContent 0.5s forwards cubic-bezier(0.19, 1, 0.22, 1);
 }
