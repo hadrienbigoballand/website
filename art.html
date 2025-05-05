@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Favorite Art Gallery</title>
+  <meta name="description" content="A gallery of favorite impressionist paintings">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="css/normalize.css">
+  <link rel="stylesheet" href="css/skeleton.css">
+  <link rel="stylesheet" href="css/main.css">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="images/dot.png">
+
+  <!-- jQuery for theme toggling and DOM -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+
+  <style>
+    /* Gallery grid */
+    .art-gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 28px;
+      margin-top: 30px;
+      margin-bottom: 60px;
+    }
+    .art-thumb {
+      position: relative;
+      cursor: pointer;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.10);
+      transition: transform 0.25s cubic-bezier(0.22,1,0.36,1), box-shadow 0.25s;
+      background: #fff;
+    }
+    body.night .art-thumb {
+      background: #2D2D32;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.25);
+    }
+    .art-thumb:hover {
+      transform: scale(1.04) translateY(-4px);
+      box-shadow: 0 10px 28px rgba(0,0,0,0.18);
+      z-index: 2;
+    }
+    .art-thumb img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+      display: block;
+      border-radius: 8px 8px 0 0;
+      transition: filter 0.2s;
+    }
+    .art-thumb .thumb-legend {
+      padding: 12px 10px 10px 10px;
+      text-align: center;
+      background: none;
+    }
+    .thumb-title {
+      font-family: NeueHaasMedium;
+      font-size: 15px;
+      margin-bottom: 2px;
+      font-style: italic;
+      color: inherit;
+    }
+    .thumb-artist {
+      font-family: NeueHaas;
+      font-size: 13px;
+      color: #888;
+    }
+    .thumb-year {
+      font-family: NeueHaas;
+      font-size: 12px;
+      color: #aaa;
+    }
+    body.night .thumb-artist, body.night .thumb-year {
+      color: #bbb;
+    }
+    /* Modal styles */
+    .modal-overlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.2);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.3s cubic-bezier(0.19,1,0.22,1), visibility 0s linear 0.3s;
+      z-index: 999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    body.night .modal-overlay {
+      background: rgba(0,0,0,0.4);
+    }
+    .modal-overlay.visible {
+      opacity: 1;
+      visibility: visible;
+      transition: opacity 0.3s cubic-bezier(0.19,1,0.22,1), visibility 0s linear;
+    }
+    .art-modal {
+      background: #fff;
+      border-radius: 14px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.18);
+      max-width: 96vw;
+      max-height: 92vh;
+      padding: 0 0 18px 0;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      opacity: 0;
+      transform: translateY(30px) scale(0.97);
+      transition: opacity 0.3s, transform 0.3s;
+      overflow: hidden;
+    }
+    .modal-overlay.visible .art-modal {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+    body.night .art-modal {
+      background: #2D2D32;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.35);
+    }
+    .art-modal img {
+      max-width: 90vw;
+      max-height: 60vh;
+      border-radius: 14px 14px 0 0;
+      display: block;
+      margin: 0 auto;
+      background: #eee;
+    }
+    body.night .art-modal img {
+      background: #222;
+    }
+    .art-modal .modal-legend {
+      padding: 18px 24px 0 24px;
+      text-align: center;
+    }
+    .art-modal .modal-title {
+      font-family: NeueHaasMedium;
+      font-size: 18px;
+      margin-bottom: 4px;
+      font-style: italic;
+      color: inherit;
+    }
+    .art-modal .modal-artist {
+      font-family: NeueHaas;
+      font-size: 15px;
+      color: #888;
+    }
+    .art-modal .modal-year {
+      font-family: NeueHaas;
+      font-size: 13px;
+      color: #aaa;
+    }
+    body.night .art-modal .modal-artist, body.night .art-modal .modal-year {
+      color: #bbb;
+    }
+    .modal-close {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      opacity: 0.5;
+      transition: transform 0.2s, opacity 0.2s;
+      z-index: 2;
+    }
+    .modal-close:hover {
+      opacity: 0.8;
+      transform: scale(1.1);
+    }
+    body.night .modal-close {
+      color: #ccc;
+    }
+    @media (max-width: 600px) {
+      .art-gallery-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 14px;
+      }
+      .art-thumb img {
+        height: 120px;
+      }
+      .art-modal img {
+        max-height: 40vh;
+      }
+      .art-modal .modal-legend {
+        padding: 12px 8px 0 8px;
+      }
+    }
+    @media (max-width: 400px) {
+      .art-gallery-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Back button styling copied from central-limit-theorem.html */
+    .header-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+    }
+    
+    .back-info-container {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .back-link {
+      text-decoration: none;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+      background-color: transparent;
+      padding: 0;
+      margin: 0;
+      line-height: 1;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .back-link:before {
+      content: "←";
+      transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+      font-size: 18px;
+      z-index: 2;
+      position: relative;
+    }
+
+    /* Subtle background glow effect */
+    .back-link:after {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: radial-gradient(circle, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0) 70%);
+      opacity: 0;
+      transition: opacity 0.4s ease;
+      border-radius: 50%;
+      z-index: 1;
+    }
+
+    body.day .back-link {
+      color: #403E43;
+      border: 1px solid rgba(0, 0, 0, 0.15);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    }
+
+    body.night .back-link {
+      color: #C8C8C9;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    body.day .back-link:hover {
+      border-color: rgba(0, 0, 0, 0.3);
+      box-shadow: 0 3px 12px rgba(0, 0, 0, 0.1);
+      transform: translateY(-1px);
+    }
+
+    body.night .back-link:hover {
+      border-color: rgba(255, 255, 255, 0.3);
+      box-shadow: 0 3px 12px rgba(0, 0, 0, 0.3);
+      transform: translateY(-1px);
+    }
+
+    .back-link:hover:before {
+      transform: translateX(-2px);
+    }
+
+    .back-link:hover:after {
+      opacity: 0.2;
+    }
+
+    body.night .back-link:after {
+      background: radial-gradient(circle, rgba(255,255,255,0.5) 0%, rgba(255,255,255,0) 70%);
+    }
+
+    /* Compact header layout */
+    .art-header-bar {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 18px;
+      margin-bottom: 36px;
+      margin-top: 30px;
+    }
+    .art-header-bar .back-link {
+      margin-right: 0;
+      margin-left: 0;
+      flex-shrink: 0;
+    }
+    .art-header-bar .theme-toggle {
+      margin-left: 0;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      gap: 0;
+    }
+    .art-header-title {
+      font-family: NeueHaasMedium;
+      font-size: 22px;
+      text-align: center;
+      margin: 0 10px;
+      flex: 1 1 auto;
+      line-height: 1.2;
+      color: inherit;
+      letter-spacing: 0.2px;
+      /* Prevent text selection on drag of icons */
+      user-select: none;
+      pointer-events: none;
+    }
+    @media (max-width: 600px) {
+      .art-header-bar {
+        gap: 10px;
+        margin-bottom: 20px;
+        margin-top: 18px;
+      }
+      .art-header-title {
+        font-size: 16px;
+      }
+    }
+  </style>
+  <script>
+    $(document).ready(function(){
+      // Theme toggling (copied from central-limit-theorem)
+      $("#moon").click(function(){
+          $("body").addClass("day");
+          $("body").removeClass("night");
+          localStorage.setItem('theme', 'day');
+      });
+      $("#sun").click(function(){
+          $("body").removeClass("day");
+          $("body").addClass("night");
+          localStorage.setItem('theme', 'night');
+      });
+      // Apply saved theme on page load
+      const storedTheme = localStorage.getItem('theme');
+      if (storedTheme) {
+          if (storedTheme === 'night') {
+              $("body").removeClass("day");
+              $("body").addClass("night");
+          } else {
+              $("body").addClass("day");
+              $("body").removeClass("night");
+          }
+      }
+
+      // Paintings array (copied from index.html)
+      const paintings = [
+        {
+          src: "https://upload.wikimedia.org/wikipedia/commons/5/5f/Pissarro_Jardin_a_Valhermeil.jpg",
+          title: "Le Jardin de Maubuisson, Pontoise",
+          artist: "Camille Pissarro",
+          year: "1881"
+        },
+        {
+          src: "https://upload.wikimedia.org/wikipedia/commons/5/53/Camille_Pissarro_-_Sc%C3%A8ne_de_neige_%C3%A0_%C3%89ragny_%281884%29.jpg",
+          title: "Scène de Neige à Éragny",
+          artist: "Camille Pissarro",
+          year: "1884"
+        },
+        {
+          src: "https://upload.wikimedia.org/wikipedia/commons/a/a8/Camille_Pissarro_-_La_Seine_%C3%A0_Rouen%2C_l%E2%80%99%C3%AEle_Lacroix%2C_effet_de_brouillard_855.jpg",
+          title: "La Seine à Rouen, l'Île Lacroix, Effet de Brouillard",
+          artist: "Camille Pissarro",
+          year: "1888"
+        },
+        {
+          src: "https://upload.wikimedia.org/wikipedia/commons/9/95/Pissarro_-_Les_glaneuses%2C_1889.jpg",
+          title: "Les Glaneuses",
+          artist: "Camille Pissarro",
+          year: "1889"
+        },
+        {
+          src: "https://upload.wikimedia.org/wikipedia/commons/6/64/Camille_Pissarro%2C_Charing_Cross_Bridge%2C_London%2C_1890%2C_NGA_66430.jpg",
+          title: "Charing Cross Bridge, London",
+          artist: "Camille Pissarro",
+          year: "1890"
+        },
+        {
+          src: "https://upload.wikimedia.org/wikipedia/commons/0/0b/Camille_Pissarro_-_P%C3%A2turage%2C_coucher_de_soleil%2C_Eragny_%28PD_880%29.jpg",
+          title: "Pâturage, Coucher de Soleil, Éragny",
+          artist: "Camille Pissarro",
+          year: "1890"
+        },
+        {
+          src: "https://upload.wikimedia.org/wikipedia/commons/1/14/Camille_Pissarro_-_Boulevard_Montmartre_at_Night_-_c_1897_-_National_Gallery_UK.jpg",
+          title: "Boulevard Montmartre at Night",
+          artist: "Camille Pissarro",
+          year: "1897"
+        },
+        {
+          src: "https://upload.wikimedia.org/wikipedia/commons/d/db/Statue_d%27Henri_IV%2C_matin%2C_soleil_.jpg",
+          title: "Statue d'Henri IV, Matin, Soleil",
+          artist: "Camille Pissarro",
+          year: "1901"
+        },
+        {
+          src: "https://upload.wikimedia.org/wikipedia/commons/f/f0/Camille_Pissarro_-_Le_Pont_de_la_Clef_%C3%A0_Bruges%2C_Belgique.jpg",
+          title: "Le Pont de la Clef à Bruges",
+          artist: "Camille Pissarro",
+          year: "1896"
+        },
+        {
+          src: "https://upload.wikimedia.org/wikipedia/commons/3/34/Alfred_Sisley_-_La_Route_-_2001-0009_-_Kunsthaus_Z%C3%BCrich.jpg",
+          title: "La Route",
+          artist: "Alfred Sisley",
+          year: "1885"
+        },
+        {
+          src: "https://upload.wikimedia.org/wikipedia/commons/6/6f/Alfred_Sisley_-_%C3%89t%C3%A9_%C3%A0_Bougival_-_100_-_Foundation_E.G._B%C3%BChrle_Collection.jpg",
+          title: "Été à Bougival",
+          artist: "Alfred Sisley",
+          year: "1876"
+        },
+        {
+          src: "https://upload.wikimedia.org/wikipedia/commons/1/10/Claude_Monet_-_Le_Palais_Ducal_vu_de_Saint-Georges_Majeur_-_1995-0004_-_Kunsthaus_Z%C3%BCrich.jpg",
+          title: "Le Palais Ducal vu de Saint-Georges Majeur",
+          artist: "Claude Monet",
+          year: "1908"
+        },
+        {
+          src: "https://upload.wikimedia.org/wikipedia/commons/6/64/Claude_Monet_-_Le_Pont_de_Waterloo_-_1995-0002_-_Kunsthaus_Z%C3%BCrich.jpg",
+          title: "Le Pont de Waterloo",
+          artist: "Claude Monet",
+          year: "1902"
+        },
+        {
+          src: "https://upload.wikimedia.org/wikipedia/commons/8/8b/C%C3%A9zanne%2C_Paul_-_Still_Life_with_a_Curtain.jpg",
+          title: "Nature morte au rideau",
+          artist: "Paul Cézanne",
+          year: "1898"
+        }
+      ];
+
+      // Render gallery
+      const grid = $(".art-gallery-grid");
+      paintings.forEach((painting, idx) => {
+        const thumb = $(`
+          <div class="art-thumb" tabindex="0" data-idx="${idx}">
+            <img src="${painting.src}" alt="${painting.title}">
+            <div class="thumb-legend">
+              <div class="thumb-title">${painting.title}</div>
+              <div class="thumb-artist">${painting.artist} <span class="thumb-year">(${painting.year})</span></div>
+            </div>
+          </div>
+        `);
+        grid.append(thumb);
+      });
+
+      // Modal logic
+      function showModal(idx) {
+        const painting = paintings[idx];
+        $(".art-modal-img").attr("src", painting.src).attr("alt", painting.title);
+        $(".art-modal-title").text(painting.title);
+        $(".art-modal-artist").text(painting.artist);
+        $(".art-modal-year").text(painting.year);
+        $(".modal-overlay").addClass("visible");
+        $("body").css("overflow", "hidden");
+      }
+      function hideModal() {
+        $(".modal-overlay").removeClass("visible");
+        $("body").css("overflow", "");
+      }
+      // Click on thumb
+      grid.on("click", ".art-thumb", function() {
+        showModal($(this).data("idx"));
+      });
+      // Keyboard accessibility
+      grid.on("keydown", ".art-thumb", function(e) {
+        if (e.key === "Enter" || e.key === " ") {
+          showModal($(this).data("idx"));
+        }
+      });
+      // Close modal
+      $(".modal-close").click(hideModal);
+      $(".modal-overlay").click(function(e) {
+        if (e.target === this) hideModal();
+      });
+      $(document).on("keydown", function(e) {
+        if (e.key === "Escape" && $(".modal-overlay").hasClass("visible")) hideModal();
+      });
+    });
+  </script>
+</head>
+<body class="day">
+  <div class="container">
+    <!-- Compact header: back, title, theme toggle all on one line -->
+    <div class="art-header-bar">
+      <a href="index.html" class="back-link"></a>
+      <span class="art-header-title">Favorite Art Gallery</span>
+      <div class="theme-toggle">
+        <img src="images/moon.svg" id="moon">
+        <img src="images/sun.svg" id="sun">
+      </div>
+    </div>
+    <div class="art-gallery-grid"></div>
+  </div>
+  <!-- Modal overlay for enlarged painting -->
+  <div class="modal-overlay">
+    <div class="art-modal">
+      <button class="modal-close" aria-label="Close">&times;</button>
+      <img class="art-modal-img" src="" alt="">
+      <div class="modal-legend">
+        <div class="modal-title art-modal-title"></div>
+        <div class="modal-artist art-modal-artist"></div>
+        <div class="modal-year art-modal-year"></div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
