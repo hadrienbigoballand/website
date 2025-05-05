@@ -3128,23 +3128,13 @@ h4 {
 }
 
 h4:after {
-  content: "";
-  position: absolute;
-  bottom: -5px;
-  left: 0;
-  width: 30px;
-  height: 2px;
-  background: linear-gradient(90deg, currentColor 70%, transparent);
-  transform: scaleX(0.7);
-  transform-origin: left;
-  opacity: 0.3;
-  transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+  /* Remove decorative line below headings */
+  display: none; /* Hide the decorative line while preserving the rule */
 }
 
 h4:hover:after {
-  transform: scaleX(1);
-  opacity: 0.6;
-  width: 50px;
+  /* Also hide on hover */
+  display: none;
 }
 
 body.night h4:hover {
@@ -3609,7 +3599,7 @@ body.night .modal-overlay {
   background-color: rgba(0, 0, 0, 0.4);
 }
 
-.overlay-visible {
+overlay-visible {
   opacity: 1;
   visibility: visible;
   transition: opacity 0.6s cubic-bezier(0.19, 1, 0.22, 1),
@@ -3879,10 +3869,12 @@ body.night .nav-loader::before {
   margin-bottom: 20px;
 }
 
+/* Collapsible Section Styling - Improved Vertical Alignment
+================================================== */
 .collapsible-header {
   cursor: pointer;
   display: flex;
-  align-items: center;
+  align-items: center; /* Ensure vertical centering */
   justify-content: space-between;
   transition: all 0.3s cubic-bezier(0.19, 1, 0.22, 1);
   padding: 5px 0;
@@ -3890,12 +3882,12 @@ body.night .nav-loader::before {
   overflow: visible;
 }
 
-.collapsible-header:hover h4 {
-  transform: translateX(5px);
-}
-
-.collapsible-header:hover .collapse-icon {
-  transform: rotate(180deg);
+.collapsible-header h4 {
+  margin: 0; /* Remove any default margins */
+  padding: 0; /* Remove any default padding */
+  line-height: 24px; /* Match the height of the collapse icon */
+  display: flex;
+  align-items: center;
 }
 
 .collapse-icon {
@@ -3908,6 +3900,15 @@ body.night .nav-loader::before {
   justify-content: center;
   opacity: 0.7;
   border-radius: 50%;
+  margin-top: 0; /* Remove any top margin */
+}
+
+.collapsible-header:hover h4 {
+  transform: translateX(5px);
+}
+
+.collapsible-header:hover .collapse-icon {
+  transform: rotate(180deg);
 }
 
 .collapse-icon:before,
