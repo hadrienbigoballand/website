@@ -1450,6 +1450,23 @@ var x = setInterval(function() {
     const collapsibleHeaders = document.querySelectorAll('.collapsible-header');
     
     collapsibleHeaders.forEach(header => {
+      const sectionId = header.closest('.collapsible-section').id;
+      
+      // Apply saved state on page load
+      if (sectionId) {
+        const savedState = localStorage.getItem('section_' + sectionId);
+        const content = header.nextElementSibling;
+        
+        if (savedState === 'collapsed') {
+          header.classList.remove('active');
+          content.classList.remove('expanded');
+        } else if (savedState === 'expanded') {
+          header.classList.add('active');
+          content.classList.add('expanded');
+        }
+        // If no saved state, keep default (HTML classes)
+      }
+      
       header.addEventListener('click', function() {
         // Toggle active class on header
         this.classList.toggle('active');
@@ -1459,6 +1476,12 @@ var x = setInterval(function() {
         
         // Toggle expanded class
         content.classList.toggle('expanded');
+        
+        // Save the state to localStorage
+        if (sectionId) {
+          const state = content.classList.contains('expanded') ? 'expanded' : 'collapsed';
+          localStorage.setItem('section_' + sectionId, state);
+        }
         
         // If expanding, scroll it into view after animation starts
         if (content.classList.contains('expanded')) {
@@ -1476,13 +1499,31 @@ var x = setInterval(function() {
     
     // Automatically expand or collapse section based on URL hash
     function checkHash() {
-      if (window.location.hash === '#teaching') {
-        const teachingHeader = document.querySelector('#teaching-section .collapsible-header');
-        const teachingContent = teachingHeader.nextElementSibling;
+      if (window.location.hash) {
+        const sectionId = window.location.hash.substring(1);
+        const section = document.getElementById(sectionId + '-section');
         
-        if (!teachingContent.classList.contains('expanded')) {
-          teachingHeader.classList.add('active');
-          teachingContent.classList.add('expanded');
+        if (section) {
+          const header = section.querySelector('.collapsible-header');
+          const content = header.nextElementSibling;
+          
+          if (!content.classList.contains('expanded')) {
+            header.classList.add('active');
+            content.classList.add('expanded');
+            
+            // Save state to localStorage
+            localStorage.setItem('section_' + section.id, 'expanded');
+            
+            // Scroll to section with a slight delay to allow for DOM updates
+            setTimeout(() => {
+              const headerRect = header.getBoundingClientRect();
+              const offset = headerRect.top + window.pageYOffset - 60;
+              window.scrollTo({
+                top: offset,
+                behavior: 'smooth'
+              });
+            }, 100);
+          }
         }
       }
     }
