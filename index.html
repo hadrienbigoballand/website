@@ -1482,18 +1482,6 @@ var x = setInterval(function() {
           const state = content.classList.contains('expanded') ? 'expanded' : 'collapsed';
           localStorage.setItem('section_' + sectionId, state);
         }
-        
-        // If expanding, scroll it into view after animation starts
-        if (content.classList.contains('expanded')) {
-          setTimeout(() => {
-            const headerRect = this.getBoundingClientRect();
-            const offset = headerRect.top + window.pageYOffset - 60;
-            window.scrollTo({
-              top: offset,
-              behavior: 'smooth'
-            });
-          }, 100);
-        }
       });
     });
     
@@ -1513,16 +1501,6 @@ var x = setInterval(function() {
             
             // Save state to localStorage
             localStorage.setItem('section_' + section.id, 'expanded');
-            
-            // Scroll to section with a slight delay to allow for DOM updates
-            setTimeout(() => {
-              const headerRect = header.getBoundingClientRect();
-              const offset = headerRect.top + window.pageYOffset - 60;
-              window.scrollTo({
-                top: offset,
-                behavior: 'smooth'
-              });
-            }, 100);
           }
         }
       }
