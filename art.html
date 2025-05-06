@@ -572,6 +572,78 @@
           artist: "Georgia O'Keeffe",
           year: "1929"
         },
+        {
+          src: "https://upload.wikimedia.org/wikipedia/commons/2/2e/Sans_titre_Wassily_Kandinsky%29.webp",
+          title: "Sans titre",
+          artist: "Wassily Kandinsky",
+          year: "1941"
+        },
+        {
+          src: "https://upload.wikimedia.org/wikipedia/commons/b/b5/Vertiefte_Regung_%28Deepened_Impulse%29%29.webp",
+          title: "Vertiefte Regung (Deepened Impulse)",
+          artist: "Wassily Kandinsky",
+          year: "1928"
+        },
+        {
+          src: "https://upload.wikimedia.org/wikipedia/commons/6/66/Wassily_Kandinsky_-_Murnau_%E2%80%93_Dorfstrasse_-_MB_0074_-_Kunsthaus_Z%C3%BCrich.jpg",
+          title: "Murnau – Dorfstraße",
+          artist: "Wassily Kandinsky",
+          year: "1908",
+        },
+        {
+          src: "https://upload.wikimedia.org/wikipedia/commons/f/f6/Wassily_Kandinsky_-_Murnau_-_Kohlgruberstrasse_-_MB_0076_-_Kunsthaus_Z%C3%BCrich.jpg",
+          title: "Murnau – Kohlgruberstraße",
+          artist: "Wassily Kandinsky",
+          year: "1908"
+        },
+        {
+          src: "https://upload.wikimedia.org/wikipedia/commons/f/fa/Kandinsky_-_Angular_Line%2C_1930.jpg",
+          title: "Angular Line",
+          artist: "Wassily Kandinsky",
+          year: "1930"
+        },
+        {
+          src: "https://upload.wikimedia.org/wikipedia/commons/2/2c/Kandinsky_-_Binding%2C_1932.jpg",
+          title: "Binding",
+          artist: "Wassily Kandinsky",
+          year: "1932"
+        },
+        {
+          src: "https://upload.wikimedia.org/wikipedia/commons/e/ee/Kandinsky_-_Blue_Circle_II%2C_1925.jpg",
+          title: "Blue Circle II",
+          artist: "Wassily Kandinsky",
+          year: "1925"
+        },
+        {
+          src: "https://upload.wikimedia.org/wikipedia/commons/a/ac/Kandinsky_-_Kochel%2C_Snowy_Trees%2C_1909.jpg",
+          title: "Kochel, Snowy Trees",
+          artist: "Wassily Kandinsky",
+          year: "1909"
+        },
+        {
+          src: "https://upload.wikimedia.org/wikipedia/commons/e/e8/Vassily_Kandinsky%2C_1940_-_316.jpg",
+          title: "316",
+          artist: "Wassily Kandinsky",
+          year: "1940"
+        },
+        {
+          src: "https://upload.wikimedia.org/wikipedia/commons/4/40/Kandinsky_-_Sharp_-_Quiet%2C_1927.jpg",
+          title: "Sharp - Quiet",
+          artist: "Wassily Kandinsky",
+          year: "1927"
+        },
+        {
+          src: "https://upload.wikimedia.org/wikipedia/commons/e/e3/DANSEUSE_DANS_LE_FAUTEUIL%2C_SOL_EN_DAMIER%29.webp",
+          title: "Danseuse dans le fauteuil, sol en damier",
+          artist: "Henri Matisse",
+          year: "1926"
+        },
+        {
+          src: "https://upload.wikimedia.org/wikipedia/commons/b/b8/Henri_matisse_antique_et_oeillets010547%29.jpg",
+          title: "Antique et oeillets",
+          artist: "Henri Matisse",
+          year: "1947"
+        },
       ];
 
       // Function to create a thumbnail URL from a Wikimedia URL
@@ -611,7 +683,7 @@
       // Render gallery without needing to calculate aspect ratio for layout
       const grid = $(".art-gallery-grid");
       paintings.forEach((painting, idx) => {
-        const thumbnailSize = 200; // Size for thumbnails
+        const thumbnailSize = 600; // Size for thumbnails
         const thumbnailUrl = getThumbnailUrl(painting.src, thumbnailSize);
         
         // Create the thumbnail
