@@ -2800,22 +2800,16 @@ body.day h1 {
 }
 
 body.night h1:hover {
-  text-shadow: 0 0 12px rgba(255, 255, 255, 0.5);
+  text-shadow: 0 0 8px rgba(255, 255, 255, 0.3);
   letter-spacing: 0.45px;
-  background: linear-gradient(45deg, #fff, #c8c8ff, #fff);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
+  color: #ffffff; /* Use simple color instead of gradient */
   transform: translateY(-2px);
 }
 
 body.day h1:hover {
-  text-shadow: 0 0 12px rgba(64, 62, 67, 0.25);
+  text-shadow: 0 0 8px rgba(64, 62, 67, 0.15);
   letter-spacing: 0.45px;
-  background: linear-gradient(45deg, #403E43, #6a6875, #403E43);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
+  color: #222222; /* Use simple color instead of gradient */
   transform: translateY(-2px);
 }
 
@@ -2900,14 +2894,41 @@ body.night h1:hover::before {
   transform: translateY(-1px);
 }
 
+/* Refined text glow that enhances readability rather than hiding text */
 body.night .underline:hover {
-  text-shadow: 0 0 8px rgba(255, 255, 255, 0.4);
-  animation: subtle-glow 3s infinite alternate;
+  text-shadow: 0 0 3px rgba(255, 255, 255, 0.2); /* Reduced intensity */
+  color: #ffffff; /* Brighter text color for better contrast */
 }
 
 body.day .underline:hover {
-  text-shadow: 0 0 5px rgba(64, 62, 67, 0.2);
-  animation: subtle-glow 3s infinite alternate;
+  text-shadow: 0 0 2px rgba(64, 62, 67, 0.1); /* Reduced intensity */
+  color: #000000; /* Darker text color for better contrast */
+}
+
+/* Simplify contact link hover animations for better readability */
+.contact-link {
+  transition: all 0.3s ease;
+}
+
+.contact-link:hover {
+  letter-spacing: 0.2px;
+  opacity: 1;
+}
+
+.contact-link::after {
+  transition: all 0.3s ease;
+  background: currentColor;
+}
+
+/* Improve readability of contact links on hover */
+body.night .contact-link:hover {
+  text-shadow: none;
+  color: #ffffff;
+}
+
+body.day .contact-link:hover {
+  text-shadow: none;
+  color: #000000;
 }
 
 /* Enhance theme toggle buttons with glow effect */
