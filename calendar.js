@@ -5,29 +5,35 @@ $(document).ready(function(){
            (navigator.maxTouchPoints && navigator.maxTouchPoints > 2 && /MacIntel/.test(navigator.platform));
   }
   
+  // Color palette for events
+  const eventColors = [
+    '#4a89dc', // Blue
+    '#ff6b6b', // Red
+    '#26d0ce', // Teal
+    '#a0d468', // Green
+    '#ffce54', // Yellow
+    '#ac92ec', // Purple
+    '#ff9800', // Orange
+    '#e91e63', // Pink
+    '#00bcd4', // Cyan
+    '#8bc34a', // Light Green
+    '#ff5722', // Deep Orange
+    '#9c27b0', // Violet
+    '#795548', // Brown
+    '#607d8b', // Blue Grey
+    '#f44336', // Strong Red
+    '#3f51b5'  // Indigo
+  ];
+  
   // Calendar functionality
   const events = [
     {
-      title: "Machine Learning Conference",
-      date: new Date(2025, 2, 15), // March 15, 2025
+      title: "Shape seminar",
+      date: new Date(2025, 5, 17), // March 15, 2025
       location: "Paris, France",
       multiDay: false,
-      description: "Annual conference on machine learning advances and applications."
-    },
-    {
-      title: "Statistics Workshop",
-      startDate: new Date(2025, 2, 22), // March 22, 2025
-      endDate: new Date(2025, 2, 24), // March 24, 2025
-      location: "Lyon, France",
-      multiDay: true,
-      description: "Intensive workshop covering advanced statistical methods and their practical applications."
-    },
-    {
-      title: "Research Symposium",
-      date: new Date(2025, 3, 8), // April 8, 2025
-      location: "Online",
-      multiDay: false,
-      description: "Symposium presenting latest research findings in computational mathematics."
+      description: "French research community on shapes analysis, from biomedical imaging to computer assisted design and graphics.",
+      color: eventColors[0]
     },
     {
       title: "Inverse Problems and Artificial Intelligence in Medicine",
@@ -35,7 +41,8 @@ $(document).ready(function(){
       endDate: new Date(2025, 5, 29), // June 29, 2025
       location: "Bath, England",
       multiDay: true,
-      description: "International conference on the intersection of inverse problems and AI in medical applications."
+      description: "International conference on the intersection of inverse problems and AI in medical applications.",
+      color: eventColors[1]
     }
   ];
   
@@ -86,6 +93,9 @@ $(document).ready(function(){
       if (dayEvents.length > 0) {
         dayElement.addClass("has-event");
         dayElement.attr('data-events-count', dayEvents.length);
+        
+        // Set the primary event color for the dot
+        dayElement[0].style.setProperty('--primary-event-color', dayEvents[0].color);
       }
       
       calendarDays.append(dayElement);
@@ -164,7 +174,7 @@ $(document).ready(function(){
         }
         
         modalContent += `
-          <div class="day-event-item ${event.multiDay ? 'multi-day' : ''}">
+          <div class="day-event-item" style="--event-color: ${event.color}">
             <div class="day-event-time">${timeInfo}</div>
             <div class="day-event-title">${event.title}</div>
             <div class="day-event-location">${event.location}</div>
@@ -268,7 +278,7 @@ $(document).ready(function(){
       }
       
       const eventElement = $(`
-        <div class="event-item ${event.multiDay ? 'multi-day' : ''}">
+        <div class="event-item" style="--event-color: ${event.color}">
           <div class="event-date">${dateText}</div>
           <div class="event-title">${event.title}</div>
           <div class="event-location">${event.location}</div>
