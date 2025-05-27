@@ -42,7 +42,7 @@ body.night .calendar-grid {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 20px;
+  padding: 12px 20px;
   background-color: rgba(64, 62, 67, 0.05);
   border-bottom: 1px solid rgba(159, 158, 161, 0.1);
 }
@@ -60,43 +60,37 @@ body.night .calendar-header {
 .nav-button {
   background: none;
   border: none;
-  width: 32px;
-  height: 32px;
+  width: 44px;
+  height: 44px;
   border-radius: 50%;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
   transition: all 0.2s ease;
-  font-size: 16px;
+  font-size: 24px;
+  font-weight: 300;
+  margin-top: 2px;
 }
 
 body.day .nav-button {
   color: #403E43;
-  background-color: rgba(64, 62, 67, 0.05);
 }
 
 body.night .nav-button {
   color: #C8C8C9;
-  background-color: rgba(255, 255, 255, 0.05);
 }
 
 .nav-button:hover {
   transform: scale(1.1);
 }
 
-body.day .nav-button:hover {
-  background-color: rgba(64, 62, 67, 0.1);
-}
-
-body.night .nav-button:hover {
-  background-color: rgba(255, 255, 255, 0.1);
-}
-
 .month-year {
   font-family: NeueHaasMedium;
   font-size: 18px;
   letter-spacing: 0.25px;
+  line-height: 1;
+  margin: 0;
 }
 
 body.day .month-year {
@@ -117,7 +111,7 @@ body.night .month-year {
 }
 
 .day-header {
-  padding: 16px 8px;
+  padding: 10px 8px;
   text-align: center;
   font-family: NeueHaasMedium;
   font-size: 12px;
