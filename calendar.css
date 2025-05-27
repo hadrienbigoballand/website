@@ -40,9 +40,9 @@ body.night .calendar-grid {
 
 .calendar-header {
   display: flex;
-  justify-content: space-between;
+  justify-content: center; /* Center the month-year text */
   align-items: center;
-  padding: 8px 12px; /* Reduced from 12px 20px */
+  padding: 8px 12px;
   background-color: rgba(64, 62, 67, 0.05);
   border-bottom: 1px solid rgba(159, 158, 161, 0.1);
 }
@@ -50,39 +50,6 @@ body.night .calendar-grid {
 body.night .calendar-header {
   background-color: rgba(255, 255, 255, 0.03);
   border-bottom-color: rgba(200, 200, 201, 0.1);
-}
-
-.calendar-nav {
-  display: flex;
-  gap: 4px; /* Reduced from 10px */
-}
-
-.nav-button {
-  background: none;
-  border: none;
-  width: 28px; /* Reduced from 44px */
-  height: 28px; /* Reduced from 44px */
-  border-radius: 50%;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.2s ease;
-  font-size: 16px; /* Reduced from 24px */
-  font-weight: 300;
-  margin-top: 0; /* Removed margin */
-}
-
-body.day .nav-button {
-  color: #403E43;
-}
-
-body.night .nav-button {
-  color: #C8C8C9;
-}
-
-.nav-button:hover {
-  transform: scale(1.1);
 }
 
 .month-year {
@@ -103,6 +70,9 @@ body.night .month-year {
 
 .calendar-body {
   padding: 0;
+  height: 300px; /* Fixed height for scrolling */
+  overflow-y: auto;
+  scroll-behavior: smooth;
 }
 
 .calendar-days {
@@ -622,6 +592,11 @@ body.night .no-events {
     height: 2px; /* Reduced from 3px */
     bottom: 0.5px; /* Reduced from 1px */
   }
+  
+  .nav-button {
+    width: 28px; /* Slightly smaller on mobile */
+    height: 28px;
+  }
 }
 
 /* Tablet responsive adjustments */
@@ -637,5 +612,10 @@ body.night .no-events {
   .calendar-day {
     aspect-ratio: 1.6; /* Slightly less compact than mobile but more than desktop */
     min-height: 17px;
+  }
+  
+  .nav-button {
+    width: 30px; /* Medium size for tablets */
+    height: 30px;
   }
 }
