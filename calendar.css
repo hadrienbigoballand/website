@@ -2,9 +2,7 @@
 ================================================== */
 
 .calendar-container {
-  display: grid;
-  grid-template-columns: 1fr 300px;
-  gap: 30px;
+  display: block; /* Changed from grid to block for single column */
   margin-top: 24px;
 }
 
@@ -20,29 +18,31 @@
 
 @media (max-width: 768px) {
   .calendar-container {
-    grid-template-columns: 1fr;
-    gap: 20px;
+    display: block; /* Keep block layout on mobile */
   }
 }
 
 /* Calendar Grid */
 .calendar-grid {
   background-color: white;
-  border-radius: 12px;
+  border-radius: 8px;
   overflow: hidden;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  width: 100%; /* Full width */
+  max-width: 800px; /* Reasonable maximum width */
+  margin: 0 auto; /* Center the calendar */
 }
 
 body.night .calendar-grid {
   background-color: rgba(45, 45, 50, 0.7);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12); /* Reduced shadow */
 }
 
 .calendar-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 12px 20px;
+  padding: 8px 12px; /* Reduced from 12px 20px */
   background-color: rgba(64, 62, 67, 0.05);
   border-bottom: 1px solid rgba(159, 158, 161, 0.1);
 }
@@ -54,23 +54,23 @@ body.night .calendar-header {
 
 .calendar-nav {
   display: flex;
-  gap: 10px;
+  gap: 4px; /* Reduced from 10px */
 }
 
 .nav-button {
   background: none;
   border: none;
-  width: 44px;
-  height: 44px;
+  width: 28px; /* Reduced from 44px */
+  height: 28px; /* Reduced from 44px */
   border-radius: 50%;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
   transition: all 0.2s ease;
-  font-size: 24px;
+  font-size: 16px; /* Reduced from 24px */
   font-weight: 300;
-  margin-top: 2px;
+  margin-top: 0; /* Removed margin */
 }
 
 body.day .nav-button {
@@ -87,7 +87,7 @@ body.night .nav-button {
 
 .month-year {
   font-family: NeueHaasMedium;
-  font-size: 18px;
+  font-size: 14px; /* Reduced from 18px */
   letter-spacing: 0.25px;
   line-height: 1;
   margin: 0;
@@ -111,11 +111,11 @@ body.night .month-year {
 }
 
 .day-header {
-  padding: 10px 8px;
+  padding: 6px 4px; /* Reduced from 10px 8px */
   text-align: center;
   font-family: NeueHaasMedium;
-  font-size: 12px;
-  letter-spacing: 1px;
+  font-size: 10px; /* Reduced from 12px */
+  letter-spacing: 0.5px; /* Reduced from 1px */
   text-transform: uppercase;
   background-color: rgba(159, 158, 161, 0.05);
   border-bottom: 1px solid rgba(159, 158, 161, 0.1);
@@ -132,7 +132,7 @@ body.night .day-header {
 }
 
 .calendar-day {
-  aspect-ratio: 1;
+  aspect-ratio: 1.8; /* Changed from 1.2 to 1.8 for much more compact vertical cells */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -142,7 +142,9 @@ body.night .day-header {
   cursor: pointer;
   transition: all 0.2s ease;
   font-family: NeueHaas;
-  font-size: 14px;
+  font-size: 12px;
+  min-height: 18px; /* Reduced from 24px to 18px */
+  padding: 2px; /* Added small padding for better text positioning */
 }
 
 body.night .calendar-day {
@@ -177,11 +179,11 @@ body.night .calendar-day.has-event {
 .calendar-day.has-event::after {
   content: '';
   position: absolute;
-  bottom: 4px;
+  bottom: 1px; /* Reduced from 2px to 1px for more compact spacing */
   left: 50%;
   transform: translateX(-50%);
-  width: 6px;
-  height: 6px;
+  width: 3px; /* Reduced from 4px to 3px */
+  height: 3px; /* Reduced from 4px to 3px */
   border-radius: 50%;
   background-color: var(--primary-event-color, #4a89dc);
 }
@@ -208,22 +210,25 @@ body.night .calendar-day.has-event:hover {
 
 /* Events List */
 .events-list {
-  background-color: white;
-  border-radius: 12px;
-  padding: 20px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-  height: fit-content;
+  background-color: transparent; /* Remove background */
+  border-radius: 0; /* Remove border radius */
+  padding: 24px 0 0 0; /* Only top padding */
+  box-shadow: none; /* Remove shadow */
+  height: auto; /* Remove height constraint */
+  max-width: 800px; /* Match calendar width */
+  margin: 0 auto; /* Center align */
 }
 
 body.night .events-list {
-  background-color: rgba(45, 45, 50, 0.7);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  background-color: transparent; /* Remove background for night mode */
+  box-shadow: none; /* Remove shadow for night mode */
 }
 
 .events-header {
-  margin-bottom: 20px;
-  padding-bottom: 12px;
+  margin-bottom: 16px; /* Reduced margin */
+  padding-bottom: 8px; /* Reduced padding */
   border-bottom: 1px solid rgba(159, 158, 161, 0.1);
+  text-align: center; /* Center the title */
 }
 
 body.night .events-header {
@@ -232,7 +237,7 @@ body.night .events-header {
 
 .events-title {
   font-family: NeueHaasMedium;
-  font-size: 16px;
+  font-size: 18px; /* Slightly larger for prominence */
   margin: 0;
 }
 
@@ -245,12 +250,16 @@ body.night .events-title {
 }
 
 .event-item {
-  margin-bottom: 16px;
-  padding: 12px;
+  margin-bottom: 12px; /* Reduced margin for tighter spacing */
+  padding: 16px;
   border-radius: 8px;
   background-color: rgba(159, 158, 161, 0.03);
   border-left: 3px solid var(--event-color, #4a89dc);
   transition: all 0.2s ease;
+  max-width: 600px; /* Constrain event width for readability */
+  margin-left: auto; /* Center events */
+  margin-right: auto; /* Center events */
+  margin-bottom: 12px; /* Explicit bottom margin */
 }
 
 body.night .event-item {
@@ -557,30 +566,76 @@ body.night .calendar-day:hover {
   transform: translateX(-50%) scale(1.2);
 }
 
+/* Add spacing between calendar and events */
+.calendar-grid + .events-list {
+  margin-top: 32px; /* Space between calendar and events */
+}
+
+/* No events styling */
+.no-events {
+  text-align: center;
+  padding: 20px;
+  font-family: NeueHaas;
+  font-size: 14px;
+  opacity: 0.7;
+  font-style: italic;
+}
+
+body.day .no-events {
+  color: #8A898C;
+}
+
+body.night .no-events {
+  color: #C8C8C9;
+}
+
 /* Mobile responsiveness */
 @media (max-width: 768px) {
-  .day-detail-modal {
-    width: 95%;
-    max-height: 85vh;
+  .calendar-grid {
+    border-radius: 6px;
+    max-width: none; /* Full width on mobile */
   }
   
-  .day-detail-header {
-    padding: 20px 20px 12px 20px;
+  .events-list {
+    max-width: none; /* Full width on mobile */
+    padding: 20px 0 0 0;
   }
   
-  .day-detail-date {
-    font-size: 18px;
+  .event-item {
+    max-width: none; /* Full width events on mobile */
+    margin-left: 0;
+    margin-right: 0;
   }
   
-  .day-detail-content {
-    padding: 0 20px 20px 20px;
+  .events-header {
+    text-align: left; /* Left align on mobile */
   }
   
-  .day-event-item {
-    padding: 12px;
+  .calendar-day {
+    font-size: 11px;
+    min-height: 16px; /* Reduced from 20px to 16px for mobile */
+    aspect-ratio: 2.0; /* Even more compact on mobile */
   }
   
-  .day-event-title {
-    font-size: 15px;
+  .calendar-day.has-event::after {
+    width: 2px; /* Reduced from 3px */
+    height: 2px; /* Reduced from 3px */
+    bottom: 0.5px; /* Reduced from 1px */
+  }
+}
+
+/* Tablet responsive adjustments */
+@media (max-width: 1024px) and (min-width: 769px) {
+  .calendar-grid {
+    max-width: 700px; /* Slightly smaller on tablets */
+  }
+  
+  .events-list {
+    max-width: 700px;
+  }
+  
+  .calendar-day {
+    aspect-ratio: 1.6; /* Slightly less compact than mobile but more than desktop */
+    min-height: 17px;
   }
 }

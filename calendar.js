@@ -315,9 +315,9 @@ $(document).ready(function(){
   
   // Initialize calendar and events
   if (isMobileDevice()) {
-    // Hide calendar grid on mobile
-    $('.calendar-grid').hide();
+    // Keep calendar visible on mobile but make it more compact
     $('.calendar-container').addClass('mobile-events-only');
+    generateCalendar(currentMonth, currentYear); // Generate calendar for mobile too
   } else {
     // Generate calendar for desktop
     generateCalendar(currentMonth, currentYear);
