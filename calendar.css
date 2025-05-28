@@ -59,11 +59,88 @@ body.night .calendar-grid {
   padding: 8px 12px;
   background-color: rgba(64, 62, 67, 0.05);
   border-bottom: 1px solid rgba(159, 158, 161, 0.1);
+  position: relative; /* For absolute positioning of today button */
 }
 
 body.night .calendar-header {
   background-color: rgba(255, 255, 255, 0.03);
   border-bottom-color: rgba(200, 200, 201, 0.1);
+}
+
+/* Today Button Styling */
+.today-button {
+  position: absolute;
+  left: 12px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  padding: 0;
+}
+
+.today-button svg {
+  width: 16px;
+  height: 16px;
+  transition: all 0.2s ease;
+}
+
+.today-button svg path {
+  fill: currentColor;
+}
+
+body.day .today-button {
+  color: #000;
+  background-color: rgba(159, 158, 161, 0.08);
+}
+
+body.night .today-button {
+  color: #fff !important;
+  background-color: rgba(255, 255, 255, 0.08);
+}
+
+body.night .today-button svg {
+  color: #fff !important;
+}
+
+body.night .today-button svg path {
+  fill: #fff !important;
+}
+
+.today-button:hover {
+  transform: scale(1.05);
+}
+
+body.day .today-button:hover {
+  background-color: rgba(159, 158, 161, 0.2);
+  color: #000;
+}
+
+body.night .today-button:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+  color: #fff !important;
+}
+
+body.night .today-button:hover svg {
+  color: #fff !important;
+}
+
+body.night .today-button:hover svg path {
+  fill: #fff !important;
+}
+
+.today-button:active {
+  transform: scale(0.95);
+}
+
+/* Remove the glow effect */
+.today-button:hover svg {
+  filter: none;
 }
 
 .month-year {

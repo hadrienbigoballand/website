@@ -469,6 +469,15 @@ $(document).ready(function(){
     showDayDetail(day, month, year);
   });
   
+  // Today button click handler
+  $(document).on('click', '#today-button', function() {
+    const today = new Date();
+    currentMonth = today.getMonth();
+    currentYear = today.getFullYear();
+    updateMonthDisplay();
+    scrollToCurrentMonth();
+  });
+  
   // Initialize calendar and events
   if (isMobileDevice()) {
     $('.calendar-container').addClass('mobile-events-only');
