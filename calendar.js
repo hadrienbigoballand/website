@@ -1,8 +1,20 @@
 $(document).ready(function(){
-  // Mobile device detection
+  // Enhanced mobile device detection
   function isMobileDevice() {
-    return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ||
-           (navigator.maxTouchPoints && navigator.maxTouchPoints > 2 && /MacIntel/.test(navigator.platform));
+    // Check for touch device with small screen
+    const hasTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+    const isSmallScreen = window.innerWidth <= 768;
+    
+    // User agent based detection for mobile devices
+    const mobileRegex = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile|mobile|CriOS/i;
+    const isMobileUA = mobileRegex.test(navigator.userAgent);
+    
+    // Platform detection
+    const isMobilePlatform = /Android|iOS/.test(navigator.platform) || 
+                            /iPhone|iPad|iPod/.test(navigator.platform);
+    
+    // Combine checks - prioritize actual mobile devices over screen size
+    return isMobileUA || isMobilePlatform || (hasTouch && isSmallScreen);
   }
   
   // Color palette for events
@@ -51,36 +63,75 @@ $(document).ready(function(){
   let monthsData = []; // Store calendar data for multiple months
   let isScrolling = false;
   
+  // Define calendar bounds: 5 years before and after current year
+  const today = new Date();
+  const MIN_YEAR = today.getFullYear() - 5;
+  const MAX_YEAR = today.getFullYear() + 5;
+  const MIN_DATE = new Date(MIN_YEAR, 0, 1); // January 1st of min year
+  const MAX_DATE = new Date(MAX_YEAR, 11, 31); // December 31st of max year
+  
   function generateScrollableCalendar() {
     // Skip calendar generation on mobile devices
     if (isMobileDevice()) {
+      // Hide calendar completely on mobile
+      $('.calendar-grid').hide();
       return;
     }
     
-    // Generate 6 months: 2 previous, current, 3 next
+    // Generate bounded calendar: from MIN_DATE to MAX_DATE
     monthsData = [];
     const calendarDays = $(".calendar-days");
     calendarDays.empty();
     
-    for (let i = -2; i <= 3; i++) {
-      const month = new Date(currentYear, currentMonth + i, 1);
-      const monthData = generateMonthData(month.getFullYear(), month.getMonth());
+    let monthCount = 0;
+    let currentDisplayMonth = new Date(MIN_YEAR, 0, 1);
+    
+    while (currentDisplayMonth <= MAX_DATE) {
+      const monthData = generateMonthData(currentDisplayMonth.getFullYear(), currentDisplayMonth.getMonth());
       monthsData.push(monthData);
       
-      // Add month separator (invisible but helps with scroll positioning)
-      if (i > -2) {
-        calendarDays.append('<div class="month-separator"></div>');
-      }
+      // Add month header for each month
+      const monthNames = ["January", "February", "March", "April", "May", "June",
+        "July", "August", "September", "October", "November", "December"];
+      const monthHeader = $(`
+        <div class="month-header-row">
+          <div class="month-header-content">
+            <span class="month-name">${monthNames[currentDisplayMonth.getMonth()]}</span>
+            <span class="month-year">${currentDisplayMonth.getFullYear()}</span>
+          </div>
+        </div>
+      `);
+      calendarDays.append(monthHeader);
+      
+      // Add day headers for the first month or after each month header
+      const dayHeaders = $(`
+        <div class="day-header">Mon</div>
+        <div class="day-header">Tue</div>
+        <div class="day-header">Wed</div>
+        <div class="day-header">Thu</div>
+        <div class="day-header">Fri</div>
+        <div class="day-header">Sat</div>
+        <div class="day-header">Sun</div>
+      `);
+      calendarDays.append(dayHeaders);
       
       // Add month days
       monthData.days.forEach(dayData => {
         calendarDays.append(dayData.element);
       });
+      
+      // Add spacing after each month except the last
+      if (currentDisplayMonth < MAX_DATE) {
+        calendarDays.append('<div class="month-separator-space"></div>');
+      }
+      
+      monthCount++;
+      currentDisplayMonth.setMonth(currentDisplayMonth.getMonth() + 1);
     }
     
-    // Scroll to current month (index 2)
+    // Scroll to current month
     setTimeout(() => {
-      scrollToMonth(2);
+      scrollToCurrentMonth();
     }, 100);
   }
   
@@ -115,6 +166,12 @@ $(document).ready(function(){
         dayElement.addClass("has-event");
         dayElement.attr('data-events-count', dayEvents.length);
         dayElement[0].style.setProperty('--primary-event-color', dayEvents[0].color);
+        
+        // Extract RGB values for glow effects
+        const rgb = hexToRgb(dayEvents[0].color);
+        if (rgb) {
+          dayElement[0].style.setProperty('--primary-event-color-rgb', `${rgb.r}, ${rgb.g}, ${rgb.b}`);
+        }
       }
       
       days.push({ element: dayElement, day, month, year });
@@ -132,6 +189,27 @@ $(document).ready(function(){
     }
     
     return { year, month, days };
+  }
+  
+  // Helper function to convert hex color to RGB
+  function hexToRgb(hex) {
+    const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    return result ? {
+      r: parseInt(result[1], 16),
+      g: parseInt(result[2], 16),
+      b: parseInt(result[3], 16)
+    } : null;
+  }
+  
+  function scrollToCurrentMonth() {
+    // Find the index of the current month in monthsData
+    const currentMonthIndex = monthsData.findIndex(monthData => 
+      monthData.year === currentYear && monthData.month === currentMonth
+    );
+    
+    if (currentMonthIndex !== -1) {
+      scrollToMonth(currentMonthIndex);
+    }
   }
   
   function scrollToMonth(monthIndex) {
@@ -160,58 +238,16 @@ $(document).ready(function(){
     const containerHeight = calendarBody.clientHeight;
     const scrollHeight = calendarBody.scrollHeight;
     
-    // Check if we need to load more months
-    if (scrollTop < containerHeight) {
-      // Scrolled to top - add previous months
-      isScrolling = true;
-      addPreviousMonth();
-      setTimeout(() => { isScrolling = false; }, 300);
-    } else if (scrollTop + containerHeight > scrollHeight - containerHeight) {
-      // Scrolled to bottom - add next months
-      isScrolling = true;
-      addNextMonth();
-      setTimeout(() => { isScrolling = false; }, 300);
-    }
-    
-    // Update current month based on visible area
+    // Prevent scrolling beyond bounds - just update current month display
+    // No more dynamic loading of months
     updateCurrentMonthFromScroll();
-  }
-  
-  function addPreviousMonth() {
-    const firstMonth = monthsData[0];
-    const prevMonth = new Date(firstMonth.year, firstMonth.month - 1, 1);
-    const newMonthData = generateMonthData(prevMonth.getFullYear(), prevMonth.getMonth());
     
-    monthsData.unshift(newMonthData);
-    
-    const calendarDays = $(".calendar-days");
-    const currentScrollTop = $('.calendar-body')[0].scrollTop;
-    
-    // Add new month at the beginning
-    newMonthData.days.forEach(dayData => {
-      calendarDays.prepend(dayData.element);
-    });
-    calendarDays.prepend('<div class="month-separator"></div>');
-    
-    // Adjust scroll position to maintain visual position
-    const newScrollTop = currentScrollTop + newMonthData.days[0].element[0].offsetHeight * newMonthData.days.length;
-    $('.calendar-body')[0].scrollTop = newScrollTop;
-  }
-  
-  function addNextMonth() {
-    const lastMonth = monthsData[monthsData.length - 1];
-    const nextMonth = new Date(lastMonth.year, lastMonth.month + 1, 1);
-    const newMonthData = generateMonthData(nextMonth.getFullYear(), nextMonth.getMonth());
-    
-    monthsData.push(newMonthData);
-    
-    const calendarDays = $(".calendar-days");
-    
-    // Add month separator and new month at the end
-    calendarDays.append('<div class="month-separator"></div>');
-    newMonthData.days.forEach(dayData => {
-      calendarDays.append(dayData.element);
-    });
+    // Optional: Add subtle resistance at bounds
+    if (scrollTop < 0) {
+      calendarBody.scrollTop = 0;
+    } else if (scrollTop + containerHeight > scrollHeight) {
+      calendarBody.scrollTop = scrollHeight - containerHeight;
+    }
   }
   
   function updateCurrentMonthFromScroll() {
@@ -230,7 +266,12 @@ $(document).ready(function(){
       if (elementTop <= centerPoint && elementBottom >= centerPoint) {
         const month = parseInt($(element).attr('data-month'));
         const year = parseInt($(element).attr('data-year'));
-        visibleMonth = { month, year };
+        
+        // Ensure the visible month is within our bounds
+        const visibleDate = new Date(year, month, 1);
+        if (visibleDate >= MIN_DATE && visibleDate <= MAX_DATE) {
+          visibleMonth = { month, year };
+        }
         return false; // Break the loop
       }
     });
@@ -244,6 +285,12 @@ $(document).ready(function(){
   
   function getEventsForDay(year, month, day) {
     const targetDate = new Date(year, month, day);
+    
+    // Only show events within our calendar bounds
+    if (targetDate < MIN_DATE || targetDate > MAX_DATE) {
+      return [];
+    }
+    
     return events.filter(event => {
       if (event.multiDay) {
         return targetDate >= event.startDate && targetDate <= event.endDate;
@@ -425,7 +472,7 @@ $(document).ready(function(){
   // Initialize calendar and events
   if (isMobileDevice()) {
     $('.calendar-container').addClass('mobile-events-only');
-    generateScrollableCalendar();
+    $('.calendar-grid').hide();
   } else {
     generateScrollableCalendar();
   }
