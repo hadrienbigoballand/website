@@ -1103,44 +1103,8 @@ body.night .no-events {
   }
 }
 
-/* Add visual indicators for calendar bounds */
+/* Remove visual indicators for calendar bounds */
 .calendar-days::before,
 .calendar-days::after {
-  content: '';
-  display: block;
-  width: 100%;
-  height: 4px;
-  background: linear-gradient(
-    to bottom,
-    rgba(74, 137, 220, 0.15),
-    transparent
-  );
-  grid-column: 1 / -1;
-  margin: 4px 0;
-  border-radius: 2px;
-}
-
-.calendar-days::after {
-  background: linear-gradient(
-    to top,
-    rgba(74, 137, 220, 0.15),
-    transparent
-  );
-}
-
-body.night .calendar-days::before,
-body.night .calendar-days::after {
-  background: linear-gradient(
-    to bottom,
-    rgba(93, 156, 250, 0.15),
-    transparent
-  );
-}
-
-body.night .calendar-days::after {
-  background: linear-gradient(
-    to top,
-    rgba(93, 156, 250, 0.15),
-    transparent
-  );
+  display: none;
 }
