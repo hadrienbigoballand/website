@@ -887,39 +887,35 @@ body.night .day-detail-date {
 }
 
 .day-detail-close {
-  background: none;
+  background: none !important;
   border: none;
   font-size: 24px;
   cursor: pointer;
-  width: 32px;
-  height: 32px;
+  width: 32px !important;
+  height: 32px !important;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 0 !important;
+  margin: 0;
   transition: all 0.2s ease;
-}
-
-body.day .day-detail-close {
   color: #8A898C;
-  background-color: rgba(159, 158, 161, 0.1);
+  box-sizing: border-box;
+  overflow: visible;
 }
 
 body.night .day-detail-close {
   color: #C8C8C9;
-  background-color: rgba(255, 255, 255, 0.1);
 }
 
 .day-detail-close:hover {
-  transform: scale(1.1);
-}
-
-body.day .day-detail-close:hover {
-  background-color: rgba(159, 158, 161, 0.2);
+  transform: scale(1.05);
+  background-color: rgba(159, 158, 161, 0.15) !important;
 }
 
 body.night .day-detail-close:hover {
-  background-color: rgba(255, 255, 255, 0.2);
+  background-color: rgba(255, 255, 255, 0.15) !important;
 }
 
 .day-detail-content {
