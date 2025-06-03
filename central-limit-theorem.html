@@ -5,23 +5,25 @@
   <title>Théorème Central Limite - Illustration</title>
   <meta name="description" content="Illustration interactive du théorème central limite avec des lancers de pièce">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <link rel="preload" href="fonts/NHaasGroteskTXPro-55Rg.ttf" as="font" type="font/ttf" crossorigin>
+  <link rel="preload" href="fonts/NHaasGroteskTXPro-65Md.ttf" as="font" type="font/ttf" crossorigin>
 
   <!-- CSS -->
-  <link rel="stylesheet" href="css/normalize.css">
-  <link rel="stylesheet" href="css/skeleton.css">
-  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/normalize.min.css">
+  <link rel="stylesheet" href="css/skeleton.min.css">
+  <link rel="stylesheet" href="css/main.min.css">
 
   <!-- Favicon -->
   <link rel="icon" type="image/png" href="images/dot.png">
 
   <!-- D3.js pour les visualisations -->
-  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <script defer src="https://d3js.org/d3.v7.min.js"></script>
   
   <!-- jQuery pour la gestion du thème jour/nuit -->
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+  <script defer src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
   
   <!-- MathJax pour les formules mathématiques -->
-  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script defer src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
   <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
   
   <style>
@@ -781,8 +783,8 @@
         <span class="info-icon" id="sample-info">i</span>
       </div>
       <div class="theme-toggle">
-        <img src="images/moon.svg" id="moon">
-        <img src="images/sun.svg" id="sun">
+        <img loading="lazy" src="images/moon.svg" id="moon">
+        <img loading="lazy" src="images/sun.svg" id="sun">
       </div>
     </div>
     

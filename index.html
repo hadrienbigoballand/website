@@ -22,14 +22,16 @@
   <!-- Mobile Specific Metas
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="preload" href="fonts/NHaasGroteskTXPro-55Rg.ttf" as="font" type="font/ttf" crossorigin>
+  <link rel="preload" href="fonts/NHaasGroteskTXPro-65Md.ttf" as="font" type="font/ttf" crossorigin>
 
   <!-- CSS
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-  <link rel="stylesheet" href="css/normalize.css">
-  <link rel="stylesheet" href="css/skeleton.css">
-  <link rel="stylesheet" href="css/main.css">
-  <link rel="stylesheet" href="css/animate.css">
-  <link rel="stylesheet" href="calendar.css">
+  <link rel="stylesheet" href="css/normalize.min.css">
+  <link rel="stylesheet" href="css/skeleton.min.css">
+  <link rel="stylesheet" href="css/main.min.css">
+  <link rel="stylesheet" href="css/animate.min.css">
+  <link rel="stylesheet" href="calendar.min.css">
 
   <!-- Favicon
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
@@ -37,11 +39,11 @@
 
   <!-- jQuery
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+  <script defer src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
   
   <!-- Custom scripts -->
-  <script src="js/simple-tooltip.js"></script>
-  <script src="calendar.js"></script>
+  <script defer src="js/simple-tooltip.min.js"></script>
+  <script defer src="calendar.min.js"></script>
 
   <script>
   $(document).ready(function(){
@@ -659,8 +661,8 @@ var x = setInterval(function() {
 <div class="container animated fadeIn one">
   <div class="row group">
     <div class="three columns icon">
-   		<img src="images/moon.svg" id="moon">
-      <img src="images/sun.svg" id="sun">
+   		<img loading="lazy" src="images/moon.svg" id="moon">
+      <img loading="lazy" src="images/sun.svg" id="sun">
     </div>
 
     <div class="six columns">
@@ -1492,8 +1494,6 @@ var x = setInterval(function() {
   });
 </script>
 
-<!-- Add this script to fix tooltip position dynamically -->
-<script src="js/simple-tooltip.js"></script>
 
 <!-- Page Footer -->
 <footer class="page-footer">
