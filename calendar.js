@@ -46,15 +46,6 @@ $(document).ready(function(){
       multiDay: false,
       description: "French research community on shapes analysis, from biomedical imaging to computer assisted design and graphics.",
       color: eventColors[0]
-    },
-    {
-      title: "Inverse Problems and Artificial Intelligence in Medicine",
-      startDate: new Date(2025, 5, 23), // June 23, 2025
-      endDate: new Date(2025, 5, 29), // June 29, 2025
-      location: "Bath, England",
-      multiDay: true,
-      description: "International conference on the intersection of inverse problems and AI in medical applications.",
-      color: eventColors[1]
     }
   ];
   
