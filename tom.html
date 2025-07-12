@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tom Bigo-Balland</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            height: 100vh;
+            background-image: url('tom_maquette.jpeg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            padding: 20px 30px;
+            z-index: 1000;
+        }
+
+        .nav-item {
+            position: relative;
+            cursor: pointer;
+            font-size: 16px;
+            color: #333;
+            font-weight: bold;
+            transition: opacity 0.3s ease;
+        }
+
+        .nav-item:hover {
+            opacity: 0.7;
+        }
+
+        .menu-icon {
+            width: 22px;
+            height: 22px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 4px;
+        }
+
+        .menu-line {
+            width: 100%;
+            height: 2px;
+            background-color: #333;
+        }
+
+        .hover-content {
+            position: absolute;
+            top: 30px;
+            padding: 0;
+            border-radius: 0;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.4s ease;
+            white-space: nowrap;
+            font-size: 14px;
+            color: #333;
+            font-weight: bold;
+            transform: translateY(-10px);
+        }
+
+        .nav-item:hover .hover-content {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .menu-content {
+            left: 0;
+        }
+
+        .center-content {
+            left: 50%;
+            transform: translateX(-50%) translateY(-10px);
+        }
+
+        .nav-item:hover .center-content {
+            transform: translateX(-50%) translateY(0);
+        }
+
+        .about-content {
+            right: 0;
+            width: 200px;
+            white-space: normal;
+            text-align: right;
+        }
+
+        .menu-list {
+            list-style: none;
+        }
+
+        .menu-list li {
+            padding: 3px 0;
+            color: #333;
+            transform: translateY(-5px);
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+
+        .nav-item:hover .menu-list li {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .nav-item:hover .menu-list li:nth-child(1) {
+            transition-delay: 0.1s;
+        }
+
+        .nav-item:hover .menu-list li:nth-child(2) {
+            transition-delay: 0.2s;
+        }
+
+        .nav-item:hover .menu-list li:nth-child(3) {
+            transition-delay: 0.3s;
+        }
+    </style>
+</head>
+<body>
+    <nav class="nav">
+        <div class="nav-item">
+            <span>aller à</span>
+            <div class="hover-content menu-content">
+                <ul class="menu-list">
+                    <li>projets</li>
+                    <li>ressources</li>
+                    <li>atelier</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="nav-item">
+            <span>T</span>
+            <div class="hover-content center-content">
+                Tom Bigo-Balland
+            </div>
+        </div>
+
+        <div class="nav-item">
+            <span>à propos</span>
+            <div class="hover-content about-content">
+                Cabinet d'architecture dédié à la conception innovante et aux solutions de construction durable.
+            </div>
+        </div>
+    </nav>
+</body>
+</html>
+</body>
+</html>
