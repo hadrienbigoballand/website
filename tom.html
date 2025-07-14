@@ -132,7 +132,7 @@ backdrop-filter: blur(8px); /* si tu veux un flou plus design */
     </style>
 </head>
 <body>
-    <video class="video-background" autoplay muted loop preload="auto">
+    <video class="video-background" autoplay muted loop preload="auto" playsinline webkit-playsinline>
         <source src="output1.mp4" type="video/mp4">
     </video>
     
@@ -158,11 +158,26 @@ backdrop-filter: blur(8px); /* si tu veux un flou plus design */
     </div>
 
     <script>
-        const video = document.querySelector('.video-background');
-        
-        video.addEventListener('canplaythrough', function() {
+    document.addEventListener('DOMContentLoaded', () => {
+    const video = document.querySelector('.video-background');
+
+    // Essaie de lire immédiatement
+    video.play().catch(() => {
+        // Si échec, on attend un premier touch
+        const onFirstTouch = () => {
+        video.play().finally(() => {
             video.classList.add('loaded');
         });
+        document.removeEventListener('touchstart', onFirstTouch);
+        };
+        document.addEventListener('touchstart', onFirstTouch, { passive: true });
+    });
+
+    // Même logique de canplaythrough
+    video.addEventListener('canplaythrough', () => {
+        video.classList.add('loaded');
+    });
+    });
     </script>
 </body>
 </html>
