@@ -15,6 +15,9 @@
             height: 100vh;
             font-family: 'Neue Haas Unica', sans-serif;
             overflow: hidden;
+            background-image: url('background_image.webp');
+            background-size: cover;
+            background-position: center;
         }
 
         .video-background {
@@ -25,6 +28,12 @@
             height: 100%;
             object-fit: cover;
             z-index: -1;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+        }
+
+        .video-background.loaded {
+            opacity: 1;
         }
 
         .nav {
@@ -108,7 +117,7 @@ backdrop-filter: blur(4px); /* si tu veux un flou plus design */
     </style>
 </head>
 <body>
-    <video class="video-background" autoplay muted loop>
+    <video class="video-background" autoplay muted loop preload="auto">
         <source src="output1.mp4" type="video/mp4">
     </video>
     
@@ -133,5 +142,13 @@ backdrop-filter: blur(4px); /* si tu veux un flou plus design */
         59000 Lille<br>
         atelier.langage@outlook.fr
     </div>
+
+    <script>
+        const video = document.querySelector('.video-background');
+        
+        video.addEventListener('canplaythrough', function() {
+            video.classList.add('loaded');
+        });
+    </script>
 </body>
 </html>
