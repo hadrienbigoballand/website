@@ -65,7 +65,7 @@
             line-height: 1.6;
             text-align: justify;
             z-index: 1000;
-            background-color: rgba(0, 0, 0, 0.1); /* ou 0.4 pour un peu plus de contraste */
+            background-color: rgba(0, 0, 0, 0.05); /* ou 0.4 pour un peu plus de contraste */
 padding: 10px;
 border-radius: 8px; /* facultatif mais élégant */
 backdrop-filter: blur(8px); /* si tu veux un flou plus design */
@@ -148,21 +148,6 @@ backdrop-filter: blur(8px); /* si tu veux un flou plus design */
         
         video.addEventListener('canplaythrough', function() {
             video.classList.add('loaded');
-        });
-
-        // Force play on mobile if autoplay fails
-        video.addEventListener('loadedmetadata', function() {
-            const playPromise = video.play();
-            if (playPromise !== undefined) {
-                playPromise.catch(error => {
-                    console.log('Auto-play was prevented:', error);
-                    // Fallback: show a play button or start on first user interaction
-                    document.addEventListener('touchstart', function playOnTouch() {
-                        video.play();
-                        document.removeEventListener('touchstart', playOnTouch);
-                    }, { once: true });
-                });
-            }
         });
     </script>
 </body>
