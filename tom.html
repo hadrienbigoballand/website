@@ -149,6 +149,21 @@ backdrop-filter: blur(8px); /* si tu veux un flou plus design */
         video.addEventListener('canplaythrough', function() {
             video.classList.add('loaded');
         });
+
+        // Force play on mobile if autoplay fails
+        video.addEventListener('loadedmetadata', function() {
+            const playPromise = video.play();
+            if (playPromise !== undefined) {
+                playPromise.catch(error => {
+                    console.log('Auto-play was prevented:', error);
+                    // Fallback: show a play button or start on first user interaction
+                    document.addEventListener('touchstart', function playOnTouch() {
+                        video.play();
+                        document.removeEventListener('touchstart', playOnTouch);
+                    }, { once: true });
+                });
+            }
+        });
     </script>
 </body>
 </html>
