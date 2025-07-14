@@ -92,7 +92,15 @@ backdrop-filter: blur(8px); /* si tu veux un flou plus design */
             font-size: 12px;
             text-align: center;
             z-index: 1000;
-            
+            white-space: nowrap
+        }
+
+        .dotted-underline {
+            border-bottom: 1px dotted white;
+        }
+
+        .solid-underline {
+            border-bottom: 1px solid white;
         }
 
         @media (max-width: 495px) {
@@ -114,6 +122,13 @@ backdrop-filter: blur(8px); /* si tu veux un flou plus design */
                 text-align: left;
             }
         }
+
+    .bold {
+        font-weight: 600; /* or bold */
+    }
+    .italic {
+        font-style: italic; /* or oblique */
+    }
     </style>
 </head>
 <body>
@@ -138,9 +153,8 @@ backdrop-filter: blur(8px); /* si tu veux un flou plus design */
 
     <div class="bottom-text">
         Bureau d'architecture<br>
-        48 Boulevard Jean-Baptiste Lebas<br>
-        59000 Lille<br>
-        atelier.langage@outlook.fr
+        <span class="dotted-underline">48 Boulevard Jean-Baptiste Lebas, 59000 Lille</span><br>
+        <span class="solid-underline">atelier.langage@outlook.fr</span>
     </div>
 
     <script>
