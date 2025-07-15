@@ -16,7 +16,7 @@
             height: 100vh;
             font-family: 'Montserrat', sans-serif;
             overflow: hidden;
-            background-image: url('background_image.webp');
+            background-image: url('backgrounds/video_1/bg_image.webp');
             background-size: cover;
             background-position: center;
         }
@@ -44,7 +44,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-image: url('background_image.webp');
+            background-image: url('backgrounds/video_1/bg_image.webp');
             background-size: cover;
             background-position: center;
             z-index: -2;
@@ -163,8 +163,8 @@ backdrop-filter: blur(0px); /* si tu veux un flou plus design 8px */
            preload="metadata"
            playsinline 
            webkit-playsinline
-           poster="background_image.webp">
-        <source src="output1.webm" type="video/webm; codecs=vp9">
+           poster="backgrounds/video_1/bg_image.webp">
+        <source src="backgrounds/video_1/bg_video.webm" type="video/webm; codecs=vp9">
     </video>
     
     <nav class="nav">
@@ -187,7 +187,39 @@ backdrop-filter: blur(0px); /* si tu veux un flou plus design 8px */
 
     <script>
     document.addEventListener('DOMContentLoaded', () => {
+        // Background selection system
+        const availableBackgrounds = ['video_1', 'video_2']; // Add video_3, video_4, etc. as you create them
+        
+        function getRandomBackground() {
+            const lastUsed = localStorage.getItem('lastBackground');
+            let availableChoices = availableBackgrounds.filter(bg => bg !== lastUsed);
+            
+            // If all backgrounds have been used or it's the first visit
+            if (availableChoices.length === 0) {
+                availableChoices = availableBackgrounds;
+            }
+            
+            const randomIndex = Math.floor(Math.random() * availableChoices.length);
+            const selectedBackground = availableChoices[randomIndex];
+            
+            localStorage.setItem('lastBackground', selectedBackground);
+            return selectedBackground;
+        }
+        
+        // Select and apply background
+        const selectedBg = getRandomBackground();
+        const bgImagePath = `backgrounds/${selectedBg}/bg_image.webp`;
+        const bgVideoPath = `backgrounds/${selectedBg}/bg_video.webm`;
+        
+        // Update all background references
+        document.body.style.backgroundImage = `url('${bgImagePath}')`;
+        document.querySelector('.loading-overlay').style.backgroundImage = `url('${bgImagePath}')`;
+        
         const video = document.querySelector('.video-background');
+        video.poster = bgImagePath;
+        video.querySelector('source').src = bgVideoPath;
+        video.load(); // Reload video with new source
+        
         const loadingOverlay = document.querySelector('.loading-overlay');
         let hasPlayedOnce = false;
 
