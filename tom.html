@@ -12,6 +12,12 @@
             box-sizing: border-box;
         }
 
+        html {
+            overscroll-behavior: none;
+            overscroll-behavior-y: none;
+            -webkit-overflow-scrolling: touch;
+        }
+
         body {
             height: 100vh;
             font-family: 'Montserrat', sans-serif;
@@ -19,6 +25,9 @@
             overflow-y: auto;
             scroll-behavior: smooth;
             background-color: black;
+            overscroll-behavior: none;
+            overscroll-behavior-y: none;
+            position: relative;
         }
 
         .main-section {
@@ -439,6 +448,29 @@
         });
 
         observer.observe(document.getElementById('white-section'));
+
+        // Prevent overscroll on mobile devices
+        let startY = 0;
+        document.addEventListener('touchstart', function(e) {
+            startY = e.touches[0].pageY;
+        }, { passive: true });
+
+        document.addEventListener('touchmove', function(e) {
+            const y = e.touches[0].pageY;
+            const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+            const scrollHeight = document.documentElement.scrollHeight;
+            const clientHeight = document.documentElement.clientHeight;
+
+            // Prevent pull-to-refresh at the top
+            if (scrollTop === 0 && y > startY) {
+                e.preventDefault();
+            }
+
+            // Prevent overscroll at the bottom
+            if (scrollTop + clientHeight >= scrollHeight && y < startY) {
+                e.preventDefault();
+            }
+        }, { passive: false });
     });
     </script>
 </body>
