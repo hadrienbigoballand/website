@@ -71,7 +71,7 @@
         .nav-item {
             font-size: 25px;
             color: black;
-            font-weight: 400;
+            font-weight: 500;
             transition: color 0.3s ease;
         }
 
@@ -82,15 +82,11 @@
             transform: translateX(-50%);
             width: 215px;
             color: black;
-            font-weight: 300;
+            font-weight: 350;
             font-size: 14px;
             line-height: 1.6;
             text-align: justify;
             z-index: 1000;
-            background-color: rgba(0, 0, 0, 0); /* ou 0.05 pour un peu plus de contraste */
-padding: 0px; /* 10px; */
-border-radius: 8px; /* facultatif mais élégant */
-backdrop-filter: blur(0px); /* si tu veux un flou plus design 8px */
             transition: color 0.3s ease;
         }
 
@@ -112,7 +108,7 @@ backdrop-filter: blur(0px); /* si tu veux un flou plus design 8px */
             left: 50%;
             transform: translateX(-50%);
             color: black;
-            font-weight: 300;
+            font-weight: 350;
             font-size: 12px;
             text-align: center;
             z-index: 1000;
@@ -138,6 +134,13 @@ backdrop-filter: blur(0px); /* si tu veux un flou plus design 8px */
             color: white;
         }
 
+        body.white-text .nav-item, 
+        body.white-text .text-block,
+        body.white-text .names-block,
+        body.white-text .bottom-text {
+            text-shadow: 0 2px 4px rgba(0,0,0,0.6);
+        }
+
         body.white-text .dotted-underline {
             border-bottom-color: white;
         }
@@ -159,10 +162,10 @@ backdrop-filter: blur(0px); /* si tu veux un flou plus design 8px */
     }
 
     .reg {
-    font-size: 0.45em; /* adjust size here */
+    font-size: 0.40em; /* adjust size here */
     vertical-align: top;
     position: relative;
-    top: +0.2em; /* tweak this until the circle top aligns */
+    top: +0.4em; /* tweak this until the circle top aligns */
     margin-left: 0.1em;
     }
     </style>
