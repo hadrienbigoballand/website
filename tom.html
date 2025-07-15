@@ -226,6 +226,19 @@
             font-style: italic;
         }
 
+        .brand {
+        position: relative;
+        display: inline-block;
+        }
+
+        .reg {
+        font-size: 0.35em; /* adjust size here */
+        vertical-align: top;
+        position: relative;
+        top: 0.35em; /* tweak this until the circle top aligns */
+        margin-left: 0.1em;
+        }
+
         @media (max-width: 495px) {
             .discover-button {
                 font-size: 13px;
@@ -305,47 +318,19 @@
         video.querySelector('source').src = bgVideoPath;
         video.load(); // Reload video with new source
         
-        // Function to detect brightness of background video
-        function detectBrightness() {
-            const canvas = document.createElement('canvas');
-            const ctx = canvas.getContext('2d');
-            canvas.width = 100;
-            canvas.height = 100;
-            
-            try {
-                ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-                const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-                const data = imageData.data;
-                
-                let totalBrightness = 0;
-                for (let i = 0; i < data.length; i += 4) {
-                    const r = data[i];
-                    const g = data[i + 1];
-                    const b = data[i + 2];
-                    // Calculate relative luminance
-                    const brightness = (0.299 * r + 0.587 * g + 0.114 * b);
-                    totalBrightness += brightness;
-                }
-                
-                const avgBrightness = totalBrightness / (data.length / 4);
-                return avgBrightness > 128; // Return true if bright, false if dark
-            } catch (error) {
-                console.log('Cannot detect brightness, using default');
-                return false; // Default to dark background assumption
-            }
-        }
-        
-        // Apply button style based on background brightness
+        // Apply button style based on selected video
         function updateButtonStyle() {
             const discoverButton = document.querySelector('.discover-button');
-            const isBright = detectBrightness();
             
-            if (isBright) {
+            if (selectedBg === 'video_1') {
                 discoverButton.classList.add('dark');
             } else {
                 discoverButton.classList.remove('dark');
             }
         }
+        
+        // Update button style immediately
+        updateButtonStyle();
         
         const loadingOverlay = document.querySelector('.loading-overlay');
         let hasPlayedOnce = false;
@@ -360,10 +345,6 @@
                 video.classList.add('loaded');
                 setTimeout(() => {
                     loadingOverlay.classList.add('hidden');
-                    // Update button style after video loads
-                    setTimeout(() => {
-                        updateButtonStyle();
-                    }, 500);
                 }, 300);
             }
         };
