@@ -191,41 +191,6 @@
             transition: border-color 0.3s ease;
         }
 
-        .discover-button {
-            position: absolute;
-            bottom: 110px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 1000;
-            padding: 12px 24px;
-            background: rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 25px;
-            color: white;
-            font-family: 'Montserrat', sans-serif;
-            font-size: 14px;
-            font-weight: 400;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-decoration: none;
-            display: inline-block;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.6);
-        }
-
-        .discover-button:hover {
-            background: rgba(255, 255, 255, 0.25);
-            transform: translateX(-50%) translateY(-2px);
-        }
-
-        /* Dark version for light backgrounds */
-        .discover-button.dark {
-            background: rgba(0, 0, 0, 0.05);
-            border: 1px solid rgba(0, 0, 0, 0.05);
-            color: white;
-        }
-
-
         .bold {
             font-weight: 600;
         }
@@ -274,17 +239,15 @@
         
         <nav class="nav">
         <div class="nav-item">
-            <span class="brand">LANGAGE<span class="reg">&reg;</span></span>
+            <span class="brand">LANGAGE</span>
         </div>
         </nav>
 
-        <a href="#white-section" class="discover-button">Découvrir</a>
-
         <div class="bottom-text">
             Bureau d'architecture<br>
-            Tom Bigo-Balland & Louis Ducancelle<br>
-            <span class="dotted-underline">48 Boulevard Jean-Baptiste Lebas, 59000 Lille</span><br>
-            <span class="solid-underline">atelier.langage@outlook.fr</span>
+            Tom Bigo-Balland - Louis Ducancelle<br>
+            48 Boulevard Jean-Baptiste Lebas, 59000 Lille<br>
+            atelier.langage@outlook.fr
         </div>
     </div>
 
@@ -329,20 +292,6 @@
         const video = document.querySelector('.video-background');
         video.querySelector('source').src = bgVideoPath;
         video.load(); // Reload video with new source
-        
-        // Apply button style based on selected video
-        function updateButtonStyle() {
-            const discoverButton = document.querySelector('.discover-button');
-            
-            if (selectedBg === 'video_1') {
-                discoverButton.classList.add('dark');
-            } else {
-                discoverButton.classList.remove('dark');
-            }
-        }
-        
-        // Update button style immediately
-        updateButtonStyle();
         
         let hasPlayedOnce = false;
 
@@ -423,8 +372,8 @@
             video.playbackRate = 1.0;
         });
 
-        // Smooth scroll functionality
-        document.querySelector('.discover-button').addEventListener('click', (e) => {
+        // Smooth scroll functionality - change from button click to main section click
+        document.querySelector('.main-section').addEventListener('click', (e) => {
             e.preventDefault();
             document.getElementById('white-section').scrollIntoView({
                 behavior: 'smooth'
