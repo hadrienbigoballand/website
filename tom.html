@@ -261,27 +261,26 @@
 
     <script>
     document.addEventListener('DOMContentLoaded', () => {
-        // Background selection system
-        const availableBackgrounds = ['video_1', 'video_2']; // Add video_3, video_4, etc. as you create them
-        
-        function getRandomBackground() {
+        // Background selection system - sequential cycling
+        const availableBackgrounds = ['video_1', 'video_2', 'video_3', 'video_4', 'video_5'];
+
+        function getNextBackground() {
             const lastUsed = localStorage.getItem('lastBackground');
-            let availableChoices = availableBackgrounds.filter(bg => bg !== lastUsed);
+            let currentIndex = 0;
             
-            // If all backgrounds have been used or it's the first visit
-            if (availableChoices.length === 0) {
-                availableChoices = availableBackgrounds;
+            if (lastUsed) {
+                currentIndex = availableBackgrounds.indexOf(lastUsed);
+                // Move to next video, or back to first if we're at the end
+                currentIndex = (currentIndex + 1) % availableBackgrounds.length;
             }
             
-            const randomIndex = Math.floor(Math.random() * availableChoices.length);
-            const selectedBackground = availableChoices[randomIndex];
-            
+            const selectedBackground = availableBackgrounds[currentIndex];
             localStorage.setItem('lastBackground', selectedBackground);
             return selectedBackground;
         }
         
         // Select and apply background
-        const selectedBg = getRandomBackground();
+        const selectedBg = getNextBackground();
         const bgVideoPath = `backgrounds/${selectedBg}/bg_video.webm`;
         const bgImagePath = `backgrounds/${selectedBg}/bg_image.webp`;
         
