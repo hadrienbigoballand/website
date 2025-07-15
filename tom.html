@@ -30,11 +30,30 @@
             object-fit: cover;
             z-index: -1;
             opacity: 0;
-            transition: opacity 0.0s ease-in-out;
+            transition: opacity 0.5s ease-in-out;
+            will-change: opacity;
         }
 
         .video-background.loaded {
             opacity: 1;
+        }
+
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('background_image.webp');
+            background-size: cover;
+            background-position: center;
+            z-index: -2;
+            opacity: 1;
+            transition: opacity 0.5s ease-in-out;
+        }
+
+        .loading-overlay.hidden {
+            opacity: 0;
         }
 
         .nav {
@@ -51,7 +70,7 @@
 
         .nav-item {
             font-size: 45px;
-            color: white;
+            color: black;
             font-weight: 200;
         }
 
@@ -61,8 +80,8 @@
             left: 50%;
             transform: translateX(-50%);
             width: 215px;
-            color: white;
-            font-weight: 200;
+            color: black;
+            font-weight: 300;
             font-size: 14px;
             line-height: 1.6;
             text-align: justify;
@@ -77,7 +96,7 @@ backdrop-filter: blur(0px); /* si tu veux un flou plus design 8px */
             position: fixed;
             top: 23px;
             right: calc(100vw - 465px);
-            color: white;
+            color: black;
             font-weight: 500;
             font-size: 14px;
             text-align: right;
@@ -89,7 +108,7 @@ backdrop-filter: blur(0px); /* si tu veux un flou plus design 8px */
             bottom: 30px;
             left: 50%;
             transform: translateX(-50%);
-            color: white;
+            color: black;
             font-weight: 300;
             font-size: 12px;
             text-align: center;
@@ -98,11 +117,11 @@ backdrop-filter: blur(0px); /* si tu veux un flou plus design 8px */
         }
 
         .dotted-underline {
-            border-bottom: 1px dotted white;
+            border-bottom: 1px dotted black;
         }
 
         .solid-underline {
-            border-bottom: 1px solid white;
+            border-bottom: 1px solid black;
         }
 
         @media (max-width: 495px) {
@@ -135,8 +154,17 @@ backdrop-filter: blur(0px); /* si tu veux un flou plus design 8px */
     </style>
 </head>
 <body>
-    <video class="video-background" autoplay muted loop preload="auto" playsinline webkit-playsinline>
-        <source src="output1.webm" type="video/webm">
+    <div class="loading-overlay"></div>
+    
+    <video class="video-background" 
+           autoplay 
+           muted 
+           loop 
+           preload="metadata"
+           playsinline 
+           webkit-playsinline
+           poster="background_image.webp">
+        <source src="output1.webm" type="video/webm; codecs=vp9">
     </video>
     
     <nav class="nav">
@@ -159,24 +187,86 @@ backdrop-filter: blur(0px); /* si tu veux un flou plus design 8px */
 
     <script>
     document.addEventListener('DOMContentLoaded', () => {
-    const video = document.querySelector('.video-background');
+        const video = document.querySelector('.video-background');
+        const loadingOverlay = document.querySelector('.loading-overlay');
+        let hasPlayedOnce = false;
 
-    // Essaie de lire immédiatement
-    video.play().catch(() => {
-        // Si échec, on attend un premier touch
-        const onFirstTouch = () => {
-        video.play().finally(() => {
-            video.classList.add('loaded');
-        });
-        document.removeEventListener('touchstart', onFirstTouch);
+        // Preload video metadata
+        video.preload = 'metadata';
+
+        // Handle video loading states
+        const handleVideoReady = () => {
+            if (!hasPlayedOnce) {
+                hasPlayedOnce = true;
+                video.classList.add('loaded');
+                setTimeout(() => {
+                    loadingOverlay.classList.add('hidden');
+                }, 300);
+            }
         };
-        document.addEventListener('touchstart', onFirstTouch, { passive: true });
-    });
 
-    // Même logique de canplaythrough
-    video.addEventListener('canplaythrough', () => {
-        video.classList.add('loaded');
-    });
+        // Progressive loading: start with metadata, then auto if connection is good
+        const optimizeLoading = () => {
+            if (navigator.connection) {
+                const connection = navigator.connection;
+                // Only preload auto on fast connections
+                if (connection.effectiveType === '4g' || connection.downlink > 2) {
+                    video.preload = 'auto';
+                }
+            } else {
+                // Default to auto if no connection API
+                video.preload = 'auto';
+            }
+        };
+
+        // Call loading optimization
+        optimizeLoading();
+
+        // Multiple event listeners for reliability
+        video.addEventListener('loadedmetadata', () => {
+            // Video structure is ready, attempt play
+            const playPromise = video.play();
+            
+            if (playPromise !== undefined) {
+                playPromise
+                    .then(handleVideoReady)
+                    .catch((error) => {
+                        // Autoplay failed, wait for user interaction
+                        console.log('Autoplay prevented:', error);
+                        
+                        const enableVideoOnInteraction = () => {
+                            video.play().then(handleVideoReady);
+                            document.removeEventListener('click', enableVideoOnInteraction);
+                            document.removeEventListener('touchstart', enableVideoOnInteraction);
+                        };
+                        
+                        document.addEventListener('click', enableVideoOnInteraction, { passive: true });
+                        document.addEventListener('touchstart', enableVideoOnInteraction, { passive: true });
+                    });
+            }
+        });
+
+        video.addEventListener('canplay', () => {
+            // Backup trigger if loadedmetadata doesn't fire
+            if (!hasPlayedOnce) {
+                video.play().then(handleVideoReady).catch(() => {});
+            }
+        });
+
+        video.addEventListener('playing', handleVideoReady);
+
+        // Error handling
+        video.addEventListener('error', (e) => {
+            console.log('Video error:', e);
+            // Keep background image visible
+            video.style.display = 'none';
+        });
+
+        // Optimize playback
+        video.addEventListener('loadstart', () => {
+            // Ensure video is ready for VP9 decoding
+            video.playbackRate = 1.0;
+        });
     });
     </script>
 </body>
