@@ -69,14 +69,15 @@
         }
 
         .nav-item {
-            font-size: 45px;
+            font-size: 25px;
             color: black;
-            font-weight: 200;
+            font-weight: 400;
+            transition: color 0.3s ease;
         }
 
         .text-block {
             position: fixed;
-            top: 75px;
+            top: 55px;
             left: 50%;
             transform: translateX(-50%);
             width: 215px;
@@ -90,6 +91,7 @@
 padding: 0px; /* 10px; */
 border-radius: 8px; /* facultatif mais élégant */
 backdrop-filter: blur(0px); /* si tu veux un flou plus design 8px */
+            transition: color 0.3s ease;
         }
 
         .names-block {
@@ -101,6 +103,7 @@ backdrop-filter: blur(0px); /* si tu veux un flou plus design 8px */
             font-size: 14px;
             text-align: right;
             z-index: 1000;
+            transition: color 0.3s ease;
         }
 
         .bottom-text {
@@ -113,15 +116,34 @@ backdrop-filter: blur(0px); /* si tu veux un flou plus design 8px */
             font-size: 12px;
             text-align: center;
             z-index: 1000;
-            white-space: nowrap
+            white-space: nowrap;
+            transition: color 0.3s ease;
         }
 
         .dotted-underline {
             border-bottom: 1px dotted black;
+            transition: border-color 0.3s ease;
         }
 
         .solid-underline {
             border-bottom: 1px solid black;
+            transition: border-color 0.3s ease;
+        }
+
+        /* White text theme for video_2 */
+        body.white-text .nav-item,
+        body.white-text .text-block,
+        body.white-text .names-block,
+        body.white-text .bottom-text {
+            color: white;
+        }
+
+        body.white-text .dotted-underline {
+            border-bottom-color: white;
+        }
+
+        body.white-text .solid-underline {
+            border-bottom-color: white;
         }
 
         @media (max-width: 495px) {
@@ -151,6 +173,19 @@ backdrop-filter: blur(0px); /* si tu veux un flou plus design 8px */
     .italic {
         font-style: italic; /* or oblique */
     }
+
+    .brand {
+    position: relative;
+    display: inline-block;
+    }
+
+    .reg {
+    font-size: 0.45em; /* adjust size here */
+    vertical-align: top;
+    position: relative;
+    top: +0.2em; /* tweak this until the circle top aligns */
+    margin-left: 0.1em;
+    }
     </style>
 </head>
 <body>
@@ -168,9 +203,9 @@ backdrop-filter: blur(0px); /* si tu veux un flou plus design 8px */
     </video>
     
     <nav class="nav">
-        <div class="nav-item">
-            <span>LANGAGE</span>
-        </div>
+    <div class="nav-item">
+        <span class="brand">LANGAGE<span class="reg">&reg;</span></span>
+    </div>
     </nav>
 
     <div class="text-block">
@@ -210,6 +245,13 @@ backdrop-filter: blur(0px); /* si tu veux un flou plus design 8px */
         const selectedBg = getRandomBackground();
         const bgImagePath = `backgrounds/${selectedBg}/bg_image.webp`;
         const bgVideoPath = `backgrounds/${selectedBg}/bg_video.webm`;
+        
+        // Apply text color theme based on background
+        if (selectedBg === 'video_2') {
+            document.body.classList.add('white-text');
+        } else {
+            document.body.classList.remove('white-text');
+        }
         
         // Update all background references
         document.body.style.backgroundImage = `url('${bgImagePath}')`;
