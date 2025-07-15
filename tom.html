@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Langage Architectes</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -13,7 +14,7 @@
 
         body {
             height: 100vh;
-            font-family: 'Neue Haas Unica', sans-serif;
+            font-family: 'Montserrat', sans-serif;
             overflow: hidden;
             background-image: url('background_image.webp');
             background-size: cover;
@@ -42,33 +43,34 @@
             left: 0;
             right: 0;
             display: flex;
-            justify-content: left;
+            justify-content: center;
             align-items: flex-start;
             padding: 20px 30px;
             z-index: 1000;
         }
 
         .nav-item {
-            font-size: 18px;
+            font-size: 45px;
             color: white;
-            font-weight: 800;
+            font-weight: 200;
         }
 
         .text-block {
             position: fixed;
-            top: 55px;
-            left: 30px;
-            width: 435px;
+            top: 75px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 215px;
             color: white;
-            font-weight: 300;
+            font-weight: 200;
             font-size: 14px;
             line-height: 1.6;
             text-align: justify;
             z-index: 1000;
-            background-color: rgba(0, 0, 0, 0.05); /* ou 0.4 pour un peu plus de contraste */
-padding: 10px;
+            background-color: rgba(0, 0, 0, 0); /* ou 0.05 pour un peu plus de contraste */
+padding: 0px; /* 10px; */
 border-radius: 8px; /* facultatif mais élégant */
-backdrop-filter: blur(8px); /* si tu veux un flou plus design */
+backdrop-filter: blur(0px); /* si tu veux un flou plus design 8px */
         }
 
         .names-block {
@@ -105,13 +107,14 @@ backdrop-filter: blur(8px); /* si tu veux un flou plus design */
 
         @media (max-width: 495px) {
             .nav {
-                padding: 15px 15px;
+                padding: 20px 30px;
             }
             
             .text-block {
-                left: 15px;
-                right: 15px;
-                width: auto;
+                left: 50%;
+                transform: translateX(-50%);
+                right: auto;
+                width: calc(100vw - 30px);
                 top: 75px;
             }
             
@@ -133,7 +136,7 @@ backdrop-filter: blur(8px); /* si tu veux un flou plus design */
 </head>
 <body>
     <video class="video-background" autoplay muted loop preload="auto" playsinline webkit-playsinline>
-        <source src="output1.mp4" type="video/mp4">
+        <source src="output1.webm" type="video/webm">
     </video>
     
     <nav class="nav">
@@ -143,16 +146,13 @@ backdrop-filter: blur(8px); /* si tu veux un flou plus design */
     </nav>
 
     <div class="text-block">
-        Système de signes qui associe des mots, puisés dans un lexique, selon des règles grammaticales précises, établies par une syntaxe.
+        Système de signes qui associe des mots, puisés dans un lexique, selon des règles grammaticales précises, établies par une syntaxe.<br>
         Système explicable et donc partageable et transmissible.
-    </div>
-
-    <div class="names-block">
-        Tom Bigo-Balland & Louis Ducancelle
     </div>
 
     <div class="bottom-text">
         Bureau d'architecture<br>
+        Tom Bigo-Balland & Louis Ducancelle<br>
         <span class="dotted-underline">48 Boulevard Jean-Baptiste Lebas, 59000 Lille</span><br>
         <span class="solid-underline">atelier.langage@outlook.fr</span>
     </div>
