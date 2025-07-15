@@ -68,6 +68,8 @@
             right: 0;
             z-index: 1;
             pointer-events: none;
+            opacity: 1;
+            transition: opacity 0.3s ease;
         }
 
         .gradient-overlay.top {
@@ -377,16 +379,19 @@
             });
         });
 
-        // Handle nav color change on scroll
+        // Handle nav color change and gradient visibility on scroll
         const navItem = document.querySelector('.nav-item');
+        const gradientOverlays = document.querySelectorAll('.gradient-overlay');
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     // We're in the white section
                     navItem.classList.add('black-text');
+                    gradientOverlays.forEach(overlay => overlay.classList.add('hidden'));
                 } else {
                     // We're in the main section
                     navItem.classList.remove('black-text');
+                    gradientOverlays.forEach(overlay => overlay.classList.remove('hidden'));
                 }
             });
         }, {
