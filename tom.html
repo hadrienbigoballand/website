@@ -207,6 +207,18 @@
             transform: translateX(-50%) translateY(-2px);
         }
 
+        /* Dark version for light backgrounds */
+        .discover-button.dark {
+            background: rgba(0, 0, 0, 0.25);
+            border: 1px solid rgba(0, 0, 0, 0.3);
+            color: black;
+            text-shadow: 0 2px 4px rgba(255,255,255,0.6);
+        }
+
+        .discover-button.dark:hover {
+            background: rgba(0, 0, 0, 0.35);
+        }
+
         .bold {
             font-weight: 600;
         }
@@ -293,6 +305,48 @@
         video.querySelector('source').src = bgVideoPath;
         video.load(); // Reload video with new source
         
+        // Function to detect brightness of background video
+        function detectBrightness() {
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = 100;
+            canvas.height = 100;
+            
+            try {
+                ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+                const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+                const data = imageData.data;
+                
+                let totalBrightness = 0;
+                for (let i = 0; i < data.length; i += 4) {
+                    const r = data[i];
+                    const g = data[i + 1];
+                    const b = data[i + 2];
+                    // Calculate relative luminance
+                    const brightness = (0.299 * r + 0.587 * g + 0.114 * b);
+                    totalBrightness += brightness;
+                }
+                
+                const avgBrightness = totalBrightness / (data.length / 4);
+                return avgBrightness > 128; // Return true if bright, false if dark
+            } catch (error) {
+                console.log('Cannot detect brightness, using default');
+                return false; // Default to dark background assumption
+            }
+        }
+        
+        // Apply button style based on background brightness
+        function updateButtonStyle() {
+            const discoverButton = document.querySelector('.discover-button');
+            const isBright = detectBrightness();
+            
+            if (isBright) {
+                discoverButton.classList.add('dark');
+            } else {
+                discoverButton.classList.remove('dark');
+            }
+        }
+        
         const loadingOverlay = document.querySelector('.loading-overlay');
         let hasPlayedOnce = false;
 
@@ -306,6 +360,10 @@
                 video.classList.add('loaded');
                 setTimeout(() => {
                     loadingOverlay.classList.add('hidden');
+                    // Update button style after video loads
+                    setTimeout(() => {
+                        updateButtonStyle();
+                    }, 500);
                 }, 300);
             }
         };
