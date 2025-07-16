@@ -6,30 +6,114 @@
     <title>Langage Architectes</title>
     <style>
         @font-face {
-            font-family: 'Helvetica';
-            src: url('fonts/Helvetica.ttf') format('truetype');
-            font-weight: 400;
+            font-family: 'Helvetica Neue';
+            src: url('fonts/HelveticaNeueRoman.otf') format('opentype');
+            font-weight: normal;
             font-style: normal;
         }
-
+        
         @font-face {
-            font-family: 'Helvetica';
-            src: url('fonts/Helvetica-Bold.ttf') format('truetype');
-            font-weight: 700;
+            font-family: 'Helvetica Neue';
+            src: url('fonts/HelveticaNeueItalic.ttf') format('truetype');
+            font-weight: normal;
+            font-style: italic;
+        }
+        
+        @font-face {
+            font-family: 'Helvetica Neue';
+            src: url('fonts/HelveticaNeueThin.otf') format('opentype');
+            font-weight: 100;
             font-style: normal;
         }
-
+        
         @font-face {
-            font-family: 'Helvetica';
-            src: url('fonts/Helvetica-Light.ttf') format('truetype');
+            font-family: 'Helvetica Neue';
+            src: url('fonts/HelveticaNeueThinItalic.otf') format('opentype');
+            font-weight: 100;
+            font-style: italic;
+        }
+        
+        @font-face {
+            font-family: 'Helvetica Neue';
+            src: url('fonts/HelveticaNeueUltraLight.otf') format('opentype');
+            font-weight: 200;
+            font-style: normal;
+        }
+        
+        @font-face {
+            font-family: 'Helvetica Neue';
+            src: url('fonts/HelveticaNeueUltraLightItalic.otf') format('opentype');
+            font-weight: 200;
+            font-style: italic;
+        }
+        
+        @font-face {
+            font-family: 'Helvetica Neue';
+            src: url('fonts/HelveticaNeueLight.otf') format('opentype');
             font-weight: 300;
             font-style: normal;
         }
-
+        
         @font-face {
-            font-family: 'Helvetica';
-            src: url('fonts/Helvetica-Oblique.ttf') format('truetype');
-            font-weight: 400;
+            font-family: 'Helvetica Neue';
+            src: url('fonts/HelveticaNeueLightItalic.otf') format('opentype');
+            font-weight: 300;
+            font-style: italic;
+        }
+        
+        @font-face {
+            font-family: 'Helvetica Neue';
+            src: url('fonts/HelveticaNeueMedium.otf') format('opentype');
+            font-weight: 500;
+            font-style: normal;
+        }
+        
+        @font-face {
+            font-family: 'Helvetica Neue';
+            src: url('fonts/HelveticaNeueMediumItalic.otf') format('opentype');
+            font-weight: 500;
+            font-style: italic;
+        }
+        
+        @font-face {
+            font-family: 'Helvetica Neue';
+            src: url('fonts/HelveticaNeueBold.otf') format('opentype');
+            font-weight: 700;
+            font-style: normal;
+        }
+        
+        @font-face {
+            font-family: 'Helvetica Neue';
+            src: url('fonts/HelveticaNeueBoldItalic.otf') format('opentype');
+            font-weight: 700;
+            font-style: italic;
+        }
+        
+        @font-face {
+            font-family: 'Helvetica Neue';
+            src: url('fonts/HelveticaNeueHeavy.otf') format('opentype');
+            font-weight: 800;
+            font-style: normal;
+        }
+        
+        @font-face {
+            font-family: 'Helvetica Neue';
+            src: url('fonts/HelveticaNeueHeavyItalic.otf') format('opentype');
+            font-weight: 800;
+            font-style: italic;
+        }
+        
+        @font-face {
+            font-family: 'Helvetica Neue';
+            src: url('fonts/HelveticaNeueBlack.otf') format('opentype');
+            font-weight: 900;
+            font-style: normal;
+        }
+        
+        @font-face {
+            font-family: 'Helvetica Neue';
+            src: url('fonts/HelveticaNeueBlackItalic.otf') format('opentype');
+            font-weight: 900;
             font-style: italic;
         }
 
@@ -47,7 +131,7 @@
 
         body {
             height: 100vh;
-            font-family: 'Helvetica', Arial, sans-serif;
+            font-family: 'Helvetica Neue', sans-serif;
             overflow-x: hidden;
             overflow-y: auto;
             scroll-behavior: smooth;
@@ -158,6 +242,7 @@
             font-weight: 500;
             transition: color 0.3s ease, text-shadow 0.3s ease;
             text-shadow: 0 2px 4px rgba(0,0,0,0.6);
+            letter-spacing: 0.15em;
         }
 
         .nav-item.black-text {
@@ -172,7 +257,7 @@
             transform: translateX(-50%);
             width: 215px;
             color: white;
-            font-weight: 300;
+            font-weight: 350;
             font-size: 14px;
             line-height: 1.6;
             text-align: justify;
@@ -199,7 +284,7 @@
             left: 50%;
             transform: translateX(-50%);
             color: white;
-            font-weight: 300;
+            font-weight: 350;
             font-size: 12px;
             text-align: center;
             z-index: 1000;
@@ -219,7 +304,7 @@
         }
 
         .bold {
-            font-weight: 700;
+            font-weight: 600;
         }
         .italic {
             font-style: italic;
