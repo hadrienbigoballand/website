@@ -347,8 +347,9 @@
                loop 
                preload="metadata"
                playsinline 
-               webkit-playsinline>
-            <source src="backgrounds/video_1/bg_video.webm" type="video/webm; codecs=vp9">
+               webkit-playsinline
+               poster="https://github.com/hadrienbigoballand/website/releases/download/v1/bg_image_1.webp">
+            <source src="https://github.com/hadrienbigoballand/website/releases/download/v1/bg_video_1.webm" type="video/webm; codecs=vp9">
         </video>
         
         <nav class="nav">
@@ -395,9 +396,9 @@
         
         // Select and apply background
         const selectedBg = getNextBackground();
-        const bgVideoPath = `https://cdn.jsdelivr.net/gh/hadrienbigoballand/website@v1/bg_video_${selectedBg}.webm`;
-        const bgImagePath = `https://cdn.jsdelivr.net/gh/hadrienbigoballand/website@v1/bg_image_${selectedBg}.webp`;
-        
+        const bgVideoPath = `https://github.com/hadrienbigoballand/website/releases/download/v1/bg_video_${selectedBg}.webm`;
+        const bgImagePath = `https://github.com/hadrienbigoballand/website/releases/download/v1/bg_image_${selectedBg}.webp`;
+
         // Set loading overlay background image
         const loadingOverlay = document.querySelector('.loading-overlay');
         loadingOverlay.style.backgroundImage = `url('${bgImagePath}')`;
