@@ -463,7 +463,6 @@
             const wait = Math.max(0, MIN_IMAGE_SHOW - (performance.now() - shownAt));
             setTimeout(() => {
             vid.classList.add('loaded');
-            img.classList.add('hidden');
             }, wait);
         }
 
