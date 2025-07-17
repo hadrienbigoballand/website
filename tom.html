@@ -439,10 +439,22 @@
             vid.load();
         };
 
-        // decode the already-set img, then hide loader & start video
-        (img.decode ? img.decode() : Promise.resolve())
-            .then(showImageAndLoadVideo)
-            .catch(showImageAndLoadVideo);
+        // This is the new, more robust logic
+        img.onload = () => {
+            (img.decode ? img.decode() : Promise.resolve())
+                .then(showImageAndLoadVideo)
+                .catch(showImageAndLoadVideo);
+        };
+
+        // Also handle the rare case of a real error
+        img.onerror = showImageAndLoadVideo;
+
+        // If the image is already loaded and cached by the browser,
+        // the 'onload' event might not fire. This line handles that case.
+        if (img.complete) {
+            img.onload();
+        }
+
 
         let swapped = false;
         function handleVideoReady() {
