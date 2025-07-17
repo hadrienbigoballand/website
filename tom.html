@@ -1,6 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <script>
+        // 1A. Pick one background and expose its URLs globally
+        const BGS = ['1','2','3','4','5'];
+        function getNextBackground() {
+            const last = localStorage.getItem('lastBackground');
+            let idx = last ? BGS.indexOf(last) : 0;
+            idx = (idx + 1) % BGS.length;
+            localStorage.setItem('lastBackground', BGS[idx]);
+            return BGS[idx];
+        }
+        const sel = getNextBackground();
+        window.bgImagePath = `https://github.com/hadrienbigoballand/website/releases/download/v1/bg_image_${sel}.webp`;
+        window.bgVideoPath = `https://github.com/hadrienbigoballand/website/releases/download/v1/bg_video_${sel}.webm`;
+
+        // 1B. Preload exactly that one image
+        const link = document.createElement('link');
+        link.rel  = 'preload';
+        link.as   = 'image';
+        link.href = window.bgImagePath;
+        document.head.appendChild(link);
+    </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Langage Architectes</title>
@@ -361,7 +382,9 @@
         <div class="gradient-overlay bottom"></div>
         
         <img class="image-background" />
-        
+        <script>
+            document.querySelector('.image-background').src = window.bgImagePath;
+        </script>
         <video class="video-background" 
                autoplay 
                muted 
@@ -395,105 +418,55 @@
     </div>
 
     <script>
+    // Background selection system - sequential cycling
+    
+    // Select and apply background
+
     document.addEventListener('DOMContentLoaded', () => {
-        // Background selection system - sequential cycling
-        const availableBackgrounds = ['1', '2', '3', '4', '5'];
+        const img = document.querySelector('.image-background');
+        const vid = document.querySelector('.video-background');
+        const loader = document.querySelector('.loading-overlay');
+        const MIN_IMAGE_SHOW = 500;
+        let shownAt;
 
-        function getNextBackground() {
-            const lastUsed = localStorage.getItem('lastBackground');
-            let currentIndex = 0;
-            
-            if (lastUsed) {
-                currentIndex = availableBackgrounds.indexOf(lastUsed);
-                // Move to next video, or back to first if we're at the end
-                currentIndex = (currentIndex + 1) % availableBackgrounds.length;
-            }
-            
-            const selectedBackground = availableBackgrounds[currentIndex];
-            localStorage.setItem('lastBackground', selectedBackground);
-            return selectedBackground;
+        // decode the already-set img, then hide loader & start video
+        (img.decode ? img.decode() : Promise.resolve())
+            .then(() => {
+            shownAt = performance.now();
+            loader.classList.add('hidden');
+            img.classList.add('loaded');
+            vid.querySelector('source').src = window.bgVideoPath;
+            vid.load();
+            })
+            .catch(() => {
+            loader.classList.add('hidden');
+            vid.querySelector('source').src = window.bgVideoPath;
+            vid.load();
+            });
+
+        let swapped = false;
+        function handleVideoReady() {
+            if (swapped) return;
+            swapped = true;
+            const wait = Math.max(0, MIN_IMAGE_SHOW - (performance.now() - shownAt));
+            setTimeout(() => {
+            vid.classList.add('loaded');
+            img.classList.add('hidden');
+            }, wait);
         }
-        
-        // Select and apply background
-        const selectedBg = getNextBackground();
-        const bgVideoPath = `https://github.com/hadrienbigoballand/website/releases/download/v1/bg_video_${selectedBg}.webm`;
-        const bgImagePath = `https://github.com/hadrienbigoballand/website/releases/download/v1/bg_image_${selectedBg}.webp`;
 
-        const loadingOverlay = document.querySelector('.loading-overlay');
-        const imageBackground = document.querySelector('.image-background');
-        const video = document.querySelector('.video-background');
-        
-        let imageLoaded = false;
-        let videoReady = false;
-
-        // Load image first
-        imageBackground.onload = () => {
-            imageLoaded = true;
-            imageBackground.classList.add('loaded');
-            loadingOverlay.classList.add('hidden');
-            
-            // Start loading video after image is shown
-            video.querySelector('source').src = bgVideoPath;
-            video.load();
-        };
-
-        imageBackground.onerror = () => {
-            console.log('Image failed to load');
-            loadingOverlay.classList.add('hidden');
-            // Still try to load video
-            video.querySelector('source').src = bgVideoPath;
-            video.load();
-        };
-
-        // Set image source to start loading
-        imageBackground.src = bgImagePath;
-
-        // Handle video loading
-        const handleVideoReady = () => {
-            if (!videoReady) {
-                videoReady = true;
-                video.classList.add('loaded');
-                // Hide image background when video starts playing
-                setTimeout(() => {
-                    imageBackground.classList.add('hidden');
-                }, 300);
-            }
-        };
-
-        // Video event listeners
-        video.addEventListener('loadedmetadata', () => {
-            const playPromise = video.play();
-            
-            if (playPromise !== undefined) {
-                playPromise
-                    .then(handleVideoReady)
-                    .catch((error) => {
-                        console.log('Autoplay prevented:', error);
-                        
-                        const enableVideoOnInteraction = () => {
-                            video.play().then(handleVideoReady);
-                            document.removeEventListener('click', enableVideoOnInteraction);
-                            document.removeEventListener('touchstart', enableVideoOnInteraction);
-                        };
-                        
-                        document.addEventListener('click', enableVideoOnInteraction, { passive: true });
-                        document.addEventListener('touchstart', enableVideoOnInteraction, { passive: true });
-                    });
-            }
+        vid.addEventListener('loadedmetadata', () => {
+            vid.play().then(handleVideoReady).catch(() => {
+            const onInt = () => { vid.play().then(handleVideoReady); 
+                document.removeEventListener('click', onInt);
+                document.removeEventListener('touchstart', onInt);
+            };
+            document.addEventListener('click', onInt, { passive: true });
+            document.addEventListener('touchstart', onInt, { passive: true });
+            });
         });
-
-        video.addEventListener('canplay', () => {
-            if (!videoReady) {
-                video.play().then(handleVideoReady).catch(() => {});
-            }
-        });
-
-        video.addEventListener('playing', handleVideoReady);
-
-        video.addEventListener('error', (e) => {
-            console.log('Video error:', e);
-            video.style.display = 'none';
-        });
+        vid.addEventListener('canplay', () => vid.play().then(handleVideoReady).catch(()=>{}));
+        vid.addEventListener('error', () => vid.style.display = 'none');
 
         // Smooth scroll functionality - change from button click to main section click
         document.querySelector('.main-section').addEventListener('click', (e) => {
