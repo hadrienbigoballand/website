@@ -376,7 +376,7 @@
     <script>
     document.addEventListener('DOMContentLoaded', () => {
         // Background selection system - sequential cycling
-        const availableBackgrounds = ['video_1', 'video_2', 'video_3', 'video_4', 'video_5'];
+        const availableBackgrounds = ['1', '2', '3', '4', '5'];
 
         function getNextBackground() {
             const lastUsed = localStorage.getItem('lastBackground');
@@ -395,8 +395,8 @@
         
         // Select and apply background
         const selectedBg = getNextBackground();
-        const bgVideoPath = `backgrounds/${selectedBg}/bg_video.webm`;
-        const bgImagePath = `backgrounds/${selectedBg}/bg_image.webp`;
+        const bgVideoPath = `https://cdn.jsdelivr.net/gh/hadrienbigoballand/website@v1/bg_video_${selectedBg}.webm`;
+        const bgImagePath = `https://cdn.jsdelivr.net/gh/hadrienbigoballand/website@v1/bg_image_${selectedBg}.webp`;
         
         // Set loading overlay background image
         const loadingOverlay = document.querySelector('.loading-overlay');
