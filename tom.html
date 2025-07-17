@@ -430,19 +430,19 @@
         let shownAt;
 
         // decode the already-set img, then hide loader & start video
-        (img.decode ? img.decode() : Promise.resolve())
-            .then(() => {
+        const showImageAndLoadVideo = () => {
+            if (shownAt) return; // Ensure this only runs once
             shownAt = performance.now();
             loader.classList.add('hidden');
             img.classList.add('loaded');
             vid.querySelector('source').src = window.bgVideoPath;
             vid.load();
-            })
-            .catch(() => {
-            loader.classList.add('hidden');
-            vid.querySelector('source').src = window.bgVideoPath;
-            vid.load();
-            });
+        };
+
+        // decode the already-set img, then hide loader & start video
+        (img.decode ? img.decode() : Promise.resolve())
+            .then(showImageAndLoadVideo)
+            .catch(showImageAndLoadVideo);
 
         let swapped = false;
         function handleVideoReady() {
