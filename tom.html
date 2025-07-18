@@ -418,17 +418,18 @@
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
-                    // We're in the white section
+                    // We're in the white section - always show black text
                     navItem.classList.add('black-text');
                 } else {
-                    // We're in the main section - only remove black-text if video is loaded
+                    // We're in the main section - show white text (remove black-text and loading)
+                    navItem.classList.remove('black-text');
                     if (videoReady) {
-                        navItem.classList.remove('black-text');
+                        navItem.classList.remove('loading');
                     }
                 }
             });
         }, {
-            threshold: 0.5
+            threshold: 0.1
         });
 
         observer.observe(document.getElementById('white-section'));
