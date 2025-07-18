@@ -414,28 +414,40 @@
             });
         });
 
-        // Handle nav color change on scroll
-        const nav      = document.querySelector('.nav');
-        const navHeight = nav.getBoundingClientRect().height;
+        // Handle nav color change on scroll (scroll‐based logic)
+        const nav         = document.querySelector('.nav');
+        const mainSection = document.querySelector('.main-section');
+        const navHeight   = nav.getBoundingClientRect().height;
 
-        const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            // use intersectionRatio > 0 so that you only switch
-            // once a sliver of the white section is actually visible
-            if (entry.intersectionRatio > 0) {
-            navItem.classList.add('black-text');
-            } else {
+        // called when the first frame of the video is ready
+        vid.addEventListener('loadeddata', () => {
+        videoReady = true;
+        loader.classList.add('hidden');
+        vid.classList.add('loaded');
+        updateNav();
+        });
+
+        // decide which classes to apply based on load + scroll
+        function updateNav() {
+        const atSecondPage = window.scrollY >= (mainSection.offsetHeight - navHeight);
+
+        if (!videoReady) {
+            // still loading: black, no shadow
+            navItem.classList.add('loading');
             navItem.classList.remove('black-text');
-            }
-        });
-        }, {
-        // move the “viewport top” down by your nav’s height
-        rootMargin: `-${navHeight}px 0px 0px 0px`,
-        // wait for at least 1% of the target to be visible
-        threshold: 0.01
-        });
+        } else if (atSecondPage) {
+            // on white section: black, no shadow
+            navItem.classList.add('black-text');
+            navItem.classList.remove('loading');
+        } else {
+            // video is playing & ready: white + shadow
+            navItem.classList.remove('black-text', 'loading');
+        }
+        }
 
-        observer.observe(document.getElementById('white-section'));
+        // wire it up
+        window.addEventListener('scroll', updateNav, { passive: true });
+        updateNav();
 
         // Prevent overscroll on mobile devices
         let startY = 0;
