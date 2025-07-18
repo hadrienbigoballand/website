@@ -419,33 +419,33 @@
         const mainSection = document.querySelector('.main-section');
         const navHeight   = nav.getBoundingClientRect().height;
 
-        // called when the first frame of the video is ready
+        // when video’s first frame arrives, keep your bottomText logic here:
         vid.addEventListener('loadeddata', () => {
         videoReady = true;
         loader.classList.add('hidden');
         vid.classList.add('loaded');
+        // <-- leave this line as-is to restore bottom text:
+        bottomText.classList.remove('loading');
         updateNav();
         });
 
-        // decide which classes to apply based on load + scroll
         function updateNav() {
         const atSecondPage = window.scrollY >= (mainSection.offsetHeight - navHeight);
 
         if (!videoReady) {
-            // still loading: black, no shadow
+            // still loading: black title, no shadow
             navItem.classList.add('loading');
             navItem.classList.remove('black-text');
         } else if (atSecondPage) {
-            // on white section: black, no shadow
+            // on white section: black title, no shadow
             navItem.classList.add('black-text');
             navItem.classList.remove('loading');
         } else {
-            // video is playing & ready: white + shadow
+            // video is ready & you're in first section: white title + shadow
             navItem.classList.remove('black-text', 'loading');
         }
         }
 
-        // wire it up
         window.addEventListener('scroll', updateNav, { passive: true });
         updateNav();
 
