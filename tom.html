@@ -415,20 +415,24 @@
         });
 
         // Handle nav color change on scroll
-        const nav = document.querySelector('.nav');
-        const navHeight = nav.getBoundingClientRect().height;  // e.g. 60
+        const nav      = document.querySelector('.nav');
+        const navHeight = nav.getBoundingClientRect().height;
 
         const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
-            if (entry.isIntersecting) {
-            nav.querySelector('.nav-item').classList.add('black-text');
+            // use intersectionRatio > 0 so that you only switch
+            // once a sliver of the white section is actually visible
+            if (entry.intersectionRatio > 0) {
+            navItem.classList.add('black-text');
             } else {
-            nav.querySelector('.nav-item').classList.remove('black-text');
+            navItem.classList.remove('black-text');
             }
         });
         }, {
-        rootMargin: `-${navHeight}px 0px 0px 0px`,  // push the “viewport top” down by navHeight
-        threshold: 0                             // fire as soon as *any* part hits
+        // move the “viewport top” down by your nav’s height
+        rootMargin: `-${navHeight}px 0px 0px 0px`,
+        // wait for at least 1% of the target to be visible
+        threshold: 0.01
         });
 
         observer.observe(document.getElementById('white-section'));
