@@ -418,7 +418,7 @@
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
-                    // We're in the white section - show black text
+                    // We're touching/entering the white section - show black text
                     navItem.classList.add('black-text');
                 } else {
                     // We're in the main section - show white text
@@ -430,7 +430,7 @@
                 }
             });
         }, {
-            threshold: 0.1
+            threshold: 0.01
         });
 
         observer.observe(document.getElementById('white-section'));
