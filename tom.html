@@ -12,15 +12,7 @@
             return BGS[idx];
         }
         const sel = getNextBackground();
-        window.bgImagePath = `backgrounds/bg_image_${sel}.webp`;
         window.bgVideoPath = `https://github.com/hadrienbigoballand/website/releases/download/v1/bg_video_${sel}.webm`;
-
-        // 1B. Preload exactly that one image
-        const link = document.createElement('link');
-        link.rel  = 'preload';
-        link.as   = 'image';
-        link.href = window.bgImagePath;
-        document.head.appendChild(link);
     </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -156,7 +148,7 @@
             overflow-x: hidden;
             overflow-y: auto;
             scroll-behavior: smooth;
-            background-color: black;
+            background-color: white;
             overscroll-behavior: none;
             overscroll-behavior-y: none;
             position: relative;
@@ -203,58 +195,13 @@
             opacity: 1;
         }
 
-        .image-background {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            z-index: -1;
-            opacity: 0;
-            transition: opacity 0.0s ease-in-out;
-            will-change: opacity;
-        }
-
-        .image-background.loaded {
-            opacity: 1;
-        }
-
-        .image-background.hidden {
-            opacity: 0;
-        }
-
-        .gradient-overlay {
-            position: absolute;
-            left: 0;
-            right: 0;
-            z-index: 1;
-            pointer-events: none;
-        }
-
-        .gradient-overlay.top {
-            top: -100px;
-            height: 220px;
-            background: linear-gradient(to bottom, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.4) 45%, rgba(0,0,0,0.2) 73%, rgba(0,0,0,0) 100%);
-        }
-
-        .gradient-overlay.bottom {
-            bottom: 0;
-            height: 100px;
-            background: linear-gradient(to top, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.2) 50%, rgba(0,0,0,0) 100%);
-        }
-
-        .gradient-overlay.hidden {
-            opacity: 0;
-        }
-
         .loading-overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: black;
+            background-color: white;
             z-index: -2;
             opacity: 1;
             transition: opacity 0.0s ease-in-out;
@@ -283,6 +230,11 @@
             transition: color 0.3s ease, text-shadow 0.3s ease;
             text-shadow: 0 2px 4px rgba(0,0,0,0.6);
             letter-spacing: 0.10em;
+        }
+
+        .nav-item.loading {
+            color: black;
+            text-shadow: none;
         }
 
         .nav-item.black-text {
@@ -329,10 +281,15 @@
             text-align: center;
             z-index: 1000;
             white-space: nowrap;
-            transition: color 0.3s ease;
+            transition: color 0.3s ease, text-shadow 0.3s ease;
             text-shadow: 0 2px 4px rgba(0,0,0,0.6);
             text-transform: uppercase;
             letter-spacing: 0.02em;
+        }
+
+        .bottom-text.loading {
+            color: black;
+            text-shadow: none;
         }
 
         .dotted-underline {
@@ -381,10 +338,6 @@
         <div class="gradient-overlay top"></div>
         <div class="gradient-overlay bottom"></div>
         
-        <img class="image-background" />
-        <script>
-            document.querySelector('.image-background').src = window.bgImagePath;
-        </script>
         <video class="video-background" 
                autoplay 
                muted 
@@ -396,12 +349,12 @@
         </video>
         
         <nav class="nav">
-        <div class="nav-item">
+        <div class="nav-item loading">
             <span class="brand">LANGAGE</span>
         </div>
         </nav>
 
-        <div class="bottom-text">
+        <div class="bottom-text loading">
             Bureau d'architecture<br>
             Tom Bigo-Balland - Louis Ducancelle<br>
             48 Boulevard Jean-Baptiste Lebas, 59000 Lille<br>
@@ -418,62 +371,36 @@
     </div>
 
     <script>
-    // Background selection system - sequential cycling
-    
-    // Select and apply background
-
     document.addEventListener('DOMContentLoaded', () => {
-        const img = document.querySelector('.image-background');
         const vid = document.querySelector('.video-background');
         const loader = document.querySelector('.loading-overlay');
-        const MIN_IMAGE_SHOW = 500;
-        let shownAt;
+        const navItem = document.querySelector('.nav-item');
+        const bottomText = document.querySelector('.bottom-text');
 
-        // decode the already-set img, then hide loader & start video
-        const showImageAndLoadVideo = () => {
-            if (shownAt) return; // Ensure this only runs once
-            shownAt = performance.now();
-            loader.classList.add('hidden');
-            img.classList.add('loaded');
-            vid.querySelector('source').src = window.bgVideoPath;
-            vid.load();
-        };
+        // Set video source
+        vid.querySelector('source').src = window.bgVideoPath;
+        vid.load();
 
-        // This is the new, more robust logic
-        img.onload = () => {
-            (img.decode ? img.decode() : Promise.resolve())
-                .then(showImageAndLoadVideo)
-                .catch(showImageAndLoadVideo);
-        };
-
-        // Also handle the rare case of a real error
-        img.onerror = showImageAndLoadVideo;
-
-        // If the image is already loaded and cached by the browser,
-        // the 'onload' event might not fire. This line handles that case.
-        if (img.complete) {
-            img.onload();
-        }
-
-
-        let swapped = false;
+        let videoReady = false;
         function handleVideoReady() {
-            if (swapped) return;
-            swapped = true;
-            const wait = Math.max(0, MIN_IMAGE_SHOW - (performance.now() - shownAt));
-            setTimeout(() => {
+            if (videoReady) return;
+            videoReady = true;
+            loader.classList.add('hidden');
             vid.classList.add('loaded');
-            }, wait);
+            // Remove loading classes to show white text with shadow
+            navItem.classList.remove('loading');
+            bottomText.classList.remove('loading');
         }
 
         vid.addEventListener('loadedmetadata', () => {
             vid.play().then(handleVideoReady).catch(() => {
-            const onInt = () => { vid.play().then(handleVideoReady); 
-                document.removeEventListener('click', onInt);
-                document.removeEventListener('touchstart', onInt);
-            };
-            document.addEventListener('click', onInt, { passive: true });
-            document.addEventListener('touchstart', onInt, { passive: true });
+                const onInt = () => { 
+                    vid.play().then(handleVideoReady); 
+                    document.removeEventListener('click', onInt);
+                    document.removeEventListener('touchstart', onInt);
+                };
+                document.addEventListener('click', onInt, { passive: true });
+                document.addEventListener('touchstart', onInt, { passive: true });
             });
         });
         vid.addEventListener('canplay', () => vid.play().then(handleVideoReady).catch(()=>{}));
@@ -488,15 +415,16 @@
         });
 
         // Handle nav color change on scroll
-        const navItem = document.querySelector('.nav-item');
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     // We're in the white section
                     navItem.classList.add('black-text');
                 } else {
-                    // We're in the main section
-                    navItem.classList.remove('black-text');
+                    // We're in the main section - only remove black-text if video is loaded
+                    if (videoReady) {
+                        navItem.classList.remove('black-text');
+                    }
                 }
             });
         }, {
