@@ -1614,19 +1614,5 @@ var x = setInterval(function() {
   });
 </script>
 
-<!-- Add this script to fix tooltip position dynamically -->
-<script src="js/simple-tooltip.js"></script>
-
-<!-- Page Footer -->
-<footer class="page-footer">
-  <div class="footer-content">
-    Hadrien Bigo--Balland | © 2026kHash();
-  </div>
-</footer>isten for hash changes
-nge', checkHash);
-<!-- Add the collapsible section functionality right before the closing body tag -->
-<script>
-  document.addEventListener('DOMContentLoaded', function() {
-    // Initialize collapsible sections
-    const collapsibleHeaders = document.querySelectorAll('.collapsible-header');
-        collapsibleHeaders.forEach(header => {      const sectionId = header.closest('.collapsible-section').id;            // Apply saved state on page load      if (sectionId) {        const savedState = localStorage.getItem('section_' + sectionId);        const content = header.nextElementSibling;                if (savedState === 'collapsed') {          header.classList.remove('active');          content.classList.remove('expanded');        } else if (savedState === 'expanded') {          header.classList.add('active');          content.classList.add('expanded');        }        // If no saved state, keep default (HTML classes)      }            header.addEventListener('click', function() {        // Toggle active class on header        this.classList.toggle('active');                // Get the content element that follows this header        const content = this.nextElementSibling;                // Toggle expanded class        content.classList.toggle('expanded');                // Save the state to localStorage        if (sectionId) {          const state = content.classList.contains('expanded') ? 'expanded' : 'collapsed';          localStorage.setItem('section_' + sectionId, state);        }      });    });        // Automatically expand or collapse section based on URL hash    function checkHash() {      if (window.location.hash) {        const sectionId = window.location.hash.substring(1);        const section = document.getElementById(sectionId + '-section');                if (section) {          const header = section.querySelector('.collapsible-header');          const content = header.nextElementSibling;                    if (!content.classList.contains('expanded')) {            header.classList.add('active');            content.classList.add('expanded');                        // Save state to localStorage            localStorage.setItem('section_' + section.id, 'expanded');          }        }      }    }        // Check hash on page load    checkHash();        // Listen for hash changes    window.addEventListener('hashchange', checkHash);  });</script></body></html>
+</body>
+</html>

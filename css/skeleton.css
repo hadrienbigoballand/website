@@ -33,7 +33,7 @@
     width: 100%;
     max-width: 704px;
     margin: 40px auto;
-    padding: 0 32px;
+    padding: 0 20px;
     box-sizing: border-box; }
   .column,
   .columns {
@@ -48,12 +48,16 @@
   }
   .six.columns {
     width: 100%;
+    margin-left: 0; /* Ensure no left margin */
   }
   
   /* For devices larger than 400px */
   @media (min-width: 400px) {
     .container {
       width: 85%;
+      max-width: 704px;
+      margin-left: auto;
+      margin-right: auto;
       padding: 0; }
   }
   
@@ -61,10 +65,11 @@
   @media (min-width: 550px) {
     .container {
       margin: 120px auto;
-      width: 80%; }
+      width: 80%;
+      max-width: 704px; }
     .column,
     .columns {
-      margin-left: 4%; }
+      margin-left: 0; } /* Changed from 4% to 0 */
     .column:first-child,
     .columns:first-child {
       margin-left: 0; }
@@ -78,7 +83,7 @@
     .three.columns                  { width: 22%;            }
     .four.columns                   { width: 30.6666666667%; }
     .five.columns                   { width: 39.3333333333%; }
-    .six.columns                    { width: 48%;            }
+    .six.columns                    { width: 100%; margin-left: 0; }
     .seven.columns                  { width: 56.6666666667%; }
     .eight.columns                  { width: 65.3333333333%; }
     .nine.columns                   { width: 74.0%;          }
@@ -429,4 +434,3 @@
   
   /* Larger than Desktop HD */
   @media (min-width: 1200px) {}
-  
