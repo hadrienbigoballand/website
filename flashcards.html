@@ -1693,7 +1693,22 @@
     }
   ];
 
-  $(document).ready(function() {
+  // Wait for everything to be fully loaded
+  $(window).on('load', function() {
+    // Small delay to ensure all resources are ready
+    setTimeout(initFlashcards, 100);
+  });
+  
+  // Fallback if load event already fired
+  if (document.readyState === 'complete') {
+    setTimeout(initFlashcards, 100);
+  }
+
+  function initFlashcards() {
+    // Prevent double initialization
+    if (window.flashcardsInitialized) return;
+    window.flashcardsInitialized = true;
+    
     var currentCardIndex = 0;
     var animationInProgress = false;
     var navigationFailSafeTimer = null;
@@ -1735,15 +1750,18 @@
     
     // Function to update the visibility of navigation arrows
     function updateArrowVisibility() {
+      var $prevArrow = $('#prev-arrow');
+      var $nextArrow = $('#next-arrow');
+      
       // Hide left arrow on first card
       if (currentCardIndex === 0) {
-        $('#prev-arrow').addClass('hidden').css({
+        $prevArrow.addClass('hidden').css({
           'opacity': '0',
           'visibility': 'hidden',
           'pointer-events': 'none'
         });
       } else {
-        $('#prev-arrow').removeClass('hidden').css({
+        $prevArrow.removeClass('hidden').css({
           'opacity': '',
           'visibility': '',
           'pointer-events': ''
@@ -1752,273 +1770,18 @@
       
       // Hide right arrow on last card
       if (currentCardIndex === flashcards.length - 1) {
-        $('#next-arrow').addClass('hidden').css({
+        $nextArrow.addClass('hidden').css({
           'opacity': '0',
           'visibility': 'hidden',
           'pointer-events': 'none'
         });
       } else {
-        $('#next-arrow').removeClass('hidden').css({
+        $nextArrow.removeClass('hidden').css({
           'opacity': '',
           'visibility': '',
           'pointer-events': ''
         });
       }
-    }
-    
-    // Initialize carousel by creating all cards
-    function initializeCarousel() {
-      const carouselTrack = $('#carousel-track');
-      const dotContainer = $('#carousel-dots');
-      
-      // Clear track
-      carouselTrack.empty();
-      dotContainer.empty();
-      
-      // Generate all flashcard elements
-      flashcards.forEach((card, index) => {
-        // Create flashcard container
-        const cardContainer = $(`
-          <div class="flashcard-container ${index === currentCardIndex ? 'active' : ''}">
-            <div class="flashcard">
-              <div class="card-face front">
-                <div class="card-content">${card.question}</div>
-                <div class="card-number">${index + 1} / ${flashcards.length}</div>
-                <div class="card-hint">Cliquez pour voir la réponse</div>
-                ${index === 0 ? '<div class="bounce-hint">↓</div>' : ''}
-              </div>
-              <div class="card-face back">
-                <div class="card-content">${card.answer}</div>
-                <div class="card-number">${index + 1} / ${flashcards.length}</div>
-                <div class="card-hint">Cliquez pour voir la question</div>
-              </div>
-            </div>
-          </div>
-        `);
-        
-        // Append card to track
-        carouselTrack.append(cardContainer);
-      });
-      
-      // Create new navigation system
-      createProgressNavigation();
-      
-      // Add click handler to flip cards
-      $('.flashcard').off('click').on('click', function() {
-        const cardIndex = $(this).closest('.flashcard-container').index();
-        if (cardIndex === currentCardIndex) {
-          flipCurrentCard();
-        }
-      });
-      
-      // Set appropriate relative positions for prev/active/next cards
-      updateCardClasses();
-      
-      // Process MathJax for all cards at once
-      if (window.MathJax) {
-        MathJax.typesetPromise().then(() => {
-          // Add indicators for overflowing equations
-          checkAndAddScrollIndicators();
-        }).catch((err) => console.log('MathJax error:', err));
-      }
-
-      // Remove bounce hint since we have persistent hints now
-      $('.bounce-hint').remove();
-
-      // Initialize arrow visibility immediately
-      setTimeout(function() {
-        updateArrowVisibility();
-      }, 100);
-    }
-    
-    // Create new progress bar navigation
-    function createProgressNavigation() {
-      // Remove old dots if they exist
-      $('.carousel-dots').hide();
-      
-      // Remove existing navigation if present (prevent duplicates)
-      $('.carousel-nav').remove();
-      
-      // Create new navigation container
-      const navContainer = $('<div class="carousel-nav"></div>');
-      const progressTrack = $('<div class="progress-track"></div>');
-      const progressFill = $('<div class="progress-fill"></div>');
-      const positionIndicator = $('<div class="position-indicator"></div>');
-      
-      // Set initial progress fill width
-      const progressPercent = (currentCardIndex / (flashcards.length - 1)) * 100;
-      progressFill.css('width', `${progressPercent}%`);
-      
-      // Set initial position indicator
-      positionIndicator.text(`${currentCardIndex + 1} / ${flashcards.length}`);
-      const positionPercent = (currentCardIndex / (flashcards.length - 1)) * 100;
-      positionIndicator.css('left', `${positionPercent}%`);
-      
-      // Add progress track to container
-      progressTrack.append(progressFill);
-      navContainer.append(positionIndicator);
-      navContainer.append(progressTrack);
-      
-      // Create markers for each card
-      for (let i = 0; i < flashcards.length; i++) {
-        const markerPosition = (i / (flashcards.length - 1)) * 100;
-        const marker = $(`<div class="nav-marker ${i === currentCardIndex ? 'active' : ''}" data-index="${i}"></div>`);
-        
-        // Create tooltip for this marker
-        const tooltip = $(`<div class="card-tooltip">${flashcards[i].question}</div>`);
-        
-        // Truncate long questions for tooltip
-        const maxLength = 100;
-        let tooltipText = flashcards[i].question;
-        if (tooltipText.length > maxLength) {
-          tooltipText = tooltipText.substring(0, maxLength) + '...';
-        }
-        // Strip HTML tags for tooltip
-        tooltipText = tooltipText.replace(/<[^>]*>?/gm, '');
-        tooltip.text(tooltipText);
-        
-        marker.append(tooltip);
-        marker.css('left', `${markerPosition}%`);
-        progressTrack.append(marker);
-        
-        // Add click handler for direct navigation
-        marker.on('click', function() {
-          checkAndUnlockIfStuck();
-          const index = parseInt($(this).data('index'));
-          if (!animationInProgress && index !== currentCardIndex) {
-            goToCard(index);
-          }
-        });
-      }
-      
-      // Add click handler to progress track for navigation
-      progressTrack.on('click', function(e) {
-        checkAndUnlockIfStuck();
-        if (animationInProgress) return;
-        
-        // Get clicked position relative to track width
-        const trackWidth = $(this).width();
-        const clickOffset = e.offsetX;
-        const clickPercent = clickOffset / trackWidth;
-        
-        // Calculate nearest card index
-        const targetIndex = Math.round(clickPercent * (flashcards.length - 1));
-        
-        // Navigate to that card if not already there
-        if (targetIndex !== currentCardIndex) {
-          goToCard(targetIndex);
-        }
-      });
-      
-      // Add the navigation to the page
-      $('.cards-carousel').after(navContainer);
-    }
-    
-    // Update navigation when changing cards
-    function updateNavigation() {
-      // Update progress fill
-      const progressPercent = (currentCardIndex / (flashcards.length - 1)) * 100;
-      $('.progress-fill').css('width', `${progressPercent}%`);
-      
-      // Update active marker
-      $('.nav-marker').removeClass('active');
-      $(`.nav-marker[data-index="${currentCardIndex}"]`).addClass('active');
-      
-      // Update position indicator
-      $('.position-indicator').text(`${currentCardIndex + 1} / ${flashcards.length}`);
-      $('.position-indicator').css('left', `${progressPercent}%`);
-    }
-    
-    // Update current card and adjacent card classes
-    function updateCardClasses() {
-      $('.flashcard-container').removeClass('active prev next');
-      
-      // Set active card
-      $(`.flashcard-container:eq(${currentCardIndex})`).addClass('active');
-      
-      // Set previous card if available
-      if (currentCardIndex > 0) {
-        $(`.flashcard-container:eq(${currentCardIndex - 1})`).addClass('prev');
-      }
-      
-      // Set next card if available
-      if (currentCardIndex < flashcards.length - 1) {
-        $(`.flashcard-container:eq(${currentCardIndex + 1})`).addClass('next');
-      }
-      
-      // Update track position to center the current card
-      updateTrackPosition();
-      
-      // Update dots
-      $('.carousel-dot').removeClass('active');
-      $(`.carousel-dot:eq(${currentCardIndex})`).addClass('active');
-
-      // Also update progress navigation
-      updateNavigation();
-      
-      // Update navigation arrow visibility based on current index
-      updateArrowVisibility();
-    }
-    
-    // Position the track to center the current card
-    function updateTrackPosition() {
-      const translateX = -100 * currentCardIndex;
-      $('#carousel-track').css('transform', `translateX(${translateX}%)`);
-    }
-    
-    // Go to a specific card with animation
-    function goToCard(index) {
-      // Always check for stuck state first
-      checkAndUnlockIfStuck();
-      
-      if (animationInProgress) return;
-      if (index < 0 || index >= flashcards.length) return;
-      if (index === currentCardIndex) return;
-      
-      // Clear any existing timers
-      unlockAnimation();
-      
-      animationInProgress = true;
-      lastNavigationTime = Date.now();
-      
-      // Set a fail-safe timer to reset animation state
-      animationLockTimeout = setTimeout(() => {
-        console.log("Animation timeout - force unlocking");
-        unlockAnimation();
-      }, 800);
-      
-      // Update current card index
-      currentCardIndex = index;
-      
-      // Update card classes which handles the track position
-      updateCardClasses();
-      
-      // Ensure card is showing front face
-      $(`.flashcard-container:eq(${currentCardIndex})`).find('.flashcard').removeClass('flipped');
-
-      // Listen for transition end and reset animation flag
-      const carouselTrack = document.getElementById('carousel-track');
-      
-      const onTransitionComplete = function(e) {
-        // Only respond to transform transitions on the track itself
-        if (e.target === carouselTrack && e.propertyName === 'transform') {
-          unlockAnimation();
-          carouselTrack.removeEventListener('transitionend', onTransitionComplete);
-        }
-      };
-      
-      carouselTrack.addEventListener('transitionend', onTransitionComplete);
-      
-      // Backup timeout - slightly shorter than the fail-safe
-      setTimeout(() => {
-        unlockAnimation();
-      }, 650);
-    }
-    
-    // Flip the current card
-    function flipCurrentCard() {
-      const currentCard = $(`.flashcard-container:eq(${currentCardIndex})`).find('.flashcard');
-      currentCard.toggleClass('flipped');
     }
     
     // Go to next card
@@ -2035,23 +1798,105 @@
       }
     }
     
-    // Update progress bar
-    function updateProgressBar() {
+    // Flip the current card
+    function flipCurrentCard() {
+      var $currentCard = $('.flashcard-container').eq(currentCardIndex).find('.flashcard');
+      $currentCard.toggleClass('flipped');
+    }
+    
+    // Position the track to center the current card
+    function updateTrackPosition() {
+      var translateX = -100 * currentCardIndex;
+      $('#carousel-track').css('transform', 'translateX(' + translateX + '%)');
+    }
+    
+    // Update navigation when changing cards
+    function updateNavigation() {
+      var progressPercent = (currentCardIndex / (flashcards.length - 1)) * 100;
+      $('.progress-fill').css('width', progressPercent + '%');
+      
+      $('.nav-marker').removeClass('active');
+      $('.nav-marker[data-index="' + currentCardIndex + '"]').addClass('active');
+      
+      $('.position-indicator').text((currentCardIndex + 1) + ' / ' + flashcards.length);
+      $('.position-indicator').css('left', progressPercent + '%');
+    }
+    
+    // Update current card and adjacent card classes
+    function updateCardClasses() {
+      $('.flashcard-container').removeClass('active prev next');
+      
+      $('.flashcard-container').eq(currentCardIndex).addClass('active');
+      
+      if (currentCardIndex > 0) {
+        $('.flashcard-container').eq(currentCardIndex - 1).addClass('prev');
+      }
+      
+      if (currentCardIndex < flashcards.length - 1) {
+        $('.flashcard-container').eq(currentCardIndex + 1).addClass('next');
+      }
+      
+      updateTrackPosition();
+      
+      $('.carousel-dot').removeClass('active');
+      $('.carousel-dot').eq(currentCardIndex).addClass('active');
+
       updateNavigation();
+      updateArrowVisibility();
+    }
+    
+    // Go to a specific card with animation
+    function goToCard(index) {
+      checkAndUnlockIfStuck();
+      
+      if (animationInProgress) return;
+      if (index < 0 || index >= flashcards.length) return;
+      if (index === currentCardIndex) return;
+      
+      unlockAnimation();
+      
+      animationInProgress = true;
+      lastNavigationTime = Date.now();
+      
+      animationLockTimeout = setTimeout(function() {
+        console.log("Animation timeout - force unlocking");
+        unlockAnimation();
+      }, 800);
+      
+      currentCardIndex = index;
+      
+      updateCardClasses();
+      
+      $('.flashcard-container').eq(currentCardIndex).find('.flashcard').removeClass('flipped');
+
+      var carouselTrack = document.getElementById('carousel-track');
+      
+      var onTransitionComplete = function(e) {
+        if (e.target === carouselTrack && e.propertyName === 'transform') {
+          unlockAnimation();
+          carouselTrack.removeEventListener('transitionend', onTransitionComplete);
+        }
+      };
+      
+      carouselTrack.addEventListener('transitionend', onTransitionComplete);
+      
+      setTimeout(function() {
+        unlockAnimation();
+      }, 650);
     }
     
     // Highlight key animation
     function highlightKey(keyName) {
       $(".key").each(function() {
-        if ($(this).text() === keyName) {
-          const key = $(this);
-          key.css({
+        var $key = $(this);
+        if ($key.text() === keyName) {
+          $key.css({
             "transform": "translateY(2px)",
             "opacity": "0.7"
           });
           
           setTimeout(function() {
-            key.css({
+            $key.css({
               "transform": "",
               "opacity": ""
             });
@@ -2069,13 +1914,143 @@
       });
     }
     
+    // Create progress bar navigation
+    function createProgressNavigation() {
+      $('.carousel-dots').hide();
+      $('.carousel-nav').remove();
+      
+      var navContainer = $('<div class="carousel-nav"></div>');
+      var progressTrack = $('<div class="progress-track"></div>');
+      var progressFill = $('<div class="progress-fill"></div>');
+      var positionIndicator = $('<div class="position-indicator"></div>');
+      
+      var progressPercent = (currentCardIndex / (flashcards.length - 1)) * 100;
+      progressFill.css('width', progressPercent + '%');
+      
+      positionIndicator.text((currentCardIndex + 1) + ' / ' + flashcards.length);
+      positionIndicator.css('left', progressPercent + '%');
+      
+      progressTrack.append(progressFill);
+      navContainer.append(positionIndicator);
+      navContainer.append(progressTrack);
+      
+      for (var i = 0; i < flashcards.length; i++) {
+        (function(index) {
+          var markerPosition = (index / (flashcards.length - 1)) * 100;
+          var marker = $('<div class="nav-marker" data-index="' + index + '"></div>');
+          
+          if (index === currentCardIndex) {
+            marker.addClass('active');
+          }
+          
+          var tooltip = $('<div class="card-tooltip"></div>');
+          var tooltipText = flashcards[index].question;
+          if (tooltipText.length > 100) {
+            tooltipText = tooltipText.substring(0, 100) + '...';
+          }
+          tooltipText = tooltipText.replace(/<[^>]*>?/gm, '');
+          tooltip.text(tooltipText);
+          
+          marker.append(tooltip);
+          marker.css('left', markerPosition + '%');
+          progressTrack.append(marker);
+        })(i);
+      }
+      
+      $('.cards-carousel').after(navContainer);
+      
+      // Use event delegation for marker clicks
+      navContainer.on('click', '.nav-marker', function() {
+        checkAndUnlockIfStuck();
+        var index = parseInt($(this).data('index'));
+        if (!animationInProgress && index !== currentCardIndex) {
+          goToCard(index);
+        }
+      });
+      
+      progressTrack.on('click', function(e) {
+        if ($(e.target).hasClass('nav-marker')) return;
+        
+        checkAndUnlockIfStuck();
+        if (animationInProgress) return;
+        
+        var trackWidth = $(this).width();
+        var clickOffset = e.offsetX;
+        var clickPercent = clickOffset / trackWidth;
+        var targetIndex = Math.round(clickPercent * (flashcards.length - 1));
+        
+        if (targetIndex !== currentCardIndex) {
+          goToCard(targetIndex);
+        }
+      });
+    }
+    
+    // Initialize carousel by creating all cards
+    function initializeCarousel() {
+      var carouselTrack = $('#carousel-track');
+      var dotContainer = $('#carousel-dots');
+      
+      carouselTrack.empty();
+      dotContainer.empty();
+      
+      flashcards.forEach(function(card, index) {
+        var cardContainer = $(
+          '<div class="flashcard-container ' + (index === currentCardIndex ? 'active' : '') + '">' +
+            '<div class="flashcard">' +
+              '<div class="card-face front">' +
+                '<div class="card-content">' + card.question + '</div>' +
+                '<div class="card-number">' + (index + 1) + ' / ' + flashcards.length + '</div>' +
+                '<div class="card-hint">Cliquez pour voir la réponse</div>' +
+              '</div>' +
+              '<div class="card-face back">' +
+                '<div class="card-content">' + card.answer + '</div>' +
+                '<div class="card-number">' + (index + 1) + ' / ' + flashcards.length + '</div>' +
+                '<div class="card-hint">Cliquez pour voir la question</div>' +
+              '</div>' +
+            '</div>' +
+          '</div>'
+        );
+        
+        carouselTrack.append(cardContainer);
+      });
+      
+      createProgressNavigation();
+      
+      // Use event delegation for flashcard clicks
+      carouselTrack.off('click', '.flashcard').on('click', '.flashcard', function() {
+        var cardIndex = $(this).closest('.flashcard-container').index();
+        if (cardIndex === currentCardIndex) {
+          flipCurrentCard();
+        }
+      });
+      
+      updateCardClasses();
+      
+      if (window.MathJax) {
+        MathJax.typesetPromise().then(function() {
+          checkAndAddScrollIndicators();
+        }).catch(function(err) {
+          console.log('MathJax error:', err);
+        });
+      }
+
+      $('.bounce-hint').remove();
+      
+      // Update arrow visibility after a short delay
+      setTimeout(updateArrowVisibility, 50);
+    }
+    
     // Initialize the carousel
     initializeCarousel();
-    updateProgressBar();
     
-    // Set up navigation arrow handlers - remove existing handlers first
-    $('#prev-arrow').off('click').on('click', function(e) {
+    // Set up navigation arrow handlers using event delegation on the document
+    // This ensures they work even if the page wasn't fully ready
+    $(document).off('click.flashcard-nav', '#prev-arrow').on('click.flashcard-nav', '#prev-arrow', function(e) {
+      e.preventDefault();
       e.stopPropagation();
+      
+      console.log('Prev arrow clicked, currentCardIndex:', currentCardIndex, 'animationInProgress:', animationInProgress);
+      
       checkAndUnlockIfStuck();
       
       if (!animationInProgress && currentCardIndex > 0) {
@@ -2084,8 +2059,12 @@
       }
     });
     
-    $('#next-arrow').off('click').on('click', function(e) {
+    $(document).off('click.flashcard-nav', '#next-arrow').on('click.flashcard-nav', '#next-arrow', function(e) {
+      e.preventDefault();
       e.stopPropagation();
+      
+      console.log('Next arrow clicked, currentCardIndex:', currentCardIndex, 'animationInProgress:', animationInProgress);
+      
       checkAndUnlockIfStuck();
       
       if (!animationInProgress && currentCardIndex < flashcards.length - 1) {
@@ -2117,23 +2096,23 @@
     });
     
     // Touch swipe support
-    let touchStartX = 0;
-    let touchStartY = 0;
-    let swipeThreshold = 30;
-    let swipeDirectionDetermined = false;
-    let isHorizontalSwipe = false;
+    var touchStartX = 0;
+    var touchStartY = 0;
+    var swipeThreshold = 30;
+    var swipeDirectionDetermined = false;
+    var isHorizontalSwipe = false;
     
     // Add swipe direction indicators to the carousel (only once)
     if ($('.swipe-direction-indicator').length === 0) {
-      $('.cards-carousel').append(`
-        <div class="swipe-direction-indicator swipe-left-indicator">→</div>
-        <div class="swipe-direction-indicator swipe-right-indicator">←</div>
-      `);
+      $('.cards-carousel').append(
+        '<div class="swipe-direction-indicator swipe-left-indicator">→</div>' +
+        '<div class="swipe-direction-indicator swipe-right-indicator">←</div>'
+      );
     }
     
     $('.cards-carousel')
-      .off('touchstart touchmove touchend touchcancel')
-      .on('touchstart', function(e) {
+      .off('touchstart.flashcards touchmove.flashcards touchend.flashcards touchcancel.flashcards')
+      .on('touchstart.flashcards', function(e) {
         checkAndUnlockIfStuck();
         if (animationInProgress) return;
         
@@ -2149,13 +2128,13 @@
         
         $('.swipe-direction-indicator').removeClass('active');
       })
-      .on('touchmove', function(e) {
+      .on('touchmove.flashcards', function(e) {
         if (animationInProgress) return;
         
-        const currentX = e.originalEvent.touches[0].clientX;
-        const currentY = e.originalEvent.touches[0].clientY;
-        const deltaX = currentX - touchStartX;
-        const deltaY = Math.abs(currentY - touchStartY);
+        var currentX = e.originalEvent.touches[0].clientX;
+        var currentY = e.originalEvent.touches[0].clientY;
+        var deltaX = currentX - touchStartX;
+        var deltaY = Math.abs(currentY - touchStartY);
         
         if (!swipeDirectionDetermined) {
           if (Math.abs(deltaX) > 10 || deltaY > 10) {
@@ -2179,11 +2158,11 @@
             $('.swipe-direction-indicator').removeClass('active');
           }
           
-          const trackTransform = -100 * currentCardIndex + (deltaX * 0.3);
-          $('#carousel-track').css('transform', `translateX(${trackTransform}%)`);
+          var trackTransform = -100 * currentCardIndex + (deltaX * 0.3);
+          $('#carousel-track').css('transform', 'translateX(' + trackTransform + '%)');
         }
       })
-      .on('touchend', function(e) {
+      .on('touchend.flashcards', function(e) {
         $(this).css('opacity', '');
         $('#carousel-track').removeClass('swiping');
         $('.swipe-direction-indicator').removeClass('active');
@@ -2194,8 +2173,8 @@
           return;
         }
         
-        const touchEndX = e.originalEvent.changedTouches[0].clientX;
-        const swipeDistanceX = touchEndX - touchStartX;
+        var touchEndX = e.originalEvent.changedTouches[0].clientX;
+        var swipeDistanceX = touchEndX - touchStartX;
         
         if (isHorizontalSwipe && Math.abs(swipeDistanceX) > swipeThreshold) {
           $('.flashcard-container').addClass('fast-transition');
@@ -2206,14 +2185,14 @@
             nextCard();
           }
           
-          setTimeout(() => {
+          setTimeout(function() {
             $('.flashcard-container').removeClass('fast-transition');
           }, 300);
         } else {
           updateTrackPosition();
         }
       })
-      .on('touchcancel', function() {
+      .on('touchcancel.flashcards', function() {
         updateTrackPosition();
         $(this).css('opacity', '');
         $('#carousel-track').removeClass('swiping');
@@ -2223,7 +2202,7 @@
       });
 
     // Handle orientation change
-    window.addEventListener('orientationchange', function() {
+    $(window).on('orientationchange.flashcards', function() {
       setTimeout(function() {
         unlockAnimation();
         updateTrackPosition();
@@ -2245,50 +2224,47 @@
       }
     });
     
-    // Periodic check for stuck state - more frequent
+    // Periodic check for stuck state
     setInterval(function() {
       checkAndUnlockIfStuck();
     }, 2000);
 
     // Add CSS for mobile hints
     if ($('#flashcard-mobile-hints-style').length === 0) {
-      $('head').append(`
-        <style id="flashcard-mobile-hints-style">
-          .mobile-top-hints {
-            display: none;
-            margin: -5px auto 25px;
-            text-align: center;
-            font-family: NeueHaas;
-            font-size: 13px;
-          }
-          
-          .top-tap-hint, .top-swipe-hint {
-            display: inline-block;
-            margin: 0 10px;
-            opacity: 0.8;
-          }
-          
-          body.day .mobile-top-hints {
-            color: #403E43;
-          }
-          
-          body.night .mobile-top-hints {
-            color: #C8C8C9;
-          }
-          
-          @media (hover: none) and (pointer: coarse) {
-            .mobile-top-hints {
-              display: block;
-            }
-            
-            .mobile-hints {
-              display: none;
-            }
-          }
-        </style>
-      `);
+      $('head').append(
+        '<style id="flashcard-mobile-hints-style">' +
+          '.mobile-top-hints {' +
+            'display: none;' +
+            'margin: -5px auto 25px;' +
+            'text-align: center;' +
+            'font-family: NeueHaas;' +
+            'font-size: 13px;' +
+          '}' +
+          '.top-tap-hint, .top-swipe-hint {' +
+            'display: inline-block;' +
+            'margin: 0 10px;' +
+            'opacity: 0.8;' +
+          '}' +
+          'body.day .mobile-top-hints {' +
+            'color: #403E43;' +
+          '}' +
+          'body.night .mobile-top-hints {' +
+            'color: #C8C8C9;' +
+          '}' +
+          '@media (hover: none) and (pointer: coarse) {' +
+            '.mobile-top-hints {' +
+              'display: block;' +
+            '}' +
+            '.mobile-hints {' +
+              'display: none;' +
+            '}' +
+          '}' +
+        '</style>'
+      );
     }
-  });
+    
+    console.log('Flashcards initialized successfully');
+  }
   </script>
 </body>
 </html>
