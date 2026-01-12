@@ -645,6 +645,83 @@ var x = setInterval(function() {
       display: none !important;
       content: none !important;
     }
+
+    /* Questionnaire Section - Elegant & Minimal */
+    .questionnaire-section {
+      display: flex;
+      align-items: flex-start;
+      gap: 24px;
+      padding: 0;
+      margin: 0;
+    }
+
+    .questionnaire-content {
+      flex: 1;
+    }
+
+    .questionnaire-content p {
+      margin-bottom: 12px;
+    }
+
+    .questionnaire-link {
+      display: inline;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .questionnaire-link:after {
+      content: "";
+      position: absolute;
+      z-index: -1;
+      left: 0;
+      right: 100%;
+      bottom: -3px;
+      background: #8A898C;
+      height: 1.5px;
+      transition-property: left right;
+      transition-duration: 0.2s;
+      transition-timing-function: ease-out;
+    }
+
+    .questionnaire-link:hover:after,
+    .questionnaire-link:focus:after,
+    .questionnaire-link:active:after {
+      right: 0;
+    }
+
+    .questionnaire-qr {
+      flex-shrink: 0;
+      opacity: 0.9;
+      transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+
+    .questionnaire-qr:hover {
+      opacity: 1;
+      transform: scale(1.02);
+    }
+
+    .questionnaire-qr img {
+      display: block;
+      width: 72px;
+      height: 72px;
+      border-radius: 4px;
+    }
+
+    body.night .questionnaire-qr img {
+      filter: invert(1);
+    }
+
+    /* Responsive */
+    @media (max-width: 550px) {
+      .questionnaire-section {
+        flex-direction: column;
+        gap: 16px;
+      }
+      
+      .questionnaire-qr {
+        align-self: flex-start;
+      }
+    }
   </style>
 
 </head>
@@ -671,6 +748,20 @@ var x = setInterval(function() {
 
        <p> Additionally, I have been serving as a Teaching Assistant of Probability Theory at <a href="https://www.univ-lyon2.fr/" target="_blank" class="underline">Lyon 2 Lumière University</a>, working in collaboration with <a href="https://sites.google.com/site/stephanegchretien/home" target="_blank" class="underline">Professor Stephane Chretien</a> for three years and Zied Gharbi for one year.</p>
 
+      <div class="spacer48"></div>
+      
+      <!-- Questionnaire Section -->
+      <div class="questionnaire-section animated fadeIn two">
+        <div class="questionnaire-content">
+          <p>Étudiants L1 MIASHS : merci de remplir le <a href="https://docs.google.com/forms/d/e/1FAIpQLSe4KFXHJELEUxzPtsDSsgIjRyzt045MHzTX7s-Cni6p8q7FoA/viewform?usp=header" target="_blank" class="questionnaire-link underline">questionnaire de rentrée</a> pour que je puisse adapter le cours à vos besoins.</p>
+        </div>
+        <div class="questionnaire-qr">
+          <a href="https://docs.google.com/forms/d/e/1FAIpQLSe4KFXHJELEUxzPtsDSsgIjRyzt045MHzTX7s-Cni6p8q7FoA/viewform?usp=header" target="_blank">
+            <img src="https://api.qrserver.com/v1/create-qr-code/?size=72x72&data=https://docs.google.com/forms/d/e/1FAIpQLSe4KFXHJELEUxzPtsDSsgIjRyzt045MHzTX7s-Cni6p8q7FoA/viewform" alt="QR Code">
+          </a>
+        </div>
+      </div>
+      
       <div class="spacer48"></div>
       
       <!-- Contact Section - Collapsible but Expanded by Default -->
@@ -1230,8 +1321,7 @@ var x = setInterval(function() {
                           </div>
                         </div>
                         <div class="card-details">
-                          <h3 class="card-title">Cours de probabilités et statistiques</h3>
-                          <p class="card-description">Cours complet de Pierre-Loïc Méliot.</p>
+                          <h3 class="card-title">Cours de probabilités et statistiques</h3                          <p class="card-description">Cours complet de Pierre-Loïc Méliot.</p>
                         </div>
                         <div class="card-overlay"></div>
                       </div>
@@ -1294,7 +1384,7 @@ var x = setInterval(function() {
                   <h4>2020–2021</h4>
                 </div>
               </div>
-            </div>
+                       </div>
           </div>
         </div>
         
@@ -1524,5 +1614,19 @@ var x = setInterval(function() {
   });
 </script>
 
-</body>
-</html>
+<!-- Add this script to fix tooltip position dynamically -->
+<script src="js/simple-tooltip.js"></script>
+
+<!-- Page Footer -->
+<footer class="page-footer">
+  <div class="footer-content">
+    Hadrien Bigo--Balland | © 2026kHash();
+  </div>
+</footer>isten for hash changes
+nge', checkHash);
+<!-- Add the collapsible section functionality right before the closing body tag -->
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Initialize collapsible sections
+    const collapsibleHeaders = document.querySelectorAll('.collapsible-header');
+        collapsibleHeaders.forEach(header => {      const sectionId = header.closest('.collapsible-section').id;            // Apply saved state on page load      if (sectionId) {        const savedState = localStorage.getItem('section_' + sectionId);        const content = header.nextElementSibling;                if (savedState === 'collapsed') {          header.classList.remove('active');          content.classList.remove('expanded');        } else if (savedState === 'expanded') {          header.classList.add('active');          content.classList.add('expanded');        }        // If no saved state, keep default (HTML classes)      }            header.addEventListener('click', function() {        // Toggle active class on header        this.classList.toggle('active');                // Get the content element that follows this header        const content = this.nextElementSibling;                // Toggle expanded class        content.classList.toggle('expanded');                // Save the state to localStorage        if (sectionId) {          const state = content.classList.contains('expanded') ? 'expanded' : 'collapsed';          localStorage.setItem('section_' + sectionId, state);        }      });    });        // Automatically expand or collapse section based on URL hash    function checkHash() {      if (window.location.hash) {        const sectionId = window.location.hash.substring(1);        const section = document.getElementById(sectionId + '-section');                if (section) {          const header = section.querySelector('.collapsible-header');          const content = header.nextElementSibling;                    if (!content.classList.contains('expanded')) {            header.classList.add('active');            content.classList.add('expanded');                        // Save state to localStorage            localStorage.setItem('section_' + section.id, 'expanded');          }        }      }    }        // Check hash on page load    checkHash();        // Listen for hash changes    window.addEventListener('hashchange', checkHash);  });</script></body></html>
