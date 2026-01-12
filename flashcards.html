@@ -1363,14 +1363,6 @@
         font-size: 20px;
       }
     }
-
-    /* Enhanced hidden state with !important flags for stronger hiding */
-    .nav-arrow.hidden {
-      opacity: 0 !important;
-      visibility: hidden !important;
-      pointer-events: none !important;
-      display: none !important; /* Force complete hiding */
-    }
   </style>
   
   <!-- Script for day/night theme management -->
@@ -1705,6 +1697,8 @@
     var currentCardIndex = 0;
     var animationInProgress = false;
     var navigationFailSafeTimer = null;
+    var lastNavigationTime = Date.now();
+    var animationLockTimeout = null;
     
     // More reliable touch device detection
     const isTouchDevice = () => {
@@ -1715,6 +1709,62 @@
     };
     
     const isTouch = isTouchDevice() || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    
+    // Robust function to unlock animation state
+    function unlockAnimation() {
+      animationInProgress = false;
+      if (navigationFailSafeTimer) {
+        clearTimeout(navigationFailSafeTimer);
+        navigationFailSafeTimer = null;
+      }
+      if (animationLockTimeout) {
+        clearTimeout(animationLockTimeout);
+        animationLockTimeout = null;
+      }
+    }
+    
+    // Check if animation has been locked too long and force unlock
+    function checkAndUnlockIfStuck() {
+      if (animationInProgress && Date.now() - lastNavigationTime > 1500) {
+        console.log("Force unlocking stuck animation state");
+        unlockAnimation();
+        return true;
+      }
+      return false;
+    }
+    
+    // Function to update the visibility of navigation arrows
+    function updateArrowVisibility() {
+      // Hide left arrow on first card
+      if (currentCardIndex === 0) {
+        $('#prev-arrow').addClass('hidden').css({
+          'opacity': '0',
+          'visibility': 'hidden',
+          'pointer-events': 'none'
+        });
+      } else {
+        $('#prev-arrow').removeClass('hidden').css({
+          'opacity': '',
+          'visibility': '',
+          'pointer-events': ''
+        });
+      }
+      
+      // Hide right arrow on last card
+      if (currentCardIndex === flashcards.length - 1) {
+        $('#next-arrow').addClass('hidden').css({
+          'opacity': '0',
+          'visibility': 'hidden',
+          'pointer-events': 'none'
+        });
+      } else {
+        $('#next-arrow').removeClass('hidden').css({
+          'opacity': '',
+          'visibility': '',
+          'pointer-events': ''
+        });
+      }
+    }
     
     // Initialize carousel by creating all cards
     function initializeCarousel() {
@@ -1754,7 +1804,7 @@
       createProgressNavigation();
       
       // Add click handler to flip cards
-      $('.flashcard').on('click', function() {
+      $('.flashcard').off('click').on('click', function() {
         const cardIndex = $(this).closest('.flashcard-container').index();
         if (cardIndex === currentCardIndex) {
           flipCurrentCard();
@@ -1778,14 +1828,16 @@
       // Initialize arrow visibility immediately
       setTimeout(function() {
         updateArrowVisibility();
-        console.log("Initial arrow visibility updated");
-      }, 100); // Small delay to ensure DOM is ready
+      }, 100);
     }
     
     // Create new progress bar navigation
     function createProgressNavigation() {
       // Remove old dots if they exist
       $('.carousel-dots').hide();
+      
+      // Remove existing navigation if present (prevent duplicates)
+      $('.carousel-nav').remove();
       
       // Create new navigation container
       const navContainer = $('<div class="carousel-nav"></div>');
@@ -1831,6 +1883,7 @@
         
         // Add click handler for direct navigation
         marker.on('click', function() {
+          checkAndUnlockIfStuck();
           const index = parseInt($(this).data('index'));
           if (!animationInProgress && index !== currentCardIndex) {
             goToCard(index);
@@ -1840,6 +1893,7 @@
       
       // Add click handler to progress track for navigation
       progressTrack.on('click', function(e) {
+        checkAndUnlockIfStuck();
         if (animationInProgress) return;
         
         // Get clicked position relative to track width
@@ -1914,21 +1968,24 @@
     
     // Go to a specific card with animation
     function goToCard(index) {
+      // Always check for stuck state first
+      checkAndUnlockIfStuck();
+      
       if (animationInProgress) return;
       if (index < 0 || index >= flashcards.length) return;
+      if (index === currentCardIndex) return;
       
-      // Clear any existing fail-safe timer
-      if (navigationFailSafeTimer) {
-        clearTimeout(navigationFailSafeTimer);
-      }
+      // Clear any existing timers
+      unlockAnimation();
       
       animationInProgress = true;
+      lastNavigationTime = Date.now();
       
-      // Set a fail-safe timer to reset animation state if something goes wrong
-      navigationFailSafeTimer = setTimeout(() => {
-        console.log("Navigation fail-safe triggered");
-        animationInProgress = false;
-      }, 1500); // Longer than transition to ensure it only triggers if something goes wrong
+      // Set a fail-safe timer to reset animation state
+      animationLockTimeout = setTimeout(() => {
+        console.log("Animation timeout - force unlocking");
+        unlockAnimation();
+      }, 800);
       
       // Update current card index
       currentCardIndex = index;
@@ -1938,48 +1995,30 @@
       
       // Ensure card is showing front face
       $(`.flashcard-container:eq(${currentCardIndex})`).find('.flashcard').removeClass('flipped');
-      
-      // Update progress bar
-      updateProgressBar();
 
       // Listen for transition end and reset animation flag
       const carouselTrack = document.getElementById('carousel-track');
       
-      // Using both setTimeout and transitionend for redundancy
-      const onTransitionComplete = function() {
-        animationInProgress = false;
-        if (navigationFailSafeTimer) {
-          clearTimeout(navigationFailSafeTimer);
-          navigationFailSafeTimer = null;
+      const onTransitionComplete = function(e) {
+        // Only respond to transform transitions on the track itself
+        if (e.target === carouselTrack && e.propertyName === 'transform') {
+          unlockAnimation();
+          carouselTrack.removeEventListener('transitionend', onTransitionComplete);
         }
-        carouselTrack.removeEventListener('transitionend', onTransitionComplete);
       };
       
-      carouselTrack.addEventListener('transitionend', onTransitionComplete, { once: true });
+      carouselTrack.addEventListener('transitionend', onTransitionComplete);
       
-      // Backup timeout in case transitionend doesn't fire
+      // Backup timeout - slightly shorter than the fail-safe
       setTimeout(() => {
-        animationInProgress = false;
-        if (navigationFailSafeTimer) {
-          clearTimeout(navigationFailSafeTimer);
-          navigationFailSafeTimer = null;
-        }
-      }, 600); // Match the transition duration
+        unlockAnimation();
+      }, 650);
     }
     
     // Flip the current card
     function flipCurrentCard() {
-      if (animationInProgress) return;
-      
       const currentCard = $(`.flashcard-container:eq(${currentCardIndex})`).find('.flashcard');
-      const isFrontVisible = !currentCard.hasClass('flipped');
-      
-      // Flip the card
-      if (isFrontVisible) {
-        currentCard.addClass('flipped');
-      } else {
-        currentCard.removeClass('flipped');
-      }
+      currentCard.toggleClass('flipped');
     }
     
     // Go to next card
@@ -1996,26 +2035,21 @@
       }
     }
     
-    // Update progress bar - remove this function as we no longer have a progress bar
+    // Update progress bar
     function updateProgressBar() {
-      // Progress bar was removed, so this function can be empty
-      // We keep it to avoid breaking existing code that calls it
       updateNavigation();
     }
     
     // Highlight key animation
     function highlightKey(keyName) {
-      // Find the key element with matching text content
       $(".key").each(function() {
         if ($(this).text() === keyName) {
           const key = $(this);
-          // Add a highlight class
           key.css({
             "transform": "translateY(2px)",
             "opacity": "0.7"
           });
           
-          // Remove it after animation completes
           setTimeout(function() {
             key.css({
               "transform": "",
@@ -2039,139 +2073,81 @@
     initializeCarousel();
     updateProgressBar();
     
-    // Set up navigation arrow handlers with improved error handling
-    $('#prev-arrow').on('click', function(e) {
-      try {
-        e.stopPropagation(); // Prevent event bubbling
-        
-        // Force navigation if stuck for too long
-        if (animationInProgress && Date.now() - lastNavigationTime > 2000) {
-          console.log("Forcing navigation - animation state was stuck");
-          animationInProgress = false;
-        }
-        
-        if (!animationInProgress) {
-          lastNavigationTime = Date.now();
-          previousCard();
-          highlightKey("←");
-        }
-      } catch (err) {
-        console.error("Error in prev button:", err);
-        animationInProgress = false; // Reset on error
+    // Set up navigation arrow handlers - remove existing handlers first
+    $('#prev-arrow').off('click').on('click', function(e) {
+      e.stopPropagation();
+      checkAndUnlockIfStuck();
+      
+      if (!animationInProgress && currentCardIndex > 0) {
+        previousCard();
+        highlightKey("←");
       }
     });
     
-    $('#next-arrow').on('click', function(e) {
-      try {
-        e.stopPropagation(); // Prevent event bubbling
-        
-        // Force navigation if stuck for too long
-        if (animationInProgress && Date.now() - lastNavigationTime > 2000) {
-          console.log("Forcing navigation - animation state was stuck");
-          animationInProgress = false;
-        }
-        
-        if (!animationInProgress) {
-          lastNavigationTime = Date.now();
-          nextCard();
-          highlightKey("→");
-        }
-      } catch (err) {
-        console.error("Error in next button:", err);
-        animationInProgress = false; // Reset on error
+    $('#next-arrow').off('click').on('click', function(e) {
+      e.stopPropagation();
+      checkAndUnlockIfStuck();
+      
+      if (!animationInProgress && currentCardIndex < flashcards.length - 1) {
+        nextCard();
+        highlightKey("→");
       }
     });
     
-    // Add variable to track last navigation time
-    var lastNavigationTime = Date.now();
-    
-    // Enhanced keyboard navigation with error recovery
-    $(document).keydown(function(e) {
-      try {
-        // Force navigation if stuck for too long
-        if (animationInProgress && Date.now() - lastNavigationTime > 2000) {
-          console.log("Forcing navigation - animation state was stuck");
-          animationInProgress = false;
+    // Keyboard navigation
+    $(document).off('keydown.flashcards').on('keydown.flashcards', function(e) {
+      checkAndUnlockIfStuck();
+      
+      if (animationInProgress) return;
+      
+      if (e.key === "ArrowRight") {
+        nextCard();
+        highlightKey("→");
+      } else if (e.key === "ArrowLeft") {
+        previousCard();
+        highlightKey("←");
+      } else if (e.key === " " || e.key === "Space" || e.key === "Enter" || 
+              e.key === "ArrowUp" || e.key === "ArrowDown") {
+        flipCurrentCard();
+        highlightKey("Espace");
+        if (e.key === " " || e.key === "Space") {
+          e.preventDefault();
         }
-        
-        if (animationInProgress) return;
-        
-        // Right arrow for next
-        if (e.key === "ArrowRight") {
-          lastNavigationTime = Date.now();
-          nextCard();
-          highlightKey("→");
-        } 
-        // Left arrow for previous
-        else if (e.key === "ArrowLeft") {
-          lastNavigationTime = Date.now();
-          previousCard();
-          highlightKey("←");
-        } 
-        // Space, Enter, ArrowUp or ArrowDown to flip
-        else if (e.key === " " || e.key === "Space" || e.key === "Enter" || 
-                e.key === "ArrowUp" || e.key === "ArrowDown") {
-          flipCurrentCard();
-          highlightKey("Espace");
-          // Prevent page scroll on spacebar
-          if (e.key === " " || e.key === "Space") {
-            e.preventDefault();
-          }
-        }
-      } catch (err) {
-        console.error("Error in keyboard navigation:", err);
-        animationInProgress = false; // Reset on error
       }
     });
     
-    // Add touch swipe support - enhanced version
+    // Touch swipe support
     let touchStartX = 0;
     let touchStartY = 0;
-    let touchEndX = 0;
-    let touchEndY = 0;
-    let swipeThreshold = 30; // Lower threshold for more permissive detection
+    let swipeThreshold = 30;
     let swipeDirectionDetermined = false;
     let isHorizontalSwipe = false;
-    let activeSwipeDirection = null;
     
-    // Add swipe direction indicators to the carousel
-    $('.cards-carousel').append(`
-      <div class="swipe-direction-indicator swipe-left-indicator">→</div>
-      <div class="swipe-direction-indicator swipe-right-indicator">←</div>
-    `);
+    // Add swipe direction indicators to the carousel (only once)
+    if ($('.swipe-direction-indicator').length === 0) {
+      $('.cards-carousel').append(`
+        <div class="swipe-direction-indicator swipe-left-indicator">→</div>
+        <div class="swipe-direction-indicator swipe-right-indicator">←</div>
+      `);
+    }
     
     $('.cards-carousel')
+      .off('touchstart touchmove touchend touchcancel')
       .on('touchstart', function(e) {
-        try {
-          // Force navigation if stuck for too long
-          if (animationInProgress && Date.now() - lastNavigationTime > 2000) {
-            console.log("Forcing navigation - animation state was stuck");
-            animationInProgress = false;
-          }
-          
-          if (animationInProgress) return;
-          
-          touchStartX = e.originalEvent.touches[0].clientX;
-          touchStartY = e.originalEvent.touches[0].clientY;
-          
-          // Reset swipe detection state
-          swipeDirectionDetermined = false;
-          isHorizontalSwipe = false;
-          activeSwipeDirection = null;
-          
-          // Add active state for touch feedback
-          if (isTouch) {
-            $(this).css('opacity', '0.98');
-            // Mark track as being swiped for immediate visual feedback
-            $('#carousel-track').addClass('swiping');
-          }
-          
-          // Hide direction indicators initially
-          $('.swipe-direction-indicator').removeClass('active');
-        } catch (err) {
-          console.error("Error in touchstart:", err);
-          animationInProgress = false; // Reset on error
+        checkAndUnlockIfStuck();
+        if (animationInProgress) return;
+        
+        touchStartX = e.originalEvent.touches[0].clientX;
+        touchStartY = e.originalEvent.touches[0].clientY;
+        swipeDirectionDetermined = false;
+        isHorizontalSwipe = false;
+        
+        if (isTouch) {
+          $(this).css('opacity', '0.98');
+          $('#carousel-track').addClass('swiping');
         }
+        
+        $('.swipe-direction-indicator').removeClass('active');
       })
       .on('touchmove', function(e) {
         if (animationInProgress) return;
@@ -2181,258 +2157,136 @@
         const deltaX = currentX - touchStartX;
         const deltaY = Math.abs(currentY - touchStartY);
         
-        // Determine swipe direction early if not yet determined
         if (!swipeDirectionDetermined) {
-          // If we've moved enough to determine direction
           if (Math.abs(deltaX) > 10 || deltaY > 10) {
             isHorizontalSwipe = Math.abs(deltaX) > deltaY;
             swipeDirectionDetermined = true;
           }
         }
         
-        // If it's a horizontal swipe, add enhanced visual feedback
         if (isHorizontalSwipe) {
-          e.preventDefault(); // Prevent page scroll for horizontal swipes
+          e.preventDefault();
           
-          // Significant drag - show direction indicator
           if (Math.abs(deltaX) > 20) {
             if (deltaX > 0) {
-              activeSwipeDirection = 'right';
               $('.swipe-right-indicator').addClass('active');
               $('.swipe-left-indicator').removeClass('active');
             } else {
-              activeSwipeDirection = 'left';
               $('.swipe-left-indicator').addClass('active');
               $('.swipe-right-indicator').removeClass('active');
             }
           } else {
-            // Reset indicators if swipe isn't significant yet
-            activeSwipeDirection = null;
             $('.swipe-direction-indicator').removeClass('active');
           }
           
-          // Apply drag effect to track - more responsive with larger multiplier
           const trackTransform = -100 * currentCardIndex + (deltaX * 0.3);
           $('#carousel-track').css('transform', `translateX(${trackTransform}%)`);
-          
-          // Also adjust opacity of adjacent cards based on swipe direction
-          if (deltaX > 0 && currentCardIndex > 0) {
-            // Swiping right, highlight previous card
-            $(`.flashcard-container:eq(${currentCardIndex-1})`).css('opacity', 0.6 + (deltaX * 0.002));
-            if (currentCardIndex < flashcards.length - 1) {
-              $(`.flashcard-container:eq(${currentCardIndex+1})`).css('opacity', 0.6 - (deltaX * 0.001));
-            }
-          } else if (deltaX < 0 && currentCardIndex < flashcards.length - 1) {
-            // Swiping left, highlight next card
-            $(`.flashcard-container:eq(${currentCardIndex+1})`).css('opacity', 0.6 + (Math.abs(deltaX) * 0.002));
-            if (currentCardIndex > 0) {
-              $(`.flashcard-container:eq(${currentCardIndex-1})`).css('opacity', 0.6 - (Math.abs(deltaX) * 0.001));
-            }
-          }
         }
       })
       .on('touchend', function(e) {
-        if (animationInProgress) return;
-        
-        // Reset opacity and remove swiping class
         $(this).css('opacity', '');
         $('#carousel-track').removeClass('swiping');
-        
-        // Hide direction indicators
         $('.swipe-direction-indicator').removeClass('active');
-        
-        // Reset adjacent cards opacity
         $('.flashcard-container').css('opacity', '');
         
-        touchEndX = e.originalEvent.changedTouches[0].clientX;
-        touchEndY = e.originalEvent.changedTouches[0].clientY;
+        if (animationInProgress) {
+          updateTrackPosition();
+          return;
+        }
         
-        // Calculate swipe distance
+        const touchEndX = e.originalEvent.changedTouches[0].clientX;
         const swipeDistanceX = touchEndX - touchStartX;
-        const swipeDistanceY = Math.abs(touchEndY - touchStartY);
         
-        // More permissive criteria for horizontal swipes:
-        // 1. If we already determined it's a horizontal swipe
-        // 2. If the horizontal distance exceeds the threshold and is greater than vertical
         if (isHorizontalSwipe && Math.abs(swipeDistanceX) > swipeThreshold) {
-          // Add fast transition class to all cards for snappier response
           $('.flashcard-container').addClass('fast-transition');
           
           if (swipeDistanceX > 0) {
-            // Swipe right - go to previous card
             previousCard();
           } else {
-            // Swipe left - go to next card
             nextCard();
           }
           
-          // Remove fast transition class after animation completes
           setTimeout(() => {
             $('.flashcard-container').removeClass('fast-transition');
           }, 300);
         } else {
-          // Reset position if swipe wasn't valid
           updateTrackPosition();
         }
-        
-        // Reset swipe direction
-        activeSwipeDirection = null;
       })
       .on('touchcancel', function() {
-        // Reset everything on touch cancel
         updateTrackPosition();
         $(this).css('opacity', '');
         $('#carousel-track').removeClass('swiping');
         $('.swipe-direction-indicator').removeClass('active');
         $('.flashcard-container').css('opacity', '');
+        unlockAnimation();
       });
 
-    // Handle orientation change to optimize layout
+    // Handle orientation change
     window.addEventListener('orientationchange', function() {
-      // Wait for orientation change to complete
       setTimeout(function() {
+        unlockAnimation();
         updateTrackPosition();
       }, 300);
     });
     
-    // ...rest of your existing code...
-    // Add CSS for new mobile top hints
-    $('head').append(`
-      <style>
-        .mobile-top-hints {
-          display: none; /* Hidden by default, only shown on mobile */
-          margin: -5px auto 25px;
-          text-align: center;
-          font-family: NeueHaas;
-          font-size: 13px;
-        }
-        
-        .top-tap-hint, .top-swipe-hint {
-          display: inline-block;
-          margin: 0 10px;
-          opacity: 0.8;
-        }
-        
-        body.day .mobile-top-hints {
-          color: #403E43;
-        }
-        
-        body.night .mobile-top-hints {
-          color: #C8C8C9;
-        }
-        
-        /* Only show on touch devices */
-        @media (hover: none) and (pointer: coarse) {
-          .mobile-top-hints {
-            display: block;
-          }
-          
-          /* Hide the bottom mobile hints since we now show them at the top */
-          .mobile-hints {
-            display: none;
-          }
-        }
-      </style>
-    `);
-    
-    // Function to manually reset animation state - can be called by user
+    // Global reset function
     window.resetFlashcardsNavigation = function() {
       console.log("Manual navigation reset triggered");
-      animationInProgress = false;
-      if (navigationFailSafeTimer) {
-        clearTimeout(navigationFailSafeTimer);
-        navigationFailSafeTimer = null;
-      }
-      // Reset the carousel to current position
+      unlockAnimation();
       updateTrackPosition();
       updateCardClasses();
     };
     
-    // Add a double-click handler on the body to reset navigation if needed
-    $('body').on('dblclick', function() {
+    // Double-click to reset if stuck
+    $('body').off('dblclick.flashcards').on('dblclick.flashcards', function() {
       if (animationInProgress) {
         resetFlashcardsNavigation();
       }
     });
     
-    // Add automatic periodic check for stuck animation state
+    // Periodic check for stuck state - more frequent
     setInterval(function() {
-      if (animationInProgress && Date.now() - lastNavigationTime > 3000) {
-        console.log("Auto-recovery: Animation state stuck for too long");
-        resetFlashcardsNavigation();
-      }
-    }, 3000);
+      checkAndUnlockIfStuck();
+    }, 2000);
 
-    // Function to update the visibility of navigation arrows - improved version
-    function updateArrowVisibility() {
-      console.log("Updating arrow visibility. Current card index:", currentCardIndex);
-      
-      // Hide left arrow on first card
-      if (currentCardIndex === 0) {
-        console.log("Hiding prev arrow");
-        $('#prev-arrow').addClass('hidden');
-        // Use visibility instead of display to preserve layout
-        $('#prev-arrow').css({
-          'opacity': '0',
-          'visibility': 'hidden',
-          'pointer-events': 'none'
-          // Don't hide with display:none as it shifts layout
-        });
-      } else {
-        console.log("Showing prev arrow");
-        $('#prev-arrow').removeClass('hidden');
-        $('#prev-arrow').css({
-          'opacity': '',
-          'visibility': '',
-          'pointer-events': ''
-        });
-      }
-      
-      // Hide right arrow on last card
-      if (currentCardIndex === flashcards.length - 1) {
-        console.log("Hiding next arrow");
-        $('#next-arrow').addClass('hidden');
-        $('#next-arrow').css({
-          'opacity': '0',
-          'visibility': 'hidden',
-          'pointer-events': 'none'
-          // Don't hide with display:none as it shifts layout
-        });
-      } else {
-        console.log("Showing next arrow");
-        $('#next-arrow').removeClass('hidden');
-        $('#next-arrow').css({
-          'opacity': '',
-          'visibility': '',
-          'pointer-events': ''
-        });
-      }
-    }
-
-    // After page is loaded, ensure arrows are properly hidden/shown
-    $(document).ready(function() {
-      // Make sure arrows visibility is checked after everything is loaded
-      setTimeout(function() {
-        updateArrowVisibility();
-        console.log("Document ready arrow visibility updated");
-      }, 500);
-    });
-
-    // Function to update the visibility of navigation arrows
-    function updateArrowVisibility() {
-      // Hide left arrow on first card
-      if (currentCardIndex === 0) {
-        $('#prev-arrow').addClass('hidden');
-      } else {
-        $('#prev-arrow').removeClass('hidden');
-      }
-      
-      // Hide right arrow on last card
-      if (currentCardIndex === flashcards.length - 1) {
-        $('#next-arrow').addClass('hidden');
-      } else {
-        $('#next-arrow').removeClass('hidden');
-      }
+    // Add CSS for mobile hints
+    if ($('#flashcard-mobile-hints-style').length === 0) {
+      $('head').append(`
+        <style id="flashcard-mobile-hints-style">
+          .mobile-top-hints {
+            display: none;
+            margin: -5px auto 25px;
+            text-align: center;
+            font-family: NeueHaas;
+            font-size: 13px;
+          }
+          
+          .top-tap-hint, .top-swipe-hint {
+            display: inline-block;
+            margin: 0 10px;
+            opacity: 0.8;
+          }
+          
+          body.day .mobile-top-hints {
+            color: #403E43;
+          }
+          
+          body.night .mobile-top-hints {
+            color: #C8C8C9;
+          }
+          
+          @media (hover: none) and (pointer: coarse) {
+            .mobile-top-hints {
+              display: block;
+            }
+            
+            .mobile-hints {
+              display: none;
+            }
+          }
+        </style>
+      `);
     }
   });
   </script>
