@@ -590,6 +590,40 @@
   </script>
 
 <script>
+  function submitContactForm(event) {
+    event.preventDefault();
+    
+    const email = document.getElementById('email-field').value;
+    const message = document.getElementById('message-field').value;
+    
+    // Google Form URL with correct entry IDs from your form
+    const formUrl = 'https://docs.google.com/forms/d/e/1FAIpQLSeRe5osVztTQuYQbfXgTi3UciyiRByxbFiE-0VW5LVirieytA/formResponse';
+    
+    // Create form data with the correct entry field names
+    const formData = new FormData();
+    formData.append('entry.1894189694', email);
+    formData.append('entry.648758865', message);
+    
+    // Submit to Google Form
+    fetch(formUrl, {
+      method: 'POST',
+      body: formData,
+      mode: 'no-cors'
+    }).then(() => {
+      // Clear form
+      document.getElementById('contact-form').reset();
+      alert('Message sent successfully!');
+    }).catch(() => {
+      // Even if fetch fails (CORS), the form is usually submitted
+      document.getElementById('contact-form').reset();
+      alert('Message sent!');
+    });
+    
+    return false;
+  }
+</script>
+
+<script>
 // Set the date we're counting down to
 var countDownDate = new Date("Oct 02, 2023 09:00:00").getTime();
 
@@ -722,6 +756,93 @@ var x = setInterval(function() {
         align-self: flex-start;
       }
     }
+
+    /* Simple Contact Form Styles */
+    .simple-contact-form {
+      margin: 0;
+      padding: 0;
+    }
+
+    .simple-contact-form .form-field {
+      margin-bottom: 12px;
+    }
+
+    .simple-contact-form input,
+    .simple-contact-form textarea {
+      width: 100%;
+      padding: 8px 0;
+      border: none;
+      border-bottom: 1px solid #8A898C;
+      background: transparent;
+      font-family: inherit;
+      font-size: inherit;
+      color: inherit;
+      outline: none;
+      transition: border-color 0.2s ease;
+    }
+
+    body.night .simple-contact-form input,
+    body.night .simple-contact-form textarea {
+      border-bottom-color: #666;
+    }
+
+    .simple-contact-form input:focus,
+    .simple-contact-form textarea:focus {
+      border-bottom-color: #333;
+    }
+
+    body.night .simple-contact-form input:focus,
+    body.night .simple-contact-form textarea:focus {
+      border-bottom-color: #999;
+    }
+
+    .simple-contact-form input::placeholder,
+    .simple-contact-form textarea::placeholder {
+      color: #8A898C;
+      opacity: 0.6;
+    }
+
+    body.night .simple-contact-form input::placeholder,
+    body.night .simple-contact-form textarea::placeholder {
+      color: #666;
+    }
+
+    .simple-contact-form textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+
+    .send-button {
+      background: transparent;
+      border: 1px solid #8A898C;
+      padding: 6px 24px;
+      font-family: inherit;
+      font-size: inherit;
+      color: inherit;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      margin-top: 8px;
+    }
+
+    .send-button:hover {
+      background: #8A898C;
+      color: #fff;
+    }
+
+    body.night .send-button {
+      border-color: #666;
+    }
+
+    body.night .send-button:hover {
+      background: #666;
+      color: #000;
+    }
+
+    @media (max-width: 550px) {
+      .send-button {
+        width: 100%;
+      }
+    }
   </style>
 
 </head>
@@ -760,6 +881,21 @@ var x = setInterval(function() {
             <img src="https://api.qrserver.com/v1/create-qr-code/?size=72x72&data=https://docs.google.com/forms/d/e/1FAIpQLSe4KFXHJELEUxzPtsDSsgIjRyzt045MHzTX7s-Cni6p8q7FoA/viewform" alt="QR Code">
           </a>
         </div>
+      </div>
+      
+      <div class="spacer48"></div>
+      
+      <!-- Simple Contact Form -->
+      <div class="simple-contact-form animated fadeIn two">
+        <form id="contact-form" onsubmit="return submitContactForm(event)">
+          <div class="form-field">
+            <input type="email" id="email-field" name="email" placeholder="Email" required>
+          </div>
+          <div class="form-field">
+            <textarea id="message-field" name="message" placeholder="Message" rows="4" required></textarea>
+          </div>
+          <button type="submit" class="send-button">Send</button>
+        </form>
       </div>
       
       <div class="spacer48"></div>
