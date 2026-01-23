@@ -68,6 +68,101 @@
         }
       }
 
+
+
+      // Translation Dictionary
+      const translations = {
+        en: {
+          "intro-title": "Hi, I'm Hadrien.",
+          "bio-phd": "I am currently pursuring a PhD at <a href=\"https://myfit-solutions.com/\" target=\"_blank\" class=\"underline\">MyFit Solutions</a>, in the HEKA team of <a href=\"https://www.inria.fr/fr/centre-inria-de-paris\" target=\"_blank\" class=\"underline\">INRIA Paris</a> and under the supervision of <a href=\"https://sites.google.com/site/stephanieallassonniere/\" target=\"_blank\" class=\"underline\">Professor Stéphanie Allassonnière</a>, <a href=\"https://www.jeanfeydy.com/\" target=\"_blank\" class=\"underline\">Dr. Jean Feydy</a> and <a href=\"https://www.linkedin.com/in/jérémy-adoux-96612092/\" target=\"_blank\" class=\"underline\">Jeremy Adoux</a> for the last <span id=\"counter\"><br></span>.",
+          "bio-scikit": "I am also contributing to <a href=\"https://github.com/scikit-shapes/scikit-shapes\" target=\"_blank\" class=\"underline\">scikit-shapes</a>, an open-source Python library for shape analysis and statistical learning on geometric data, designed to facilitate research and applications in computational anatomy, morphometrics, and related fields.",
+          "bio-teaching": "Additionally, I have been serving as a Teaching Assistant of Probability Theory at <a href=\"https://www.univ-lyon2.fr/\" target=\"_blank\" class=\"underline\">Lyon 2 Lumière University</a>, working in collaboration with <a href=\"https://sites.google.com/site/stephanegchretien/home\" target=\"_blank\" class=\"underline\">Professor Stephane Chretien</a> for three years and Zied Gharbi for one year.",
+          "section-contact": "CONTACT",
+          "contact-desc": "You can send me a message using this form, or use the contact information below.",
+          "contact-students": "For students",
+          "contact-work": "For work",
+          "contact-connect": "Connect",
+          "contact-linkedin": "LinkedIn Profile",
+          "section-teaching": "TEACHING RESOURCES",
+          "teaching-intro": "Probability Theory course materials for Lyon 2 students (credit to Zied Gharbi):",
+          "section-education": "EDUCATION",
+          "section-degrees": "DEGREES",
+          "nav-intro": "Introduction",
+          "nav-contact": "Contact",
+          "nav-calendar": "Calendar",
+          "nav-teaching": "Teaching Resources",
+          "nav-education": "Education",
+          "nav-degrees": "Degrees",
+          "contact-email-ph": "Your email",
+          "contact-message-ph": "Your message",
+          "contact-send": "Send"
+        },
+        fr: {
+          "intro-title": "Bonjour, je suis Hadrien.",
+          "bio-phd": "Je suis actuellement en doctorat à <a href=\"https://myfit-solutions.com/\" target=\"_blank\" class=\"underline\">MyFit Solutions</a>, au sein de l'équipe HEKA de l'<a href=\"https://www.inria.fr/fr/centre-inria-de-paris\" target=\"_blank\" class=\"underline\">INRIA Paris</a>, sous la direction du <a href=\"https://sites.google.com/site/stephanieallassonniere/\" target=\"_blank\" class=\"underline\">Professeur Stéphanie Allassonnière</a>, du <a href=\"https://www.jeanfeydy.com/\" target=\"_blank\" class=\"underline\">Dr. Jean Feydy</a> et de <a href=\"https://www.linkedin.com/in/jérémy-adoux-96612092/\" target=\"_blank\" class=\"underline\">Jeremy Adoux</a> depuis <span id=\"counter\"><br></span>.",
+          "bio-scikit": "Je contribue également à <a href=\"https://github.com/scikit-shapes/scikit-shapes\" target=\"_blank\" class=\"underline\">scikit-shapes</a>, une bibliothèque Python open-source pour l'analyse de formes et l'apprentissage statistique sur des données géométriques, conçue pour faciliter la recherche et les applications en anatomie computationnelle, morphométrie et domaines connexes.",
+          "bio-teaching": "De plus, j'ai enseigné la théorie des probabilités à l'<a href=\"https://www.univ-lyon2.fr/\" target=\"_blank\" class=\"underline\">Université Lyon 2 Lumière</a>, en collaboration avec le <a href=\"https://sites.google.com/site/stephanegchretien/home\" target=\"_blank\" class=\"underline\">Professeur Stephane Chretien</a> pendant trois ans et Zied Gharbi pendant un an.",
+          "section-contact": "CONTACT",
+          "contact-desc": "Vous pouvez m'envoyer un message via ce formulaire, ou utiliser les coordonnées ci-dessous.",
+          "contact-students": "Pour les étudiants",
+          "contact-work": "Pour le travail",
+          "contact-connect": "Réseaux",
+          "contact-linkedin": "Profil LinkedIn",
+          "section-teaching": "RESSOURCES PÉDAGOGIQUES",
+          "teaching-intro": "Support de cours de théorie des probabilités pour les étudiants de Lyon 2 (crédit à Zied Gharbi) :",
+          "section-education": "FORMATION",
+          "section-degrees": "DIPLÔMES",
+          "nav-intro": "Introduction",
+          "nav-contact": "Contact",
+          "nav-calendar": "Calendrier",
+          "nav-teaching": "Ressources Pédagogiques",
+          "nav-education": "Formation",
+          "nav-degrees": "Diplômes",
+          "contact-email-ph": "Votre email",
+          "contact-message-ph": "Votre message",
+          "contact-send": "Envoyer"
+        }
+      };
+
+      // Function to apply translations
+      function translatePage(lang) {
+        $("[data-i18n]").each(function () {
+          const key = $(this).data("i18n");
+          if (translations[lang] && translations[lang][key]) {
+            // Check if the content has HTML tags
+            if (translations[lang][key].includes("<")) {
+              $(this).html(translations[lang][key]);
+            } else {
+              $(this).text(translations[lang][key]);
+            }
+          }
+        });
+
+        $("[data-i18n-placeholder]").each(function () {
+          const key = $(this).data("i18n-placeholder");
+          if (translations[lang] && translations[lang][key]) {
+            $(this).attr("placeholder", translations[lang][key]);
+          }
+        });
+      }
+
+      // Language toggling
+      function updateLangButton(lang) {
+        $("#lang-toggle").text(lang.toUpperCase());
+        translatePage(lang);
+      }
+
+      $("#lang-toggle").click(function () {
+        const currentLang = localStorage.getItem('lang') || 'en';
+        const newLang = currentLang === 'en' ? 'fr' : 'en';
+        localStorage.setItem('lang', newLang);
+        updateLangButton(newLang);
+      });
+
+      // Apply saved language on page load
+      const storedLang = localStorage.getItem('lang') || 'en';
+      updateLangButton(storedLang);
+
       // Array of impressionist landscape paintings with metadata
       const paintings = [
         {
@@ -864,16 +959,17 @@
     <div class="container animated fadeIn one">
       <div class="row group">
         <div class="three columns icon">
+          <span id="lang-toggle" class="lang-btn">EN</span>
           <img src="images/moon.svg" id="moon">
           <img src="images/sun.svg" id="sun">
         </div>
 
         <div class="six columns">
-          <h1 id="intro" class="night section">Hi, I'm Hadrien.</h1>
+          <h1 id="intro" class="night section" data-i18n="intro-title">Hi, I'm Hadrien.</h1>
 
           <div class="animated fadeIn two">
-            <p>I am currently pursuring a PhD at <a href="https://myfit-solutions.com/" target="_blank"
-                class="underline">MyFit Solutions</a>, in the HEKA team of <a
+            <p data-i18n="bio-phd">I am currently pursuring a PhD at <a href="https://myfit-solutions.com/"
+                target="_blank" class="underline">MyFit Solutions</a>, in the HEKA team of <a
                 href="https://www.inria.fr/fr/centre-inria-de-paris" target="_blank" class="underline">INRIA Paris</a>
               and under the supervision of <a href="https://sites.google.com/site/stephanieallassonniere/"
                 target="_blank" class="underline">Professor Stéphanie Allassonnière</a>, <a
@@ -881,13 +977,14 @@
                 href="https://www.linkedin.com/in/jérémy-adoux-96612092/" target="_blank" class="underline">Jeremy
                 Adoux</a> for the last <span id="counter"><br></span>.</p>
 
-            <p>I am also contributing to <a href="https://github.com/scikit-shapes/scikit-shapes" target="_blank"
-                class="underline">scikit-shapes</a>, an open-source Python library for shape analysis and statistical
+            <p data-i18n="bio-scikit">I am also contributing to <a href="https://github.com/scikit-shapes/scikit-shapes"
+                target="_blank" class="underline">scikit-shapes</a>, an open-source Python library for shape analysis
+              and statistical
               learning on geometric data, designed to facilitate research and applications in computational anatomy,
               morphometrics, and related fields.</p>
 
-            <p> Additionally, I have been serving as a Teaching Assistant of Probability Theory at <a
-                href="https://www.univ-lyon2.fr/" target="_blank" class="underline">Lyon 2 Lumière University</a>,
+            <p data-i18n="bio-teaching"> Additionally, I have been serving as a Teaching Assistant of Probability Theory
+              at <a href="https://www.univ-lyon2.fr/" target="_blank" class="underline">Lyon 2 Lumière University</a>,
               working in collaboration with <a href="https://sites.google.com/site/stephanegchretien/home"
                 target="_blank" class="underline">Professor Stephane Chretien</a> for three years and Zied Gharbi for
               one year.</p>
@@ -917,25 +1014,27 @@
             <!-- Contact Section - Collapsible but Expanded by Default -->
             <div class="collapsible-section" id="contact-section">
               <div class="collapsible-header active" id="contact">
-                <h4 class="animated fadeIn three section">CONTACT</h4>
+                <h4 class="animated fadeIn three section" data-i18n="section-contact">CONTACT</h4>
                 <div class="collapse-icon"></div>
               </div>
               <div class="collapsible-content expanded">
                 <div class="collapsible-content-inner">
                   <div class="contact-section animated fadeIn two">
-                    <p>You can send me a message using this form, or use the contact information below.</p>
+                    <p data-i18n="contact-desc">You can send me a message using this form, or use the contact
+                      information below.</p>
 
                     <!-- Simple Contact Form -->
                     <div class="simple-contact-form">
                       <form id="contact-form" onsubmit="return submitContactForm(event)">
                         <div class="form-field">
-                          <input type="email" id="email-field" name="email" placeholder="Your email" required>
+                          <input type="email" id="email-field" name="email" placeholder="Your email" required
+                            data-i18n-placeholder="contact-email-ph">
                         </div>
                         <div class="form-field">
-                          <textarea id="message-field" name="message" placeholder="Your message" rows="4"
-                            required></textarea>
+                          <textarea id="message-field" name="message" placeholder="Your message" rows="4" required
+                            data-i18n-placeholder="contact-message-ph"></textarea>
                         </div>
-                        <button type="submit" class="send-button">Send</button>
+                        <button type="submit" class="send-button" data-i18n="contact-send">Send</button>
                       </form>
                     </div>
 
@@ -950,7 +1049,7 @@
                           </svg>
                         </div>
                         <div class="contact-info">
-                          <p class="contact-label">For students</p>
+                          <p class="contact-label" data-i18n="contact-students">For students</p>
                           <a href="mailto:h.bigo-balland@univ-lyon2.fr"
                             class="contact-link">h.bigo-balland@univ-lyon2.fr</a>
                         </div>
@@ -964,7 +1063,7 @@
                           </svg>
                         </div>
                         <div class="contact-info">
-                          <p class="contact-label">For work</p>
+                          <p class="contact-label" data-i18n="contact-work">For work</p>
                           <a href="mailto:hadrien.bigo-balland@inria.fr"
                             class="contact-link">hadrien.bigo-balland@inria.fr</a>
                         </div>
@@ -978,9 +1077,9 @@
                           </svg>
                         </div>
                         <div class="contact-info">
-                          <p class="contact-label">Connect</p>
-                          <a href="https://www.linkedin.com/in/hadrienbigoballand" target="_blank"
-                            class="contact-link">LinkedIn Profile</a>
+                          <p class="contact-label" data-i18n="contact-connect">Connect</p>
+                          <a href="https://www.linkedin.com/in/hadrienbigoballand" target="_blank" class="contact-link"
+                            data-i18n="contact-linkedin">LinkedIn Profile</a>
                         </div>
                       </div>
                     </div>
@@ -995,13 +1094,14 @@
             <!-- Teaching Resources Section with collapsible functionality - Closed by Default -->
             <div class="collapsible-section" id="teaching-section">
               <div class="collapsible-header" id="teaching">
-                <h4 class="animated fadeIn three section">TEACHING RESOURCES</h4>
+                <h4 class="animated fadeIn three section" data-i18n="section-teaching">TEACHING RESOURCES</h4>
                 <div class="collapse-icon"></div>
               </div>
               <div class="collapsible-content">
                 <div class="collapsible-content-inner">
                   <div class="downloads-section animated fadeIn two">
-                    <p>Probability Theory course materials for Lyon 2 students (credit to Zied Gharbi):</p>
+                    <p data-i18n="teaching-intro">Probability Theory course materials for Lyon 2 students (credit to
+                      Zied Gharbi):</p>
 
                     <div class="resources-container">
                       <!-- Main course materials -->
@@ -1477,7 +1577,7 @@
               <div class="section-column">
                 <div class="collapsible-section" id="education-section">
                   <div class="collapsible-header active" id="education">
-                    <h4 class="animated fadeIn three section">EDUCATION</h4>
+                    <h4 class="animated fadeIn three section" data-i18n="section-education">EDUCATION</h4>
                     <div class="collapse-icon"></div>
                   </div>
                   <div class="collapsible-content expanded">
@@ -1511,7 +1611,7 @@
               <div class="section-column">
                 <div class="collapsible-section" id="degrees-section">
                   <div class="collapsible-header active" id="degrees">
-                    <h4 class="animated fadeIn three section">DEGREES</h4>
+                    <h4 class="animated fadeIn three section" data-i18n="section-degrees">DEGREES</h4>
                     <div class="collapse-icon"></div>
                   </div>
                   <div class="collapsible-content expanded">
@@ -1575,27 +1675,27 @@
               <div class="nav-items">
                 <div class="nav-item active" data-target="intro">
                   <div class="nav-dot"></div>
-                  <div class="nav-label">Introduction</div>
+                  <div class="nav-label" data-i18n="nav-intro">Introduction</div>
                 </div>
                 <div class="nav-item" data-target="contact">
                   <div class="nav-dot"></div>
-                  <div class="nav-label">Contact</div>
+                  <div class="nav-label" data-i18n="nav-contact">Contact</div>
                 </div>
                 <div class="nav-item" data-target="calendar">
                   <div class="nav-dot"></div>
-                  <div class="nav-label">Calendar</div>
+                  <div class="nav-label" data-i18n="nav-calendar">Calendar</div>
                 </div>
                 <div class="nav-item" data-target="teaching">
                   <div class="nav-dot"></div>
-                  <div class="nav-label">Teaching Resources</div>
+                  <div class="nav-label" data-i18n="nav-teaching">Teaching Resources</div>
                 </div>
                 <div class="nav-item" data-target="education">
                   <div class="nav-dot"></div>
-                  <div class="nav-label">Education</div>
+                  <div class="nav-label" data-i18n="nav-education">Education</div>
                 </div>
                 <div class="nav-item" data-target="degrees">
                   <div class="nav-dot"></div>
-                  <div class="nav-label">Degrees</div>
+                  <div class="nav-label" data-i18n="nav-degrees">Degrees</div>
                 </div>
                 <!-- Removed: Art I like nav item -->
               </div>
@@ -1610,11 +1710,11 @@
           <!-- Mobile Navigation Menu -->
           <div class="mobile-nav">
             <div class="mobile-nav-items">
-              <div class="mobile-nav-item"><a href="#intro">Introduction</a></div>
-              <div class="mobile-nav-item"><a href="#contact">Contact</a></div>
-              <div class="mobile-nav-item"><a href="#teaching">Teaching Resources</a></div>
-              <div class="mobile-nav-item"><a href="#education">Education</a></div>
-              <div class="mobile-nav-item"><a href="#degrees">Degrees</a></div>
+              <div class="mobile-nav-item"><a href="#intro" data-i18n="nav-intro">Introduction</a></div>
+              <div class="mobile-nav-item"><a href="#contact" data-i18n="nav-contact">Contact</a></div>
+              <div class="mobile-nav-item"><a href="#teaching" data-i18n="nav-teaching">Teaching Resources</a></div>
+              <div class="mobile-nav-item"><a href="#education" data-i18n="nav-education">Education</a></div>
+              <div class="mobile-nav-item"><a href="#degrees" data-i18n="nav-degrees">Degrees</a></div>
               <!-- Removed: Art I Like mobile nav item -->
             </div>
           </div>
