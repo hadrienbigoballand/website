@@ -134,8 +134,6 @@ body.night h1 {
   line-height: 28px;
   padding-bottom: 48px;
   cursor: default;
-  transition: all 0.5s ease;
-  position: relative;
 }
 
 body.day h1 {
@@ -146,50 +144,9 @@ body.day h1 {
   line-height: 28px;
   padding-bottom: 48px;
   cursor: default;
-  transition: all 0.5s ease;
-  position: relative;
 }
 
-/* Elegant hover effect for heading */
-body.night h1:hover {
-  text-shadow: 0 0 8px rgba(255, 255, 255, 0.4);
-  letter-spacing: 0.45px;
-  background: linear-gradient(45deg, #fff, #c8c8ff, #fff);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  transform: translateY(-2px);
-}
 
-body.day h1:hover {
-  text-shadow: 0 0 8px rgba(64, 62, 67, 0.2);
-  letter-spacing: 0.45px;
-  background: linear-gradient(45deg, #403E43, #6a6875, #403E43);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  transform: translateY(-2px);
-}
-
-/* Elegant decorative element that appears on hover */
-body.night h1:after,
-body.day h1:after {
-  content: "";
-  position: absolute;
-  width: 0;
-  height: 1px;
-  bottom: 40px;
-  left: 0;
-  background: linear-gradient(90deg, transparent, currentColor, transparent);
-  transition: width 0.5s ease;
-  opacity: 0;
-}
-
-body.night h1:hover:after,
-body.day h1:hover:after {
-  width: 100%;
-  opacity: 0.7;
-}
 
 body.night h2 {
   color: #fff;
@@ -2830,7 +2787,7 @@ body.night .resource-card.featured:hover .card-icon.highlight .icon-svg svg {
   }
 }
 
-body.night @keyframes subtle-glow {
+@keyframes subtle-glow-night {
 
   0%,
   100% {
@@ -2842,79 +2799,7 @@ body.night @keyframes subtle-glow {
   }
 }
 
-/* Enhanced heading animation with elegant glow */
-body.night h1 {
-  transition: all 0.6s cubic-bezier(0.19, 1, 0.22, 1);
-  position: relative;
-  overflow: visible;
-}
 
-body.day h1 {
-  transition: all 0.6s cubic-bezier(0.19, 1, 0.22, 1);
-  position: relative;
-  overflow: visible;
-}
-
-body.night h1:hover {
-  text-shadow: 0 0 8px rgba(255, 255, 255, 0.3);
-  letter-spacing: 0.45px;
-  color: #ffffff;
-  /* Use simple color instead of gradient */
-  transform: translateY(-2px);
-}
-
-body.day h1:hover {
-  text-shadow: 0 0 8px rgba(64, 62, 67, 0.15);
-  letter-spacing: 0.45px;
-  color: #222222;
-  /* Use simple color instead of gradient */
-  transform: translateY(-2px);
-}
-
-/* Add glow effect to h1 on hover */
-body.night h1:hover::before,
-body.day h1:hover::before {
-  content: "";
-  position: absolute;
-  top: -10px;
-  left: -20px;
-  right: -20px;
-  bottom: -10px;
-  background: radial-gradient(ellipse at center,
-      rgba(255, 255, 255, 0.1) 0%,
-      rgba(255, 255, 255, 0) 70%);
-  z-index: -1;
-  opacity: 0;
-  animation: heading-glow 2.5s infinite alternate cubic-bezier(0.455, 0.03, 0.515, 0.955);
-}
-
-body.night h1:hover::before {
-  animation: heading-glow-night 2.5s infinite alternate cubic-bezier(0.455, 0.03, 0.515, 0.955);
-}
-
-@keyframes heading-glow {
-  0% {
-    opacity: 0.1;
-    transform: scale(0.95);
-  }
-
-  100% {
-    opacity: 0.4;
-    transform: scale(1.05);
-  }
-}
-
-@keyframes heading-glow-night {
-  0% {
-    opacity: 0.2;
-    transform: scale(0.95);
-  }
-
-  100% {
-    opacity: 0.6;
-    transform: scale(1.05);
-  }
-}
 
 /* Enhanced link animation effects */
 .underline {
