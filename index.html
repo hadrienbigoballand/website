@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
 
   <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-BERXY0M3FY"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
+    function gtag() { dataLayer.push(arguments); }
     gtag('js', new Date());
 
     gtag('config', 'G-BERXY0M3FY');
@@ -37,36 +38,36 @@
   <!-- jQuery
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
-  
+
   <!-- Custom scripts -->
   <script src="js/simple-tooltip.js"></script>
 
   <script>
-  $(document).ready(function(){
+    $(document).ready(function () {
       // Theme toggling
-      $("#moon").click(function(){
-          $("body").addClass("day");
-          $("body").removeClass("night");
-          localStorage.setItem('theme', 'day');
+      $("#moon").click(function () {
+        $("body").addClass("day");
+        $("body").removeClass("night");
+        localStorage.setItem('theme', 'day');
       });
-      $("#sun").click(function(){
-          $("body").removeClass("day");
-          $("body").addClass("night");
-          localStorage.setItem('theme', 'night');
+      $("#sun").click(function () {
+        $("body").removeClass("day");
+        $("body").addClass("night");
+        localStorage.setItem('theme', 'night');
       });
-      
+
       // Apply saved theme on page load
       const storedTheme = localStorage.getItem('theme');
       if (storedTheme) {
-          if (storedTheme === 'night') {
-              $("body").removeClass("day");
-              $("body").addClass("night");
-          } else {
-              $("body").addClass("day");
-              $("body").removeClass("night");
-          }
+        if (storedTheme === 'night') {
+          $("body").removeClass("day");
+          $("body").addClass("night");
+        } else {
+          $("body").addClass("day");
+          $("body").removeClass("night");
+        }
       }
-      
+
       // Array of impressionist landscape paintings with metadata
       const paintings = [
         {
@@ -178,31 +179,31 @@
           year: "1929"
         },
       ];
-      
+
       // Select a random painting
       const randomIndex = Math.floor(Math.random() * paintings.length);
       const randomPainting = paintings[randomIndex];
-      
+
       // Set the image src and legend
       $("#art-painting").attr("src", randomPainting.src);
       updatePaintingLegend(randomPainting);
-      
+
       // Add click functionality to change the painting
-      $("#art-painting").click(function() {
+      $("#art-painting").click(function () {
         // Get current painting
         const currentSrc = $(this).attr("src");
         const currentIndex = paintings.findIndex(painting => painting.src === currentSrc);
-        
+
         // Create a filtered array without the current painting
         const availablePaintings = paintings.filter((painting, index) => index !== currentIndex);
-        
+
         // Select a new random painting from available options
         const newPainting = availablePaintings[Math.floor(Math.random() * availablePaintings.length)];
-        
+
         // Apply the transition animation
         $(this).addClass("painting-fade-out");
         $(".painting-legend").addClass("legend-fade-out");
-        
+
         // After fade out completes, change image and fade back in
         setTimeout(() => {
           $(this).attr("src", newPainting.src);
@@ -211,7 +212,7 @@
           $(this).addClass("painting-fade-in");
           $(".painting-legend").removeClass("legend-fade-out");
           $(".painting-legend").addClass("legend-fade-in");
-          
+
           // Remove the fade-in classes after animation completes
           setTimeout(() => {
             $(this).removeClass("painting-fade-in");
@@ -219,7 +220,7 @@
           }, 500);
         }, 300);
       });
-      
+
       // Function to update the painting legend
       function updatePaintingLegend(painting) {
         $(".painting-title").text(painting.title);
@@ -244,87 +245,87 @@
           paintingGrid.appendChild(paintingItem);
         });
       }
-      
+
       // List button click handler
-      $("#list-button").click(function(e) {
+      $("#list-button").click(function (e) {
         e.preventDefault();
         e.stopPropagation();
         togglePaintingSelection();
       });
-      
+
       // Close bubble on close button click
-      $(".close-bubble").click(function(e) {
+      $(".close-bubble").click(function (e) {
         e.preventDefault();
         e.stopPropagation();
         hidePaintingSelection();
       });
-      
+
       // Close bubble when clicking outside
-      $(document).click(function(e) {
+      $(document).click(function (e) {
         if (!$(e.target).closest('#painting-selection, #list-button').length) {
           hidePaintingSelection();
         }
       });
-      
+
       // Toggle painting selection bubble with overlay
       function togglePaintingSelection() {
         const bubble = $('#painting-selection');
         const overlay = $('.modal-overlay');
-        
+
         if (bubble.hasClass('bubble-expanded')) {
           hidePaintingSelection();
         } else {
           showPaintingSelection();
         }
       }
-      
+
       // Show painting selection bubble with animation
       function showPaintingSelection() {
         const bubble = $('#painting-selection');
         const overlay = $('.modal-overlay');
-        
+
         // First make overlay visible
         overlay.addClass('overlay-visible');
-        
+
         // Then make bubble visible but not expanded yet
         bubble.addClass('bubble-visible');
-        
+
         // Force browser to calculate layout before animation
         bubble[0].offsetHeight;
-        
+
         // Then start the expansion animation after a very short delay
         setTimeout(() => {
           bubble.addClass('bubble-expanded');
         }, 50);
       }
-      
+
       // Hide painting selection bubble with animation
       function hidePaintingSelection() {
         const bubble = $('#painting-selection');
         const overlay = $('.modal-overlay');
-        
+
         // First collapse the bubble
         bubble.removeClass('bubble-expanded');
-        
+
         // Then hide bubble and overlay with proper delay for animations
         setTimeout(() => {
           bubble.removeClass('bubble-visible');
           overlay.removeClass('overlay-visible');
         }, 500);
       }
-      
+
       // Select a painting from the bubble
       function selectPainting(index) {
         const selectedPainting = paintings[index];
-        
+
         // Apply the transition animation
         const artPainting = $("#art-painting");
         artPainting.addClass("painting-fade-out");
         $(".painting-legend").addClass("legend-fade-out");
-        
+
         // Hide the selection bubble
         hidePaintingSelection();
-        
+
         // After fade out completes, change image and fade back in
         setTimeout(() => {
           artPainting.attr("src", selectedPainting.src);
@@ -333,7 +334,7 @@
           artPainting.addClass("painting-fade-in");
           $(".painting-legend").removeClass("legend-fade-out");
           $(".painting-legend").addClass("legend-fade-in");
-          
+
           // Remove the fade-in classes after animation completes
           setTimeout(() => {
             artPainting.removeClass("painting-fade-in");
@@ -343,14 +344,14 @@
       }
 
       // Add keyboard shortcut (ESC key) to close the painting selection bubble
-      $(document).keydown(function(e) {
+      $(document).keydown(function (e) {
         if (e.key === "Escape" || e.keyCode === 27) {
           hidePaintingSelection();
         }
       });
-      
+
       // Close bubble when clicking overlay
-      $(document).on('click', '.modal-overlay', function() {
+      $(document).on('click', '.modal-overlay', function () {
         hidePaintingSelection();
       });
 
@@ -359,20 +360,20 @@
       const navItems = $('.nav-item');
       const navProgress = $('.nav-progress');
       let currentSection = 'intro';
-      
+
       // Set up smooth scrolling for nav items
-      $('.nav-item').click(function(e) {
+      $('.nav-item').click(function (e) {
         e.preventDefault();
         const target = $(this).attr('data-target');
         const $targetSection = $('#' + target);
-        
+
         if ($targetSection.length) {
           // Mark other sections
           $('.section').removeClass('section-entering');
-          
+
           // Calculate precise scroll position with offset
           const scrollPosition = $targetSection.offset().top - 50;
-          
+
           // Use RAF for smoother animation start
           requestAnimationFrame(() => {
             // Smooth scroll with premium easing
@@ -382,11 +383,11 @@
               duration: 1000,
               easing: 'cubicBezier',
               // Define custom easing function for ultimate smoothness
-              cubicBezier: function(t) {
+              cubicBezier: function (t) {
                 // Return the value of custom cubic-bezier at time t
                 return cubicBezier(0.22, 1, 0.36, 1, t);
               },
-              complete: function() {
+              complete: function () {
                 // Add entrance animation class when scrolling completes
                 $targetSection.addClass('section-entering');
               }
@@ -394,118 +395,118 @@
           });
         }
       });
-      
+
       // Handle mobile navigation - updated for true instant teleportation
-      $('.mobile-nav-item a').click(function(e) {
+      $('.mobile-nav-item a').click(function (e) {
         e.preventDefault();
         const target = $(this).attr('href').substring(1); // Remove the #
         const $targetSection = $('#' + target);
-        
+
         if ($targetSection.length) {
           // Store the target section position
           const scrollPosition = $targetSection.offset().top - 50;
-          
+
           // Start closing animation
           $('.mobile-nav').removeClass('visible');
           $('.mobile-nav-toggle').removeClass('active');
-          
+
           // Add blur to the body content during transition
           $('body').addClass('content-transitioning');
-          
+
           // INSTANT teleportation - direct DOM manipulation with no animation
           window.scrollTo(0, scrollPosition);
-          
+
           // Remove existing animations
           $('.section').removeClass('section-entering');
-          
+
           // Add entrance effect to target section
           $targetSection.addClass('section-entering');
-          
+
           // After the fade animation completes - use shorter duration
-          setTimeout(function() {
+          setTimeout(function () {
             // Remove blur effect
             $('body').removeClass('content-transitioning');
             $('body').css('overflow', '');
           }, 300); // Reduced from 500ms to 300ms to match fade-in speed
         }
       });
-      
+
       // Toggle mobile menu
-      $('.mobile-nav-toggle').click(function() {
+      $('.mobile-nav-toggle').click(function () {
         $(this).toggleClass('active');
         $('.mobile-nav').toggleClass('visible');
-        
+
         // If menu is opening, prevent body scrolling
         if ($('.mobile-nav').hasClass('visible')) {
           $('body').css('overflow', 'hidden');
         } else {
           // Delay returning scroll ability to body until animation completes
-          setTimeout(function() {
+          setTimeout(function () {
             $('body').css('overflow', '');
           }, 300); // Reduced from 500ms to 300ms to match the new animation speed
         }
       });
-      
+
       // Update active section on scroll
       function updateActiveSection() {
         let maxVisibleSection = '';
         let maxVisiblePercentage = 0;
-        
-        sections.forEach(function(section) {
+
+        sections.forEach(function (section) {
           const $section = $('#' + section);
-          
+
           if ($section.length) {
             const rect = $section[0].getBoundingClientRect();
             const windowHeight = $(window).height();
-            
+
             // Calculate how much of the section is visible in the viewport
             const visibleHeight = Math.min(rect.bottom, windowHeight) - Math.max(rect.top, 0);
             const sectionHeight = rect.height;
             const visiblePercentage = (visibleHeight > 0) ? visibleHeight / sectionHeight : 0;
-            
+
             if (visiblePercentage > maxVisiblePercentage) {
               maxVisiblePercentage = visiblePercentage;
               maxVisibleSection = section;
             }
           }
         });
-        
+
         if (maxVisibleSection && maxVisibleSection !== currentSection) {
           currentSection = maxVisibleSection;
           updateNavUI(currentSection);
         }
-        
+
         // Update scroll progress
         updateScrollProgress();
       }
-      
+
       // Update UI based on active section
       function updateNavUI(activeSection) {
         // Remove active class from all nav items
         navItems.removeClass('active');
-        
+
         // Add active class to current nav item
         $(`.nav-item[data-target="${activeSection}"]`).addClass('active');
-        
+
         // Update highlight position
         updateHighlightPosition();
       }
-      
+
       // Position the highlight element based on active nav item
       function updateHighlightPosition() {
         const activeItem = $('.nav-item.active');
-        
+
         if (activeItem.length) {
           const position = activeItem.position();
           const height = activeItem.height();
-          
+
           $('.nav-highlight').css({
             'top': position.top,
             'height': height
           });
         }
       }
-      
+
       // Update scroll progress indicator
       function updateScrollProgress() {
         const scrollTop = $(window).scrollTop();
@@ -513,15 +514,15 @@
         const winHeight = $(window).height();
         const scrollPercent = (scrollTop) / (docHeight - winHeight);
         const progressHeight = Math.max(0, Math.min(100, scrollPercent * 100));
-        
+
         navProgress.css('height', progressHeight + '%');
       }
 
       // Add scroll indicator to document
       $('body').prepend('<div class="scroll-indicator"></div>');
-      
+
       // Update scroll indicator width on scroll
-      $(window).on('scroll', function() {
+      $(window).on('scroll', function () {
         const scrollTop = $(window).scrollTop();
         const docHeight = $(document).height();
         const winHeight = $(window).height();
@@ -536,139 +537,141 @@
       function cubicBezier(p1, p2, p3, p4, t) {
         const t2 = t * t;
         const t3 = t2 * t;
-        return p1 * (1 - 3 * t + 3 * t2 - t3) + 
-               3 * p2 * (t - 2 * t2 + t3) + 
-               3 * p3 * (t2 - t3) + 
-               p4 * t3;
+        return p1 * (1 - 3 * t + 3 * t2 - t3) +
+          3 * p2 * (t - 2 * t2 + t3) +
+          3 * p3 * (t2 - t3) +
+          p4 * t3;
       }
-      
+
       // Add jQuery easing extension for animations
       jQuery.extend(jQuery.easing, {
         cubicBezier: function (x, t, b, c, d, s) {
-          const ts = (t/=d)*t;
-          const tc = ts*t;
-          return b+c*(0.22*tc + -0.15*ts + 0.93*t);
+          const ts = (t /= d) * t;
+          const tc = ts * t;
+          return b + c * (0.22 * tc + -0.15 * ts + 0.93 * t);
         }
       });
-      
+
       // Detect when sections enter viewport and add animation class
       function handleSectionVisibility() {
-        $('.section').each(function() {
+        $('.section').each(function () {
           const $section = $(this);
           const sectionTop = $section.offset().top;
           const scrollPosition = $(window).scrollTop() + $(window).height() * 0.8;
-          
+
           if (scrollPosition > sectionTop && !$section.hasClass('section-entering')) {
             $section.addClass('section-entering');
           }
         });
       }
-      
+
       // Run section visibility check on scroll and page load
       $(window).on('scroll resize', handleSectionVisibility);
       setTimeout(handleSectionVisibility, 100);
-      
+
       // Initialize
       updateActiveSection();
-      
+
       // Bind events for scroll and resize
       $(window).on('scroll resize', updateActiveSection);
-      
+
       // Add modal overlay if it doesn't exist
       if ($('.modal-overlay').length === 0) {
         $('body').append('<div class="modal-overlay"></div>');
       }
 
       // Staggered reveal animation for featured cards
-      $('.resource-card.featured').each(function(index) {
+      $('.resource-card.featured').each(function (index) {
         const card = $(this);
         setTimeout(() => {
           card.addClass('reveal');
         }, 100 * (index + 1));
       });
-  });
+    });
   </script>
 
-<script>
-  function submitContactForm(event) {
-    event.preventDefault();
-    
-    const email = document.getElementById('email-field').value;
-    const message = document.getElementById('message-field').value;
-    
-    // Google Form URL with correct entry IDs from your form
-    const formUrl = 'https://docs.google.com/forms/d/e/1FAIpQLSeRe5osVztTQuYQbfXgTi3UciyiRByxbFiE-0VW5LVirieytA/formResponse';
-    
-    // Create form data with the correct entry field names
-    const formData = new FormData();
-    formData.append('entry.1894189694', email);
-    formData.append('entry.648758865', message);
-    
-    // Submit to Google Form
-    fetch(formUrl, {
-      method: 'POST',
-      body: formData,
-      mode: 'no-cors'
-    }).then(() => {
-      // Clear form
-      document.getElementById('contact-form').reset();
-      alert('Message sent successfully!');
-    }).catch(() => {
-      // Even if fetch fails (CORS), the form is usually submitted
-      document.getElementById('contact-form').reset();
-      alert('Message sent!');
-    });
-    
-    return false;
-  }
-</script>
+  <script>
+    function submitContactForm(event) {
+      event.preventDefault();
 
-<script>
-// Set the date we're counting down to
-var countDownDate = new Date("Oct 02, 2023 09:00:00").getTime();
+      const email = document.getElementById('email-field').value;
+      const message = document.getElementById('message-field').value;
 
-// Update the count down every 1 second
-var x = setInterval(function() {
-    // Get todays date and time
-    var now = new Date().getTime();
-    
-    // Find the distance between now and the count down date
-    var distance = now - countDownDate;
-    
-    // Time calculations for days, hours, minutes and seconds
-    var days = Math.floor(distance / (1000 * 60 * 60 * 24));
-    var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-    var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-    var seconds = Math.floor((distance % (1000 * 60)) / 1000);
-    
-    // Output the result in an element with id="counter"
-    document.getElementById("counter").innerHTML = days + " days, " + hours + " hour" + (hours === 1 ? "" : "s") + ", " + minutes + " minute" + (minutes === 1 ? "" : "s") + ", and "  + seconds + " second" + (seconds === 1 ? "" : "s");
-    
-    // If the count down errors, write some text 
-    if (distance < 0) {
+      // Google Form URL with correct entry IDs from your form
+      const formUrl = 'https://docs.google.com/forms/d/e/1FAIpQLSeRe5osVztTQuYQbfXgTi3UciyiRByxbFiE-0VW5LVirieytA/formResponse';
+
+      // Create form data with the correct entry field names
+      const formData = new FormData();
+      formData.append('entry.1894189694', email);
+      formData.append('entry.648758865', message);
+
+      // Submit to Google Form
+      fetch(formUrl, {
+        method: 'POST',
+        body: formData,
+        mode: 'no-cors'
+      }).then(() => {
+        // Clear form
+        document.getElementById('contact-form').reset();
+        alert('Message sent successfully!');
+      }).catch(() => {
+        // Even if fetch fails (CORS), the form is usually submitted
+        document.getElementById('contact-form').reset();
+        alert('Message sent!');
+      });
+
+      return false;
+    }
+  </script>
+
+  <script>
+    // Set the date we're counting down to
+    var countDownDate = new Date("Oct 02, 2023 09:00:00").getTime();
+
+    // Update the count down every 1 second
+    var x = setInterval(function () {
+      // Get todays date and time
+      var now = new Date().getTime();
+
+      // Find the distance between now and the count down date
+      var distance = now - countDownDate;
+
+      // Time calculations for days, hours, minutes and seconds
+      var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+      var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+      // Output the result in an element with id="counter"
+      document.getElementById("counter").innerHTML = days + " days, " + hours + " hour" + (hours === 1 ? "" : "s") + ", " + minutes + " minute" + (minutes === 1 ? "" : "s") + ", and " + seconds + " second" + (seconds === 1 ? "" : "s");
+
+      // If the count down errors, write some text 
+      if (distance < 0) {
         clearInterval(x);
         document.getElementById("counter").innerHTML = "year";
-    }
-}, 1000);
-</script>
+      }
+    }, 1000);
+  </script>
 
   <!-- Google Analytics -->
   <script>
-    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+    (function (i, s, o, g, r, a, m) {
+      i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
+        (i[r].q = i[r].q || []).push(arguments)
+      }, i[r].l = 1 * new Date(); a = s.createElement(o),
+        m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
+    })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
 
     ga('create', 'UA-48335777-1', 'auto');
     ga('send', 'pageview');
   </script>
 
   <script>
-    var trackOutboundLink = function(url) {
-       ga('send', 'event', 'outbound', 'click', url, {
-         'transport': 'beacon',
-         'hitCallback': function(){document.location = url;}
-       });
+    var trackOutboundLink = function (url) {
+      ga('send', 'event', 'outbound', 'click', url, {
+        'transport': 'beacon',
+        'hitCallback': function () { document.location = url; }
+      });
     }
   </script>
 
@@ -751,7 +754,7 @@ var x = setInterval(function() {
         flex-direction: column;
         gap: 16px;
       }
-      
+
       .questionnaire-qr {
         align-self: flex-start;
       }
@@ -851,633 +854,703 @@ var x = setInterval(function() {
   </style>
 
 </head>
+
 <body>
 
   <!-- Primary Page Layout
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
 
-<body class="day">
-<div class="container animated fadeIn one">
-  <div class="row group">
-    <div class="three columns icon">
-   		<img src="images/moon.svg" id="moon">
-      <img src="images/sun.svg" id="sun">
-    </div>
-
-    <div class="six columns">
-      <h1 id="intro" class="night section">Hi, I'm Hadrien.</h1>
-
-      <div class="animated fadeIn two">
-       <p>I am currently pursuring a PhD at <a href="https://myfit-solutions.com/" target="_blank" class="underline">MyFit Solutions</a>, in the HEKA team of <a href="https://www.inria.fr/fr/centre-inria-de-paris" target="_blank" class="underline">INRIA Paris</a> and under the supervision of <a href="https://sites.google.com/site/stephanieallassonniere/" target="_blank" class="underline">Professor Stéphanie Allassonnière</a>, <a href="https://www.jeanfeydy.com/" target="_blank" class="underline">Dr. Jean Feydy</a> and <a href="https://www.linkedin.com/in/jérémy-adoux-96612092/" target="_blank" class="underline">Jeremy Adoux</a> for the last <span id="counter"><br></span>.</p>
-
-       <p>I am also contributing to <a href="https://github.com/scikit-shapes/scikit-shapes" target="_blank" class="underline">scikit-shapes</a>, an open-source Python library for shape analysis and statistical learning on geometric data, designed to facilitate research and applications in computational anatomy, morphometrics, and related fields.</p>
-
-       <p> Additionally, I have been serving as a Teaching Assistant of Probability Theory at <a href="https://www.univ-lyon2.fr/" target="_blank" class="underline">Lyon 2 Lumière University</a>, working in collaboration with <a href="https://sites.google.com/site/stephanegchretien/home" target="_blank" class="underline">Professor Stephane Chretien</a> for three years and Zied Gharbi for one year.</p>
-
-      <div class="spacer48"></div>
-      
-      <!-- Questionnaire Section -->
-      <div class="questionnaire-section animated fadeIn two">
-        <div class="questionnaire-content">
-          <p>Étudiants L1 MIASHS : merci de remplir le <a href="https://docs.google.com/forms/d/e/1FAIpQLSe4KFXHJELEUxzPtsDSsgIjRyzt045MHzTX7s-Cni6p8q7FoA/viewform?usp=header" target="_blank" class="questionnaire-link underline">questionnaire de rentrée</a> pour que je puisse adapter le cours à vos besoins.</p>
+  <body class="day">
+    <div class="container animated fadeIn one">
+      <div class="row group">
+        <div class="three columns icon">
+          <img src="images/moon.svg" id="moon">
+          <img src="images/sun.svg" id="sun">
         </div>
-        <div class="questionnaire-qr">
-          <a href="https://docs.google.com/forms/d/e/1FAIpQLSe4KFXHJELEUxzPtsDSsgIjRyzt045MHzTX7s-Cni6p8q7FoA/viewform?usp=header" target="_blank">
-            <img src="https://api.qrserver.com/v1/create-qr-code/?size=72x72&data=https://docs.google.com/forms/d/e/1FAIpQLSe4KFXHJELEUxzPtsDSsgIjRyzt045MHzTX7s-Cni6p8q7FoA/viewform" alt="QR Code">
-          </a>
-        </div>
-      </div>
-      
-      <div class="spacer48"></div>
-      
-      <!-- Contact Section - Collapsible but Expanded by Default -->
-      <div class="collapsible-section" id="contact-section">
-        <div class="collapsible-header active" id="contact">
-          <h4 class="animated fadeIn three section">CONTACT</h4>
-          <div class="collapse-icon"></div>
-        </div>
-        <div class="collapsible-content expanded">
-          <div class="collapsible-content-inner">
-            <div class="contact-section animated fadeIn two">
-              <p>You can send me a message using this form, or use the contact information below.</p>
-              
-              <!-- Simple Contact Form -->
-              <div class="simple-contact-form">
-                <form id="contact-form" onsubmit="return submitContactForm(event)">
-                  <div class="form-field">
-                    <input type="email" id="email-field" name="email" placeholder="Your email" required>
-                  </div>
-                  <div class="form-field">
-                    <textarea id="message-field" name="message" placeholder="Your message" rows="4" required></textarea>
-                  </div>
-                  <button type="submit" class="send-button">Send</button>
-                </form>
+
+        <div class="six columns">
+          <h1 id="intro" class="night section">Hi, I'm Hadrien.</h1>
+
+          <div class="animated fadeIn two">
+            <p>I am currently pursuring a PhD at <a href="https://myfit-solutions.com/" target="_blank"
+                class="underline">MyFit Solutions</a>, in the HEKA team of <a
+                href="https://www.inria.fr/fr/centre-inria-de-paris" target="_blank" class="underline">INRIA Paris</a>
+              and under the supervision of <a href="https://sites.google.com/site/stephanieallassonniere/"
+                target="_blank" class="underline">Professor Stéphanie Allassonnière</a>, <a
+                href="https://www.jeanfeydy.com/" target="_blank" class="underline">Dr. Jean Feydy</a> and <a
+                href="https://www.linkedin.com/in/jérémy-adoux-96612092/" target="_blank" class="underline">Jeremy
+                Adoux</a> for the last <span id="counter"><br></span>.</p>
+
+            <p>I am also contributing to <a href="https://github.com/scikit-shapes/scikit-shapes" target="_blank"
+                class="underline">scikit-shapes</a>, an open-source Python library for shape analysis and statistical
+              learning on geometric data, designed to facilitate research and applications in computational anatomy,
+              morphometrics, and related fields.</p>
+
+            <p> Additionally, I have been serving as a Teaching Assistant of Probability Theory at <a
+                href="https://www.univ-lyon2.fr/" target="_blank" class="underline">Lyon 2 Lumière University</a>,
+              working in collaboration with <a href="https://sites.google.com/site/stephanegchretien/home"
+                target="_blank" class="underline">Professor Stephane Chretien</a> for three years and Zied Gharbi for
+              one year.</p>
+
+            <div class="spacer48"></div>
+
+            <!-- Questionnaire Section -->
+            <div class="questionnaire-section animated fadeIn two">
+              <div class="questionnaire-content">
+                <p>Étudiants L1 MIASHS : merci de remplir le <a
+                    href="https://docs.google.com/forms/d/e/1FAIpQLSe4KFXHJELEUxzPtsDSsgIjRyzt045MHzTX7s-Cni6p8q7FoA/viewform?usp=header"
+                    target="_blank" class="questionnaire-link underline">questionnaire de rentrée</a> pour que je puisse
+                  adapter le cours à vos besoins.</p>
               </div>
-              
-              <div class="spacer48"></div>
-
-              <div class="contact-grid">
-                <div class="contact-item">
-                  <div class="icon-svg icon-mail">
-                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                      <path d="M20,4H4C2.9,4,2,4.9,2,6v12c0,1.1,0.9,2,2,2h16c1.1,0,2-0.9,2-2V6C22,4.9,21.1,4,20,4z M20,8l-8,5L4,8V6l8,5l8-5V8z"/>
-                    </svg>
-                  </div>
-                  <div class="contact-info">
-                    <p class="contact-label">For students</p>
-                    <a href="mailto:h.bigo-balland@univ-lyon2.fr" class="contact-link">h.bigo-balland@univ-lyon2.fr</a>
-                  </div>
-                </div>
-                
-                <div class="contact-item">
-                  <div class="icon-svg icon-mail">
-                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                      <path d="M20,4H4C2.9,4,2,4.9,2,6v12c0,1.1,0.9,2,2,2h16c1.1,0,2-0.9,2-2V6C22,4.9,21.1,4,20,4z M20,8l-8,5L4,8V6l8,5l8-5V8z"/>
-                    </svg>
-                  </div>
-                  <div class="contact-info">
-                    <p class="contact-label">For work</p>
-                    <a href="mailto:hadrien.bigo-balland@inria.fr" class="contact-link">hadrien.bigo-balland@inria.fr</a>
-                  </div>
-                </div>
-                
-                <div class="contact-item">
-                  <div class="icon-svg icon-linkedin">
-                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                      <path d="M19,3H5C3.9,3,3,3.9,3,5v14c0,1.1,0.9,2,2,2h14c1.1,0,2-0.9,2-2V5C21,3.9,20.1,3,19,3z M9,17H6.5v-7H9V17z M7.7,8.7c-0.8,0-1.4-0.7-1.4-1.4c0-0.8,0.6-1.4,1.4-1.4c0.8,0,1.4,0.6,1.4,1.4C9.1,8.1,8.5,8.7,7.7,8.7z M18,17h-2.5v-3.9c0-0.9-0.2-1.6-1.1-1.6c-1.4,0-1.6,1.4-1.6,1.6V17H10v-7h2.5v1c0.3-0.6,1.1-1.2,2.2-1.2c2.4,0,2.8,1.6,2.8,3.6V17z"/>
-                    </svg>
-                  </div>
-                  <div class="contact-info">
-                    <p class="contact-label">Connect</p>
-                    <a href="https://www.linkedin.com/in/hadrienbigoballand" target="_blank" class="contact-link">LinkedIn Profile</a>
-                  </div>
-                </div>
+              <div class="questionnaire-qr">
+                <a href="https://docs.google.com/forms/d/e/1FAIpQLSe4KFXHJELEUxzPtsDSsgIjRyzt045MHzTX7s-Cni6p8q7FoA/viewform?usp=header"
+                  target="_blank">
+                  <img
+                    src="https://api.qrserver.com/v1/create-qr-code/?size=72x72&data=https://docs.google.com/forms/d/e/1FAIpQLSe4KFXHJELEUxzPtsDSsgIjRyzt045MHzTX7s-Cni6p8q7FoA/viewform"
+                    alt="QR Code">
+                </a>
               </div>
             </div>
-          </div>
-        </div>
-      </div>
-      
-      <div class="spacer48"></div>
-      <!-- End contact section -->
-      
-      <!-- Teaching Resources Section with collapsible functionality - Closed by Default -->
-      <div class="collapsible-section" id="teaching-section">
-        <div class="collapsible-header" id="teaching">
-          <h4 class="animated fadeIn three section">TEACHING RESOURCES</h4>
-          <div class="collapse-icon"></div>
-        </div>
-        <div class="collapsible-content">
-          <div class="collapsible-content-inner">
-            <div class="downloads-section animated fadeIn two">
-              <p>Probability Theory course materials for Lyon 2 students (credit to Zied Gharbi):</p>
-              
-              <div class="resources-container">
-                <!-- Main course materials -->
-                <div class="resources-group">
-                  <h5 class="resource-subtitle">Cours</h5>
-                  <div class="resource-grid">
-                    <div class="resource-card">
-                      <div class="card-content">
-                        <div class="card-icon">
-                          <div class="icon-svg icon-document">
-                            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                              <path d="M14,2H6C4.9,2,4,2.9,4,4v16c0,1.1,0.9,2,2,2h12c1.1,0,2-0.9,2-2V8L14,2z M16,18H8v-2h8V18z M16,14H8v-2h8V14z M13,9V3.5L18.5,9H13z"/>
-                            </svg>
-                          </div>
-                        </div>
-                        <div class="card-details">
-                          <h3 class="card-title">Cours - Probabilités et ses applications</h3>
-                          <p class="card-description">Le cours complet couvrant tous les aspects théoriques.</p>
-                        </div>
-                        <div class="card-overlay"></div>
-                      </div>
-                      <a href="lyon2-TD-probas/cours.pdf" download class="card-link" aria-label="Download Cours - Probabilités et ses applications"></a>
-                    </div>
-                  </div>
-                </div>
-            
-                <!-- Essential understanding resources -->
-                <div class="resources-group">
-                  <h5 class="resource-subtitle">L'essentiel pour comprendre les TDs</h5>
-                  <div class="resource-grid">
-                    <div class="resource-card featured interactive">
-                      <div class="card-content">
-                        <div class="card-icon highlight featured">
-                          <div class="icon-svg icon-sparkle">
-                            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                              <path d="M12,2L15,9L22,9L16,13.5L18,21L12,17L6,21L8,13.5L2,9L9,9Z"/>
-                            </svg>
-                          </div>
-                        </div>
-                        <div class="card-details">
-                          <h3 class="card-title">L'essentiel - Guide détaillé</h3>
-                          <p class="card-description">Explications essentielles et méthodes pour comprendre et résoudre les TDs.</p>
-                        </div>
-                        <div class="card-overlay"></div>
-                        <span class="featured-badge">Recommandé</span>
-                      </div>
-                      <a href="lyon2-TD-probas/essentiel_td.pdf" download class="card-link" 
-                         ></a>
-                    </div>
-                    
-                    <div class="resource-card featured interactive">
-                      <div class="card-content">
-                        <div class="card-icon highlight featured">
-                          <div class="icon-svg icon-sparkle">
-                            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                              <path d="M12,2L15,9L22,9L16,13.5L18,21L12,17L6,21L8,13.5L2,9L9,9Z"/>
-                            </svg>
-                          </div>
-                        </div>
-                        <div class="card-details">
-                          <h3 class="card-title">L'essentiel - Récapitulatif des formules</h3>
-                          <p class="card-description">Version condensée avec uniquement les formules et méthodes.</p>
-                        </div>
-                        <div class="card-overlay"></div>
-                        <span class="featured-badge">Recommandé</span>
-                      </div>
-                      <a href="lyon2-TD-probas/essentiel_td_recap.pdf" download class="card-link" ></a>
-                    </div>
-                  </div>
-                </div>
-            
-                <!-- Interactive tools -->
-                <div class="resources-group">
-                  <h5 class="resource-subtitle">Pour réviser</h5>
-                  <div class="resource-grid">
-                    <div class="resource-card featured interactive">
-                      <div class="card-content">
-                        <div class="card-icon highlight featured">
-                          <div class="icon-svg icon-flashcard">
-                            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                              <path d="M4,2H20A2,2 0 0,1 22,4V16A2,2 0 0,1 20,18H16L12,22L8,18H4A2,2 0 0,1 2,16V4A2,2 0 0,1 4,2M4,4V16H8.83L12,19.17L15.17,16H20V4H4M6,7H18V9H6V7M6,11H16V13H6V11Z"/>
-                            </svg>
-                          </div>
-                        </div>
-                        <div class="card-details">
-                          <h3 class="card-title">Flashcards pour réviser</h3>
-                          <p class="card-description">Outil interactif pour réviser les concepts importants.</p>
-                        </div>
-                        <div class="card-overlay"></div>
-                        <span class="featured-badge">Recommandé</span>
-                      </div>
-                      <a href="flashcards.html" class="card-link"></a>
-                    </div>
-                  </div>
-                </div>
-            
-                <!-- Interactive teaching tools -->
-                <div class="resources-group">
-                  <h5 class="resource-subtitle">Outils pédagogiques interactifs</h5>
-                  <div class="resource-grid">
-                    <div class="resource-card featured interactive">
-                      <div class="card-content">
-                        <div class="card-icon highlight featured">
-                          <div class="icon-svg icon-chart">
-                            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                              <path d="M3,13v7h18v-1.5l-9-7L8,17L3,13z M3,7l4,3l5-7l9,7v-7C21,3.9,20.1,3,19,3H5C3.9,3,3,3,5V7z"/>
-                            </svg>
-                          </div>
-                        </div>
-                        <div class="card-details">
-                          <h3 class="card-title">Théorème central limite</h3>
-                          <p class="card-description">Démonstration interactive du théorème central limite.</p>
-                        </div>
-                        <div class="card-overlay"></div>
-                        <span class="featured-badge">Pour aller plus loin</span>
-                      </div>
-                      <a href="central-limit-theorem.html" class="card-link"></a>
-                    </div>
-                  </div>
-                </div>
-            
-                <!-- New section grouping all TD resources -->
-                <div class="resources-group td-section">
-                  <h5 class="resource-subtitle resource-subtitle-major">Travaux Dirigés (TDs)</h5>
-                  
-                <!-- TD préliminaire Section -->
-                  <h6 class="resource-subtitle-minor">TD préliminaire - Exercices sur les ensembles, les limites, la dérivation et les primitives</h6>
-                  <div class="resource-grid">
-                    <div class="resource-card">
-                      <div class="card-content">
-                        <div class="card-icon">
-                          <div class="icon-svg icon-document">
-                            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                              <path d="M14,2H6C4.9,2,4,2.9,4,4v16c0,1.1,0.9,2,2,2h12c1.1,0,2-0.9,2-2V8L14,2z M16,18H8v-2h8V18z M16,14H8v-2h8V14z M13,9V3.5L18.5,9H13z"/>
-                            </svg>
-                          </div>
-                        </div>
-                        <div class="card-details">
-                          <h3 class="card-title">TD préliminaire - Énoncé</h3>
-                          <p class="card-description">Exercices sur les ensembles, les limites, la dérivation et les primitives.</p>
-                        </div>
-                        <div class="card-overlay"></div>
-                      </div>
-                      <a href="lyon2-TD-probas/TD0_Probabilites_L2_MIASHS.pdf" download class="card-link"></a>
-                    </div>
-                    
-                    <div class="resource-card">
-                      <div class="card-content">
-                        <div class="card-icon">
-                          <div class="icon-svg icon-document">
-                            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                              <path d="M14,2H6C4.9,2,4,2.9,4,4v16c0,1.1,0.9,2,2,2h12c1.1,0,2-0.9,2-2V8L14,2z M16,18H8v-2h8V18z M16,14H8v-2h8V14z M13,9V3.5L18.5,9H13z"/>
-                            </svg>
-                          </div>
-                        </div>
-                        <div class="card-details">
-                          <h3 class="card-title">TD préliminaire - Correction</h3>
-                          <p class="card-description">Solutions détaillées des exercices.</p>
-                        </div>
-                        <div class="card-overlay"></div>
-                      </div>
-                      <a href="lyon2-TD-probas/TD 0 correction.pdf" download class="card-link"></a>
-                    </div>
-                  </div>
 
-                  <!-- TD1 Section -->
-                  <h6 class="resource-subtitle-minor">TD1 - Exercices sur les probabilités et les probabilités conditionnelles</h6>
-                  <div class="resource-grid">
-                    <div class="resource-card">
-                      <div class="card-content">
-                        <div class="card-icon">
-                          <div class="icon-svg icon-document">
-                            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                              <path d="M14,2H6C4.9,2,4,2.9,4,4v16c0,1.1,0.9,2,2,2h12c1.1,0,2-0.9,2-2V8L14,2z M16,18H8v-2h8V18z M16,14H8v-2h8V14z M13,9V3.5L18.5,9H13z"/>
-                            </svg>
-                          </div>
-                        </div>
-                        <div class="card-details">
-                          <h3 class="card-title">TD1 - Énoncé</h3>
-                          <p class="card-description">Exercices sur les probabilités et les probabilités conditionnelles.</p>
-                        </div>
-                        <div class="card-overlay"></div>
-                      </div>
-                      <a href="lyon2-TD-probas/TD1_Probabilites_L2_MIASHS_noncorrigé.pdf" download class="card-link"></a>
-                    </div>
-                    
-                    <div class="resource-card">
-                      <div class="card-content">
-                        <div class="card-icon">
-                          <div class="icon-svg icon-document">
-                            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                              <path d="M14,2H6C4.9,2,4,2.9,4,4v16c0,1.1,0.9,2,2,2h12c1.1,0,2-0.9,2-2V8L14,2z M16,18H8v-2h8V18z M16,14H8v-2h8V14z M13,9V3.5L18.5,9H13z"/>
-                            </svg>
-                          </div>
-                        </div>
-                        <div class="card-details">
-                          <h3 class="card-title">TD1 - Correction</h3>
-                          <p class="card-description">Solutions détaillées des exercices.</p>
-                        </div>
-                        <div class="card-overlay"></div>
-                      </div>
-                      <a href="lyon2-TD-probas/TD1_Probabilites_L2_MIASHS_corrigé.pdf" download class="card-link"></a>
-                    </div>
-                  </div>
-                  
-                  <!-- TD2 Section -->
-                  <h6 class="resource-subtitle-minor">TD2 - Exercices sur les probabilités et les probabilités conditionnelles</h6>
-                  <div class="resource-grid">
-                    <div class="resource-card">
-                      <div class="card-content">
-                        <div class="card-icon">
-                          <div class="icon-svg icon-document">
-                            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                              <path d="M14,2H6C4.9,2,4,2.9,4,4v16c0,1.1,0.9,2,2,2h12c1.1,0,2-0.9,2-2V8L14,2z M16,18H8v-2h8V18z M16,14H8v-2h8V14z M13,9V3.5L18.5,9H13z"/>
-                            </svg>
-                          </div>
-                        </div>
-                        <div class="card-details">
-                          <h3 class="card-title">TD2 - Énoncé</h3>
-                          <p class="card-description">Exercices sur les probabilités et les probabilités conditionnelles.</p>
-                        </div>
-                        <div class="card-overlay"></div>
-                      </div>
-                      <a href="lyon2-TD-probas/TD2_Probabilites_L2_MIASHS.pdf" download class="card-link"></a>
-                    </div>
-                    
-                    <div class="resource-card">
-                      <div class="card-content">
-                        <div class="card-icon">
-                          <div class="icon-svg icon-document">
-                            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                              <path d="M14,2H6C4.9,2,4,2.9,4,4v16c0,1.1,0.9,2,2,2h12c1.1,0,2-0.9,2-2V8L14,2z M16,18H8v-2h8V18z M16,14H8v-2h8V14z M13,9V3.5L18.5,9H13z"/>
-                            </svg>
-                          </div>
-                        </div>
-                        <div class="card-details">
-                          <h3 class="card-title">TD2 - Correction</h3>
-                          <p class="card-description">Solutions détaillées des exercices.</p>
-                        </div>
-                        <div class="card-overlay"></div>
-                      </div>
-                      <a href="lyon2-TD-probas/TD2_Probabilites_L2_MIASHS_corrigé.pdf" download class="card-link"></a>
-                    </div>
-                  </div>
-                  
-                  <!-- TD3 Section -->
-                  <h6 class="resource-subtitle-minor">TD3 - Exercices sur les lois de probabilités sur les entiers et sur la droite réelle</h6>
-                  <div class="resource-grid">
-                    <div class="resource-card">
-                      <div class="card-content">
-                        <div class="card-icon">
-                          <div class="icon-svg icon-document">
-                            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                              <path d="M14,2H6C4.9,2,4,2.9,4,4v16c0,1.1,0.9,2,2,2h12c1.1,0,2-0.9,2-2V8L14,2z M16,18H8v-2h8V18z M16,14H8v-2h8V14z M13,9V3.5L18.5,9H13z"/>
-                            </svg>
-                          </div>
-                        </div>
-                        <div class="card-details">
-                          <h3 class="card-title">TD3 - Énoncé</h3>
-                          <p class="card-description">Exercices sur les lois de probabilités sur les entiers et sur la droite réelle.</p>
-                        </div>
-                        <div class="card-overlay"></div>
-                      </div>
-                      <a href="lyon2-TD-probas/TD3_Probabilites_L2_MIASHS.pdf" download class="card-link"></a>
-                    </div>
-                  </div>
+            <div class="spacer48"></div>
 
-                  <div class="resource-grid">
-                    <div class="resource-card">
-                      <div class="card-content">
-                        <div class="card-icon">
-                          <div class="icon-svg icon-document">
-                            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                              <path d="M14,2H6C4.9,2,4,2.9,4,4v16c0,1.1,0.9,2,2,2h12c1.1,0,2-0.9,2-2V8L14,2z M16,18H8v-2h8V18z M16,14H8v-2h8V14z M13,9V3.5L18.5,9H13z"/>
-                            </svg>
-                          </div>
+            <!-- Contact Section - Collapsible but Expanded by Default -->
+            <div class="collapsible-section" id="contact-section">
+              <div class="collapsible-header active" id="contact">
+                <h4 class="animated fadeIn three section">CONTACT</h4>
+                <div class="collapse-icon"></div>
+              </div>
+              <div class="collapsible-content expanded">
+                <div class="collapsible-content-inner">
+                  <div class="contact-section animated fadeIn two">
+                    <p>You can send me a message using this form, or use the contact information below.</p>
+
+                    <!-- Simple Contact Form -->
+                    <div class="simple-contact-form">
+                      <form id="contact-form" onsubmit="return submitContactForm(event)">
+                        <div class="form-field">
+                          <input type="email" id="email-field" name="email" placeholder="Your email" required>
                         </div>
-                        <div class="card-details">
-                          <h3 class="card-title">Table de la loi normale</h3>
-                          <p class="card-description">Table de la loi normale utile pour le TD3.</p>
+                        <div class="form-field">
+                          <textarea id="message-field" name="message" placeholder="Your message" rows="4"
+                            required></textarea>
                         </div>
-                        <div class="card-overlay"></div>
-                      </div>
-                      <a href="lyon2-TD-probas/TD3_Probabilites_L2_MIASHS.pdf" download class="card-link"></a>
-                    </div>
-                  </div>
-                  
-                  <!-- TD4 Section -->
-                  <h6 class="resource-subtitle-minor">TD4 - Exercices sur les variables aléatoires et leurs lois de probabilités sur les entiers et sur la droite réelle</h6>
-                  <div class="resource-grid">
-                    <div class="resource-card">
-                      <div class="card-content">
-                        <div class="card-icon">
-                          <div class="icon-svg icon-document">
-                            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                              <path d="M14,2H6C4.9,2,4,2.9,4,4v16c0,1.1,0.9,2,2,2h12c1.1,0,2-0.9,2-2V8L14,2z M16,18H8v-2h8V18z M16,14H8v-2h8V14z M13,9V3.5L18.5,9H13z"/>
-                            </svg>
-                          </div>
-                        </div>
-                        <div class="card-details">
-                          <h3 class="card-title">TD4 - Énoncé</h3>
-                          <p class="card-description">Exercices sur les variables aléatoires et leurs lois de probabilités sur les entiers et sur la droite réelle.</p>
-                        </div>
-                        <div class="card-overlay"></div>
-                      </div>
-                      <a href="lyon2-TD-probas/TD4_Probabilites_L2_MIASHS.pdf" download class="card-link"></a>
-                    </div>
-                  </div>
-                </div>
-            
-                <div class="resources-group">
-                  <h5 class="resource-subtitle">Ressources vidéo & web recommandées</h5>
-                  <div class="resource-grid">
-                    
-                    <div class="resource-card interactive">
-                      <div class="card-content">
-                        <div class="card-icon">
-                          <div class="icon-svg">
-                            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                              <path d="M8,5.14V19.14L19,12.14L8,5.14Z"/>
-                            </svg>
-                          </div>
-                        </div>
-                        <div class="card-details">
-                          <h3 class="card-title">Probabilités - Yvan Monka</h3>
-                          <p class="card-description">Tutos pas-à-pas.</p>
-                        </div>
-                        <div class="card-overlay"></div>
-                      </div>
-                      <a href="https://www.youtube.com/playlist?list=PLVUDmbpupCaoTbm5IPhDmnM7qnETXp47B" target="_blank" class="card-link"></a>
+                        <button type="submit" class="send-button">Send</button>
+                      </form>
                     </div>
 
-                    <div class="resource-card interactive">
-                      <div class="card-content">
-                        <div class="card-icon">
-                          <div class="icon-svg">
-                            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                              <path d="M8,5.14V19.14L19,12.14L8,5.14Z"/>
-                            </svg>
-                          </div>
-                        </div>
-                        <div class="card-details">
-                          <h3 class="card-title">Probabilités conditionnelles et indépendances - Yvan Monka</h3>
-                          <p class="card-description">Tutos pas-à-pas.</p>
-                        </div>
-                        <div class="card-overlay"></div>
-                      </div>
-                      <a href="https://www.youtube.com/playlist?list=PLVUDmbpupCapoStVETZ2x6iy0vCua0HvK" target="_blank" class="card-link"></a>
-                    </div>
- 
-                    <div class="resource-card interactive">
-                      <div class="card-content">
-                        <div class="card-icon">
-                          <div class="icon-svg">
-                             <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                              <path d="M12,4.5C7,4.5 2.73,7.61 1,12c1.73,4.39 6,7.5 11,7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12,17c-2.76,0-5-2.24-5-5s2.24-5 5-5 5,2.24 5,5-2.24,5-5,5zM12,9c-1.66,0-3,1.34-3,3s1.34,3 3,3 3-1.34 3-3-1.34-3-3-3z"/>
-                            </svg>
-                          </div>
-                        </div>
-                        <div class="card-details">
-                          <h3 class="card-title">Comprendre le théorème de Bayes - 3Blue1Brown</h3>
-                          <p class="card-description">L'intuition derrière le théorème de Bayes.</p>
-                        </div>
-                        <div class="card-overlay"></div>
-                      </div>
-                      <a href="https://www.youtube.com/watch?v=HZGCoVF3YvM" target="_blank" class="card-link"></a>
-                    </div>
+                    <div class="spacer48"></div>
 
-                    <div class="resource-card interactive">
-                      <div class="card-content">
-                        <div class="card-icon">
-                          <div class="icon-svg">
-                             <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                              <path d="M3,13v7h18v-1.5l-9-7L8,17L3,13z M3,7l4,3l5-7l9,7v-7C21,3.9,20.1,3,19,3H5C3.9,3,3,3,5V7z"/>
-                            </svg>
-                          </div>
+                    <div class="contact-grid">
+                      <div class="contact-item">
+                        <div class="icon-svg icon-mail">
+                          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                              d="M20,4H4C2.9,4,2,4.9,2,6v12c0,1.1,0.9,2,2,2h16c1.1,0,2-0.9,2-2V6C22,4.9,21.1,4,20,4z M20,8l-8,5L4,8V6l8,5l8-5V8z" />
+                          </svg>
                         </div>
-                        <div class="card-details">
-                          <h3 class="card-title">Simulateur Loi Normale</h3>
-                          <p class="card-description">Outil GeoGebra pour visualiser l'aire sous la courbe.</p>
+                        <div class="contact-info">
+                          <p class="contact-label">For students</p>
+                          <a href="mailto:h.bigo-balland@univ-lyon2.fr"
+                            class="contact-link">h.bigo-balland@univ-lyon2.fr</a>
                         </div>
-                        <div class="card-overlay"></div>
                       </div>
-                      <a href="https://www.geogebra.org/classic#probability" target="_blank" class="card-link"></a>
-                    </div>
 
-                    <div class="resource-card interactive">
-                      <div class="card-content">
-                        <div class="card-icon">
-                          <div class="icon-svg">
-                            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                              <path d="M3,17.25V21h3.75L17.81,9.94l-3.75-3.75L3,17.25z M20.71,7.04c0.39-0.39,0.39-1.02,0-1.41l-2.34-2.34c-0.39-0.39-1.02-0.39-1.41,0l-1.83,1.83l3.75,3.75L20.71,7.04z"/>
-                            </svg>
-                          </div>
+                      <div class="contact-item">
+                        <div class="icon-svg icon-mail">
+                          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                              d="M20,4H4C2.9,4,2,4.9,2,6v12c0,1.1,0.9,2,2,2h16c1.1,0,2-0.9,2-2V6C22,4.9,21.1,4,20,4z M20,8l-8,5L4,8V6l8,5l8-5V8z" />
+                          </svg>
                         </div>
-                        <div class="card-details">
-                          <h3 class="card-title">Khan Academy</h3>
-                          <p class="card-description">Exercices interactifs corrigés pour s'entraîner.</p>
+                        <div class="contact-info">
+                          <p class="contact-label">For work</p>
+                          <a href="mailto:hadrien.bigo-balland@inria.fr"
+                            class="contact-link">hadrien.bigo-balland@inria.fr</a>
                         </div>
-                        <div class="card-overlay"></div>
                       </div>
-                      <a href="https://fr.khanacademy.org/math/probability" target="_blank" class="card-link"></a>
-                    </div>
 
-                    <div class="resource-card interactive">
-                      <div class="card-content">
-                        <div class="card-icon">
-                          <div class="icon-svg">
-                            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                              <path d="M18,22A2,2 0 0,0 20,20V4C20,2.89 19.1,2 18,2H12V9L9.5,7.5L7,9V2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18Z"/>
-                            </svg>
-                          </div>
+                      <div class="contact-item">
+                        <div class="icon-svg icon-linkedin">
+                          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                              d="M19,3H5C3.9,3,3,3.9,3,5v14c0,1.1,0.9,2,2,2h14c1.1,0,2-0.9,2-2V5C21,3.9,20.1,3,19,3z M9,17H6.5v-7H9V17z M7.7,8.7c-0.8,0-1.4-0.7-1.4-1.4c0-0.8,0.6-1.4,1.4-1.4c0.8,0,1.4,0.6,1.4,1.4C9.1,8.1,8.5,8.7,7.7,8.7z M18,17h-2.5v-3.9c0-0.9-0.2-1.6-1.1-1.6c-1.4,0-1.6,1.4-1.6,1.6V17H10v-7h2.5v1c0.3-0.6,1.1-1.2,2.2-1.2c2.4,0,2.8,1.6,2.8,3.6V17z" />
+                          </svg>
                         </div>
-                        <div class="card-details">
-                          <h3 class="card-title">Bibm@th.net</h3>
-                          <p class="card-description">Encyclopédie mathématique : définitions rigoureuses et exercices.</p>
+                        <div class="contact-info">
+                          <p class="contact-label">Connect</p>
+                          <a href="https://www.linkedin.com/in/hadrienbigoballand" target="_blank"
+                            class="contact-link">LinkedIn Profile</a>
                         </div>
-                        <div class="card-overlay"></div>
                       </div>
-                      <a href="https://www.bibmath.net/ressources/index.php?action=affiche&quoi=bde/proba" target="_blank" class="card-link"></a>
                     </div>
-
                   </div>
                 </div>
               </div>
             </div>
-          </div>
-        </div>
-      </div>
-      
-      <div class="spacer48"></div>
-      <!-- End of teaching resources section -->
-      
-      <!-- Wrapper for education-degrees sections -->
-      <div class="education-degrees-container">
-        <!-- Education Section - Collapsible but Expanded by Default -->
-        <div class="section-column">
-          <div class="collapsible-section" id="education-section">
-            <div class="collapsible-header active" id="education">
-              <h4 class="animated fadeIn three section">EDUCATION</h4>
-              <div class="collapse-icon"></div>
-            </div>
-            <div class="collapsible-content expanded">
-              <div class="collapsible-content-inner">
-                <div class="institution-item">
-                  <h2 class="night"><a href="https://www.univ-lyon2.fr/" target="_blank" class="underline">Lyon 2 Lumière University</a></h2>
-                  <h3>Machine Learning pour l'Intelligence Artificielle</h3>
-                  <h4>2022–2023</h4>
-                </div>
 
-                <div class="institution-item">
-                  <h2 class="night"><a href="https://www.imo.universite-paris-saclay.fr/fr/" target="_blank" class="underline">Paris-Saclay University</a></h2>
-                  <h3>Mathématiques de l'Aléatoire</h3>
-                  <h4>2021–2022</h4>
-                </div>
+            <div class="spacer48"></div>
+            <!-- End contact section -->
 
-                <div class="institution-item">
-                  <h2 class="night"><a href="https://www.imo.universite-paris-saclay.fr/fr/" target="_blank" class="underline">Paris-Saclay University</a></h2>
-                  <h3>Agrégation de Mathématiques</h3>
-                  <h4>2020–2021</h4>
+            <!-- Teaching Resources Section with collapsible functionality - Closed by Default -->
+            <div class="collapsible-section" id="teaching-section">
+              <div class="collapsible-header" id="teaching">
+                <h4 class="animated fadeIn three section">TEACHING RESOURCES</h4>
+                <div class="collapse-icon"></div>
+              </div>
+              <div class="collapsible-content">
+                <div class="collapsible-content-inner">
+                  <div class="downloads-section animated fadeIn two">
+                    <p>Probability Theory course materials for Lyon 2 students (credit to Zied Gharbi):</p>
+
+                    <div class="resources-container">
+                      <!-- Main course materials -->
+                      <div class="resources-group">
+                        <h5 class="resource-subtitle">Cours</h5>
+                        <div class="resource-grid">
+                          <div class="resource-card">
+                            <div class="card-content">
+                              <div class="card-icon">
+                                <div class="icon-svg icon-document">
+                                  <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                      d="M14,2H6C4.9,2,4,2.9,4,4v16c0,1.1,0.9,2,2,2h12c1.1,0,2-0.9,2-2V8L14,2z M16,18H8v-2h8V18z M16,14H8v-2h8V14z M13,9V3.5L18.5,9H13z" />
+                                  </svg>
+                                </div>
+                              </div>
+                              <div class="card-details">
+                                <h3 class="card-title">Cours - Probabilités et ses applications</h3>
+                                <p class="card-description">Le cours complet couvrant tous les aspects théoriques.</p>
+                              </div>
+                              <div class="card-overlay"></div>
+                            </div>
+                            <a href="lyon2-TD-probas/cours.pdf" download class="card-link"
+                              aria-label="Download Cours - Probabilités et ses applications"></a>
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- Essential understanding resources -->
+                      <div class="resources-group">
+                        <h5 class="resource-subtitle">L'essentiel pour comprendre les TDs</h5>
+                        <div class="resource-grid">
+                          <div class="resource-card featured interactive">
+                            <div class="card-content">
+                              <div class="card-icon highlight featured">
+                                <div class="icon-svg icon-sparkle">
+                                  <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M12,2L15,9L22,9L16,13.5L18,21L12,17L6,21L8,13.5L2,9L9,9Z" />
+                                  </svg>
+                                </div>
+                              </div>
+                              <div class="card-details">
+                                <h3 class="card-title">L'essentiel - Guide détaillé</h3>
+                                <p class="card-description">Explications essentielles et méthodes pour comprendre et
+                                  résoudre les TDs.</p>
+                              </div>
+                              <div class="card-overlay"></div>
+                              <span class="featured-badge">Recommandé</span>
+                            </div>
+                            <a href="lyon2-TD-probas/essentiel_td.pdf" download class="card-link"></a>
+                          </div>
+
+                          <div class="resource-card featured interactive">
+                            <div class="card-content">
+                              <div class="card-icon highlight featured">
+                                <div class="icon-svg icon-sparkle">
+                                  <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M12,2L15,9L22,9L16,13.5L18,21L12,17L6,21L8,13.5L2,9L9,9Z" />
+                                  </svg>
+                                </div>
+                              </div>
+                              <div class="card-details">
+                                <h3 class="card-title">L'essentiel - Récapitulatif des formules</h3>
+                                <p class="card-description">Version condensée avec uniquement les formules et méthodes.
+                                </p>
+                              </div>
+                              <div class="card-overlay"></div>
+                              <span class="featured-badge">Recommandé</span>
+                            </div>
+                            <a href="lyon2-TD-probas/essentiel_td_recap.pdf" download class="card-link"></a>
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- Interactive tools -->
+                      <div class="resources-group">
+                        <h5 class="resource-subtitle">Pour réviser</h5>
+                        <div class="resource-grid">
+                          <div class="resource-card featured interactive">
+                            <div class="card-content">
+                              <div class="card-icon highlight featured">
+                                <div class="icon-svg icon-flashcard">
+                                  <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                      d="M4,2H20A2,2 0 0,1 22,4V16A2,2 0 0,1 20,18H16L12,22L8,18H4A2,2 0 0,1 2,16V4A2,2 0 0,1 4,2M4,4V16H8.83L12,19.17L15.17,16H20V4H4M6,7H18V9H6V7M6,11H16V13H6V11Z" />
+                                  </svg>
+                                </div>
+                              </div>
+                              <div class="card-details">
+                                <h3 class="card-title">Flashcards pour réviser</h3>
+                                <p class="card-description">Outil interactif pour réviser les concepts importants.</p>
+                              </div>
+                              <div class="card-overlay"></div>
+                              <span class="featured-badge">Recommandé</span>
+                            </div>
+                            <a href="flashcards.html" class="card-link"></a>
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- Interactive teaching tools -->
+                      <div class="resources-group">
+                        <h5 class="resource-subtitle">Outils pédagogiques interactifs</h5>
+                        <div class="resource-grid">
+                          <div class="resource-card featured interactive">
+                            <div class="card-content">
+                              <div class="card-icon highlight featured">
+                                <div class="icon-svg icon-chart">
+                                  <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                      d="M3,13v7h18v-1.5l-9-7L8,17L3,13z M3,7l4,3l5-7l9,7v-7C21,3.9,20.1,3,19,3H5C3.9,3,3,3,5V7z" />
+                                  </svg>
+                                </div>
+                              </div>
+                              <div class="card-details">
+                                <h3 class="card-title">Théorème central limite</h3>
+                                <p class="card-description">Démonstration interactive du théorème central limite.</p>
+                              </div>
+                              <div class="card-overlay"></div>
+                              <span class="featured-badge">Pour aller plus loin</span>
+                            </div>
+                            <a href="central-limit-theorem.html" class="card-link"></a>
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- New section grouping all TD resources -->
+                      <div class="resources-group td-section">
+                        <h5 class="resource-subtitle resource-subtitle-major">Travaux Dirigés (TDs)</h5>
+
+                        <!-- TD préliminaire Section -->
+                        <h6 class="resource-subtitle-minor">TD préliminaire - Exercices sur les ensembles, les limites,
+                          la dérivation et les primitives</h6>
+                        <div class="resource-grid">
+                          <div class="resource-card">
+                            <div class="card-content">
+                              <div class="card-icon">
+                                <div class="icon-svg icon-document">
+                                  <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                      d="M14,2H6C4.9,2,4,2.9,4,4v16c0,1.1,0.9,2,2,2h12c1.1,0,2-0.9,2-2V8L14,2z M16,18H8v-2h8V18z M16,14H8v-2h8V14z M13,9V3.5L18.5,9H13z" />
+                                  </svg>
+                                </div>
+                              </div>
+                              <div class="card-details">
+                                <h3 class="card-title">TD préliminaire - Énoncé</h3>
+                                <p class="card-description">Exercices sur les ensembles, les limites, la dérivation et
+                                  les primitives.</p>
+                              </div>
+                              <div class="card-overlay"></div>
+                            </div>
+                            <a href="lyon2-TD-probas/TD0_Probabilites_L2_MIASHS.pdf" download class="card-link"></a>
+                          </div>
+
+                          <div class="resource-card">
+                            <div class="card-content">
+                              <div class="card-icon">
+                                <div class="icon-svg icon-document">
+                                  <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                      d="M14,2H6C4.9,2,4,2.9,4,4v16c0,1.1,0.9,2,2,2h12c1.1,0,2-0.9,2-2V8L14,2z M16,18H8v-2h8V18z M16,14H8v-2h8V14z M13,9V3.5L18.5,9H13z" />
+                                  </svg>
+                                </div>
+                              </div>
+                              <div class="card-details">
+                                <h3 class="card-title">TD préliminaire - Correction</h3>
+                                <p class="card-description">Solutions détaillées des exercices.</p>
+                              </div>
+                              <div class="card-overlay"></div>
+                            </div>
+                            <a href="lyon2-TD-probas/TD 0 correction.pdf" download class="card-link"></a>
+                          </div>
+                        </div>
+
+                        <!-- TD1 Section -->
+                        <h6 class="resource-subtitle-minor">TD1 - Exercices sur les probabilités et les probabilités
+                          conditionnelles</h6>
+                        <div class="resource-grid">
+                          <div class="resource-card">
+                            <div class="card-content">
+                              <div class="card-icon">
+                                <div class="icon-svg icon-document">
+                                  <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                      d="M14,2H6C4.9,2,4,2.9,4,4v16c0,1.1,0.9,2,2,2h12c1.1,0,2-0.9,2-2V8L14,2z M16,18H8v-2h8V18z M16,14H8v-2h8V14z M13,9V3.5L18.5,9H13z" />
+                                  </svg>
+                                </div>
+                              </div>
+                              <div class="card-details">
+                                <h3 class="card-title">TD1 - Énoncé</h3>
+                                <p class="card-description">Exercices sur les probabilités et les probabilités
+                                  conditionnelles.</p>
+                              </div>
+                              <div class="card-overlay"></div>
+                            </div>
+                            <a href="lyon2-TD-probas/TD1_Probabilites_L2_MIASHS_noncorrigé.pdf" download
+                              class="card-link"></a>
+                          </div>
+
+                          <div class="resource-card">
+                            <div class="card-content">
+                              <div class="card-icon">
+                                <div class="icon-svg icon-document">
+                                  <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                      d="M14,2H6C4.9,2,4,2.9,4,4v16c0,1.1,0.9,2,2,2h12c1.1,0,2-0.9,2-2V8L14,2z M16,18H8v-2h8V18z M16,14H8v-2h8V14z M13,9V3.5L18.5,9H13z" />
+                                  </svg>
+                                </div>
+                              </div>
+                              <div class="card-details">
+                                <h3 class="card-title">TD1 - Correction</h3>
+                                <p class="card-description">Solutions détaillées des exercices.</p>
+                              </div>
+                              <div class="card-overlay"></div>
+                            </div>
+                            <a href="lyon2-TD-probas/TD1_Probabilites_L2_MIASHS_corrigé.pdf" download
+                              class="card-link"></a>
+                          </div>
+                        </div>
+
+                        <!-- TD2 Section -->
+                        <h6 class="resource-subtitle-minor">TD2 - Exercices sur les probabilités et les probabilités
+                          conditionnelles</h6>
+                        <div class="resource-grid">
+                          <div class="resource-card">
+                            <div class="card-content">
+                              <div class="card-icon">
+                                <div class="icon-svg icon-document">
+                                  <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                      d="M14,2H6C4.9,2,4,2.9,4,4v16c0,1.1,0.9,2,2,2h12c1.1,0,2-0.9,2-2V8L14,2z M16,18H8v-2h8V18z M16,14H8v-2h8V14z M13,9V3.5L18.5,9H13z" />
+                                  </svg>
+                                </div>
+                              </div>
+                              <div class="card-details">
+                                <h3 class="card-title">TD2 - Énoncé</h3>
+                                <p class="card-description">Exercices sur les probabilités et les probabilités
+                                  conditionnelles.</p>
+                              </div>
+                              <div class="card-overlay"></div>
+                            </div>
+                            <a href="lyon2-TD-probas/TD2_Probabilites_L2_MIASHS.pdf" download class="card-link"></a>
+                          </div>
+
+                          <div class="resource-card">
+                            <div class="card-content">
+                              <div class="card-icon">
+                                <div class="icon-svg icon-document">
+                                  <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                      d="M14,2H6C4.9,2,4,2.9,4,4v16c0,1.1,0.9,2,2,2h12c1.1,0,2-0.9,2-2V8L14,2z M16,18H8v-2h8V18z M16,14H8v-2h8V14z M13,9V3.5L18.5,9H13z" />
+                                  </svg>
+                                </div>
+                              </div>
+                              <div class="card-details">
+                                <h3 class="card-title">TD2 - Correction</h3>
+                                <p class="card-description">Solutions détaillées des exercices.</p>
+                              </div>
+                              <div class="card-overlay"></div>
+                            </div>
+                            <a href="lyon2-TD-probas/TD2_Probabilites_L2_MIASHS_corrigé.pdf" download
+                              class="card-link"></a>
+                          </div>
+                        </div>
+
+                        <!-- TD3 Section -->
+                        <h6 class="resource-subtitle-minor">TD3 - Exercices sur les lois de probabilités sur les entiers
+                          et sur la droite réelle</h6>
+                        <div class="resource-grid">
+                          <div class="resource-card">
+                            <div class="card-content">
+                              <div class="card-icon">
+                                <div class="icon-svg icon-document">
+                                  <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                      d="M14,2H6C4.9,2,4,2.9,4,4v16c0,1.1,0.9,2,2,2h12c1.1,0,2-0.9,2-2V8L14,2z M16,18H8v-2h8V18z M16,14H8v-2h8V14z M13,9V3.5L18.5,9H13z" />
+                                  </svg>
+                                </div>
+                              </div>
+                              <div class="card-details">
+                                <h3 class="card-title">TD3 - Énoncé</h3>
+                                <p class="card-description">Exercices sur les lois de probabilités sur les entiers et
+                                  sur la droite réelle.</p>
+                              </div>
+                              <div class="card-overlay"></div>
+                            </div>
+                            <a href="lyon2-TD-probas/TD3_Probabilites_L2_MIASHS.pdf" download class="card-link"></a>
+                          </div>
+                        </div>
+
+                        <div class="resource-grid">
+                          <div class="resource-card">
+                            <div class="card-content">
+                              <div class="card-icon">
+                                <div class="icon-svg icon-document">
+                                  <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                      d="M14,2H6C4.9,2,4,2.9,4,4v16c0,1.1,0.9,2,2,2h12c1.1,0,2-0.9,2-2V8L14,2z M16,18H8v-2h8V18z M16,14H8v-2h8V14z M13,9V3.5L18.5,9H13z" />
+                                  </svg>
+                                </div>
+                              </div>
+                              <div class="card-details">
+                                <h3 class="card-title">Table de la loi normale</h3>
+                                <p class="card-description">Table de la loi normale utile pour le TD3.</p>
+                              </div>
+                              <div class="card-overlay"></div>
+                            </div>
+                            <a href="lyon2-TD-probas/TD3_Probabilites_L2_MIASHS.pdf" download class="card-link"></a>
+                          </div>
+                        </div>
+
+                        <!-- TD4 Section -->
+                        <h6 class="resource-subtitle-minor">TD4 - Exercices sur les variables aléatoires et leurs lois
+                          de probabilités sur les entiers et sur la droite réelle</h6>
+                        <div class="resource-grid">
+                          <div class="resource-card">
+                            <div class="card-content">
+                              <div class="card-icon">
+                                <div class="icon-svg icon-document">
+                                  <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                      d="M14,2H6C4.9,2,4,2.9,4,4v16c0,1.1,0.9,2,2,2h12c1.1,0,2-0.9,2-2V8L14,2z M16,18H8v-2h8V18z M16,14H8v-2h8V14z M13,9V3.5L18.5,9H13z" />
+                                  </svg>
+                                </div>
+                              </div>
+                              <div class="card-details">
+                                <h3 class="card-title">TD4 - Énoncé</h3>
+                                <p class="card-description">Exercices sur les variables aléatoires et leurs lois de
+                                  probabilités sur les entiers et sur la droite réelle.</p>
+                              </div>
+                              <div class="card-overlay"></div>
+                            </div>
+                            <a href="lyon2-TD-probas/TD4_Probabilites_L2_MIASHS.pdf" download class="card-link"></a>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="resources-group">
+                        <h5 class="resource-subtitle">Ressources vidéo & web recommandées</h5>
+                        <div class="resource-grid">
+
+                          <div class="resource-card interactive">
+                            <div class="card-content">
+                              <div class="card-icon">
+                                <div class="icon-svg">
+                                  <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M8,5.14V19.14L19,12.14L8,5.14Z" />
+                                  </svg>
+                                </div>
+                              </div>
+                              <div class="card-details">
+                                <h3 class="card-title">Probabilités - Yvan Monka</h3>
+                                <p class="card-description">Tutos pas-à-pas.</p>
+                              </div>
+                              <div class="card-overlay"></div>
+                            </div>
+                            <a href="https://www.youtube.com/playlist?list=PLVUDmbpupCaoTbm5IPhDmnM7qnETXp47B"
+                              target="_blank" class="card-link"></a>
+                          </div>
+
+                          <div class="resource-card interactive">
+                            <div class="card-content">
+                              <div class="card-icon">
+                                <div class="icon-svg">
+                                  <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M8,5.14V19.14L19,12.14L8,5.14Z" />
+                                  </svg>
+                                </div>
+                              </div>
+                              <div class="card-details">
+                                <h3 class="card-title">Probabilités conditionnelles et indépendances - Yvan Monka</h3>
+                                <p class="card-description">Tutos pas-à-pas.</p>
+                              </div>
+                              <div class="card-overlay"></div>
+                            </div>
+                            <a href="https://www.youtube.com/playlist?list=PLVUDmbpupCapoStVETZ2x6iy0vCua0HvK"
+                              target="_blank" class="card-link"></a>
+                          </div>
+
+                          <div class="resource-card interactive">
+                            <div class="card-content">
+                              <div class="card-icon">
+                                <div class="icon-svg">
+                                  <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                      d="M12,4.5C7,4.5 2.73,7.61 1,12c1.73,4.39 6,7.5 11,7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12,17c-2.76,0-5-2.24-5-5s2.24-5 5-5 5,2.24 5,5-2.24,5-5,5zM12,9c-1.66,0-3,1.34-3,3s1.34,3 3,3 3-1.34 3-3-1.34-3-3-3z" />
+                                  </svg>
+                                </div>
+                              </div>
+                              <div class="card-details">
+                                <h3 class="card-title">Comprendre le théorème de Bayes - 3Blue1Brown</h3>
+                                <p class="card-description">L'intuition derrière le théorème de Bayes.</p>
+                              </div>
+                              <div class="card-overlay"></div>
+                            </div>
+                            <a href="https://www.youtube.com/watch?v=HZGCoVF3YvM" target="_blank" class="card-link"></a>
+                          </div>
+
+                          <div class="resource-card interactive">
+                            <div class="card-content">
+                              <div class="card-icon">
+                                <div class="icon-svg">
+                                  <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                      d="M3,13v7h18v-1.5l-9-7L8,17L3,13z M3,7l4,3l5-7l9,7v-7C21,3.9,20.1,3,19,3H5C3.9,3,3,3,5V7z" />
+                                  </svg>
+                                </div>
+                              </div>
+                              <div class="card-details">
+                                <h3 class="card-title">Simulateur Loi Normale</h3>
+                                <p class="card-description">Outil GeoGebra pour visualiser l'aire sous la courbe.</p>
+                              </div>
+                              <div class="card-overlay"></div>
+                            </div>
+                            <a href="https://www.geogebra.org/classic#probability" target="_blank"
+                              class="card-link"></a>
+                          </div>
+
+                          <div class="resource-card interactive">
+                            <div class="card-content">
+                              <div class="card-icon">
+                                <div class="icon-svg">
+                                  <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                      d="M3,17.25V21h3.75L17.81,9.94l-3.75-3.75L3,17.25z M20.71,7.04c0.39-0.39,0.39-1.02,0-1.41l-2.34-2.34c-0.39-0.39-1.02-0.39-1.41,0l-1.83,1.83l3.75,3.75L20.71,7.04z" />
+                                  </svg>
+                                </div>
+                              </div>
+                              <div class="card-details">
+                                <h3 class="card-title">Khan Academy</h3>
+                                <p class="card-description">Exercices interactifs corrigés pour s'entraîner.</p>
+                              </div>
+                              <div class="card-overlay"></div>
+                            </div>
+                            <a href="https://fr.khanacademy.org/math/probability" target="_blank" class="card-link"></a>
+                          </div>
+
+                          <div class="resource-card interactive">
+                            <div class="card-content">
+                              <div class="card-icon">
+                                <div class="icon-svg">
+                                  <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                      d="M18,22A2,2 0 0,0 20,20V4C20,2.89 19.1,2 18,2H12V9L9.5,7.5L7,9V2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18Z" />
+                                  </svg>
+                                </div>
+                              </div>
+                              <div class="card-details">
+                                <h3 class="card-title">Bibm@th.net</h3>
+                                <p class="card-description">Encyclopédie mathématique : définitions rigoureuses et
+                                  exercices.</p>
+                              </div>
+                              <div class="card-overlay"></div>
+                            </div>
+                            <a href="https://www.bibmath.net/ressources/index.php?action=affiche&quoi=bde/proba"
+                              target="_blank" class="card-link"></a>
+                          </div>
+
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
-                       </div>
-          </div>
-        </div>
-        
-        <!-- Degrees Section - Collapsible but Expanded by Default -->
-        <div class="section-column">
-          <div class="collapsible-section" id="degrees-section">
-            <div class="collapsible-header active" id="degrees">
-              <h4 class="animated fadeIn three section">DEGREES</h4>
-              <div class="collapse-icon"></div>
             </div>
-            <div class="collapsible-content expanded">
-              <div class="collapsible-content-inner">
-                <div class="institution-item">
-                  <h2 class="night"><a href="https://www.imo.universite-paris-saclay.fr/fr/" target="_blank" class="underline">Paris-Saclay University</a></h2>
-                  <h3>Licence Magistère de Mathématiques Fondamentales de l'Université Paris-Saclay</h3>
-                  <h4>2020</h4>
+
+            <div class="spacer48"></div>
+            <!-- End of teaching resources section -->
+
+            <!-- Wrapper for education-degrees sections -->
+            <div class="education-degrees-container">
+              <!-- Education Section - Collapsible but Expanded by Default -->
+              <div class="section-column">
+                <div class="collapsible-section" id="education-section">
+                  <div class="collapsible-header active" id="education">
+                    <h4 class="animated fadeIn three section">EDUCATION</h4>
+                    <div class="collapse-icon"></div>
+                  </div>
+                  <div class="collapsible-content expanded">
+                    <div class="collapsible-content-inner">
+                      <div class="institution-item">
+                        <h2 class="night"><a href="https://www.univ-lyon2.fr/" target="_blank" class="underline">Lyon 2
+                            Lumière University</a></h2>
+                        <h3>Machine Learning pour l'Intelligence Artificielle</h3>
+                        <h4>2022–2023</h4>
+                      </div>
+
+                      <div class="institution-item">
+                        <h2 class="night"><a href="https://www.imo.universite-paris-saclay.fr/fr/" target="_blank"
+                            class="underline">Paris-Saclay University</a></h2>
+                        <h3>Mathématiques de l'Aléatoire</h3>
+                        <h4>2021–2022</h4>
+                      </div>
+
+                      <div class="institution-item">
+                        <h2 class="night"><a href="https://www.imo.universite-paris-saclay.fr/fr/" target="_blank"
+                            class="underline">Paris-Saclay University</a></h2>
+                        <h3>Agrégation de Mathématiques</h3>
+                        <h4>2020–2021</h4>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-                
-                <div class="institution-item">
-                  <h2 class="night"><a href="https://www.imo.universite-paris-saclay.fr/fr/" target="_blank" class="underline">Paris-Saclay University</a></h2>
-                  <h3>Agrégation de Mathématiques</h3>
-                  <h4>2021</h4>
-                </div>
-                
-                <div class="institution-item">
-                  <h2 class="night"><a href="https://www.univ-lyon2.fr/" target="_blank" class="underline">Lyon 2 Lumière University</a></h2>
-                  <h3>Master de Mathématiques Learning Pour l'Intelligence Artificielle</h3>
-                  <h4>2023</h4>
+              </div>
+
+              <!-- Degrees Section - Collapsible but Expanded by Default -->
+              <div class="section-column">
+                <div class="collapsible-section" id="degrees-section">
+                  <div class="collapsible-header active" id="degrees">
+                    <h4 class="animated fadeIn three section">DEGREES</h4>
+                    <div class="collapse-icon"></div>
+                  </div>
+                  <div class="collapsible-content expanded">
+                    <div class="collapsible-content-inner">
+                      <div class="institution-item">
+                        <h2 class="night"><a href="https://www.imo.universite-paris-saclay.fr/fr/" target="_blank"
+                            class="underline">Paris-Saclay University</a></h2>
+                        <h3>Licence Magistère de Mathématiques Fondamentales de l'Université Paris-Saclay</h3>
+                        <h4>2020</h4>
+                      </div>
+
+                      <div class="institution-item">
+                        <h2 class="night"><a href="https://www.imo.universite-paris-saclay.fr/fr/" target="_blank"
+                            class="underline">Paris-Saclay University</a></h2>
+                        <h3>Agrégation de Mathématiques</h3>
+                        <h4>2021</h4>
+                      </div>
+
+                      <div class="institution-item">
+                        <h2 class="night"><a href="https://www.univ-lyon2.fr/" target="_blank" class="underline">Lyon 2
+                            Lumière University</a></h2>
+                        <h3>Master de Mathématiques Learning Pour l'Intelligence Artificielle</h3>
+                        <h4>2023</h4>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-        </div>
-      </div>
-      
 
-  <!-- Add spacer before the art -->
-  <div class="spacer48"></div>
-  <div class="spacer48"></div>
-  
-  <!-- Anchor for Art Gallery section -->
-  <a id="art"></a>
-  <!-- Remove art gallery button here -->
-  <!--
+
+            <!-- Add spacer before the art -->
+            <div class="spacer48"></div>
+            <div class="spacer48"></div>
+
+            <!-- Anchor for Art Gallery section -->
+            <a id="art"></a>
+            <!-- Remove art gallery button here -->
+            <!--
   <div class="row group">
     <div class="twelve columns" style="text-align: center;">
       <a href="art.html" class="art-gallery-button">
@@ -1492,181 +1565,207 @@ var x = setInterval(function() {
   </div>
   -->
 
-</div>
+          </div>
 
-<!-- Side Navigation -->
-<nav class="side-nav">
-  <div class="nav-track">
-    <div class="nav-progress"></div>
-    <div class="nav-highlight"></div>
-    <div class="nav-items">
-      <div class="nav-item active" data-target="intro">
-        <div class="nav-dot"></div>
-        <div class="nav-label">Introduction</div>
-      </div>
-      <div class="nav-item" data-target="contact">
-        <div class="nav-dot"></div>
-        <div class="nav-label">Contact</div>
-      </div>
-      <div class="nav-item" data-target="calendar">
-        <div class="nav-dot"></div>
-        <div class="nav-label">Calendar</div>
-      </div>
-      <div class="nav-item" data-target="teaching">
-        <div class="nav-dot"></div>
-        <div class="nav-label">Teaching Resources</div>
-      </div>
-      <div class="nav-item" data-target="education">
-        <div class="nav-dot"></div>
-        <div class="nav-label">Education</div>
-      </div>
-      <div class="nav-item" data-target="degrees">
-        <div class="nav-dot"></div>
-        <div class="nav-label">Degrees</div>
-      </div>
-      <!-- Removed: Art I like nav item -->
-    </div>
-  </div>
-</nav>
+          <!-- Side Navigation -->
+          <nav class="side-nav">
+            <div class="nav-track">
+              <div class="nav-progress"></div>
+              <div class="nav-highlight"></div>
+              <div class="nav-items">
+                <div class="nav-item active" data-target="intro">
+                  <div class="nav-dot"></div>
+                  <div class="nav-label">Introduction</div>
+                </div>
+                <div class="nav-item" data-target="contact">
+                  <div class="nav-dot"></div>
+                  <div class="nav-label">Contact</div>
+                </div>
+                <div class="nav-item" data-target="calendar">
+                  <div class="nav-dot"></div>
+                  <div class="nav-label">Calendar</div>
+                </div>
+                <div class="nav-item" data-target="teaching">
+                  <div class="nav-dot"></div>
+                  <div class="nav-label">Teaching Resources</div>
+                </div>
+                <div class="nav-item" data-target="education">
+                  <div class="nav-dot"></div>
+                  <div class="nav-label">Education</div>
+                </div>
+                <div class="nav-item" data-target="degrees">
+                  <div class="nav-dot"></div>
+                  <div class="nav-label">Degrees</div>
+                </div>
+                <!-- Removed: Art I like nav item -->
+              </div>
+            </div>
+          </nav>
 
-<!-- Mobile Navigation Toggle -->
-<div class="mobile-nav-toggle">
-  <span></span>
-</div>
+          <!-- Mobile Navigation Toggle -->
+          <div class="mobile-nav-toggle">
+            <span></span>
+          </div>
 
-<!-- Mobile Navigation Menu -->
-<div class="mobile-nav">
-  <div class="mobile-nav-items">
-    <div class="mobile-nav-item"><a href="#intro">Introduction</a></div>
-    <div class="mobile-nav-item"><a href="#contact">Contact</a></div>
-    <div class="mobile-nav-item"><a href="#teaching">Teaching Resources</a></div>
-    <div class="mobile-nav-item"><a href="#education">Education</a></div>
-    <div class="mobile-nav-item"><a href="#degrees">Degrees</a></div>
-    <!-- Removed: Art I Like mobile nav item -->
-  </div>
-</div>
+          <!-- Mobile Navigation Menu -->
+          <div class="mobile-nav">
+            <div class="mobile-nav-items">
+              <div class="mobile-nav-item"><a href="#intro">Introduction</a></div>
+              <div class="mobile-nav-item"><a href="#contact">Contact</a></div>
+              <div class="mobile-nav-item"><a href="#teaching">Teaching Resources</a></div>
+              <div class="mobile-nav-item"><a href="#education">Education</a></div>
+              <div class="mobile-nav-item"><a href="#degrees">Degrees</a></div>
+              <!-- Removed: Art I Like mobile nav item -->
+            </div>
+          </div>
 
-<!-- Add scroll-behavior polyfill for older browsers -->
-<script>
-  // Detect if the browser doesn't support smooth scrolling
-  if (!(CSS && CSS.supports && CSS.supports('scroll-behavior', 'smooth'))) {
-    // Create a script element to load the polyfill
-    var script = document.createElement('script');
-    script.src = 'https://unpkg.com/smoothscroll-polyfill@0.4.4/dist/smoothscroll-polyfill.min.js';
-    script.onload = function() {
-      // Initialize the polyfill
-      smoothscroll.polyfill();
-    };
-    document.head.appendChild(script);
-  }
-</script>
+          <!-- Add scroll-behavior polyfill for older browsers -->
+          <script>
+            // Detect if the browser doesn't support smooth scrolling
+            if (!(CSS && CSS.supports && CSS.supports('scroll-behavior', 'smooth'))) {
+              // Create a script element to load the polyfill
+              var script = document.createElement('script');
+              script.src = 'https://unpkg.com/smoothscroll-polyfill@0.4.4/dist/smoothscroll-polyfill.min.js';
+              script.onload = function () {
+                // Initialize the polyfill
+                smoothscroll.polyfill();
+              };
+              document.head.appendChild(script);
+            }
+          </script>
 
-<!-- Override any global smooth scrolling settings -->
-<script>
-  // Disable smooth scrolling behavior for navigation links only
-  document.addEventListener('DOMContentLoaded', function() {
-    // Remove smooth scrolling for mobile navigation
-    document.querySelectorAll('.mobile-nav-item a').forEach(link => {
-      link.addEventListener('click', function(e) {
-        // This ensures that even if there's scroll-behavior in CSS, it won't apply
-        document.documentElement.style.scrollBehavior = 'auto';
-        
-        // The scrollTo happens in the jQuery handler
-        
-        // Reset after short timeout
-        setTimeout(() => {
-          document.documentElement.style.scrollBehavior = '';
-        }, 100);
-      });
-    });
-  });
-</script>
+          <!-- Override any global smooth scrolling settings -->
+          <script>
+            // Disable smooth scrolling behavior for navigation links only
+            document.addEventListener('DOMContentLoaded', function () {
+              // Remove smooth scrolling for mobile navigation
+              document.querySelectorAll('.mobile-nav-item a').forEach(link => {
+                link.addEventListener('click', function (e) {
+                  // This ensures that even if there's scroll-behavior in CSS, it won't apply
+                  document.documentElement.style.scrollBehavior = 'auto';
 
-<!-- Add this script to fix tooltip position dynamically -->
-<script src="js/simple-tooltip.js"></script>
+                  // The scrollTo happens in the jQuery handler
 
-<!-- Page Footer -->
-<footer class="page-footer">
-  <div class="footer-content">
-    Hadrien Bigo--Balland | © 2026
-  </div>
-</footer>
+                  // Reset after short timeout
+                  setTimeout(() => {
+                    document.documentElement.style.scrollBehavior = '';
+                  }, 100);
+                });
+              });
+            });
+          </script>
 
-<!-- Add the collapsible section functionality right before the closing body tag -->
-<script>
-  document.addEventListener('DOMContentLoaded', function() {
-    
-    // Helper function to handle opening/closing
-    function setCollapsibleState(header, state) {
-      const content = header.nextElementSibling;
-      const sectionId = header.closest('.collapsible-section').id;
-      
-      if (state === 'expanded') {
-        header.classList.add('active');
-        content.classList.add('expanded');
-        // Set exact height for smooth animation
-        content.style.maxHeight = content.scrollHeight + "px";
-        localStorage.setItem('section_' + sectionId, 'expanded');
-      } else {
-        header.classList.remove('active');
-        content.classList.remove('expanded');
-        // Clear height to allow collapsing
-        content.style.maxHeight = null;
-        localStorage.setItem('section_' + sectionId, 'collapsed');
-      }
-    }
+          <!-- Add this script to fix tooltip position dynamically -->
+          <script src="js/simple-tooltip.js"></script>
 
-    // Initialize collapsible sections
-    const collapsibleHeaders = document.querySelectorAll('.collapsible-header');
-    
-    collapsibleHeaders.forEach(header => {
-      const sectionId = header.closest('.collapsible-section').id;
-      
-      // Check for saved state or default state from HTML classes
-      const savedState = sectionId ? localStorage.getItem('section_' + sectionId) : null;
-      const isDefaultExpanded = header.classList.contains('active');
-      
-      // Apply initial state (calculate height immediately if open)
-      if (savedState === 'expanded' || (!savedState && isDefaultExpanded)) {
-        setCollapsibleState(header, 'expanded');
-      } else {
-        // Ensure closed sections are clean
-        setCollapsibleState(header, 'collapsed');
-      }
-      
-      // Add click listener
-      header.addEventListener('click', function() {
-        const isCurrentlyExpanded = this.classList.contains('active');
-        setCollapsibleState(this, isCurrentlyExpanded ? 'collapsed' : 'expanded');
-      });
-    });
-    
-    // Handle URL Hash (e.g. #teaching)
-    function checkHash() {
-      if (window.location.hash) {
-        const sectionId = window.location.hash.substring(1);
-        const section = document.getElementById(sectionId + '-section');
-        
-        if (section) {
-          const header = section.querySelector('.collapsible-header');
-          // Force expand if accessed via hash
-          setCollapsibleState(header, 'expanded');
-        }
-      }
-    }
-    
-    checkHash();
-    window.addEventListener('hashchange', checkHash);
-    
-    // Recalculate heights on window resize to prevent cut-off text
-    window.addEventListener('resize', () => {
-      document.querySelectorAll('.collapsible-header.active').forEach(header => {
-        const content = header.nextElementSibling;
-        content.style.maxHeight = content.scrollHeight + "px";
-      });
-    });
-  });
-</script>
+          <!-- Page Footer -->
+          <footer class="page-footer">
+            <div class="footer-content">
+              Hadrien Bigo--Balland | © 2026
+            </div>
+          </footer>
 
-</body>
+          <!-- Add the collapsible section functionality right before the closing body tag -->
+          <script>
+            document.addEventListener('DOMContentLoaded', function () {
+
+              // Helper function to handle opening/closing
+              function setCollapsibleState(header, state) {
+                const content = header.nextElementSibling;
+                const sectionId = header.closest('.collapsible-section').id;
+
+                if (state === 'expanded') {
+                  header.classList.add('active');
+                  content.classList.add('expanded');
+                  // Set exact height for smooth animation
+                  // Set height for smooth animation, then remove constraint
+                  content.style.maxHeight = content.scrollHeight + "px";
+
+                  // Wait for transition to end then allow free growth
+                  setTimeout(() => {
+                    if (content.classList.contains('expanded')) {
+                      content.style.maxHeight = "none";
+                      content.style.overflow = "visible";
+                    }
+                  }, 500); // slightly shorter than transition duration to ensure it catches
+
+                  localStorage.setItem('section_' + sectionId, 'expanded');
+                } else {
+                  // Set height back to pixel value first to allow transition
+                  if (content.style.maxHeight === "none") {
+                    content.style.maxHeight = content.scrollHeight + "px";
+                    // Force reflow
+                    content.offsetHeight;
+                  }
+
+                  header.classList.remove('active');
+                  content.classList.remove('expanded');
+                  content.style.overflow = "hidden";
+
+                  // Clear height to allow collapsing
+                  setTimeout(() => {
+                    content.style.maxHeight = null;
+                  }, 10);
+
+                  localStorage.setItem('section_' + sectionId, 'collapsed');
+                }
+              }
+
+              // Initialize collapsible sections
+              const collapsibleHeaders = document.querySelectorAll('.collapsible-header');
+
+              collapsibleHeaders.forEach(header => {
+                const sectionId = header.closest('.collapsible-section').id;
+
+                // Check for saved state or default state from HTML classes
+                const savedState = sectionId ? localStorage.getItem('section_' + sectionId) : null;
+                const isDefaultExpanded = header.classList.contains('active');
+
+                // Apply initial state (calculate height immediately if open)
+                if (savedState === 'expanded' || (!savedState && isDefaultExpanded)) {
+                  setCollapsibleState(header, 'expanded');
+                } else {
+                  // Ensure closed sections are clean
+                  setCollapsibleState(header, 'collapsed');
+                }
+
+                // Add click listener
+                header.addEventListener('click', function () {
+                  const isCurrentlyExpanded = this.classList.contains('active');
+                  setCollapsibleState(this, isCurrentlyExpanded ? 'collapsed' : 'expanded');
+                });
+              });
+
+              // Handle URL Hash (e.g. #teaching)
+              function checkHash() {
+                if (window.location.hash) {
+                  const sectionId = window.location.hash.substring(1);
+                  const section = document.getElementById(sectionId + '-section');
+
+                  if (section) {
+                    const header = section.querySelector('.collapsible-header');
+                    // Force expand if accessed via hash
+                    setCollapsibleState(header, 'expanded');
+                  }
+                }
+              }
+
+              checkHash();
+              window.addEventListener('hashchange', checkHash);
+
+              // Recalculate heights on window resize to prevent cut-off text if transition is active
+              window.addEventListener('resize', () => {
+                document.querySelectorAll('.collapsible-header.active').forEach(header => {
+                  const content = header.nextElementSibling;
+                  // Only set pixel height if not already fully open (max-height: none)
+                  if (content.style.maxHeight !== "none" && content.style.maxHeight !== "") {
+                    content.style.maxHeight = content.scrollHeight + "px";
+                  }
+                });
+              });
+            });
+          </script>
+
+  </body>
+
 </html>
