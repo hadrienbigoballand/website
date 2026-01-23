@@ -815,13 +815,18 @@ var x = setInterval(function() {
     .send-button {
       background: transparent;
       border: 1px solid #8A898C;
-      padding: 6px 24px;
+      padding: 8px 24px;
       font-family: inherit;
       font-size: inherit;
       color: inherit;
       cursor: pointer;
       transition: all 0.2s ease;
       margin-top: 8px;
+      border-radius: 24px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      line-height: 1;
     }
 
     .send-button:hover {
@@ -885,21 +890,6 @@ var x = setInterval(function() {
       
       <div class="spacer48"></div>
       
-      <!-- Simple Contact Form -->
-      <div class="simple-contact-form animated fadeIn two">
-        <form id="contact-form" onsubmit="return submitContactForm(event)">
-          <div class="form-field">
-            <input type="email" id="email-field" name="email" placeholder="Email" required>
-          </div>
-          <div class="form-field">
-            <textarea id="message-field" name="message" placeholder="Message" rows="4" required></textarea>
-          </div>
-          <button type="submit" class="send-button">Send</button>
-        </form>
-      </div>
-      
-      <div class="spacer48"></div>
-      
       <!-- Contact Section - Collapsible but Expanded by Default -->
       <div class="collapsible-section" id="contact-section">
         <div class="collapsible-header active" id="contact">
@@ -909,6 +899,23 @@ var x = setInterval(function() {
         <div class="collapsible-content expanded">
           <div class="collapsible-content-inner">
             <div class="contact-section animated fadeIn two">
+              <p>You can send me a message using this form, or use the contact information below.</p>
+              
+              <!-- Simple Contact Form -->
+              <div class="simple-contact-form">
+                <form id="contact-form" onsubmit="return submitContactForm(event)">
+                  <div class="form-field">
+                    <input type="email" id="email-field" name="email" placeholder="Email" required>
+                  </div>
+                  <div class="form-field">
+                    <textarea id="message-field" name="message" placeholder="Message" rows="4" required></textarea>
+                  </div>
+                  <button type="submit" class="send-button">Send</button>
+                </form>
+              </div>
+              
+              <div class="spacer48"></div>
+
               <div class="contact-grid">
                 <div class="contact-item">
                   <div class="icon-svg icon-mail">
