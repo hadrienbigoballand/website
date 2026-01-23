@@ -150,6 +150,9 @@
       function updateLangButton(lang) {
         $("#lang-toggle").text(lang.toUpperCase());
         translatePage(lang);
+        if (window.updateCountdown) {
+          window.updateCountdown();
+        }
       }
 
       $("#lang-toggle").click(function () {
@@ -723,8 +726,7 @@
     // Set the date we're counting down to
     var countDownDate = new Date("Oct 02, 2023 09:00:00").getTime();
 
-    // Update the count down every 1 second
-    var x = setInterval(function () {
+    function updateCountdown() {
       // Get todays date and time
       var now = new Date().getTime();
 
@@ -737,15 +739,37 @@
       var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
       var seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
+      // Get current language
+      var lang = localStorage.getItem('lang') || 'en';
+      var text = "";
+
+      if (lang === 'fr') {
+        text = days + " jours, " + hours + " heure" + (hours > 1 ? "s" : "") + ", " + minutes + " minute" + (minutes > 1 ? "s" : "") + ", et " + seconds + " seconde" + (seconds > 1 ? "s" : "");
+      } else {
+        text = days + " days, " + hours + " hour" + (hours === 1 ? "" : "s") + ", " + minutes + " minute" + (minutes === 1 ? "" : "s") + ", and " + seconds + " second" + (seconds === 1 ? "" : "s");
+      }
+
       // Output the result in an element with id="counter"
-      document.getElementById("counter").innerHTML = days + " days, " + hours + " hour" + (hours === 1 ? "" : "s") + ", " + minutes + " minute" + (minutes === 1 ? "" : "s") + ", and " + seconds + " second" + (seconds === 1 ? "" : "s");
+      var counterElement = document.getElementById("counter");
+      if (counterElement) {
+        counterElement.innerHTML = text;
+      }
 
       // If the count down errors, write some text 
       if (distance < 0) {
-        clearInterval(x);
-        document.getElementById("counter").innerHTML = "year";
+        if (typeof x !== 'undefined') clearInterval(x);
+        if (counterElement) counterElement.innerHTML = "year";
       }
-    }, 1000);
+    }
+
+    // Expose to window so it can be called from other scripts
+    window.updateCountdown = updateCountdown;
+
+    // Update the count down every 1 second
+    var x = setInterval(updateCountdown, 1000);
+
+    // Initial call
+    updateCountdown();
   </script>
 
   <!-- Google Analytics -->
