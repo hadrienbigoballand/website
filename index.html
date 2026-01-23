@@ -1595,46 +1595,53 @@ var x = setInterval(function() {
 <!-- Add the collapsible section functionality right before the closing body tag -->
 <script>
   document.addEventListener('DOMContentLoaded', function() {
+    
+    // Helper function to handle opening/closing
+    function setCollapsibleState(header, state) {
+      const content = header.nextElementSibling;
+      const sectionId = header.closest('.collapsible-section').id;
+      
+      if (state === 'expanded') {
+        header.classList.add('active');
+        content.classList.add('expanded');
+        // Set exact height for smooth animation
+        content.style.maxHeight = content.scrollHeight + "px";
+        localStorage.setItem('section_' + sectionId, 'expanded');
+      } else {
+        header.classList.remove('active');
+        content.classList.remove('expanded');
+        // Clear height to allow collapsing
+        content.style.maxHeight = null;
+        localStorage.setItem('section_' + sectionId, 'collapsed');
+      }
+    }
+
     // Initialize collapsible sections
     const collapsibleHeaders = document.querySelectorAll('.collapsible-header');
     
     collapsibleHeaders.forEach(header => {
       const sectionId = header.closest('.collapsible-section').id;
       
-      // Apply saved state on page load
-      if (sectionId) {
-        const savedState = localStorage.getItem('section_' + sectionId);
-        const content = header.nextElementSibling;
-        
-        if (savedState === 'collapsed') {
-          header.classList.remove('active');
-          content.classList.remove('expanded');
-        } else if (savedState === 'expanded') {
-          header.classList.add('active');
-          content.classList.add('expanded');
-        }
-        // If no saved state, keep default (HTML classes)
+      // Check for saved state or default state from HTML classes
+      const savedState = sectionId ? localStorage.getItem('section_' + sectionId) : null;
+      const isDefaultExpanded = header.classList.contains('active');
+      
+      // Apply initial state (calculate height immediately if open)
+      if (savedState === 'expanded' || (!savedState && isDefaultExpanded)) {
+        setCollapsibleState(header, 'expanded');
+      } else {
+        // Ensure closed sections are clean
+        setCollapsibleState(header, 'collapsed');
       }
       
+      // Add click listener
       header.addEventListener('click', function() {
-        // Toggle active class on header
-        this.classList.toggle('active');
-        
-        // Get the content element that follows this header
-        const content = this.nextElementSibling;
-        
-        // Toggle expanded class
-        content.classList.toggle('expanded');
-        
-        // Save the state to localStorage
-        if (sectionId) {
-          const state = content.classList.contains('expanded') ? 'expanded' : 'collapsed';
-          localStorage.setItem('section_' + sectionId, state);
-        }
+        const isCurrentlyExpanded = this.classList.contains('active');
+        setCollapsibleState(this, isCurrentlyExpanded ? 'collapsed' : 'expanded');
       });
     });
     
-    // Automatically expand or collapse section based on URL hash
+    // Handle URL Hash (e.g. #teaching)
     function checkHash() {
       if (window.location.hash) {
         const sectionId = window.location.hash.substring(1);
@@ -1642,24 +1649,22 @@ var x = setInterval(function() {
         
         if (section) {
           const header = section.querySelector('.collapsible-header');
-          const content = header.nextElementSibling;
-          
-          if (!content.classList.contains('expanded')) {
-            header.classList.add('active');
-            content.classList.add('expanded');
-            
-            // Save state to localStorage
-            localStorage.setItem('section_' + section.id, 'expanded');
-          }
+          // Force expand if accessed via hash
+          setCollapsibleState(header, 'expanded');
         }
       }
     }
     
-    // Check hash on page load
     checkHash();
-    
-    // Listen for hash changes
     window.addEventListener('hashchange', checkHash);
+    
+    // Recalculate heights on window resize to prevent cut-off text
+    window.addEventListener('resize', () => {
+      document.querySelectorAll('.collapsible-header.active').forEach(header => {
+        const content = header.nextElementSibling;
+        content.style.maxHeight = content.scrollHeight + "px";
+      });
+    });
   });
 </script>
 
