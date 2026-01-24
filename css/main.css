@@ -1657,22 +1657,7 @@ body.night .nav-highlight {
 }
 
 /* Scroll progression animation */
-.scroll-indicator {
-  position: fixed;
-  top: 0;
-  left: 0;
-  height: 3px;
-  background: linear-gradient(90deg, #000000, #333333);
-  /* Changed to black gradient */
-  z-index: 1000;
-  width: 0%;
-  transition: width 0.1s ease-out;
-}
 
-body.night .scroll-indicator {
-  background: linear-gradient(90deg, #ffffff, #dddddd);
-  /* Changed to white gradient */
-}
 
 /* Enhance hover states for smoother transitions */
 .nav-item,
@@ -3140,28 +3125,7 @@ body.day h4:hover {
 }
 
 /* Enhanced scroll indicator */
-.scroll-indicator {
-  position: fixed;
-  top: 0;
-  left: 0;
-  height: 3px;
-  z-index: 1000;
-  width: 0%;
-  transition: width 0.15s cubic-bezier(0.19, 1, 0.22, 1);
-  background: linear-gradient(90deg,
-      rgba(64, 62, 67, 0.5),
-      rgba(64, 62, 67, 0.8) 50%,
-      rgba(64, 62, 67, 0.5));
-  box-shadow: 0 0 10px rgba(64, 62, 67, 0.2);
-}
 
-body.night .scroll-indicator {
-  background: linear-gradient(90deg,
-      rgba(255, 255, 255, 0.5),
-      rgba(255, 255, 255, 0.8) 50%,
-      rgba(255, 255, 255, 0.5));
-  box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
-}
 
 /* Reduce animations for people who prefer reduced motion */
 @media (prefers-reduced-motion: reduce) {
