@@ -3857,16 +3857,16 @@ body.night .footer-content {
 }
 
 /* Safe-area cover: paints the status-bar strip with an opaque background
-   on iOS so page content never shows in the gap above the fixed nav. */
+   on iOS so page content never shows in the gap above the fixed nav title. */
 .top-nav::before {
   content: "";
-  position: fixed;
+  position: absolute;
   top: 0;
   left: 0;
   right: 0;
   height: env(safe-area-inset-top);
   background-color: #F8F7F4;
-  z-index: 1002;
+  z-index: 1;
   pointer-events: none;
 }
 
@@ -4033,6 +4033,18 @@ body {
 
   .top-nav-inner {
     padding: 0 20px;
+  }
+
+  /* On mobile, make the nav fully opaque so iOS Safari's safe-area /
+     status-bar region never shows page content scrolling underneath. */
+  .top-nav {
+    background-color: #F8F7F4;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+
+  body.night .top-nav {
+    background-color: #18181a;
   }
 }
 
