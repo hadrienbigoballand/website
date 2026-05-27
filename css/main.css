@@ -4006,7 +4006,7 @@ body {
 }
 
 /* Responsive: hide links on small screens */
-@media (max-width: 768px) {
+@media (max-width: 900px) {
   .top-nav-links {
     display: none;
   }
@@ -4014,6 +4014,10 @@ body {
   .top-nav-inner {
     padding: 0 20px;
   }
+}
+
+.top-nav-links {
+  flex-shrink: 0;
 }
 
 /* Hide the old mobile nav toggle */
