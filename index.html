@@ -466,6 +466,28 @@
       const navProgress = $('.nav-progress');
       let currentSection = 'intro';
 
+      let _scrollRaf = null;
+      function smoothScrollTo(target, duration, onComplete) {
+        if (_scrollRaf) cancelAnimationFrame(_scrollRaf);
+        const start = window.pageYOffset;
+        const distance = target - start;
+        if (distance === 0) { if (onComplete) onComplete(); return; }
+        const startTime = performance.now();
+        function easeOutQuart(t) { return 1 - Math.pow(1 - t, 4); }
+        function step(now) {
+          const elapsed = now - startTime;
+          const progress = Math.min(elapsed / duration, 1);
+          window.scrollTo(0, start + distance * easeOutQuart(progress));
+          if (progress < 1) {
+            _scrollRaf = requestAnimationFrame(step);
+          } else {
+            _scrollRaf = null;
+            if (onComplete) onComplete();
+          }
+        }
+        _scrollRaf = requestAnimationFrame(step);
+      }
+
       $('.nav-item').click(function (e) {
         e.preventDefault();
         const target = $(this).attr('data-target');
@@ -474,19 +496,8 @@
         if ($targetSection.length) {
           $('.section').removeClass('section-entering');
           const scrollPosition = $targetSection.offset().top - 50;
-          requestAnimationFrame(() => {
-            $('html, body').stop().animate({
-              scrollTop: scrollPosition
-            }, {
-              duration: 1000,
-              easing: 'cubicBezier',
-              cubicBezier: function (t) {
-                return cubicBezier(0.22, 1, 0.36, 1, t);
-              },
-              complete: function () {
-                $targetSection.addClass('section-entering');
-              }
-            });
+          smoothScrollTo(scrollPosition, 450, function () {
+            $targetSection.addClass('section-entering');
           });
         }
       });
@@ -497,14 +508,13 @@
         const target = $(this).attr('href').substring(1);
         const $targetSection = $('#' + target);
         if ($targetSection.length) {
-          const scrollPosition = $targetSection.offset().top - 60;
-          $('html, body').stop().animate({ scrollTop: scrollPosition }, 800, 'swing');
+          smoothScrollTo($targetSection.offset().top - 60, 450);
         }
       });
 
       $('.top-nav-title').click(function (e) {
         e.preventDefault();
-        $('html, body').stop().animate({ scrollTop: 0 }, 800, 'swing');
+        smoothScrollTo(0, 450);
       });
 
 
