@@ -3846,8 +3846,9 @@ body.night .footer-content {
   left: 0;
   right: 0;
   z-index: 1001;
-  height: calc(56px + env(safe-area-inset-top));
+  height: 56px;
   padding-top: env(safe-area-inset-top);
+  box-sizing: content-box;
   transition: background-color 0.3s ease, box-shadow 0.3s ease, backdrop-filter 0.3s ease;
   background-color: rgba(248, 247, 244, 0.85);
   backdrop-filter: blur(12px);
