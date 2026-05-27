@@ -3846,7 +3846,8 @@ body.night .footer-content {
   left: 0;
   right: 0;
   z-index: 1001;
-  height: 56px;
+  height: calc(56px + env(safe-area-inset-top));
+  padding-top: env(safe-area-inset-top);
   transition: background-color 0.3s ease, box-shadow 0.3s ease, backdrop-filter 0.3s ease;
   background-color: rgba(248, 247, 244, 0.85);
   backdrop-filter: blur(12px);
@@ -4002,7 +4003,7 @@ body.night .top-nav-hamburger span:after {
 
 /* Add top padding to body to account for fixed nav */
 body {
-  padding-top: 56px;
+  padding-top: calc(56px + env(safe-area-inset-top));
 }
 
 /* Responsive: hide links on small screens */
