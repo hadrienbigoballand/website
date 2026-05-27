@@ -674,22 +674,6 @@ body.night .painting-grid::-webkit-scrollbar-thumb {
   background-color: rgba(255, 255, 255, 0.2);
 }
 
-/* For devices smaller than 400px */
-@media (max-width: 550px) {
-  body.night #moon {
-    margin-bottom: 80px;
-    padding-right: 8px;
-    width: 20px;
-    float: right;
-  }
-
-  body.day #sun {
-    margin-bottom: 80px;
-    padding-right: 8px;
-    width: 20px;
-    float: right;
-  }
-}
 
 /* For larger screens, show the art */
 @media (min-width: 850px) {
@@ -3817,6 +3801,194 @@ body.night .footer-content {
 
 .footer-content:hover {
   opacity: 1;
+}
+
+/* Top Navigation Bar
+================================================== */
+.top-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1001;
+  height: 56px;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease, backdrop-filter 0.3s ease;
+  background-color: rgba(248, 247, 244, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+body.night .top-nav {
+  background-color: rgba(24, 24, 26, 0.85);
+  border-bottom-color: rgba(255, 255, 255, 0.06);
+}
+
+.top-nav-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 32px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.top-nav-title {
+  font-family: NeueHaasMedium;
+  font-size: 16px;
+  letter-spacing: 0.2px;
+  white-space: nowrap;
+  text-decoration: none;
+  flex-shrink: 0;
+}
+
+body.day .top-nav-title {
+  color: #403E43;
+}
+
+body.night .top-nav-title {
+  color: #fff;
+}
+
+.top-nav-title:hover {
+  opacity: 0.7;
+}
+
+.top-nav-links {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+}
+
+.top-nav-link {
+  font-family: NeueHaas;
+  font-size: 14px;
+  letter-spacing: 0.2px;
+  text-decoration: none;
+  transition: opacity 0.2s ease;
+  white-space: nowrap;
+}
+
+body.day .top-nav-link {
+  color: #403E43;
+}
+
+body.night .top-nav-link {
+  color: #C8C8C9;
+}
+
+.top-nav-link:hover {
+  opacity: 0.6;
+}
+
+.top-nav-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.top-nav-controls .lang-btn {
+  margin-right: 4px;
+  top: 0;
+}
+
+.top-nav-controls #moon,
+.top-nav-controls #sun {
+  top: 0;
+  width: 18px;
+}
+
+/* Hamburger button (hidden on desktop) */
+.top-nav-hamburger {
+  display: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  width: 32px;
+  height: 32px;
+  position: relative;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+
+.top-nav-hamburger span {
+  display: block;
+  width: 20px;
+  height: 2px;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+body.day .top-nav-hamburger span,
+body.day .top-nav-hamburger span:before,
+body.day .top-nav-hamburger span:after {
+  background: #403E43;
+}
+
+body.night .top-nav-hamburger span,
+body.night .top-nav-hamburger span:before,
+body.night .top-nav-hamburger span:after {
+  background: #C8C8C9;
+}
+
+.top-nav-hamburger span:before,
+.top-nav-hamburger span:after {
+  content: '';
+  position: absolute;
+  width: 20px;
+  height: 2px;
+  transition: all 0.3s ease;
+}
+
+.top-nav-hamburger span:before {
+  top: -6px;
+}
+
+.top-nav-hamburger span:after {
+  bottom: -6px;
+}
+
+.top-nav-hamburger.active span {
+  background: transparent;
+}
+
+.top-nav-hamburger.active span:before {
+  top: 0;
+  transform: rotate(45deg);
+}
+
+.top-nav-hamburger.active span:after {
+  bottom: 0;
+  transform: rotate(-45deg);
+}
+
+/* Add top padding to body to account for fixed nav */
+body {
+  padding-top: 56px;
+}
+
+/* Responsive: hide links on small screens */
+@media (max-width: 768px) {
+  .top-nav-links {
+    display: none;
+  }
+
+  .top-nav-inner {
+    padding: 0 20px;
+  }
+}
+
+/* Hide the old mobile nav toggle */
+.mobile-nav-toggle {
+  display: none !important;
+}
+
+/* Mobile nav overlay now triggered by hamburger */
+.mobile-nav {
+  z-index: 1000;
 }
 
 /* View Transition API */

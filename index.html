@@ -491,37 +491,22 @@
         }
       });
 
-      $('.mobile-nav-item a').click(function (e) {
+      // Top nav link clicks (smooth scroll)
+      $('.top-nav-link').click(function (e) {
         e.preventDefault();
         const target = $(this).attr('href').substring(1);
         const $targetSection = $('#' + target);
-
         if ($targetSection.length) {
-          const scrollPosition = $targetSection.offset().top - 50;
-          $('.mobile-nav').removeClass('visible');
-          $('.mobile-nav-toggle').removeClass('active');
-          $('body').addClass('content-transitioning');
-          window.scrollTo(0, scrollPosition);
-          $('.section').removeClass('section-entering');
-          $targetSection.addClass('section-entering');
-          setTimeout(function () {
-            $('body').removeClass('content-transitioning');
-            $('body').css('overflow', '');
-          }, 300);
+          const scrollPosition = $targetSection.offset().top - 60;
+          $('html, body').stop().animate({ scrollTop: scrollPosition }, 800, 'swing');
         }
       });
 
-      $('.mobile-nav-toggle').click(function () {
-        $(this).toggleClass('active');
-        $('.mobile-nav').toggleClass('visible');
-        if ($('.mobile-nav').hasClass('visible')) {
-          $('body').css('overflow', 'hidden');
-        } else {
-          setTimeout(function () {
-            $('body').css('overflow', '');
-          }, 300);
-        }
+      $('.top-nav-title').click(function (e) {
+        e.preventDefault();
+        $('html, body').stop().animate({ scrollTop: 0 }, 800, 'swing');
       });
+
 
       function updateActiveSection() {
         let maxVisibleSection = '';
@@ -980,13 +965,28 @@
 <body>
 
   <body class="day">
-    <div class="container animated fadeIn one">
-      <div class="row group">
-        <div class="three columns icon">
+
+    <!-- Top Navigation Bar -->
+    <nav class="top-nav" id="top-nav">
+      <div class="top-nav-inner">
+        <a href="#intro" class="top-nav-title">Hadrien Bigo--Balland</a>
+        <div class="top-nav-links">
+          <a href="#news" class="top-nav-link" data-i18n="nav-news">News</a>
+          <a href="#publications" class="top-nav-link" data-i18n="nav-publications">Publications</a>
+          <a href="#code" class="top-nav-link" data-i18n="nav-code">Code</a>
+          <a href="#teaching" class="top-nav-link" data-i18n="nav-teaching">Teaching Resources</a>
+          <a href="#education" class="top-nav-link" data-i18n="nav-education">Education</a>
+        </div>
+        <div class="top-nav-controls">
           <span id="lang-toggle" class="lang-btn">EN</span>
           <img src="images/moon.svg" id="moon">
           <img src="images/sun.svg" id="sun">
         </div>
+      </div>
+    </nav>
+
+    <div class="container animated fadeIn one">
+      <div class="row group">
 
         <div class="six columns">
           <h1 id="intro" class="night" data-i18n="intro-title">Hi, I'm Hadrien.</h1>
@@ -1486,57 +1486,6 @@
 
           </div>
 
-          <!-- Side Navigation -->
-          <nav class="side-nav">
-            <div class="nav-track">
-              <div class="nav-progress"></div>
-              <div class="nav-highlight"></div>
-              <div class="nav-items">
-                <div class="nav-item active" data-target="intro">
-                  <div class="nav-dot"></div>
-                  <div class="nav-label" data-i18n="nav-intro">Introduction</div>
-                </div>
-                <div class="nav-item" data-target="news">
-                  <div class="nav-dot"></div>
-                  <div class="nav-label" data-i18n="nav-news">News</div>
-                </div>
-                <div class="nav-item" data-target="publications">
-                  <div class="nav-dot"></div>
-                  <div class="nav-label" data-i18n="nav-publications">Publications</div>
-                </div>
-                <div class="nav-item" data-target="code">
-                  <div class="nav-dot"></div>
-                  <div class="nav-label" data-i18n="nav-code">Code</div>
-                </div>
-                <div class="nav-item" data-target="teaching">
-                  <div class="nav-dot"></div>
-                  <div class="nav-label" data-i18n="nav-teaching">Teaching Resources</div>
-                </div>
-                <div class="nav-item" data-target="education">
-                  <div class="nav-dot"></div>
-                  <div class="nav-label" data-i18n="nav-education">Education</div>
-                </div>
-              </div>
-            </div>
-          </nav>
-
-          <!-- Mobile Navigation Toggle -->
-          <div class="mobile-nav-toggle">
-            <span></span>
-          </div>
-
-          <!-- Mobile Navigation Menu -->
-          <div class="mobile-nav">
-            <div class="mobile-nav-items">
-              <div class="mobile-nav-item"><a href="#intro" data-i18n="nav-intro">Introduction</a></div>
-              <div class="mobile-nav-item"><a href="#news" data-i18n="nav-news">News</a></div>
-              <div class="mobile-nav-item"><a href="#publications" data-i18n="nav-publications">Publications</a></div>
-              <div class="mobile-nav-item"><a href="#code" data-i18n="nav-code">Code</a></div>
-
-              <div class="mobile-nav-item"><a href="#teaching" data-i18n="nav-teaching">Teaching Resources</a></div>
-              <div class="mobile-nav-item"><a href="#education" data-i18n="nav-education">Education</a></div>
-            </div>
-          </div>
 
           <script>
             if (!(CSS && CSS.supports && CSS.supports('scroll-behavior', 'smooth'))) {
