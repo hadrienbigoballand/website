@@ -3856,6 +3856,24 @@ body.night .footer-content {
   border-bottom: 1px solid rgba(0, 0, 0, 0.06);
 }
 
+/* Safe-area cover: paints the status-bar strip with an opaque background
+   on iOS so page content never shows in the gap above the fixed nav. */
+.top-nav::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: env(safe-area-inset-top);
+  background-color: #F8F7F4;
+  z-index: 1002;
+  pointer-events: none;
+}
+
+body.night .top-nav::before {
+  background-color: #18181a;
+}
+
 body.night .top-nav {
   background-color: rgba(24, 24, 26, 0.85);
   border-bottom-color: rgba(255, 255, 255, 0.06);
