@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="light">
+<html lang="en">
+
 <head>
 
   <!-- Google tag (gtag.js) -->
@@ -11,521 +12,1642 @@
     gtag('config', 'G-BERXY0M3FY');
   </script>
 
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="utf-8">
   <title>Hadrien Bigo--Balland</title>
-  <meta name="description" content="PhD Student at MyFit Solutions & Inria Paris" />
+  <meta name="description" content="PhD Student at MyFit Solutions & Inria Paris">
+  <meta name="author" content="">
 
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="css/main.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link rel="stylesheet" href="css/normalize.css">
+  <link rel="stylesheet" href="css/skeleton.css">
+  <link rel="stylesheet" href="css/main_old.css">
+  <link rel="stylesheet" href="css/animate.css">
+
+  <link rel="icon" type="image/png" href="images/dot.png">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+  <script src="js/simple-tooltip.js"></script>
   <script src="https://kit.fontawesome.com/612029af5a.js" crossorigin="anonymous"></script>
 
-  <link rel="icon" type="image/png" href="images/favicon.png" />
+  <script>
+    $(document).ready(function () {
+      // Theme toggling with Circular Transition
+      function toggleTheme(newTheme, event) {
+        if (!document.startViewTransition) {
+          updateThemeClasses(newTheme);
+          return;
+        }
+        const x = event.clientX;
+        const y = event.clientY;
+        const endRadius = Math.hypot(
+          Math.max(x, innerWidth - x),
+          Math.max(y, innerHeight - y)
+        );
+        const transition = document.startViewTransition(() => {
+          updateThemeClasses(newTheme);
+        });
+        transition.ready.then(() => {
+          document.documentElement.animate(
+            {
+              clipPath: [
+                `circle(0px at ${x}px ${y}px)`,
+                `circle(${endRadius}px at ${x}px ${y}px)`,
+              ],
+            },
+            {
+              duration: 500,
+              easing: "ease-in",
+              pseudoElement: "::view-transition-new(root)",
+            }
+          );
+        });
+      }
+
+      function updateThemeClasses(theme) {
+        if (theme === 'day') {
+          $("body").addClass("day");
+          $("body").removeClass("night");
+        } else {
+          $("body").removeClass("day");
+          $("body").addClass("night");
+        }
+        localStorage.setItem('theme', theme);
+      }
+
+      $("#moon").click(function (e) {
+        toggleTheme('day', e);
+      });
+      $("#sun").click(function (e) {
+        toggleTheme('night', e);
+      });
+
+      const storedTheme = localStorage.getItem('theme');
+      if (storedTheme) {
+        if (storedTheme === 'night') {
+          $("body").removeClass("day");
+          $("body").addClass("night");
+        } else {
+          $("body").addClass("day");
+          $("body").removeClass("night");
+        }
+      }
+
+      // Translation Dictionary
+      const translations = {
+        en: {
+          "intro-title": "Hi, I'm Hadrien.",
+          "bio-phd": "I am currently pursuing a PhD at <a href=\"https://myfit-solutions.com/\" target=\"_blank\" class=\"underline\">MyFit Solutions</a>, in the <a href=\"https://team.inria.fr/heka/\" target=\"_blank\" class=\"underline\">HEKA team</a> of <a href=\"https://www.inria.fr/fr/centre-inria-de-paris\" target=\"_blank\" class=\"underline\">Inria Paris</a>, under the supervision of <a href=\"https://sites.google.com/site/stephanieallassonniere/\" target=\"_blank\" class=\"underline\">Professor Stéphanie Allassonnière</a>, <a href=\"https://www.jeanfeydy.com/\" target=\"_blank\" class=\"underline\">Dr. Jean Feydy</a> and <a href=\"https://www.linkedin.com/in/j%C3%A9r%C3%A9my-adoux-96612092/\" target=\"_blank\" class=\"underline\">Jeremy Adoux</a> for the last <span id=\"counter\"><br></span>.",
+          "bio-scikit": "I am also contributing to <a href=\"https://github.com/scikit-shapes/scikit-shapes\" target=\"_blank\" class=\"underline\">scikit-shapes</a>, an open-source Python library for shape analysis and statistical learning on geometric data, designed to facilitate research and applications in computational anatomy, morphometrics, and related fields.",
+          "bio-teaching": "Additionally, I have been serving as a Teaching Assistant of Probability Theory at <a href=\"https://www.univ-lyon2.fr/\" target=\"_blank\" class=\"underline\">Lyon 2 Lumière University</a>, working in collaboration with <a href=\"https://sites.google.com/site/stephanegchretien/home\" target=\"_blank\" class=\"underline\">Professor Stephane Chretien</a> and Zied Gharbi.",
+          "section-news": "NEWS",
+          "news-1": "Started my PhD at <a href=\"https://myfit-solutions.com/\" target=\"_blank\" class=\"underline\">MyFit Solutions</a> &amp; <a href=\"https://team.inria.fr/heka/\" target=\"_blank\" class=\"underline\">Inria Paris HEKA</a>, working on shape analysis for medical imaging.",
+          "news-2": "Started contributing to <a href=\"https://github.com/scikit-shapes/scikit-shapes\" target=\"_blank\" class=\"underline\">scikit-shapes</a>, an open-source library for geometric data analysis.",
+          "news-3": "Teaching Assistant for Probability Theory (L2 MIASHS) at <a href=\"https://www.univ-lyon2.fr/\" target=\"_blank\" class=\"underline\">Lyon 2 Lumière University</a>.",
+          "news-4": "Completed an internship at <a href=\"https://eric.msh-lse.fr/\" target=\"_blank\" class=\"underline\">Laboratoire ERIC</a> on Hodge Laplacian Clustering and Deep Neural Networks through the lens of Sobolev and Neuberger.",
+          "news-5": "Participated in the thematic programme <a href=\"https://www.esi.ac.at/events/e550/\" target=\"_blank\" class=\"underline\">Infinite-dimensional Geometry: Theory and Applications</a> at the Erwin Schrödinger International Institute for Mathematics and Physics (ESI), Vienna.",
+          "news-6": "Presented our work on <em>Optimal Steps for Fast Diffeomorphic Shape Registration</em> at <a href=\"https://iabm2026.sciencesconf.org/\" target=\"_blank\" class=\"underline\">IABM 2026</a>.",
+          "news-7": "Presenting our work on <em>Optimal Steps for Fast Diffeomorphic Shape Registration</em> at <a href=\"https://cs2026.sciencesconf.org/\" target=\"_blank\" class=\"underline\">Curves and Surfaces 2026</a>.",
+          "news-8": "Presenting our work on <em>Optimal Steps for Fast Diffeomorphic Shape Registration</em> at <a href=\"https://conferences.miccai.org/2026/en/\" target=\"_blank\" class=\"underline\">MICCAI 2026</a>.",
+          "news-9": "Our team (with <a href=\"https://jeandelhaye.github.io/\" target=\"_blank\" class=\"underline\">Jean Delhaye</a> and <a href=\"https://www.linkedin.com/in/pierre-andr%C3%A9-mikem-b7549713b/?locale=fr\" target=\"_blank\" class=\"underline\">Pierre-André Mikem</a>) won 1st place at the <a href=\"https://fondation-hadamard.fr/fr/campus-de-paris-saclay/formation/edmh/deroulement-du-doctorat/parcours-mathtech/\" target=\"_blank\" class=\"underline\">MathTech challenge</a> organized by the Fondation Hadamard.",
+          "news-10": "Presenting our work on <em>Optimal Steps for Fast Diffeomorphic Shape Registration</em> at the <a href=\"https://shape-analysis.github.io/\" target=\"_blank\" class=\"underline\">Shape Seminar</a>.",
+          "section-publications": "PUBLICATIONS",
+          "section-code": "CODE",
+          "section-contact": "CONTACT",
+          "contact-desc": "You can find my contact information below.",
+          "contact-students": "For students",
+          "contact-work": "For work",
+          "contact-connect": "Connect",
+          "contact-linkedin": "LinkedIn Profile",
+          "section-teaching": "TEACHING RESOURCES",
+          "teaching-intro": "Probability Theory course materials for Lyon 2 students (credit to Zied Gharbi and Professor Stephane Chretien):",
+          "section-education": "EDUCATION",
+          "section-degrees": "DEGREES",
+          "nav-intro": "Introduction",
+          "nav-news": "News",
+          "nav-publications": "Publications",
+          "nav-code": "Code",
+          "nav-contact": "Contact",
+          "nav-calendar": "Calendar",
+          "nav-teaching": "Teaching Resources",
+          "nav-education": "Education",
+          "nav-degrees": "Degrees",
+          "contact-email-ph": "Your email",
+          "contact-message-ph": "Your message",
+          "contact-send": "Send"
+        },
+        fr: {
+          "intro-title": "Bonjour, je suis Hadrien.",
+          "bio-phd": "Je suis actuellement en doctorat à <a href=\"https://myfit-solutions.com/\" target=\"_blank\" class=\"underline\">MyFit Solutions</a>, au sein de l'équipe <a href=\"https://team.inria.fr/heka/\" target=\"_blank\" class=\"underline\">HEKA</a> de l'<a href=\"https://www.inria.fr/fr/centre-inria-de-paris\" target=\"_blank\" class=\"underline\">Inria Paris</a>, sous la direction de <a href=\"https://sites.google.com/site/stephanieallassonniere/\" target=\"_blank\" class=\"underline\">Professeur Stéphanie Allassonnière</a>, du <a href=\"https://www.jeanfeydy.com/\" target=\"_blank\" class=\"underline\">Dr. Jean Feydy</a> et de <a href=\"https://www.linkedin.com/in/j%C3%A9r%C3%A9my-adoux-96612092/\" target=\"_blank\" class=\"underline\">Jeremy Adoux</a> depuis <span id=\"counter\"><br></span>.",
+          "bio-scikit": "Je contribue également à <a href=\"https://github.com/scikit-shapes/scikit-shapes\" target=\"_blank\" class=\"underline\">scikit-shapes</a>, une bibliothèque Python open-source pour l'analyse de formes et l'apprentissage statistique sur des données géométriques, conçue pour faciliter la recherche et les applications en anatomie computationnelle, morphométrie et domaines connexes.",
+          "bio-teaching": "De plus, j'enseigne la théorie des probabilités à l'<a href=\"https://www.univ-lyon2.fr/\" target=\"_blank\" class=\"underline\">Université Lyon 2 Lumière</a>, en collaboration avec le <a href=\"https://sites.google.com/site/stephanegchretien/home\" target=\"_blank\" class=\"underline\">Professeur Stephane Chretien</a> et Zied Gharbi.",
+          "section-news": "ACTUALITÉS",
+          "news-1": "Début de mon doctorat à <a href=\"https://myfit-solutions.com/\" target=\"_blank\" class=\"underline\">MyFit Solutions</a> &amp; <a href=\"https://team.inria.fr/heka/\" target=\"_blank\" class=\"underline\">Inria Paris HEKA</a>, travaillant sur l'analyse de formes pour l'imagerie médicale.",
+          "news-2": "Contributions à <a href=\"https://github.com/scikit-shapes/scikit-shapes\" target=\"_blank\" class=\"underline\">scikit-shapes</a>, une bibliothèque open-source pour l'analyse de données géométriques.",
+          "news-3": "Chargé de TD de Théorie des Probabilités (L2 MIASHS) à l'<a href=\"https://www.univ-lyon2.fr/\" target=\"_blank\" class=\"underline\">Université Lyon 2 Lumière</a>.",
+          "news-4": "Stage au <a href=\"https://eric.msh-lse.fr/\" target=\"_blank\" class=\"underline\">Laboratoire ERIC</a> sur le Hodge Laplacian Clustering et les réseaux de neurones profonds sous l'angle de Sobolev et Neuberger.",
+          "news-5": "Participation au programme thématique <a href=\"https://www.esi.ac.at/events/e550/\" target=\"_blank\" class=\"underline\">Géométrie en dimension infinie : Théorie et Applications</a> à l'Institut Erwin Schrödinger de Mathématiques et Physique (ESI), Vienne.",
+          "news-6": "Présentation de nos travaux sur <em>Optimal Steps for Fast Diffeomorphic Shape Registration</em> à <a href=\"https://iabm2026.sciencesconf.org/\" target=\"_blank\" class=\"underline\">IABM 2026</a>.",
+          "news-7": "Présentation de nos travaux sur <em>Optimal Steps for Fast Diffeomorphic Shape Registration</em> à <a href=\"https://cs2026.sciencesconf.org/\" target=\"_blank\" class=\"underline\">Curves and Surfaces 2026</a>.",
+          "news-8": "Présentation de nos travaux sur <em>Optimal Steps for Fast Diffeomorphic Shape Registration</em> à <a href=\"https://conferences.miccai.org/2026/en/\" target=\"_blank\" class=\"underline\">MICCAI 2026</a>.",
+          "news-9": "Notre équipe (avec <a href=\"https://jeandelhaye.github.io/\" target=\"_blank\" class=\"underline\">Jean Delhaye</a> et <a href=\"https://www.linkedin.com/in/pierre-andr%C3%A9-mikem-b7549713b/?locale=fr\" target=\"_blank\" class=\"underline\">Pierre-André Mikem</a>) a remporté la 1ère place du <a href=\"https://fondation-hadamard.fr/fr/campus-de-paris-saclay/formation/edmh/deroulement-du-doctorat/parcours-mathtech/\" target=\"_blank\" class=\"underline\">challenge MathTech</a> de la Fondation Hadamard.",
+          "news-10": "Présentation de nos travaux sur <em>Optimal Steps for Fast Diffeomorphic Shape Registration</em> au <a href=\"https://shape-analysis.github.io/\" target=\"_blank\" class=\"underline\">Shape Seminar</a>.",
+          "section-publications": "PUBLICATIONS",
+          "section-code": "CODE",
+          "section-contact": "CONTACT",
+          "contact-desc": "Vous trouverez mes coordonnées ci-dessous.",
+          "contact-students": "Pour les étudiants",
+          "contact-work": "Pour le travail",
+          "contact-connect": "Réseaux",
+          "contact-linkedin": "Profil LinkedIn",
+          "section-teaching": "RESSOURCES PÉDAGOGIQUES",
+          "teaching-intro": "Support de cours de théorie des probabilités pour les étudiants de Lyon 2 (crédit à Zied Gharbi et au Professeur Stephane Chretien) :",
+          "section-education": "FORMATION",
+          "section-degrees": "DIPLÔMES",
+          "nav-intro": "Introduction",
+          "nav-news": "Actualités",
+          "nav-publications": "Publications",
+          "nav-code": "Code",
+          "nav-contact": "Contact",
+          "nav-calendar": "Calendrier",
+          "nav-teaching": "Ressources Pédagogiques",
+          "nav-education": "Formation",
+          "nav-degrees": "Diplômes",
+          "contact-email-ph": "Votre email",
+          "contact-message-ph": "Votre message",
+          "contact-send": "Envoyer"
+        }
+      };
+
+      function translatePage(lang) {
+        $("[data-i18n]").each(function () {
+          const key = $(this).data("i18n");
+          if (translations[lang] && translations[lang][key]) {
+            if (translations[lang][key].includes("<")) {
+              $(this).html(translations[lang][key]);
+            } else {
+              $(this).text(translations[lang][key]);
+            }
+          }
+        });
+
+        $("[data-i18n-placeholder]").each(function () {
+          const key = $(this).data("i18n-placeholder");
+          if (translations[lang] && translations[lang][key]) {
+            $(this).attr("placeholder", translations[lang][key]);
+          }
+        });
+      }
+
+      function updateLangButton(lang) {
+        $("#lang-toggle").text(lang.toUpperCase());
+        translatePage(lang);
+        if (window.updateCountdown) {
+          window.updateCountdown();
+        }
+      }
+
+      $("#lang-toggle").click(function () {
+        const currentLang = localStorage.getItem('lang') || 'en';
+        const newLang = currentLang === 'en' ? 'fr' : 'en';
+        localStorage.setItem('lang', newLang);
+        updateLangButton(newLang);
+      });
+
+      const storedLang = localStorage.getItem('lang') || 'en';
+      updateLangButton(storedLang);
+
+      // Array of impressionist landscape paintings with metadata
+      const paintings = [
+        {
+          src: "https://upload.wikimedia.org/wikipedia/commons/5/5f/Pissarro_Jardin_a_Valhermeil.jpg",
+          title: "Le Jardin de Maubuisson, Pontoise",
+          artist: "Camille Pissarro",
+          year: "1881"
+        },
+        {
+          src: "https://upload.wikimedia.org/wikipedia/commons/5/53/Camille_Pissarro_-_Sc%C3%A8ne_de_neige_%C3%A0_%C3%89ragny_%281884%29.jpg",
+          title: "Scène de Neige à Éragny",
+          artist: "Camille Pissarro",
+          year: "1884"
+        },
+        {
+          src: "https://upload.wikimedia.org/wikipedia/commons/a/a8/Camille_Pissarro_-_La_Seine_%C3%A0_Rouen%2C_l%E2%80%99%C3%AEle_Lacroix%2C_effet_de_brouillard_855.jpg",
+          title: "La Seine à Rouen, l'Île Lacroix, Effet de Brouillard",
+          artist: "Camille Pissarro",
+          year: "1888"
+        },
+        {
+          src: "https://upload.wikimedia.org/wikipedia/commons/9/95/Pissarro_-_Les_glaneuses%2C_1889.jpg",
+          title: "Les Glaneuses",
+          artist: "Camille Pissarro",
+          year: "1889"
+        },
+        {
+          src: "https://upload.wikimedia.org/wikipedia/commons/6/64/Camille_Pissarro%2C_Charing_Cross_Bridge%2C_London%2C_1890%2C_NGA_66430.jpg",
+          title: "Charing Cross Bridge, London",
+          artist: "Camille Pissarro",
+          year: "1890"
+        },
+        {
+          src: "https://upload.wikimedia.org/wikipedia/commons/0/0b/Camille_Pissarro_-_P%C3%A2turage%2C_coucher_de_soleil%2C_Eragny_%28PD_880%29.jpg",
+          title: "Pâturage, Coucher de Soleil, Éragny",
+          artist: "Camille Pissarro",
+          year: "1890"
+        },
+        {
+          src: "https://upload.wikimedia.org/wikipedia/commons/1/14/Camille_Pissarro_-_Boulevard_Montmartre_at_Night_-_c_1897_-_National_Gallery_UK.jpg",
+          title: "Boulevard Montmartre at Night",
+          artist: "Camille Pissarro",
+          year: "1897"
+        },
+        {
+          src: "https://upload.wikimedia.org/wikipedia/commons/d/db/Statue_d%27Henri_IV%2C_matin%2C_soleil_.jpg",
+          title: "Statue d'Henri IV, Matin, Soleil",
+          artist: "Camille Pissarro",
+          year: "1901"
+        },
+        {
+          src: "https://upload.wikimedia.org/wikipedia/commons/f/f0/Camille_Pissarro_-_Le_Pont_de_la_Clef_%C3%A0_Bruges%2C_Belgique.jpg",
+          title: "Le Pont de la Clef à Bruges",
+          artist: "Camille Pissarro",
+          year: "1896"
+        },
+        {
+          src: "https://upload.wikimedia.org/wikipedia/commons/3/34/Alfred_Sisley_-_La_Route_-_2001-0009_-_Kunsthaus_Z%C3%BCrich.jpg",
+          title: "La Route",
+          artist: "Alfred Sisley",
+          year: "1885"
+        },
+        {
+          src: "https://upload.wikimedia.org/wikipedia/commons/6/6f/Alfred_Sisley_-_%C3%89t%C3%A9_%C3%A0_Bougival_-_100_-_Foundation_E.G._B%C3%BChrle_Collection.jpg",
+          title: "Été à Bougival",
+          artist: "Alfred Sisley",
+          year: "1876"
+        },
+        {
+          src: "https://upload.wikimedia.org/wikipedia/commons/1/10/Claude_Monet_-_Le_Palais_Ducal_vu_de_Saint-Georges_Majeur_-_1995-0004_-_Kunsthaus_Z%C3%BCrich.jpg",
+          title: "Le Palais Ducal vu de Saint-Georges Majeur",
+          artist: "Claude Monet",
+          year: "1908"
+        },
+        {
+          src: "https://upload.wikimedia.org/wikipedia/commons/6/64/Claude_Monet_-_Le_Pont_de_Waterloo_-_1995-0002_-_Kunsthaus_Z%C3%BCrich.jpg",
+          title: "Le Pont de Waterloo",
+          artist: "Claude Monet",
+          year: "1902"
+        },
+        {
+          src: "https://upload.wikimedia.org/wikipedia/commons/8/8b/C%C3%A9zanne%2C_Paul_-_Still_Life_with_a_Curtain.jpg",
+          title: "Nature morte au rideau",
+          artist: "Paul Cézanne",
+          year: "1898"
+        },
+        {
+          src: "https://upload.wikimedia.org/wikipedia/commons/e/e4/Blue_Flower_O%27Keeffe_1918.jpg",
+          title: "Blue Flower",
+          artist: "Georgia O'Keeffe",
+          year: "1918"
+        },
+        {
+          src: "https://upload.wikimedia.org/wikipedia/commons/9/98/Calla_Lillies_by_Georgia_O%E2%80%99Keeffe.jpg",
+          title: "Calla Lilies",
+          artist: "Georgia O'Keeffe",
+          year: "1928"
+        },
+        {
+          src: "https://upload.wikimedia.org/wikipedia/commons/3/31/Flower_Abstraction_O%27Keeffe_1924.jpg",
+          title: "Flower Abstraction",
+          artist: "Georgia O'Keeffe",
+          year: "1924"
+        },
+        {
+          src: "https://upload.wikimedia.org/wikipedia/commons/6/69/White_Flower_by_Georgia_O%27Keeffe.jpg",
+          title: "White Flower",
+          artist: "Georgia O'Keeffe",
+          year: "1929"
+        },
+      ];
+
+      const randomIndex = Math.floor(Math.random() * paintings.length);
+      const randomPainting = paintings[randomIndex];
+
+      $("#art-painting").attr("src", randomPainting.src);
+      updatePaintingLegend(randomPainting);
+
+      $("#art-painting").click(function () {
+        const currentSrc = $(this).attr("src");
+        const currentIndex = paintings.findIndex(painting => painting.src === currentSrc);
+        const availablePaintings = paintings.filter((painting, index) => index !== currentIndex);
+        const newPainting = availablePaintings[Math.floor(Math.random() * availablePaintings.length)];
+
+        $(this).addClass("painting-fade-out");
+        $(".painting-legend").addClass("legend-fade-out");
+
+        setTimeout(() => {
+          $(this).attr("src", newPainting.src);
+          updatePaintingLegend(newPainting);
+          $(this).removeClass("painting-fade-out");
+          $(this).addClass("painting-fade-in");
+          $(".painting-legend").removeClass("legend-fade-out");
+          $(".painting-legend").addClass("legend-fade-in");
+
+          setTimeout(() => {
+            $(this).removeClass("painting-fade-in");
+            $(".painting-legend").removeClass("legend-fade-in");
+          }, 500);
+        }, 300);
+      });
+
+      function updatePaintingLegend(painting) {
+        $(".painting-title").text(painting.title);
+        $(".painting-artist").text(painting.artist);
+        $(".painting-year").text(painting.year);
+      }
+
+      const paintingGrid = document.querySelector('.painting-grid');
+      if (paintingGrid) {
+        paintings.forEach((painting, index) => {
+          const paintingItem = document.createElement('div');
+          paintingItem.classList.add('painting-item');
+          paintingItem.innerHTML = `
+            <img src="${painting.src}" alt="${painting.title}" loading="lazy">
+            <div class="thumbnail-info">
+              <span class="thumbnail-title">${painting.title}</span>
+              <span class="thumbnail-artist">${painting.artist}</span>
+            </div>
+          `;
+          paintingItem.addEventListener('click', () => selectPainting(index));
+          paintingGrid.appendChild(paintingItem);
+        });
+      }
+
+      $("#list-button").click(function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        togglePaintingSelection();
+      });
+
+      $(".close-bubble").click(function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        hidePaintingSelection();
+      });
+
+      $(document).click(function (e) {
+        if (!$(e.target).closest('#painting-selection, #list-button').length) {
+          hidePaintingSelection();
+        }
+      });
+
+      function togglePaintingSelection() {
+        const bubble = $('#painting-selection');
+        if (bubble.hasClass('bubble-expanded')) {
+          hidePaintingSelection();
+        } else {
+          showPaintingSelection();
+        }
+      }
+
+      function showPaintingSelection() {
+        const bubble = $('#painting-selection');
+        const overlay = $('.modal-overlay');
+        overlay.addClass('overlay-visible');
+        bubble.addClass('bubble-visible');
+        bubble[0].offsetHeight;
+        setTimeout(() => {
+          bubble.addClass('bubble-expanded');
+        }, 50);
+      }
+
+      function hidePaintingSelection() {
+        const bubble = $('#painting-selection');
+        const overlay = $('.modal-overlay');
+        bubble.removeClass('bubble-expanded');
+        setTimeout(() => {
+          bubble.removeClass('bubble-visible');
+          overlay.removeClass('overlay-visible');
+        }, 500);
+      }
+
+      function selectPainting(index) {
+        const selectedPainting = paintings[index];
+        const artPainting = $("#art-painting");
+        artPainting.addClass("painting-fade-out");
+        $(".painting-legend").addClass("legend-fade-out");
+        hidePaintingSelection();
+        setTimeout(() => {
+          artPainting.attr("src", selectedPainting.src);
+          updatePaintingLegend(selectedPainting);
+          artPainting.removeClass("painting-fade-out");
+          artPainting.addClass("painting-fade-in");
+          $(".painting-legend").removeClass("legend-fade-out");
+          $(".painting-legend").addClass("legend-fade-in");
+          setTimeout(() => {
+            artPainting.removeClass("painting-fade-in");
+            $(".painting-legend").removeClass("legend-fade-in");
+          }, 500);
+        }, 300);
+      }
+
+      $(document).keydown(function (e) {
+        if (e.key === "Escape" || e.keyCode === 27) {
+          hidePaintingSelection();
+        }
+      });
+
+      $(document).on('click', '.modal-overlay', function () {
+        hidePaintingSelection();
+      });
+
+      // Side navigation functionality
+      const sections = ['intro', 'news', 'publications', 'code', 'teaching', 'education', 'art'];
+      const navItems = $('.nav-item');
+      const navProgress = $('.nav-progress');
+      let currentSection = 'intro';
+
+      $('.nav-item').click(function (e) {
+        e.preventDefault();
+        const target = $(this).attr('data-target');
+        const $targetSection = $('#' + target);
+
+        if ($targetSection.length) {
+          $('.section').removeClass('section-entering');
+          const scrollPosition = $targetSection.offset().top - 50;
+          requestAnimationFrame(() => {
+            $('html, body').stop().animate({
+              scrollTop: scrollPosition
+            }, {
+              duration: 1000,
+              easing: 'cubicBezier',
+              cubicBezier: function (t) {
+                return cubicBezier(0.22, 1, 0.36, 1, t);
+              },
+              complete: function () {
+                $targetSection.addClass('section-entering');
+              }
+            });
+          });
+        }
+      });
+
+      $('.mobile-nav-item a').click(function (e) {
+        e.preventDefault();
+        const target = $(this).attr('href').substring(1);
+        const $targetSection = $('#' + target);
+
+        if ($targetSection.length) {
+          const scrollPosition = $targetSection.offset().top - 50;
+          $('.mobile-nav').removeClass('visible');
+          $('.mobile-nav-toggle').removeClass('active');
+          $('body').addClass('content-transitioning');
+          window.scrollTo(0, scrollPosition);
+          $('.section').removeClass('section-entering');
+          $targetSection.addClass('section-entering');
+          setTimeout(function () {
+            $('body').removeClass('content-transitioning');
+            $('body').css('overflow', '');
+          }, 300);
+        }
+      });
+
+      $('.mobile-nav-toggle').click(function () {
+        $(this).toggleClass('active');
+        $('.mobile-nav').toggleClass('visible');
+        if ($('.mobile-nav').hasClass('visible')) {
+          $('body').css('overflow', 'hidden');
+        } else {
+          setTimeout(function () {
+            $('body').css('overflow', '');
+          }, 300);
+        }
+      });
+
+      function updateActiveSection() {
+        let maxVisibleSection = '';
+        let maxVisiblePercentage = 0;
+
+        sections.forEach(function (section) {
+          const $section = $('#' + section);
+          if ($section.length) {
+            const rect = $section[0].getBoundingClientRect();
+            const windowHeight = $(window).height();
+            const visibleHeight = Math.min(rect.bottom, windowHeight) - Math.max(rect.top, 0);
+            const sectionHeight = rect.height;
+            const visiblePercentage = (visibleHeight > 0) ? visibleHeight / sectionHeight : 0;
+            if (visiblePercentage > maxVisiblePercentage) {
+              maxVisiblePercentage = visiblePercentage;
+              maxVisibleSection = section;
+            }
+          }
+        });
+
+        if (maxVisibleSection && maxVisibleSection !== currentSection) {
+          currentSection = maxVisibleSection;
+          updateNavUI(currentSection);
+        }
+        updateScrollProgress();
+      }
+
+      function updateNavUI(activeSection) {
+        navItems.removeClass('active');
+        $(`.nav-item[data-target="${activeSection}"]`).addClass('active');
+        updateHighlightPosition();
+      }
+
+      function updateHighlightPosition() {
+        const activeItem = $('.nav-item.active');
+        if (activeItem.length) {
+          const position = activeItem.position();
+          const height = activeItem.height();
+          $('.nav-highlight').css({
+            'top': position.top,
+            'height': height
+          });
+        }
+      }
+
+      function updateScrollProgress() {
+        const scrollTop = $(window).scrollTop();
+        const docHeight = $(document).height();
+        const winHeight = $(window).height();
+        const scrollPercent = (scrollTop) / (docHeight - winHeight);
+        const progressHeight = Math.max(0, Math.min(100, scrollPercent * 100));
+        navProgress.css('height', progressHeight + '%');
+      }
+
+      function cubicBezier(p1, p2, p3, p4, t) {
+        const t2 = t * t;
+        const t3 = t2 * t;
+        return p1 * (1 - 3 * t + 3 * t2 - t3) +
+          3 * p2 * (t - 2 * t2 + t3) +
+          3 * p3 * (t2 - t3) +
+          p4 * t3;
+      }
+
+      jQuery.extend(jQuery.easing, {
+        cubicBezier: function (x, t, b, c, d, s) {
+          const ts = (t /= d) * t;
+          const tc = ts * t;
+          return b + c * (0.22 * tc + -0.15 * ts + 0.93 * t);
+        }
+      });
+
+      function handleSectionVisibility() {
+        $('.section').each(function () {
+          const $section = $(this);
+          const sectionTop = $section.offset().top;
+          const scrollPosition = $(window).scrollTop() + $(window).height() * 0.8;
+          if (scrollPosition > sectionTop && !$section.hasClass('section-entering')) {
+            $section.addClass('section-entering');
+          }
+        });
+      }
+
+      $(window).on('scroll resize', handleSectionVisibility);
+      setTimeout(handleSectionVisibility, 100);
+
+      updateActiveSection();
+      $(window).on('scroll resize', updateActiveSection);
+
+      if ($('.modal-overlay').length === 0) {
+        $('body').append('<div class="modal-overlay"></div>');
+      }
+
+      $('.resource-card.featured').each(function (index) {
+        const card = $(this);
+        setTimeout(() => {
+          card.addClass('reveal');
+        }, 100 * (index + 1));
+      });
+
+      // GitHub stars for scikit-shapes
+      fetch('https://api.github.com/repos/scikit-shapes/scikit-shapes')
+        .then(r => r.json())
+        .then(data => {
+          const el = document.getElementById('scikit-shapes-stars');
+          if (el && data.stargazers_count !== undefined) el.textContent = data.stargazers_count;
+        })
+        .catch(() => {});
+    });
+  </script>
+
+  <script>
+    var countDownDate = new Date("Oct 02, 2023 09:00:00").getTime();
+
+    function updateCountdown() {
+      var now = new Date().getTime();
+      var distance = now - countDownDate;
+      var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+      var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+      var lang = localStorage.getItem('lang') || 'en';
+      var text = "";
+
+      if (lang === 'fr') {
+        text = days + " jours, " + hours + " heure" + (hours > 1 ? "s" : "") + ", " + minutes + " minute" + (minutes > 1 ? "s" : "") + ", et " + seconds + " seconde" + (seconds > 1 ? "s" : "");
+      } else {
+        text = days + " days, " + hours + " hour" + (hours === 1 ? "" : "s") + ", " + minutes + " minute" + (minutes === 1 ? "" : "s") + ", and " + seconds + " second" + (seconds === 1 ? "" : "s");
+      }
+
+      var counterElement = document.getElementById("counter");
+      if (counterElement) {
+        counterElement.innerHTML = text;
+      }
+
+      if (distance < 0) {
+        if (typeof x !== 'undefined') clearInterval(x);
+        if (counterElement) counterElement.innerHTML = "year";
+      }
+    }
+
+    window.updateCountdown = updateCountdown;
+    var x = setInterval(updateCountdown, 1000);
+    updateCountdown();
+  </script>
+
+  <!-- Google Analytics -->
+  <script>
+    (function (i, s, o, g, r, a, m) {
+      i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
+        (i[r].q = i[r].q || []).push(arguments)
+      }, i[r].l = 1 * new Date(); a = s.createElement(o),
+        m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
+    })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+
+    ga('create', 'UA-48335777-1', 'auto');
+    ga('send', 'pageview');
+  </script>
+
+  <script>
+    var trackOutboundLink = function (url) {
+      ga('send', 'event', 'outbound', 'click', url, {
+        'transport': 'beacon',
+        'hitCallback': function () { document.location = url; }
+      });
+    }
+  </script>
+
+  <style>
+    [data-tooltip]::before,
+    [data-tooltip]::after {
+      display: none !important;
+      content: none !important;
+    }
+
+    .send-button {
+      background: transparent;
+      border: 1px solid #8A898C;
+      padding: 10px 28px;
+      font-family: NeueHaasMedium;
+      font-size: 13px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: inherit;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin-top: 12px;
+      border-radius: 30px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      line-height: 1;
+    }
+
+    .send-button:hover {
+      background: transparent;
+      opacity: 0.7;
+      border-color: #403E43;
+    }
+
+    body.night .send-button {
+      border-color: #8A898C;
+      color: #C8C8C9;
+    }
+
+    body.night .send-button:hover {
+      background: transparent;
+      border-color: #fff;
+      color: #fff;
+      opacity: 1;
+    }
+
+    @media (max-width: 550px) {
+      .send-button {
+        width: 100%;
+      }
+    }
+
+    /* News items */
+    .news-list {
+      margin: 0;
+      padding: 0;
+    }
+
+    .news-item {
+      display: flex;
+      gap: 1.2rem;
+      padding: 0.65rem 0;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.07);
+      align-items: baseline;
+    }
+
+    body.night .news-item {
+      border-bottom-color: rgba(255, 255, 255, 0.08);
+    }
+
+    .news-item:last-child {
+      border-bottom: none;
+    }
+
+    .news-date {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      color: #8A898C;
+      white-space: nowrap;
+      min-width: 80px;
+      padding-top: 2px;
+    }
+
+    .news-text {
+      font-size: 14px;
+      line-height: 1.55;
+    }
+
+    /* Publications */
+    .pub-item {
+      display: flex;
+      gap: 1.2rem;
+      padding: 1rem 0;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.07);
+      align-items: flex-start;
+    }
+
+    body.night .pub-item {
+      border-bottom-color: rgba(255, 255, 255, 0.08);
+    }
+
+    .pub-item:last-child {
+      border-bottom: none;
+    }
+
+    .pub-thumb {
+      flex-shrink: 0;
+      width: 164px;
+      height: 112px;
+      border-radius: 6px;
+      border: 1px solid rgba(0,0,0,0.12);
+      overflow: hidden;
+      background: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    body.night .pub-thumb {
+      background: rgba(255,255,255,0.06);
+      border-color: rgba(255,255,255,0.12);
+    }
+
+    .pub-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+    }
+
+    .pub-body {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .pub-title {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .pub-authors {
+      font-size: 13px;
+      color: #555;
+      margin-bottom: 2px;
+    }
+
+    body.night .pub-authors {
+      color: #aaa;
+    }
+
+    .pub-venue {
+      font-size: 12px;
+      color: #8A898C;
+    }
+
+    /* Code cards */
+    .code-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 1rem;
+    }
+
+    .code-card {
+      background: #ffffff;
+      border: 1px solid rgba(0, 0, 0, 0.1);
+      border-radius: 8px;
+      padding: 1.1rem 1.2rem 1rem;
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.07);
+      transition: box-shadow 0.2s, border-color 0.2s;
+      display: flex;
+      flex-direction: column;
+      gap: 0.45rem;
+    }
+
+    .code-card:hover {
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+      border-color: #8A898C;
+    }
+
+    body.night .code-card {
+      background: rgba(255, 255, 255, 0.05);
+      border-color: rgba(255, 255, 255, 0.1);
+    }
+
+    body.night .code-card:hover {
+      border-color: #C8C8C9;
+    }
+
+    .code-card-name {
+      font-size: 15px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .code-card-desc {
+      font-size: 13px;
+      color: #555;
+      line-height: 1.5;
+      flex: 1;
+    }
+
+    body.night .code-card-desc {
+      color: #aaa;
+    }
+
+    .code-card-stars {
+      display: inline-flex;
+      align-items: center;
+      font-size: 12px;
+      margin-top: 0.25rem;
+      white-space: nowrap;
+    }
+
+    .code-card-stars a:first-child {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 3px 8px;
+      border: 1px solid rgba(0, 0, 0, 0.15);
+      border-radius: 4px 0 0 4px;
+      background: #f8f7f4;
+      color: #403E43;
+      text-decoration: none;
+      transition: background 0.15s;
+    }
+
+    .code-card-stars a:first-child:hover {
+      background: #e8e8ea;
+    }
+
+    .code-card-stars a:last-child {
+      display: inline-flex;
+      align-items: center;
+      padding: 3px 8px;
+      border: 1px solid rgba(0, 0, 0, 0.15);
+      border-left: none;
+      border-radius: 0 4px 4px 0;
+      background: #f8f7f4;
+      color: #403E43;
+      text-decoration: none;
+      transition: background 0.15s;
+    }
+
+    .code-card-stars a:last-child:hover {
+      background: #e8e8ea;
+    }
+
+    body.night .code-card-stars a:first-child,
+    body.night .code-card-stars a:last-child {
+      background: rgba(255, 255, 255, 0.05);
+      border-color: rgba(255, 255, 255, 0.15);
+      color: #C8C8C9;
+    }
+
+    /* Bio links */
+    .bio-links {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 24px;
+    }
+    .bio-icon {
+      color: #8A898C;
+      font-size: 20px;
+      line-height: 24px;
+      text-decoration: none;
+      transition: color 0.15s;
+    }
+    body.day .bio-icon:hover { color: #403E43; }
+    body.night .bio-icon:hover { color: #fff; }
+    .bio-sep {
+      width: 1px;
+      height: 16px;
+      background: rgba(0, 0, 0, 0.18);
+    }
+    body.night .bio-sep { background: rgba(255, 255, 255, 0.18); }
+    .bio-email {
+      font-family: 'SFMono-Regular', Consolas, monospace;
+      font-size: 14px;
+      line-height: 24px;
+      color: #8A898C;
+    }
+  </style>
 
 </head>
 
 <body>
 
-<!-- ─── Nav ───────────────────────────────────────────── -->
-<nav class="nav">
-  <div class="nav__inner">
-    <a href="#bio" class="nav__brand">Hadrien Bigo--Balland</a>
-    <div class="nav__links">
-      <a href="#bio">Bio</a>
-      <a href="#news">News</a>
-      <a href="#publications">Publications</a>
-      <a href="#code">Code</a>
-      <a href="#teaching">Teaching</a>
-      <a href="#education">Education</a>
-      <button class="nav__lang" id="langToggle" aria-label="Toggle language">FR</button>
-      <button class="nav__theme" id="themeToggle" aria-label="Toggle dark mode">
-        <i class="fa-regular fa-moon" id="themeIcon"></i>
-      </button>
-    </div>
-  </div>
-</nav>
-
-<!-- ─── Main ──────────────────────────────────────────── -->
-<main class="main">
-
-  <!-- Bio ─────────────────────────────────────────────── -->
-  <section id="bio">
-    <div class="bio">
-      <div class="bio__info">
-        <div class="bio__name" data-i18n="name">Hadrien Bigo--Balland</div>
-        <div class="bio__position" data-i18n="position">PhD Student &middot; MyFit Solutions &amp; Inria Paris</div>
-
-        <p class="bio__text" data-i18n-html="bio-phd">
-          I am currently pursuing a PhD at <a href="https://myfit-solutions.com/" target="_blank">MyFit Solutions</a>,
-          in the <a href="https://team.inria.fr/heka/" target="_blank">HEKA team</a> of
-          <a href="https://www.inria.fr/fr/centre-inria-de-paris" target="_blank">Inria Paris</a>,
-          under the supervision of
-          <a href="https://sites.google.com/site/stephanieallassonniere/" target="_blank">Professor St&eacute;phanie Allassonni&egrave;re</a>,
-          <a href="https://www.jeanfeydy.com/" target="_blank">Dr. Jean Feydy</a>
-          and <a href="https://www.linkedin.com/in/j%C3%A9r%C3%A9my-adoux-96612092/" target="_blank">Jeremy Adoux</a>
-          for the last <span id="counter"></span>.
-        </p>
-
-        <p class="bio__text" data-i18n-html="bio-scikit">
-          I am also contributing to <a href="https://github.com/scikit-shapes/scikit-shapes" target="_blank">scikit-shapes</a>,
-          an open-source Python library for shape analysis and statistical learning on geometric data,
-          designed to facilitate research and applications in computational anatomy, morphometrics, and related fields.
-        </p>
-
-        <p class="bio__text" data-i18n-html="bio-teaching">
-          Additionally, I have been serving as a Teaching Assistant of Probability Theory at
-          <a href="https://www.univ-lyon2.fr/" target="_blank">Lyon 2 Lumi&egrave;re University</a>,
-          working in collaboration with
-          <a href="https://sites.google.com/site/stephanegchretien/home" target="_blank">Professor Stephane Chretien</a>
-          and Zied Gharbi.
-        </p>
-
-        <div class="bio__links">
-          <a href="https://github.com/hadrienbigoballand" target="_blank" class="bio__icon" aria-label="GitHub">
-            <i class="fa-brands fa-github"></i>
-          </a>
-          <a href="https://www.linkedin.com/in/hadrienbigoballand" target="_blank" class="bio__icon" aria-label="LinkedIn">
-            <i class="fa-brands fa-linkedin"></i>
-          </a>
-          <div class="bio__sep"></div>
-          <span class="bio__email">hadrien.bigo-balland@inria.fr</span>
+  <body class="day">
+    <div class="container animated fadeIn one">
+      <div class="row group">
+        <div class="three columns icon">
+          <span id="lang-toggle" class="lang-btn">EN</span>
+          <img src="images/moon.svg" id="moon">
+          <img src="images/sun.svg" id="sun">
         </div>
-      </div>
-    </div>
-  </section>
 
-  <!-- News ────────────────────────────────────────────── -->
-  <section id="news">
-    <h2 data-i18n="section-news">News</h2>
+        <div class="six columns">
+          <h1 id="intro" class="night" data-i18n="intro-title">Hi, I'm Hadrien.</h1>
 
-    <div class="news-item">
-      <span class="news-date">Sep–Oct 2026</span>
-      <span class="news-text" data-i18n-html="news-8">Presenting our work on <em>Optimal Steps for Fast Diffeomorphic Shape Registration</em> at <a href="https://conferences.miccai.org/2026/en/" target="_blank">MICCAI 2026</a>.</span>
-    </div>
+          <div class="animated fadeIn two">
+            <p data-i18n="bio-phd">I am currently pursuing a PhD at <a href="https://myfit-solutions.com/"
+                target="_blank" class="underline">MyFit Solutions</a>, in the <a href="https://team.inria.fr/heka/"
+                target="_blank" class="underline">HEKA team</a> of <a
+                href="https://www.inria.fr/fr/centre-inria-de-paris" target="_blank" class="underline">Inria Paris</a>,
+              under the supervision of <a href="https://sites.google.com/site/stephanieallassonniere/"
+                target="_blank" class="underline">Professor Stéphanie Allassonnière</a>, <a
+                href="https://www.jeanfeydy.com/" target="_blank" class="underline">Dr. Jean Feydy</a> and <a
+                href="https://www.linkedin.com/in/jérémy-adoux-96612092/" target="_blank" class="underline">Jeremy
+                Adoux</a> for the last <span id="counter"><br></span>.</p>
 
-    <div class="news-item">
-      <span class="news-date">Jun 2026</span>
-      <span class="news-text" data-i18n-html="news-7">Presenting our work on <em>Optimal Steps for Fast Diffeomorphic Shape Registration</em> at <a href="https://cs2026.sciencesconf.org/" target="_blank">Curves and Surfaces 2026</a>.</span>
-    </div>
+            <p data-i18n="bio-scikit">I am also contributing to <a href="https://github.com/scikit-shapes/scikit-shapes"
+                target="_blank" class="underline">scikit-shapes</a>, an open-source Python library for shape analysis
+              and statistical learning on geometric data, designed to facilitate research and applications in
+              computational anatomy, morphometrics, and related fields.</p>
 
-    <div class="news-item">
-      <span class="news-date">May 2026</span>
-      <span class="news-text" data-i18n-html="news-9">Our team (with <a href="https://jeandelhaye.github.io/" target="_blank">Jean Delhaye</a> and <a href="https://www.linkedin.com/in/pierre-andr%C3%A9-mikem-b7549713b/?locale=fr" target="_blank">Pierre-Andr&eacute; Mikem</a>) won 1st place at the <a href="https://fondation-hadamard.fr/fr/campus-de-paris-saclay/formation/edmh/deroulement-du-doctorat/parcours-mathtech/" target="_blank">MathTech challenge</a> organized by the Fondation Hadamard.</span>
-    </div>
+            <p data-i18n="bio-teaching">Additionally, I have been serving as a Teaching Assistant of Probability Theory
+              at <a href="https://www.univ-lyon2.fr/" target="_blank" class="underline">Lyon 2 Lumière University</a>,
+              working in collaboration with <a href="https://sites.google.com/site/stephanegchretien/home"
+                target="_blank" class="underline">Professor Stephane Chretien</a> and Zied Gharbi.</p>
 
-    <div class="news-item">
-      <span class="news-date">May 2026</span>
-      <span class="news-text" data-i18n-html="news-10">Presenting our work on <em>Optimal Steps for Fast Diffeomorphic Shape Registration</em> at the <a href="https://shape-analysis.github.io/" target="_blank">Shape Seminar</a>.</span>
-    </div>
+            <div class="bio-links">
+              <a href="https://github.com/hadrienbigoballand" target="_blank" class="bio-icon" aria-label="GitHub">
+                <i class="fa-brands fa-github"></i>
+              </a>
+              <a href="https://www.linkedin.com/in/hadrienbigoballand" target="_blank" class="bio-icon" aria-label="LinkedIn">
+                <i class="fa-brands fa-linkedin"></i>
+              </a>
+              <div class="bio-sep"></div>
+              <span class="bio-email">hadrien.bigo-balland@inria.fr</span>
+            </div>
 
-    <div class="news-item">
-      <span class="news-date">Mar 2026</span>
-      <span class="news-text" data-i18n-html="news-6">Presented our work on <em>Optimal Steps for Fast Diffeomorphic Shape Registration</em> at <a href="https://iabm2026.sciencesconf.org/" target="_blank">IABM 2026</a>.</span>
-    </div>
+            <div class="spacer48"></div>
 
-    <div class="news-item">
-      <span class="news-date">Feb 2025</span>
-      <span class="news-text" data-i18n-html="news-5">Participated in the thematic programme <a href="https://www.esi.ac.at/events/e550/" target="_blank">Infinite-dimensional Geometry: Theory and Applications</a> at the Erwin Schr&ouml;dinger International Institute for Mathematics and Physics (ESI), Vienna.</span>
-    </div>
+            <!-- News Section -->
+            <div class="collapsible-section" id="news-section">
+              <div class="collapsible-header active" id="news">
+                <h4 class="animated fadeIn three section" data-i18n="section-news">NEWS</h4>
+                <div class="collapse-icon"></div>
+              </div>
+              <div class="collapsible-content expanded">
+                <div class="collapsible-content-inner">
+                  <div class="news-list">
 
-    <div class="news-item">
-      <span class="news-date">2024</span>
-      <span class="news-text" data-i18n-html="news-2">Started contributing to <a href="https://github.com/scikit-shapes/scikit-shapes" target="_blank">scikit-shapes</a>, an open-source library for geometric data analysis.</span>
-    </div>
+                    <div class="news-item">
+                      <span class="news-date">Sep–Oct 2026</span>
+                      <span class="news-text" data-i18n="news-8">Presenting our work on <em>Optimal Steps for Fast Diffeomorphic Shape Registration</em> at <a href="https://conferences.miccai.org/2026/en/" target="_blank" class="underline">MICCAI 2026</a>.</span>
+                    </div>
 
-    <div class="news-item">
-      <span class="news-date">Oct 2023</span>
-      <span class="news-text" data-i18n-html="news-1">Started my PhD at <a href="https://myfit-solutions.com/" target="_blank">MyFit Solutions</a> &amp; <a href="https://team.inria.fr/heka/" target="_blank">Inria Paris HEKA</a>, working on shape analysis for medical imaging.</span>
-    </div>
+                    <div class="news-item">
+                      <span class="news-date">Jun 2026</span>
+                      <span class="news-text" data-i18n="news-7">Presenting our work on <em>Optimal Steps for Fast Diffeomorphic Shape Registration</em> at <a href="https://cs2026.sciencesconf.org/" target="_blank" class="underline">Curves and Surfaces 2026</a>.</span>
+                    </div>
 
-    <div class="news-item">
-      <span class="news-date">2022</span>
-      <span class="news-text" data-i18n-html="news-3">Teaching Assistant for Probability Theory (L2 MIASHS) at <a href="https://www.univ-lyon2.fr/" target="_blank">Lyon 2 Lumi&egrave;re University</a>.</span>
-    </div>
+                    <div class="news-item">
+                      <span class="news-date">May 2026</span>
+                      <span class="news-text" data-i18n="news-9">Our team (with <a href="https://jeandelhaye.github.io/" target="_blank" class="underline">Jean Delhaye</a> and <a href="https://www.linkedin.com/in/pierre-andr%C3%A9-mikem-b7549713b/?locale=fr" target="_blank" class="underline">Pierre-André Mikem</a>) won 1st place at the <a href="https://fondation-hadamard.fr/fr/campus-de-paris-saclay/formation/edmh/deroulement-du-doctorat/parcours-mathtech/" target="_blank" class="underline">MathTech challenge</a> organized by the Fondation Hadamard.</span>
+                    </div>
 
-    <div class="news-item">
-      <span class="news-date">2019</span>
-      <span class="news-text" data-i18n-html="news-4">Completed an internship at <a href="https://eric.msh-lse.fr/" target="_blank">Laboratoire ERIC</a> on Hodge Laplacian Clustering and Deep Neural Networks through the lens of Sobolev and Neuberger.</span>
-    </div>
+                    <div class="news-item">
+                      <span class="news-date">May 2026</span>
+                      <span class="news-text" data-i18n="news-10">Presenting our work on <em>Optimal Steps for Fast Diffeomorphic Shape Registration</em> at the <a href="https://shape-analysis.github.io/" target="_blank" class="underline">Shape Seminar</a>.</span>
+                    </div>
 
-  </section>
+                    <div class="news-item">
+                      <span class="news-date">Mar 2026</span>
+                      <span class="news-text" data-i18n="news-6">Presented our work on <em>Optimal Steps for Fast Diffeomorphic Shape Registration</em> at <a href="https://iabm2026.sciencesconf.org/" target="_blank" class="underline">IABM 2026</a>.</span>
+                    </div>
 
-  <!-- Publications ────────────────────────────────────── -->
-  <section id="publications">
-    <h2 data-i18n="section-pubs">Publications</h2>
-    <div class="pub-list">
+                    <div class="news-item">
+                      <span class="news-date">Feb 2025</span>
+                      <span class="news-text" data-i18n="news-5">Participated in the thematic programme <a href="https://www.esi.ac.at/events/e550/" target="_blank" class="underline">Infinite-dimensional Geometry: Theory and Applications</a> at the Erwin Schrödinger International Institute for Mathematics and Physics (ESI), Vienna.</span>
+                    </div>
 
-      <div class="pub">
-        <div class="pub__thumb">
-          <img src="images/MICCAI_2026-1.png" alt="Optimal Steps for Fast Diffeomorphic Shape Registration thumbnail" />
-        </div>
-        <div class="pub__body">
-          <div class="pub__title">Optimal Steps for Fast Diffeomorphic Shape Registration</div>
-          <div class="pub__authors">
-            <strong><a href="https://www.hadrienbigoballand.com" target="_blank">Hadrien Bigo--Balland</a></strong>,
-            <a href="https://www.jeanfeydy.com/" target="_blank">Jean Feydy</a>
-            and <a href="https://scholar.google.com/citations?user=oGQn_xMAAAAJ" target="_blank">Tom Boeken</a>
+                    <div class="news-item">
+                      <span class="news-date">2024</span>
+                      <span class="news-text" data-i18n="news-2">Started contributing to <a href="https://github.com/scikit-shapes/scikit-shapes" target="_blank" class="underline">scikit-shapes</a>, an open-source library for geometric data analysis.</span>
+                    </div>
+
+                    <div class="news-item">
+                      <span class="news-date">Oct 2023</span>
+                      <span class="news-text" data-i18n="news-1">Started my PhD at <a href="https://myfit-solutions.com/" target="_blank" class="underline">MyFit Solutions</a> &amp; <a href="https://team.inria.fr/heka/" target="_blank" class="underline">Inria Paris HEKA</a>, working on shape analysis for medical imaging.</span>
+                    </div>
+
+                    <div class="news-item">
+                      <span class="news-date">2022</span>
+                      <span class="news-text" data-i18n="news-3">Teaching Assistant for Probability Theory (L2 MIASHS) at <a href="https://www.univ-lyon2.fr/" target="_blank" class="underline">Lyon 2 Lumière University</a>.</span>
+                    </div>
+
+                    <div class="news-item">
+                      <span class="news-date">2019</span>
+                      <span class="news-text" data-i18n="news-4">Completed an internship at <a href="https://eric.msh-lse.fr/" target="_blank" class="underline">Laboratoire ERIC</a> on Hodge Laplacian Clustering and Deep Neural Networks through the lens of Sobolev and Neuberger.</span>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="spacer48"></div>
+
+            <!-- Publications Section -->
+            <div class="collapsible-section" id="publications-section">
+              <div class="collapsible-header active" id="publications">
+                <h4 class="animated fadeIn three section" data-i18n="section-publications">PUBLICATIONS</h4>
+                <div class="collapse-icon"></div>
+              </div>
+              <div class="collapsible-content expanded">
+                <div class="collapsible-content-inner">
+
+                  <div class="pub-item">
+                    <div class="pub-thumb">
+                      <img src="images/MICCAI_2026-1.png" alt="Optimal Steps for Fast Diffeomorphic Shape Registration thumbnail" />
+                    </div>
+                    <div class="pub-body">
+                      <div class="pub-title">Optimal Steps for Fast Diffeomorphic Shape Registration</div>
+                      <div class="pub-authors">
+                        <strong>Hadrien Bigo--Balland</strong>,
+                        <a href="https://www.jeanfeydy.com/" target="_blank" class="underline">Jean Feydy</a>
+                        and <a href="https://scholar.google.com/citations?user=oGQn_xMAAAAJ" target="_blank" class="underline">Tom Boeken</a>
+                      </div>
+                      <div class="pub-venue"><em>MICCAI 2026</em></div>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+
+            <div class="spacer48"></div>
+
+            <!-- Code Section -->
+            <div class="collapsible-section" id="code-section">
+              <div class="collapsible-header active" id="code">
+                <h4 class="animated fadeIn three section" data-i18n="section-code">CODE</h4>
+                <div class="collapse-icon"></div>
+              </div>
+              <div class="collapsible-content expanded">
+                <div class="collapsible-content-inner">
+
+                  <div class="code-grid">
+                    <div class="code-card">
+                      <div class="code-card-name">
+                        <a href="https://github.com/scikit-shapes/scikit-shapes" target="_blank" class="underline">scikit-shapes</a>
+                      </div>
+                      <div class="code-card-desc">Open-source Python library for shape analysis and statistical learning on geometric data. Contributor.</div>
+                      <div class="code-card-stars">
+                        <a href="https://github.com/scikit-shapes/scikit-shapes" target="_blank">
+                          <i class="fa-brands fa-github"></i> Star
+                        </a>
+                        <a href="https://github.com/scikit-shapes/scikit-shapes/stargazers" target="_blank" id="scikit-shapes-stars">&hellip;</a>
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+
+            <div class="spacer48"></div>
+
+            <!-- Teaching Resources Section -->
+            <div class="collapsible-section" id="teaching-section">
+              <div class="collapsible-header" id="teaching">
+                <h4 class="animated fadeIn three section" data-i18n="section-teaching">TEACHING RESOURCES</h4>
+                <div class="collapse-icon"></div>
+              </div>
+              <div class="collapsible-content">
+                <div class="collapsible-content-inner">
+                  <div class="downloads-section animated fadeIn two">
+                    <p data-i18n="teaching-intro">Probability Theory course materials for Lyon 2 students (credit to
+                      Zied Gharbi and Professor Stephane Chretien):</p>
+
+                    <div class="resources-container">
+                      <!-- Main course materials -->
+                      <div class="resources-group">
+                        <h5 class="resource-subtitle">Cours</h5>
+                        <div class="resource-grid">
+                          <div class="resource-card">
+                            <div class="card-content">
+                              <div class="card-icon">
+                                <div class="icon-svg icon-document">
+                                  <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                      d="M14,2H6C4.9,2,4,2.9,4,4v16c0,1.1,0.9,2,2,2h12c1.1,0,2-0.9,2-2V8L14,2z M16,18H8v-2h8V18z M16,14H8v-2h8V14z M13,9V3.5L18.5,9H13z" />
+                                  </svg>
+                                </div>
+                              </div>
+                              <div class="card-details">
+                                <h3 class="card-title">Cours - Probabilités et ses applications</h3>
+                                <p class="card-description">Le cours complet couvrant tous les aspects théoriques.</p>
+                              </div>
+                              <div class="card-overlay"></div>
+                            </div>
+                            <a href="lyon2-TD-probas/cours.pdf" download class="card-link"
+                              aria-label="Download Cours - Probabilités et ses applications"></a>
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- TDs -->
+                      <div class="resources-group td-section">
+                        <h5 class="resource-subtitle resource-subtitle-major">Travaux Dirigés (TDs)</h5>
+
+                        <!-- TD préliminaire Section -->
+                        <h6 class="resource-subtitle-minor">TD préliminaire - Exercices sur les ensembles, les limites,
+                          la dérivation et les primitives</h6>
+                        <div class="resource-grid">
+                          <div class="resource-card">
+                            <div class="card-content">
+                              <div class="card-icon">
+                                <div class="icon-svg icon-document">
+                                  <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                      d="M14,2H6C4.9,2,4,2.9,4,4v16c0,1.1,0.9,2,2,2h12c1.1,0,2-0.9,2-2V8L14,2z M16,18H8v-2h8V18z M16,14H8v-2h8V14z M13,9V3.5L18.5,9H13z" />
+                                  </svg>
+                                </div>
+                              </div>
+                              <div class="card-details">
+                                <h3 class="card-title">TD préliminaire - Énoncé</h3>
+                                <p class="card-description">Exercices sur les ensembles, les limites, la dérivation et
+                                  les primitives.</p>
+                              </div>
+                              <div class="card-overlay"></div>
+                            </div>
+                            <a href="lyon2-TD-probas/TD0_Probabilites_L2_MIASHS.pdf" download class="card-link"></a>
+                          </div>
+
+                          <div class="resource-card">
+                            <div class="card-content">
+                              <div class="card-icon">
+                                <div class="icon-svg icon-document">
+                                  <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                      d="M14,2H6C4.9,2,4,2.9,4,4v16c0,1.1,0.9,2,2,2h12c1.1,0,2-0.9,2-2V8L14,2z M16,18H8v-2h8V18z M16,14H8v-2h8V14z M13,9V3.5L18.5,9H13z" />
+                                  </svg>
+                                </div>
+                              </div>
+                              <div class="card-details">
+                                <h3 class="card-title">TD préliminaire - Correction</h3>
+                                <p class="card-description">Solutions détaillées des exercices.</p>
+                              </div>
+                              <div class="card-overlay"></div>
+                            </div>
+                            <a href="lyon2-TD-probas/TD 0 correction.pdf" download class="card-link"></a>
+                          </div>
+                        </div>
+
+                        <!-- TD1 Section -->
+                        <h6 class="resource-subtitle-minor">TD1 - Exercices sur les probabilités et les probabilités
+                          conditionnelles</h6>
+                        <div class="resource-grid">
+                          <div class="resource-card">
+                            <div class="card-content">
+                              <div class="card-icon">
+                                <div class="icon-svg icon-document">
+                                  <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                      d="M14,2H6C4.9,2,4,2.9,4,4v16c0,1.1,0.9,2,2,2h12c1.1,0,2-0.9,2-2V8L14,2z M16,18H8v-2h8V18z M16,14H8v-2h8V14z M13,9V3.5L18.5,9H13z" />
+                                  </svg>
+                                </div>
+                              </div>
+                              <div class="card-details">
+                                <h3 class="card-title">TD1 - Énoncé</h3>
+                                <p class="card-description">Exercices sur les probabilités et les probabilités
+                                  conditionnelles.</p>
+                              </div>
+                              <div class="card-overlay"></div>
+                            </div>
+                            <a href="lyon2-TD-probas/TD1_Probabilites_L2_MIASHS_noncorrigé.pdf" download
+                              class="card-link"></a>
+                          </div>
+
+                          <div class="resource-card">
+                            <div class="card-content">
+                              <div class="card-icon">
+                                <div class="icon-svg icon-document">
+                                  <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                      d="M14,2H6C4.9,2,4,2.9,4,4v16c0,1.1,0.9,2,2,2h12c1.1,0,2-0.9,2-2V8L14,2z M16,18H8v-2h8V18z M16,14H8v-2h8V14z M13,9V3.5L18.5,9H13z" />
+                                  </svg>
+                                </div>
+                              </div>
+                              <div class="card-details">
+                                <h3 class="card-title">TD1 - Correction</h3>
+                                <p class="card-description">Solutions détaillées des exercices.</p>
+                              </div>
+                              <div class="card-overlay"></div>
+                            </div>
+                            <a href="lyon2-TD-probas/TD1_Probabilites_L2_MIASHS_corrigé.pdf" download
+                              class="card-link"></a>
+                          </div>
+                        </div>
+
+                        <!-- TD2 Section -->
+                        <h6 class="resource-subtitle-minor">TD2 - Exercices sur les probabilités et les probabilités
+                          conditionnelles</h6>
+                        <div class="resource-grid">
+                          <div class="resource-card">
+                            <div class="card-content">
+                              <div class="card-icon">
+                                <div class="icon-svg icon-document">
+                                  <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                      d="M14,2H6C4.9,2,4,2.9,4,4v16c0,1.1,0.9,2,2,2h12c1.1,0,2-0.9,2-2V8L14,2z M16,18H8v-2h8V18z M16,14H8v-2h8V14z M13,9V3.5L18.5,9H13z" />
+                                  </svg>
+                                </div>
+                              </div>
+                              <div class="card-details">
+                                <h3 class="card-title">TD2 - Énoncé</h3>
+                                <p class="card-description">Exercices sur les probabilités et les probabilités
+                                  conditionnelles.</p>
+                              </div>
+                              <div class="card-overlay"></div>
+                            </div>
+                            <a href="lyon2-TD-probas/TD2_Probabilites_L2_MIASHS.pdf" download class="card-link"></a>
+                          </div>
+
+                          <div class="resource-card">
+                            <div class="card-content">
+                              <div class="card-icon">
+                                <div class="icon-svg icon-document">
+                                  <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                      d="M14,2H6C4.9,2,4,2.9,4,4v16c0,1.1,0.9,2,2,2h12c1.1,0,2-0.9,2-2V8L14,2z M16,18H8v-2h8V18z M16,14H8v-2h8V14z M13,9V3.5L18.5,9H13z" />
+                                  </svg>
+                                </div>
+                              </div>
+                              <div class="card-details">
+                                <h3 class="card-title">TD2 - Correction</h3>
+                                <p class="card-description">Solutions détaillées des exercices.</p>
+                              </div>
+                              <div class="card-overlay"></div>
+                            </div>
+                            <a href="lyon2-TD-probas/TD2_Probabilites_L2_MIASHS_corrigé.pdf" download
+                              class="card-link"></a>
+                          </div>
+                        </div>
+
+                        <!-- TD3 Section -->
+                        <h6 class="resource-subtitle-minor">TD3 - Exercices sur les lois de probabilités sur les entiers
+                          et sur la droite réelle</h6>
+                        <div class="resource-grid">
+                          <div class="resource-card">
+                            <div class="card-content">
+                              <div class="card-icon">
+                                <div class="icon-svg icon-document">
+                                  <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                      d="M14,2H6C4.9,2,4,2.9,4,4v16c0,1.1,0.9,2,2,2h12c1.1,0,2-0.9,2-2V8L14,2z M16,18H8v-2h8V18z M16,14H8v-2h8V14z M13,9V3.5L18.5,9H13z" />
+                                  </svg>
+                                </div>
+                              </div>
+                              <div class="card-details">
+                                <h3 class="card-title">TD3 - Énoncé</h3>
+                                <p class="card-description">Exercices sur les lois de probabilités sur les entiers et
+                                  sur la droite réelle.</p>
+                              </div>
+                              <div class="card-overlay"></div>
+                            </div>
+                            <a href="lyon2-TD-probas/TD3_Probabilites_L2_MIASHS.pdf" download class="card-link"></a>
+                          </div>
+
+                          <div class="resource-card">
+                            <div class="card-content">
+                              <div class="card-icon">
+                                <div class="icon-svg icon-document">
+                                  <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                      d="M14,2H6C4.9,2,4,2.9,4,4v16c0,1.1,0.9,2,2,2h12c1.1,0,2-0.9,2-2V8L14,2z M16,18H8v-2h8V18z M16,14H8v-2h8V14z M13,9V3.5L18.5,9H13z" />
+                                  </svg>
+                                </div>
+                              </div>
+                              <div class="card-details">
+                                <h3 class="card-title">TD3 - Correction</h3>
+                                <p class="card-description">Solutions détaillées des exercices.</p>
+                              </div>
+                              <div class="card-overlay"></div>
+                            </div>
+                            <a href="lyon2-TD-probas/TD3corrige.pdf" download class="card-link"></a>
+                          </div>
+                        </div>
+
+                        <div class="resource-grid">
+                          <div class="resource-card">
+                            <div class="card-content">
+                              <div class="card-icon">
+                                <div class="icon-svg icon-document">
+                                  <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                      d="M14,2H6C4.9,2,4,2.9,4,4v16c0,1.1,0.9,2,2,2h12c1.1,0,2-0.9,2-2V8L14,2z M16,18H8v-2h8V18z M16,14H8v-2h8V14z M13,9V3.5L18.5,9H13z" />
+                                  </svg>
+                                </div>
+                              </div>
+                              <div class="card-details">
+                                <h3 class="card-title">Table de la loi normale</h3>
+                                <p class="card-description">Table de la loi normale utile pour le TD3.</p>
+                              </div>
+                              <div class="card-overlay"></div>
+                            </div>
+                            <a href="lyon2-TD-probas/table_norm_stud_chi2.pdf" download class="card-link"></a>
+                          </div>
+                        </div>
+
+                        <!-- TD4 Section -->
+                        <h6 class="resource-subtitle-minor">TD4 - Exercices sur les variables aléatoires et leurs lois
+                          de probabilités sur les entiers et sur la droite réelle</h6>
+                        <div class="resource-grid">
+                          <div class="resource-card">
+                            <div class="card-content">
+                              <div class="card-icon">
+                                <div class="icon-svg icon-document">
+                                  <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                      d="M14,2H6C4.9,2,4,2.9,4,4v16c0,1.1,0.9,2,2,2h12c1.1,0,2-0.9,2-2V8L14,2z M16,18H8v-2h8V18z M16,14H8v-2h8V14z M13,9V3.5L18.5,9H13z" />
+                                  </svg>
+                                </div>
+                              </div>
+                              <div class="card-details">
+                                <h3 class="card-title">TD4 - Énoncé</h3>
+                                <p class="card-description">Exercices sur les variables aléatoires et leurs lois de
+                                  probabilités.</p>
+                              </div>
+                              <div class="card-overlay"></div>
+                            </div>
+                            <a href="lyon2-TD-probas/TD4_Probabilites_L2_MIASHS.pdf" download class="card-link"></a>
+                          </div>
+
+                          <div class="resource-card">
+                            <div class="card-content">
+                              <div class="card-icon">
+                                <div class="icon-svg icon-document">
+                                  <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                      d="M14,2H6C4.9,2,4,2.9,4,4v16c0,1.1,0.9,2,2,2h12c1.1,0,2-0.9,2-2V8L14,2z M16,18H8v-2h8V18z M16,14H8v-2h8V14z M13,9V3.5L18.5,9H13z" />
+                                  </svg>
+                                </div>
+                              </div>
+                              <div class="card-details">
+                                <h3 class="card-title">TD4 - Correction</h3>
+                                <p class="card-description">Solutions détaillées des exercices.</p>
+                              </div>
+                              <div class="card-overlay"></div>
+                            </div>
+                            <a href="lyon2-TD-probas/TD4corrige.pdf" download class="card-link"></a>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="spacer48"></div>
+
+            <!-- Education Section -->
+            <div class="collapsible-section" id="education-section">
+              <div class="collapsible-header active" id="education">
+                <h4 class="animated fadeIn three section" data-i18n="section-education">EDUCATION</h4>
+                <div class="collapse-icon"></div>
+              </div>
+              <div class="collapsible-content expanded">
+                <div class="collapsible-content-inner">
+                  <div class="institution-item">
+                    <h2 class="night"><a href="https://www.univ-lyon2.fr/" target="_blank" class="underline">Lyon 2
+                        Lumière University</a></h2>
+                    <h3>Machine Learning pour l'Intelligence Artificielle</h3>
+                    <h4>2022–2023</h4>
+                  </div>
+
+                  <div class="institution-item">
+                    <h2 class="night"><a href="https://www.imo.universite-paris-saclay.fr/fr/" target="_blank"
+                        class="underline">Paris-Saclay University</a></h2>
+                    <h3>Mathématiques de l'Aléatoire</h3>
+                    <h4>2021–2022</h4>
+                  </div>
+
+                  <div class="institution-item">
+                    <h2 class="night"><a href="https://www.imo.universite-paris-saclay.fr/fr/" target="_blank"
+                        class="underline">Paris-Saclay University</a></h2>
+                    <h3>Agrégation de Mathématiques</h3>
+                    <h4>2020–2021</h4>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="spacer48"></div>
+            <div class="spacer48"></div>
+
+            <a id="art"></a>
+
           </div>
-          <div class="pub__venue"><em>MICCAI 2026</em></div>
-        </div>
-      </div>
 
-    </div>
-  </section>
+          <!-- Side Navigation -->
+          <nav class="side-nav">
+            <div class="nav-track">
+              <div class="nav-progress"></div>
+              <div class="nav-highlight"></div>
+              <div class="nav-items">
+                <div class="nav-item active" data-target="intro">
+                  <div class="nav-dot"></div>
+                  <div class="nav-label" data-i18n="nav-intro">Introduction</div>
+                </div>
+                <div class="nav-item" data-target="news">
+                  <div class="nav-dot"></div>
+                  <div class="nav-label" data-i18n="nav-news">News</div>
+                </div>
+                <div class="nav-item" data-target="publications">
+                  <div class="nav-dot"></div>
+                  <div class="nav-label" data-i18n="nav-publications">Publications</div>
+                </div>
+                <div class="nav-item" data-target="code">
+                  <div class="nav-dot"></div>
+                  <div class="nav-label" data-i18n="nav-code">Code</div>
+                </div>
+                <div class="nav-item" data-target="teaching">
+                  <div class="nav-dot"></div>
+                  <div class="nav-label" data-i18n="nav-teaching">Teaching Resources</div>
+                </div>
+                <div class="nav-item" data-target="education">
+                  <div class="nav-dot"></div>
+                  <div class="nav-label" data-i18n="nav-education">Education</div>
+                </div>
+              </div>
+            </div>
+          </nav>
 
-  <!-- Code ────────────────────────────────────────────── -->
-  <section id="code">
-    <h2 data-i18n="section-code">Code</h2>
-    <div class="code-grid">
-
-      <div class="code-card">
-        <div class="code-card__name"><a href="https://github.com/scikit-shapes/scikit-shapes" target="_blank">scikit-shapes</a></div>
-        <div class="code-card__desc">Open-source Python library for shape analysis and statistical learning on geometric data. Contributor.</div>
-        <div class="code-card__stars">
-          <a class="code-card__stars-btn" href="https://github.com/scikit-shapes/scikit-shapes" target="_blank" aria-label="Star scikit-shapes on GitHub">
-            <i class="fa-brands fa-github"></i> Star
-          </a>
-          <a class="code-card__stars-count" href="https://github.com/scikit-shapes/scikit-shapes/stargazers" target="_blank" id="scikit-shapes-stars" aria-label="stargazers on GitHub">&hellip;</a>
-        </div>
-      </div>
-
-    </div>
-  </section>
-
-  <!-- Teaching ─────────────────────────────────────────── -->
-  <section id="teaching">
-    <h2 data-i18n="section-teaching">Teaching</h2>
-    <p class="teaching-intro" data-i18n-html="teaching-intro">
-      Probability Theory course materials for Lyon 2 Lumi&egrave;re University students
-      (L2 MIASHS &mdash; credit to Zied Gharbi and Professor Stephane Chretien).
-    </p>
-
-    <!-- Cours -->
-    <div class="teaching-group">
-      <div class="teaching-group__title" data-i18n="teaching-cours">Course</div>
-
-      <div class="teaching-item">
-        <span class="teaching-item__label">Cours</span>
-        <div class="teaching-item__body">
-          <span class="teaching-item__desc" data-i18n="teaching-cours-desc">Probabilit&eacute;s et ses applications &mdash; complete lecture notes</span>
-          <div class="teaching-item__links">
-            <a href="lyon2-TD-probas/cours.pdf" download class="teaching-link" data-i18n="link-download">Download</a>
+          <!-- Mobile Navigation Toggle -->
+          <div class="mobile-nav-toggle">
+            <span></span>
           </div>
-        </div>
-      </div>
-    </div>
 
-    <!-- TDs -->
-    <div class="teaching-group">
-      <div class="teaching-group__title" data-i18n="teaching-tds">Problem Sets (TDs)</div>
+          <!-- Mobile Navigation Menu -->
+          <div class="mobile-nav">
+            <div class="mobile-nav-items">
+              <div class="mobile-nav-item"><a href="#intro" data-i18n="nav-intro">Introduction</a></div>
+              <div class="mobile-nav-item"><a href="#news" data-i18n="nav-news">News</a></div>
+              <div class="mobile-nav-item"><a href="#publications" data-i18n="nav-publications">Publications</a></div>
+              <div class="mobile-nav-item"><a href="#code" data-i18n="nav-code">Code</a></div>
 
-      <div class="teaching-group__subtitle" data-i18n-html="teaching-td0-title">TD pr&eacute;liminaire &mdash; Ensembles, limites, d&eacute;rivation, primitives</div>
-      <div class="teaching-item">
-        <span class="teaching-item__label">TD0</span>
-        <div class="teaching-item__body">
-          <span class="teaching-item__desc" data-i18n="teaching-enonce">Problem sheet</span>
-          <div class="teaching-item__links">
-            <a href="lyon2-TD-probas/TD0_Probabilites_L2_MIASHS.pdf" download class="teaching-link" data-i18n="link-download">Download</a>
+              <div class="mobile-nav-item"><a href="#teaching" data-i18n="nav-teaching">Teaching Resources</a></div>
+              <div class="mobile-nav-item"><a href="#education" data-i18n="nav-education">Education</a></div>
+            </div>
           </div>
-        </div>
-      </div>
-      <div class="teaching-item">
-        <span class="teaching-item__label"></span>
-        <div class="teaching-item__body">
-          <span class="teaching-item__desc" data-i18n="teaching-correction">Solutions</span>
-          <div class="teaching-item__links">
-            <a href="lyon2-TD-probas/TD 0 correction.pdf" download class="teaching-link" data-i18n="link-download">Download</a>
-          </div>
-        </div>
-      </div>
 
-      <div class="teaching-group__subtitle" data-i18n-html="teaching-td1-title">TD1 &mdash; Probabilit&eacute;s et probabilit&eacute;s conditionnelles</div>
-      <div class="teaching-item">
-        <span class="teaching-item__label">TD1</span>
-        <div class="teaching-item__body">
-          <span class="teaching-item__desc" data-i18n="teaching-enonce">Problem sheet</span>
-          <div class="teaching-item__links">
-            <a href="lyon2-TD-probas/TD1_Probabilites_L2_MIASHS_noncorrig%C3%A9.pdf" download class="teaching-link" data-i18n="link-download">Download</a>
-          </div>
-        </div>
-      </div>
-      <div class="teaching-item">
-        <span class="teaching-item__label"></span>
-        <div class="teaching-item__body">
-          <span class="teaching-item__desc" data-i18n="teaching-correction">Solutions</span>
-          <div class="teaching-item__links">
-            <a href="lyon2-TD-probas/TD1_Probabilites_L2_MIASHS_corrig%C3%A9.pdf" download class="teaching-link" data-i18n="link-download">Download</a>
-          </div>
-        </div>
-      </div>
+          <script>
+            if (!(CSS && CSS.supports && CSS.supports('scroll-behavior', 'smooth'))) {
+              var script = document.createElement('script');
+              script.src = 'https://unpkg.com/smoothscroll-polyfill@0.4.4/dist/smoothscroll-polyfill.min.js';
+              script.onload = function () {
+                smoothscroll.polyfill();
+              };
+              document.head.appendChild(script);
+            }
+          </script>
 
-      <div class="teaching-group__subtitle" data-i18n-html="teaching-td2-title">TD2 &mdash; Probabilit&eacute;s et probabilit&eacute;s conditionnelles</div>
-      <div class="teaching-item">
-        <span class="teaching-item__label">TD2</span>
-        <div class="teaching-item__body">
-          <span class="teaching-item__desc" data-i18n="teaching-enonce">Problem sheet</span>
-          <div class="teaching-item__links">
-            <a href="lyon2-TD-probas/TD2_Probabilites_L2_MIASHS.pdf" download class="teaching-link" data-i18n="link-download">Download</a>
-          </div>
-        </div>
-      </div>
-      <div class="teaching-item">
-        <span class="teaching-item__label"></span>
-        <div class="teaching-item__body">
-          <span class="teaching-item__desc" data-i18n="teaching-correction">Solutions</span>
-          <div class="teaching-item__links">
-            <a href="lyon2-TD-probas/TD2_Probabilites_L2_MIASHS_corrig%C3%A9.pdf" download class="teaching-link" data-i18n="link-download">Download</a>
-          </div>
-        </div>
-      </div>
+          <script>
+            document.addEventListener('DOMContentLoaded', function () {
+              document.querySelectorAll('.mobile-nav-item a').forEach(link => {
+                link.addEventListener('click', function (e) {
+                  document.documentElement.style.scrollBehavior = 'auto';
+                  setTimeout(() => {
+                    document.documentElement.style.scrollBehavior = '';
+                  }, 100);
+                });
+              });
+            });
+          </script>
 
-      <div class="teaching-group__subtitle" data-i18n-html="teaching-td3-title">TD3 &mdash; Lois de probabilit&eacute;s sur les entiers et sur la droite r&eacute;elle</div>
-      <div class="teaching-item">
-        <span class="teaching-item__label">TD3</span>
-        <div class="teaching-item__body">
-          <span class="teaching-item__desc" data-i18n="teaching-enonce">Problem sheet</span>
-          <div class="teaching-item__links">
-            <a href="lyon2-TD-probas/TD3_Probabilites_L2_MIASHS.pdf" download class="teaching-link" data-i18n="link-download">Download</a>
-          </div>
-        </div>
-      </div>
-      <div class="teaching-item">
-        <span class="teaching-item__label"></span>
-        <div class="teaching-item__body">
-          <span class="teaching-item__desc" data-i18n="teaching-correction">Solutions</span>
-          <div class="teaching-item__links">
-            <a href="lyon2-TD-probas/TD3corrige.pdf" download class="teaching-link" data-i18n="link-download">Download</a>
-          </div>
-        </div>
-      </div>
-      <div class="teaching-item">
-        <span class="teaching-item__label"></span>
-        <div class="teaching-item__body">
-          <span class="teaching-item__desc" data-i18n="teaching-normtable">Normal distribution table</span>
-          <div class="teaching-item__links">
-            <a href="lyon2-TD-probas/table_norm_stud_chi2.pdf" download class="teaching-link" data-i18n="link-download">Download</a>
-          </div>
-        </div>
-      </div>
+          <script src="js/simple-tooltip.js"></script>
 
-      <div class="teaching-group__subtitle" data-i18n-html="teaching-td4-title">TD4 &mdash; Variables al&eacute;atoires et leurs lois de probabilit&eacute;s</div>
-      <div class="teaching-item">
-        <span class="teaching-item__label">TD4</span>
-        <div class="teaching-item__body">
-          <span class="teaching-item__desc" data-i18n="teaching-enonce">Problem sheet</span>
-          <div class="teaching-item__links">
-            <a href="lyon2-TD-probas/TD4_Probabilites_L2_MIASHS.pdf" download class="teaching-link" data-i18n="link-download">Download</a>
-          </div>
-        </div>
-      </div>
-      <div class="teaching-item">
-        <span class="teaching-item__label"></span>
-        <div class="teaching-item__body">
-          <span class="teaching-item__desc" data-i18n="teaching-correction">Solutions</span>
-          <div class="teaching-item__links">
-            <a href="lyon2-TD-probas/TD4corrige.pdf" download class="teaching-link" data-i18n="link-download">Download</a>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
+          <!-- Page Footer -->
+          <footer class="page-footer">
+            <div class="footer-content">
+              Hadrien Bigo--Balland | © 2026
+            </div>
+          </footer>
 
-  <!-- Education & Degrees ──────────────────────────────── -->
-  <section id="education">
-    <h2 data-i18n="section-education">Formation</h2>
-    <div class="edu-grid">
+          <script>
+            document.addEventListener('DOMContentLoaded', function () {
 
-      <div class="edu-group">
-        <div class="edu-group__title" data-i18n="edu-formation">Formation</div>
+              function setCollapsibleState(header, state) {
+                const content = header.nextElementSibling;
+                const sectionId = header.closest('.collapsible-section').id;
 
-        <div class="edu-item">
-          <div class="edu-item__school"><a href="https://www.univ-lyon2.fr/" target="_blank">Lyon 2 Lumi&egrave;re University</a></div>
-          <div class="edu-item__program" data-i18n="edu-ml-ia">Machine Learning pour l&rsquo;Intelligence Artificielle</div>
-          <div class="edu-item__year">2022&ndash;2023</div>
-        </div>
+                if (state === 'expanded') {
+                  header.classList.add('active');
+                  content.classList.add('expanded');
+                  content.style.maxHeight = content.scrollHeight + "px";
+                  setTimeout(() => {
+                    if (content.classList.contains('expanded')) {
+                      content.style.maxHeight = "none";
+                      content.style.overflow = "visible";
+                    }
+                  }, 500);
+                  localStorage.setItem('section_' + sectionId, 'expanded');
+                } else {
+                  if (content.style.maxHeight === "none") {
+                    content.style.maxHeight = content.scrollHeight + "px";
+                    content.offsetHeight;
+                  }
+                  header.classList.remove('active');
+                  content.classList.remove('expanded');
+                  content.style.overflow = "hidden";
+                  setTimeout(() => {
+                    content.style.maxHeight = null;
+                  }, 10);
+                  localStorage.setItem('section_' + sectionId, 'collapsed');
+                }
+              }
 
-        <div class="edu-item">
-          <div class="edu-item__school"><a href="https://www.imo.universite-paris-saclay.fr/fr/" target="_blank">Paris-Saclay University</a></div>
-          <div class="edu-item__program" data-i18n="edu-maths-alea">Math&eacute;matiques de l&rsquo;Al&eacute;atoire</div>
-          <div class="edu-item__year">2021&ndash;2022</div>
-        </div>
+              const collapsibleHeaders = document.querySelectorAll('.collapsible-header');
 
-        <div class="edu-item">
-          <div class="edu-item__school"><a href="https://www.imo.universite-paris-saclay.fr/fr/" target="_blank">Paris-Saclay University</a></div>
-          <div class="edu-item__program" data-i18n="edu-agregation">Agr&eacute;gation de Math&eacute;matiques</div>
-          <div class="edu-item__year">2020&ndash;2021</div>
-        </div>
-      </div>
+              collapsibleHeaders.forEach(header => {
+                const sectionId = header.closest('.collapsible-section').id;
+                const savedState = sectionId ? localStorage.getItem('section_' + sectionId) : null;
+                const isDefaultExpanded = header.classList.contains('active');
 
-    </div>
-  </section>
+                if (savedState === 'expanded' || (!savedState && isDefaultExpanded)) {
+                  setCollapsibleState(header, 'expanded');
+                } else {
+                  setCollapsibleState(header, 'collapsed');
+                }
 
-</main>
+                header.addEventListener('click', function () {
+                  const isCurrentlyExpanded = this.classList.contains('active');
+                  setCollapsibleState(this, isCurrentlyExpanded ? 'collapsed' : 'expanded');
+                });
+              });
 
-<footer class="footer">
-  Hadrien Bigo--Balland &mdash; Inria Paris &mdash; &copy; 2026
-</footer>
+              function checkHash() {
+                if (window.location.hash) {
+                  const sectionId = window.location.hash.substring(1);
+                  const section = document.getElementById(sectionId + '-section');
+                  if (section) {
+                    const header = section.querySelector('.collapsible-header');
+                    setCollapsibleState(header, 'expanded');
+                  }
+                }
+              }
 
-<script>
-// ── Dark / light mode ──────────────────────────────────
-const html = document.documentElement;
-const themeIcon = document.getElementById('themeIcon');
-const savedTheme = localStorage.getItem('theme') || 'light';
-html.setAttribute('data-theme', savedTheme);
-themeIcon.className = savedTheme === 'dark' ? 'fa-regular fa-sun' : 'fa-regular fa-moon';
+              checkHash();
+              window.addEventListener('hashchange', checkHash);
 
-document.getElementById('themeToggle').addEventListener('click', () => {
-  const next = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
-  html.setAttribute('data-theme', next);
-  themeIcon.className = next === 'dark' ? 'fa-regular fa-sun' : 'fa-regular fa-moon';
-  localStorage.setItem('theme', next);
-});
+              window.addEventListener('resize', () => {
+                document.querySelectorAll('.collapsible-header.active').forEach(header => {
+                  const content = header.nextElementSibling;
+                  if (content.style.maxHeight !== "none" && content.style.maxHeight !== "") {
+                    content.style.maxHeight = content.scrollHeight + "px";
+                  }
+                });
+              });
+            });
+          </script>
 
-// ── Translations ───────────────────────────────────────
-const T = {
-  en: {
-    'name': 'Hadrien Bigo--Balland',
-    'position': 'PhD Student · MyFit Solutions & Inria Paris',
-    'bio-phd': 'I am currently pursuing a PhD at <a href="https://myfit-solutions.com/" target="_blank">MyFit Solutions</a>, in the <a href="https://team.inria.fr/heka/" target="_blank">HEKA team</a> of <a href="https://www.inria.fr/fr/centre-inria-de-paris" target="_blank">Inria Paris</a>, under the supervision of <a href="https://sites.google.com/site/stephanieallassonniere/" target="_blank">Professor Stéphanie Allassonnière</a>, <a href="https://www.jeanfeydy.com/" target="_blank">Dr. Jean Feydy</a> and <a href="https://www.linkedin.com/in/j%C3%A9r%C3%A9my-adoux-96612092/" target="_blank">Jeremy Adoux</a> for the last <span id="counter"></span>.',
-    'bio-scikit': 'I am also contributing to <a href="https://github.com/scikit-shapes/scikit-shapes" target="_blank">scikit-shapes</a>, an open-source Python library for shape analysis and statistical learning on geometric data, designed to facilitate research and applications in computational anatomy, morphometrics, and related fields.',
-    'bio-teaching': 'Additionally, I have been serving as a Teaching Assistant of Probability Theory at <a href="https://www.univ-lyon2.fr/" target="_blank">Lyon 2 Lumière University</a>, working in collaboration with <a href="https://sites.google.com/site/stephanegchretien/home" target="_blank">Professor Stephane Chretien</a> and Zied Gharbi.',
-    'section-news': 'News',
-    'news-1': 'Started my PhD at <a href="https://myfit-solutions.com/" target="_blank">MyFit Solutions</a> & <a href="https://team.inria.fr/heka/" target="_blank">Inria Paris HEKA</a>, working on shape analysis for medical imaging.',
-    'news-2': 'Started contributing to <a href="https://github.com/scikit-shapes/scikit-shapes" target="_blank">scikit-shapes</a>, an open-source library for geometric data analysis.',
-    'news-3': 'Teaching Assistant for Probability Theory (L2 MIASHS) at <a href="https://www.univ-lyon2.fr/" target="_blank">Lyon 2 Lumière University</a>.',
-    'news-4': 'Completed an internship at <a href="https://eric.msh-lse.fr/" target="_blank">Laboratoire ERIC</a> on Hodge Laplacian Clustering and Deep Neural Networks through the lens of Sobolev and Neuberger.',
-    'news-5': 'Participated in the thematic programme <a href="https://www.esi.ac.at/events/e550/" target="_blank">Infinite-dimensional Geometry: Theory and Applications</a> at the Erwin Schrödinger International Institute for Mathematics and Physics (ESI), Vienna.',
-    'news-6': 'Presented our work on <em>Optimal Steps for Fast Diffeomorphic Shape Registration</em> at <a href="https://iabm2026.sciencesconf.org/" target="_blank">IABM 2026</a>.',
-    'news-7': 'Presenting our work on <em>Optimal Steps for Fast Diffeomorphic Shape Registration</em> at <a href="https://cs2026.sciencesconf.org/" target="_blank">Curves and Surfaces 2026</a>.',
-    'news-8': 'Presenting our work on <em>Optimal Steps for Fast Diffeomorphic Shape Registration</em> at <a href="https://conferences.miccai.org/2026/en/" target="_blank">MICCAI 2026</a>.',
-    'news-9': 'Our team (with <a href="https://jeandelhaye.github.io/" target="_blank">Jean Delhaye</a> and <a href="https://www.linkedin.com/in/pierre-andr%C3%A9-mikem-b7549713b/?locale=fr" target="_blank">Pierre-André Mikem</a>) won 1st place at the <a href="https://fondation-hadamard.fr/fr/campus-de-paris-saclay/formation/edmh/deroulement-du-doctorat/parcours-mathtech/" target="_blank">MathTech challenge</a> organized by the Fondation Hadamard.',
-    'news-10': 'Presenting our work on <em>Optimal Steps for Fast Diffeomorphic Shape Registration</em> at the <a href="https://shape-analysis.github.io/" target="_blank">Shape Seminar</a>.',
-    'section-pubs': 'Publications',
-    'section-code': 'Code',
-    'section-teaching': 'Teaching',
-    'teaching-intro': 'Probability Theory course materials for Lyon 2 Lumière University students (L2 MIASHS — credit to Zied Gharbi and Professor Stephane Chretien).',
-    'teaching-cours': 'Course',
-    'teaching-cours-desc': 'Probabilités et ses applications — complete lecture notes',
-    'teaching-tds': 'Problem Sets (TDs)',
-    'teaching-td0-title': 'TD préliminaire — Ensembles, limites, dérivation, primitives',
-    'teaching-td1-title': 'TD1 — Probabilités et probabilités conditionnelles',
-    'teaching-td2-title': 'TD2 — Probabilités et probabilités conditionnelles',
-    'teaching-td3-title': 'TD3 — Lois de probabilités sur les entiers et sur la droite réelle',
-    'teaching-td4-title': 'TD4 — Variables aléatoires et leurs lois de probabilités',
-    'teaching-enonce': 'Problem sheet',
-    'teaching-correction': 'Solutions',
-    'teaching-normtable': 'Normal distribution table',
-    'link-download': 'Download',
-    'section-education': 'Formation',
-    'edu-formation': 'Formation',
-    'edu-degrees': 'Degrees',
-    'edu-ml-ia': 'Machine Learning pour l’Intelligence Artificielle',
-    'edu-maths-alea': 'Mathématiques de l’Aléatoire',
-    'edu-agregation': 'Agrégation de Mathématiques',
-    'edu-licence': 'Licence Magière de Mathématiques Fondamentales',
-    'edu-master-ml': 'Master de Mathématiques pour l’Intelligence Artificielle',
-  },
-  fr: {
-    'name': 'Hadrien Bigo--Balland',
-    'position': 'Doctorant · MyFit Solutions & Inria Paris',
-    'bio-phd': 'Je suis actuellement en doctorat à <a href="https://myfit-solutions.com/" target="_blank">MyFit Solutions</a>, au sein de l’équipe <a href="https://team.inria.fr/heka/" target="_blank">HEKA</a> de l’<a href="https://www.inria.fr/fr/centre-inria-de-paris" target="_blank">Inria Paris</a>, sous la direction de <a href="https://sites.google.com/site/stephanieallassonniere/" target="_blank">Professeur Stéphanie Allassonnière</a>, du <a href="https://www.jeanfeydy.com/" target="_blank">Dr. Jean Feydy</a> et de <a href="https://www.linkedin.com/in/j%C3%A9r%C3%A9my-adoux-96612092/" target="_blank">Jeremy Adoux</a> depuis <span id="counter"></span>.',
-    'bio-scikit': 'Je contribue également à <a href="https://github.com/scikit-shapes/scikit-shapes" target="_blank">scikit-shapes</a>, une bibliothèque Python open-source pour l’analyse de formes et l’apprentissage statistique sur des données géométriques.',
-    'bio-teaching': 'De plus, j’enseigne la théorie des probabilités à l’<a href="https://www.univ-lyon2.fr/" target="_blank">Université Lyon 2 Lumière</a>, en collaboration avec le <a href="https://sites.google.com/site/stephanegchretien/home" target="_blank">Professeur Stephane Chretien</a> et Zied Gharbi.',
-    'section-news': 'Actualités',
-    'news-1': 'Début de mon doctorat à <a href="https://myfit-solutions.com/" target="_blank">MyFit Solutions</a> & <a href="https://team.inria.fr/heka/" target="_blank">Inria Paris HEKA</a>, travaillant sur l’analyse de formes pour l’imagerie médicale.',
-    'news-2': 'Contributions à <a href="https://github.com/scikit-shapes/scikit-shapes" target="_blank">scikit-shapes</a>, une bibliothèque open-source pour l’analyse de données géométriques.',
-    'news-3': 'Chargé de TD de Théorie des Probabilités (L2 MIASHS) à l’<a href="https://www.univ-lyon2.fr/" target="_blank">Université Lyon 2 Lumière</a>.',    'news-4': 'Stage au <a href="https://eric.msh-lse.fr/" target="_blank">Laboratoire ERIC</a> sur le Hodge Laplacian Clustering et les réseaux de neurones profonds sous l’angle de Sobolev et Neuberger.',
-    'news-5': 'Participation au programme thématique <a href="https://www.esi.ac.at/events/e550/" target="_blank">Géométrie en dimension infinie : Théorie et Applications</a> à l’Institut Erwin Schrödinger de Mathématiques et Physique (ESI), Vienne.',
-    'news-6': 'Présentation de nos travaux sur <em>Optimal Steps for Fast Diffeomorphic Shape Registration</em> à <a href="https://iabm2026.sciencesconf.org/" target="_blank">IABM 2026</a>.',
-    'news-7': 'Présentation de nos travaux sur <em>Optimal Steps for Fast Diffeomorphic Shape Registration</em> à <a href="https://cs2026.sciencesconf.org/" target="_blank">Curves and Surfaces 2026</a>.',
-    'news-8': 'Présentation de nos travaux sur <em>Optimal Steps for Fast Diffeomorphic Shape Registration</em> à <a href="https://conferences.miccai.org/2026/en/" target="_blank">MICCAI 2026</a>.',
-    'news-9': 'Notre équipe (avec <a href="https://jeandelhaye.github.io/" target="_blank">Jean Delhaye</a> et <a href="https://www.linkedin.com/in/pierre-andr%C3%A9-mikem-b7549713b/?locale=fr" target="_blank">Pierre-André Mikem</a>) a remporté la 1ère place du <a href="https://fondation-hadamard.fr/fr/campus-de-paris-saclay/formation/edmh/deroulement-du-doctorat/parcours-mathtech/" target="_blank">challenge MathTech</a> de la Fondation Hadamard.',
-    'news-10': 'Présentation de nos travaux sur <em>Optimal Steps for Fast Diffeomorphic Shape Registration</em> au <a href="https://shape-analysis.github.io/" target="_blank">Shape Seminar</a>.',
-    'section-pubs': 'Publications',
-    'section-code': 'Code',
-    'section-teaching': 'Enseignement',
-    'teaching-intro': 'Supports de cours de théorie des probabilités pour les étudiants de Lyon 2 (L2 MIASHS — crédit à Zied Gharbi et au Professeur Stephane Chretien).',
-    'teaching-cours': 'Cours',
-    'teaching-cours-desc': 'Probabilités et ses applications — cours complet',
-    'teaching-tds': 'Travaux Dirigés (TDs)',
-    'teaching-td0-title': 'TD préliminaire — Ensembles, limites, dérivation, primitives',
-    'teaching-td1-title': 'TD1 — Probabilités et probabilités conditionnelles',
-    'teaching-td2-title': 'TD2 — Probabilités et probabilités conditionnelles',
-    'teaching-td3-title': 'TD3 — Lois de probabilités sur les entiers et sur la droite réelle',
-    'teaching-td4-title': 'TD4 — Variables aléatoires et leurs lois de probabilités',
-    'teaching-enonce': 'Énoncé',
-    'teaching-correction': 'Correction',
-    'teaching-normtable': 'Table de la loi normale',
-    'link-download': 'Télécharger',
-    'section-education': 'Formation',
-    'edu-formation': 'Formation',
-    'edu-degrees': 'Diplômes',
-    'edu-ml-ia': 'Machine Learning pour l’Intelligence Artificielle',
-    'edu-maths-alea': 'Mathématiques de l’Aléatoire',
-    'edu-agregation': 'Agrégation de Mathématiques',
-    'edu-licence': 'Licence Magière de Mathématiques Fondamentales',
-    'edu-master-ml': 'Master de Mathématiques pour l’Intelligence Artificielle',
-  }
-};
+  </body>
 
-let currentLang = localStorage.getItem('lang') || 'en';
-
-function applyLang(lang) {
-  const dict = T[lang];
-  document.querySelectorAll('[data-i18n]').forEach(el => {
-    const key = el.getAttribute('data-i18n');
-    if (dict[key] !== undefined) el.textContent = dict[key];
-  });
-  document.querySelectorAll('[data-i18n-html]').forEach(el => {
-    const key = el.getAttribute('data-i18n-html');
-    if (dict[key] !== undefined) el.innerHTML = dict[key];
-  });
-  document.getElementById('langToggle').textContent = lang === 'en' ? 'FR' : 'EN';
-  updateCountdown();
-}
-
-document.getElementById('langToggle').addEventListener('click', () => {
-  currentLang = currentLang === 'en' ? 'fr' : 'en';
-  localStorage.setItem('lang', currentLang);
-  applyLang(currentLang);
-});
-
-// ── Countdown ──────────────────────────────────────────
-const startDate = new Date('Oct 02, 2023 09:00:00').getTime();
-
-function updateCountdown() {
-  const distance = Date.now() - startDate;
-  const days    = Math.floor(distance / 86400000);
-  const hours   = Math.floor((distance % 86400000) / 3600000);
-  const minutes = Math.floor((distance % 3600000) / 60000);
-  const seconds = Math.floor((distance % 60000) / 1000);
-  const lang = currentLang;
-  let text;
-  if (lang === 'fr') {
-    text = `${days} jours, ${hours} heure${hours > 1 ? 's' : ''}, ${minutes} minute${minutes > 1 ? 's' : ''} et ${seconds} seconde${seconds > 1 ? 's' : ''}`;
-  } else {
-    text = `${days} day${days !== 1 ? 's' : ''}, ${hours} hour${hours !== 1 ? 's' : ''}, ${minutes} minute${minutes !== 1 ? 's' : ''} and ${seconds} second${seconds !== 1 ? 's' : ''}`;
-  }
-  const el = document.getElementById('counter');
-  if (el) el.textContent = text;
-}
-
-setInterval(updateCountdown, 1000);
-
-// ── GitHub stars ───────────────────────────────────────
-fetch('https://api.github.com/repos/scikit-shapes/scikit-shapes')
-  .then(r => r.json())
-  .then(data => {
-    const el = document.getElementById('scikit-shapes-stars');
-    if (el && data.stargazers_count !== undefined) el.textContent = data.stargazers_count;
-  })
-  .catch(() => {});
-
-// ── Init ───────────────────────────────────────────────
-applyLang(currentLang);
-</script>
-
-</body>
 </html>
