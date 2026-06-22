@@ -107,7 +107,7 @@
           "news-4": "Completed an internship at <a href=\"https://eric.msh-lse.fr/\" target=\"_blank\" class=\"underline\">Laboratoire ERIC</a> on Hodge Laplacian Clustering and Deep Neural Networks through the lens of Sobolev and Neuberger.",
           "news-5": "Participated in the thematic programme <a href=\"https://www.esi.ac.at/events/e550/\" target=\"_blank\" class=\"underline\">Infinite-dimensional Geometry: Theory and Applications</a> at the Erwin Schrödinger International Institute for Mathematics and Physics (ESI), Vienna.",
           "news-6": "Presented our work on <em>Optimal Steps for Fast Diffeomorphic Shape Registration</em> at <a href=\"https://iabm2026.sciencesconf.org/\" target=\"_blank\" class=\"underline\">IABM 2026</a>.",
-          "news-7": "Presenting our work on <em>Optimal Steps for Fast Diffeomorphic Shape Registration</em> at <a href=\"https://cs2026.sciencesconf.org/\" target=\"_blank\" class=\"underline\">Curves and Surfaces 2026</a>.",
+          "news-7": "Presenting our work on <em>Optimal Steps for Fast Diffeomorphic Shape Registration</em> at <a href=\"https://cs2026.sciencesconf.org/\" target=\"_blank\" class=\"underline\">Curves and Surfaces 2026</a>.<span class=\"news-badge\">Poster Special Mention</span>",
           "news-8": "Presenting our work on <em>Optimal Steps for Fast Diffeomorphic Shape Registration</em> at <a href=\"https://conferences.miccai.org/2026/en/\" target=\"_blank\" class=\"underline\">MICCAI 2026</a>.",
           "news-9": "Our team (with <a href=\"https://jeandelhaye.github.io/\" target=\"_blank\" class=\"underline\">Jean Delhaye</a> and <a href=\"https://www.linkedin.com/in/pierre-andr%C3%A9-mikem-b7549713b/?locale=fr\" target=\"_blank\" class=\"underline\">Pierre-André Mikem</a>) won 1st place at the <a href=\"https://fondation-hadamard.fr/fr/campus-de-paris-saclay/formation/edmh/deroulement-du-doctorat/parcours-mathtech/\" target=\"_blank\" class=\"underline\">MathTech challenge</a> organized by the Fondation Hadamard.",
           "news-10": "Presenting our work on <em>Optimal Steps for Fast Diffeomorphic Shape Registration</em> at the <a href=\"https://shape-analysis.github.io/\" target=\"_blank\" class=\"underline\">Shape Seminar</a>.",
@@ -149,7 +149,7 @@
           "news-4": "Stage au <a href=\"https://eric.msh-lse.fr/\" target=\"_blank\" class=\"underline\">Laboratoire ERIC</a> sur le Hodge Laplacian Clustering et les réseaux de neurones profonds sous l'angle de Sobolev et Neuberger.",
           "news-5": "Participation au programme thématique <a href=\"https://www.esi.ac.at/events/e550/\" target=\"_blank\" class=\"underline\">Géométrie en dimension infinie : Théorie et Applications</a> à l'Institut Erwin Schrödinger de Mathématiques et Physique (ESI), Vienne.",
           "news-6": "Présentation de nos travaux sur <em>Optimal Steps for Fast Diffeomorphic Shape Registration</em> à <a href=\"https://iabm2026.sciencesconf.org/\" target=\"_blank\" class=\"underline\">IABM 2026</a>.",
-          "news-7": "Présentation de nos travaux sur <em>Optimal Steps for Fast Diffeomorphic Shape Registration</em> à <a href=\"https://cs2026.sciencesconf.org/\" target=\"_blank\" class=\"underline\">Curves and Surfaces 2026</a>.",
+          "news-7": "Présentation de nos travaux sur <em>Optimal Steps for Fast Diffeomorphic Shape Registration</em> à <a href=\"https://cs2026.sciencesconf.org/\" target=\"_blank\" class=\"underline\">Curves and Surfaces 2026</a>.<span class=\"news-badge\">Mention spéciale poster</span>",
           "news-8": "Présentation de nos travaux sur <em>Optimal Steps for Fast Diffeomorphic Shape Registration</em> à <a href=\"https://conferences.miccai.org/2026/en/\" target=\"_blank\" class=\"underline\">MICCAI 2026</a>.",
           "news-9": "Notre équipe (avec <a href=\"https://jeandelhaye.github.io/\" target=\"_blank\" class=\"underline\">Jean Delhaye</a> et <a href=\"https://www.linkedin.com/in/pierre-andr%C3%A9-mikem-b7549713b/?locale=fr\" target=\"_blank\" class=\"underline\">Pierre-André Mikem</a>) a remporté la 1ère place du <a href=\"https://fondation-hadamard.fr/fr/campus-de-paris-saclay/formation/edmh/deroulement-du-doctorat/parcours-mathtech/\" target=\"_blank\" class=\"underline\">challenge MathTech</a> de la Fondation Hadamard.",
           "news-10": "Présentation de nos travaux sur <em>Optimal Steps for Fast Diffeomorphic Shape Registration</em> au <a href=\"https://shape-analysis.github.io/\" target=\"_blank\" class=\"underline\">Shape Seminar</a>.",
@@ -774,6 +774,42 @@
       line-height: 1.55;
     }
 
+    .news-badge {
+      display: inline-block;
+      margin-left: 0.5rem;
+      padding: 1px 8px 1px 7px;
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+      white-space: nowrap;
+      vertical-align: middle;
+      border-radius: 999px;
+      color: #8A5A12;
+      background: linear-gradient(135deg, rgba(255, 215, 130, 0.35), rgba(212, 145, 55, 0.22));
+      border: 1px solid rgba(212, 160, 55, 0.55);
+      box-shadow: 0 1px 3px rgba(180, 130, 30, 0.18);
+    }
+
+    .news-badge::before {
+      content: "★";
+      margin-right: 4px;
+      font-size: 9px;
+      color: #D49137;
+      vertical-align: baseline;
+    }
+
+    body.night .news-badge {
+      color: #F2D177;
+      background: linear-gradient(135deg, rgba(255, 215, 130, 0.20), rgba(212, 145, 55, 0.12));
+      border-color: rgba(232, 197, 90, 0.5);
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
+    }
+
+    body.night .news-badge::before {
+      color: #F2D177;
+    }
+
     /* Publications */
     .pub-item {
       display: flex;
@@ -1053,7 +1089,7 @@
 
                     <div class="news-item">
                       <span class="news-date">Jun 2026</span>
-                      <span class="news-text" data-i18n="news-7">Presenting our work on <em>Optimal Steps for Fast Diffeomorphic Shape Registration</em> at <a href="https://cs2026.sciencesconf.org/" target="_blank" class="underline">Curves and Surfaces 2026</a>.</span>
+                      <span class="news-text" data-i18n="news-7">Presenting our work on <em>Optimal Steps for Fast Diffeomorphic Shape Registration</em> at <a href="https://cs2026.sciencesconf.org/" target="_blank" class="underline">Curves and Surfaces 2026</a>.<span class="news-badge">Poster Special Mention</span></span>
                     </div>
 
                     <div class="news-item">
