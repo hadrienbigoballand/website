@@ -111,6 +111,11 @@
           "news-8": "Presenting our work on <em>Optimal Steps for Fast Diffeomorphic Shape Registration</em> at <a href=\"https://conferences.miccai.org/2026/en/\" target=\"_blank\" class=\"underline\">MICCAI 2026</a>.",
           "news-9": "Our team (with <a href=\"https://jeandelhaye.github.io/\" target=\"_blank\" class=\"underline\">Jean Delhaye</a> and <a href=\"https://www.linkedin.com/in/pierre-andr%C3%A9-mikem-b7549713b/?locale=fr\" target=\"_blank\" class=\"underline\">Pierre-André Mikem</a>) won 1st place at the <a href=\"https://fondation-hadamard.fr/fr/campus-de-paris-saclay/formation/edmh/deroulement-du-doctorat/parcours-mathtech/\" target=\"_blank\" class=\"underline\">MathTech challenge</a> organized by the Fondation Hadamard.",
           "news-10": "Presenting our work on <em>Optimal Steps for Fast Diffeomorphic Shape Registration</em> at the <a href=\"https://shape-analysis.github.io/\" target=\"_blank\" class=\"underline\">Shape Seminar</a>.",
+          "mesh-source": "Source",
+          "mesh-deformed": "Deformed",
+          "mesh-target": "Target",
+          "section-vertebrae": "VERTEBRAE",
+          "vertebrae-intro": "We empower clinicians with deformation models to detect anomalies in vertebrae.",
           "section-publications": "PUBLICATIONS",
           "section-code": "CODE",
           "section-contact": "CONTACT",
@@ -153,6 +158,11 @@
           "news-8": "Présentation de nos travaux sur <em>Optimal Steps for Fast Diffeomorphic Shape Registration</em> à <a href=\"https://conferences.miccai.org/2026/en/\" target=\"_blank\" class=\"underline\">MICCAI 2026</a>.",
           "news-9": "Notre équipe (avec <a href=\"https://jeandelhaye.github.io/\" target=\"_blank\" class=\"underline\">Jean Delhaye</a> et <a href=\"https://www.linkedin.com/in/pierre-andr%C3%A9-mikem-b7549713b/?locale=fr\" target=\"_blank\" class=\"underline\">Pierre-André Mikem</a>) a remporté la 1ère place du <a href=\"https://fondation-hadamard.fr/fr/campus-de-paris-saclay/formation/edmh/deroulement-du-doctorat/parcours-mathtech/\" target=\"_blank\" class=\"underline\">challenge MathTech</a> de la Fondation Hadamard.",
           "news-10": "Présentation de nos travaux sur <em>Optimal Steps for Fast Diffeomorphic Shape Registration</em> au <a href=\"https://shape-analysis.github.io/\" target=\"_blank\" class=\"underline\">Shape Seminar</a>.",
+          "mesh-source": "Source",
+          "mesh-deformed": "Déformée",
+          "mesh-target": "Cible",
+          "section-vertebrae": "VERTÈBRES",
+          "vertebrae-intro": "Nous donnons aux cliniciens des modèles de déformation pour détecter les anomalies des vertèbres.",
           "section-publications": "PUBLICATIONS",
           "section-code": "CODE",
           "section-contact": "CONTACT",
@@ -810,6 +820,96 @@
       color: #F2D177;
     }
 
+    /* Vertebrae mesh viewer */
+    .vertebrae-intro {
+      font-size: 14px;
+      line-height: 1.55;
+      color: #6b6a6e;
+      margin: 0 0 0.4rem;
+    }
+
+    body.night .vertebrae-intro {
+      color: #a9a8ad;
+    }
+
+    .mesh-viewer {
+      margin-top: 0.4rem;
+    }
+
+    .mesh-stage {
+      width: 100%;
+      max-width: 420px;
+      margin: 0 auto;
+    }
+
+    .mesh-canvas {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      cursor: grab;
+      touch-action: none;
+    }
+
+    .mesh-canvas:active {
+      cursor: grabbing;
+    }
+
+    .mesh-canvas canvas {
+      display: block;
+      width: 100% !important;
+      height: 100% !important;
+    }
+
+    /* Segmented pill control */
+    .mesh-switch {
+      position: relative;
+      display: flex;
+      width: 320px;
+      max-width: 100%;
+      margin: 0.6rem auto 0;
+      padding: 4px;
+      border-radius: 999px;
+      background: rgba(0, 0, 0, 0.06);
+    }
+
+    body.night .mesh-switch {
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    .mesh-switch-thumb {
+      position: absolute;
+      top: 4px;
+      left: 4px;
+      bottom: 4px;
+      width: calc((100% - 8px) / 3);
+      border-radius: 999px;
+      background: #dd4b4b;
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.18);
+      transform: translateX(0);
+      transition: transform 0.34s cubic-bezier(0.4, 0, 0.2, 1), background 0.34s ease;
+      pointer-events: none;
+    }
+
+    .mesh-seg {
+      position: relative;
+      z-index: 1;
+      flex: 1;
+      border: none;
+      background: none;
+      cursor: pointer;
+      padding: 7px 0;
+      font-family: inherit;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: #8A898C;
+      transition: color 0.25s ease;
+    }
+
+    .mesh-seg.active {
+      color: #fff;
+    }
+
     /* Publications */
     .pub-item {
       display: flex;
@@ -1133,6 +1233,7 @@
                     </div>
 
                   </div>
+
                 </div>
               </div>
             </div>
@@ -1160,6 +1261,35 @@
                         and <a href="https://scholar.google.com/citations?user=oGQn_xMAAAAJ" target="_blank" class="underline">Tom Boeken</a>
                       </div>
                       <div class="pub-venue"><em>MICCAI 2026</em></div>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+
+            <div class="spacer48"></div>
+
+            <!-- Vertebrae Section -->
+            <div class="collapsible-section" id="vertebrae-section">
+              <div class="collapsible-header active" id="vertebrae">
+                <h4 class="animated fadeIn three section" data-i18n="section-vertebrae">VERTEBRAE</h4>
+                <div class="collapse-icon"></div>
+              </div>
+              <div class="collapsible-content expanded">
+                <div class="collapsible-content-inner">
+
+                  <p class="vertebrae-intro" data-i18n="vertebrae-intro">We empower clinicians with deformation models to detect anomalies in vertebrae.</p>
+
+                  <div class="mesh-viewer">
+                    <div class="mesh-stage">
+                      <div class="mesh-canvas" id="vertebrae-canvas"></div>
+                    </div>
+                    <div class="mesh-switch" role="tablist" aria-label="Mesh stage">
+                      <span class="mesh-switch-thumb"></span>
+                      <button class="mesh-seg active" type="button" data-index="0" data-color="source" data-mesh="meshes/source_mesh.ply" data-i18n="mesh-source">Source</button>
+                      <button class="mesh-seg" type="button" data-index="1" data-color="source" data-mesh="meshes/deformed_mesh.ply" data-i18n="mesh-deformed">Deformed</button>
+                      <button class="mesh-seg" type="button" data-index="2" data-color="target" data-mesh="meshes/target_mesh.ply" data-i18n="mesh-target">Target</button>
                     </div>
                   </div>
 
@@ -1418,6 +1548,172 @@
               });
             });
           </script>
+
+  <!-- Interactive 3D mesh registration viewer (source → deformed → target) -->
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+        "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+      }
+    }
+  </script>
+  <script type="module">
+    import * as THREE from 'three';
+    import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+    import { PLYLoader } from 'three/addons/loaders/PLYLoader.js';
+
+    const PALETTES = {
+      source: { surface: 0xdd4b4b, edge: 0x7a1f1f, accent: '#dd4b4b' },
+      target: { surface: 0x79c4ec, edge: 0x2f6f93, accent: '#79c4ec' }
+    };
+
+    function initVertebrae() {
+      const container = document.getElementById('vertebrae-canvas');
+      if (!container) return;
+      const segs = Array.from(document.querySelectorAll('.mesh-switch .mesh-seg'));
+      const thumb = document.querySelector('.mesh-switch-thumb');
+
+      const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      renderer.setClearColor(0x000000, 0); // transparent background
+      container.appendChild(renderer.domElement);
+
+      const scene = new THREE.Scene();
+
+      const camera = new THREE.PerspectiveCamera(38, 1, 0.01, 100);
+      camera.position.set(0, 0, 3);
+
+      // Soft, even lighting for nice smooth shading
+      scene.add(new THREE.HemisphereLight(0xffffff, 0x3a3a46, 1.0));
+      const key = new THREE.DirectionalLight(0xffffff, 1.15);
+      key.position.set(1, 1.3, 1.5);
+      scene.add(key);
+      const fill = new THREE.DirectionalLight(0xffffff, 0.45);
+      fill.position.set(-1.3, -0.7, -1);
+      scene.add(fill);
+
+      const controls = new OrbitControls(camera, renderer.domElement);
+      controls.enableDamping = true;
+      controls.dampingFactor = 0.08;
+      controls.enablePan = false;
+      controls.minDistance = 1.5;
+      controls.maxDistance = 6;
+      controls.autoRotate = true;
+      controls.autoRotateSpeed = 1.1;
+      controls.addEventListener('start', () => { controls.autoRotate = false; });
+
+      const group = new THREE.Group();
+      scene.add(group);
+
+      let needsRender = true;
+      const stages = [];   // one { mesh, wire } per segment
+      let current = null;
+
+      function buildStage(geometry, paletteKey) {
+        const palette = PALETTES[paletteKey];
+        if (!geometry.attributes.normal) geometry.computeVertexNormals();
+        const material = new THREE.MeshStandardMaterial({
+          color: palette.surface,
+          roughness: 0.5,
+          metalness: 0.05,
+          flatShading: false,         // smooth shading
+          side: THREE.DoubleSide,
+          polygonOffset: true,        // let the wireframe sit cleanly on top
+          polygonOffsetFactor: 1,
+          polygonOffsetUnits: 1
+        });
+        const mesh = new THREE.Mesh(geometry, material);
+        const wire = new THREE.LineSegments(
+          new THREE.WireframeGeometry(geometry),
+          new THREE.LineBasicMaterial({ color: palette.edge, transparent: true, opacity: 0.22 })
+        );
+        return { mesh, wire };
+      }
+
+      function show(index) {
+        const stage = stages[index];
+        if (!stage) return;
+        if (current) group.remove(current.mesh, current.wire);
+        group.add(stage.mesh, stage.wire);
+        current = stage;
+        needsRender = true;
+      }
+
+      function selectSegment(index) {
+        segs.forEach((b, i) => b.classList.toggle('active', i === index));
+        const paletteKey = segs[index].dataset.color === 'target' ? 'target' : 'source';
+        thumb.style.transform = 'translateX(' + (index * 100) + '%)';
+        thumb.style.background = PALETTES[paletteKey].accent;
+        show(index);
+      }
+      segs.forEach((seg, i) => seg.addEventListener('click', () => selectSegment(i)));
+
+      // Load every stage, then normalize them with a SHARED transform so the
+      // shapes stay aligned and the deformation is visible when you switch.
+      const loader = new PLYLoader();
+      const loadedGeoms = new Array(segs.length);
+      let loadedCount = 0;
+      segs.forEach((seg, i) => {
+        loader.load(seg.dataset.mesh, (geometry) => {
+          loadedGeoms[i] = {
+            geometry,
+            color: seg.dataset.color === 'target' ? 'target' : 'source'
+          };
+          if (++loadedCount === segs.length) {
+            // Center every shape on its own centroid (each sits in the middle),
+            // then apply one SHARED scale so their relative sizes stay honest.
+            let maxRadius = 0;
+            loadedGeoms.forEach((g) => {
+              g.geometry.computeBoundingBox();
+              const c = new THREE.Vector3();
+              g.geometry.boundingBox.getCenter(c);
+              g.geometry.translate(-c.x, -c.y, -c.z);
+              g.geometry.computeBoundingSphere();
+              maxRadius = Math.max(maxRadius, g.geometry.boundingSphere.radius);
+            });
+            const s = 1 / (maxRadius || 1);
+            loadedGeoms.forEach((g, idx) => {
+              g.geometry.scale(s, s, s);
+              stages[idx] = buildStage(g.geometry, g.color);
+            });
+            selectSegment(0);
+          }
+        });
+      });
+
+      function resize() {
+        const w = container.clientWidth;
+        const h = container.clientHeight;
+        if (!w || !h) return;
+        renderer.setSize(w, h, false);
+        camera.aspect = w / h;
+        camera.updateProjectionMatrix();
+        needsRender = true;
+      }
+      resize();
+      if (window.ResizeObserver) new ResizeObserver(resize).observe(container);
+      window.addEventListener('resize', resize);
+
+      function animate() {
+        requestAnimationFrame(animate);
+        // OrbitControls.update() returns true while the camera is moving
+        // (auto-rotation or damping); render on demand to spare the GPU.
+        const moved = controls.update();
+        if (moved || needsRender) {
+          renderer.render(scene, camera);
+          needsRender = false;
+        }
+      }
+      animate();
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initVertebrae);
+    } else {
+      initVertebrae();
+    }
+  </script>
 
   </body>
 
