@@ -1599,44 +1599,118 @@
       controls.enablePan = false;
       controls.minDistance = 1.5;
       controls.maxDistance = 6;
-      controls.autoRotate = true;
-      controls.autoRotateSpeed = 1.1;
-      controls.addEventListener('start', () => { controls.autoRotate = false; });
+      // No auto-rotation: the mesh stays still and only turns when dragged.
 
       const group = new THREE.Group();
+      group.rotation.set(-0.12, -0.5, 0); // gentle 3/4 resting pose so it reads as 3D
       scene.add(group);
 
       let needsRender = true;
-      const stages = [];   // one { mesh, wire } per segment
-      let current = null;
 
-      function buildStage(geometry, paletteKey) {
-        const palette = PALETTES[paletteKey];
+      const surfaceMat = (paletteKey) => new THREE.MeshStandardMaterial({
+        color: PALETTES[paletteKey].surface,
+        roughness: 0.5,
+        metalness: 0.05,
+        flatShading: false,         // smooth shading
+        side: THREE.DoubleSide,
+        polygonOffset: true,        // let the wireframe sit cleanly on top
+        polygonOffsetFactor: 1,
+        polygonOffsetUnits: 1
+      });
+      const lineMat = (paletteKey) => new THREE.LineBasicMaterial({
+        color: PALETTES[paletteKey].edge, transparent: true, opacity: 0.22
+      });
+
+      // De-duplicated edge index of a triangle-indexed geometry.
+      function buildEdgeIndex(faceIndex, vertexCount) {
+        const seen = new Set();
+        const edges = [];
+        const add = (a, b) => {
+          const key = a < b ? a * vertexCount + b : b * vertexCount + a;
+          if (!seen.has(key)) { seen.add(key); edges.push(a, b); }
+        };
+        for (let i = 0; i < faceIndex.length; i += 3) {
+          const a = faceIndex[i], b = faceIndex[i + 1], c = faceIndex[i + 2];
+          add(a, b); add(b, c); add(c, a);
+        }
+        return edges;
+      }
+
+      // Static stage (used for the target, which has its own topology).
+      function buildStatic(geometry, paletteKey) {
         if (!geometry.attributes.normal) geometry.computeVertexNormals();
-        const material = new THREE.MeshStandardMaterial({
-          color: palette.surface,
-          roughness: 0.5,
-          metalness: 0.05,
-          flatShading: false,         // smooth shading
-          side: THREE.DoubleSide,
-          polygonOffset: true,        // let the wireframe sit cleanly on top
-          polygonOffsetFactor: 1,
-          polygonOffsetUnits: 1
-        });
-        const mesh = new THREE.Mesh(geometry, material);
-        const wire = new THREE.LineSegments(
-          new THREE.WireframeGeometry(geometry),
-          new THREE.LineBasicMaterial({ color: palette.edge, transparent: true, opacity: 0.22 })
-        );
+        const mesh = new THREE.Mesh(geometry, surfaceMat(paletteKey));
+        const wire = new THREE.LineSegments(new THREE.WireframeGeometry(geometry), lineMat(paletteKey));
+        mesh.frustumCulled = false; wire.frustumCulled = false;
         return { mesh, wire };
       }
 
-      function show(index) {
-        const stage = stages[index];
-        if (!stage) return;
-        if (current) group.remove(current.mesh, current.wire);
-        group.add(stage.mesh, stage.wire);
-        current = stage;
+      // Morphing stage: source and deformed share topology, so we interpolate
+      // the vertices for a smooth deformation animation on the mesh itself.
+      function buildMorph(srcGeom, defGeom) {
+        const srcPos = srcGeom.getAttribute('position').array;
+        const defPos = defGeom.getAttribute('position').array;
+        const posAttr = new THREE.BufferAttribute(new Float32Array(srcPos), 3);
+
+        const geom = new THREE.BufferGeometry();
+        geom.setAttribute('position', posAttr);
+        geom.setIndex(srcGeom.getIndex());
+
+        // The edges share the morphing position buffer, so they deform for free.
+        const wireGeom = new THREE.BufferGeometry();
+        wireGeom.setAttribute('position', posAttr);
+        wireGeom.setIndex(buildEdgeIndex(srcGeom.getIndex().array, srcPos.length / 3));
+
+        const mesh = new THREE.Mesh(geom, surfaceMat('source'));
+        const wire = new THREE.LineSegments(wireGeom, lineMat('source'));
+        mesh.frustumCulled = false; wire.frustumCulled = false;
+
+        function apply(t) {
+          const u = 1 - t, arr = posAttr.array;
+          for (let i = 0; i < arr.length; i++) arr[i] = srcPos[i] * u + defPos[i] * t;
+          posAttr.needsUpdate = true;
+          geom.computeVertexNormals();
+          needsRender = true;
+        }
+        apply(0);
+        return { mesh, wire, apply };
+      }
+
+      // --- Stage switching ------------------------------------------------
+      let morph = null, targetStage = null;
+      let mode = null;   // 'morph' (source/deformed) | 'target'
+      let curT = 0;      // 0 = source, 1 = deformed
+      let raf = null;
+      const cancelTween = () => { if (raf) { cancelAnimationFrame(raf); raf = null; } };
+
+      function tweenTo(toT) {
+        cancelTween();
+        const fromT = curT, dur = 650, t0 = performance.now();
+        function step(now) {
+          const k = Math.min(1, (now - t0) / dur);
+          const e = k < 0.5 ? 2 * k * k : 1 - Math.pow(-2 * k + 2, 2) / 2; // easeInOut
+          curT = fromT + (toT - fromT) * e;
+          morph.apply(curT);
+          raf = k < 1 ? requestAnimationFrame(step) : (curT = toT, morph.apply(toT), null);
+        }
+        raf = requestAnimationFrame(step);
+      }
+
+      function showRed(destT) {
+        const prev = mode;
+        cancelTween();
+        if (prev === 'target') group.remove(targetStage.mesh, targetStage.wire);
+        if (prev !== 'morph') group.add(morph.mesh, morph.wire);
+        mode = 'morph';
+        if (prev === 'morph') tweenTo(destT);          // smooth source <-> deformed
+        else { curT = destT; morph.apply(destT); }     // coming from target / first load
+      }
+
+      function showTarget() {
+        cancelTween();
+        if (mode === 'morph') group.remove(morph.mesh, morph.wire);
+        if (mode !== 'target') group.add(targetStage.mesh, targetStage.wire);
+        mode = 'target';
         needsRender = true;
       }
 
@@ -1645,42 +1719,42 @@
         const paletteKey = segs[index].dataset.color === 'target' ? 'target' : 'source';
         thumb.style.transform = 'translateX(' + (index * 100) + '%)';
         thumb.style.background = PALETTES[paletteKey].accent;
-        show(index);
+        if (!morph) return;                              // meshes not loaded yet
+        if (index === 2) showTarget(); else showRed(index === 0 ? 0 : 1);
       }
       segs.forEach((seg, i) => seg.addEventListener('click', () => selectSegment(i)));
 
-      // Load every stage, then normalize them with a SHARED transform so the
-      // shapes stay aligned and the deformation is visible when you switch.
+      // Load all three meshes, then normalize them.
       const loader = new PLYLoader();
-      const loadedGeoms = new Array(segs.length);
+      const loaded = new Array(segs.length);
       let loadedCount = 0;
       segs.forEach((seg, i) => {
         loader.load(seg.dataset.mesh, (geometry) => {
-          loadedGeoms[i] = {
-            geometry,
-            color: seg.dataset.color === 'target' ? 'target' : 'source'
-          };
-          if (++loadedCount === segs.length) {
-            // Center every shape on its own centroid (each sits in the middle),
-            // then apply one SHARED scale so their relative sizes stay honest.
-            let maxRadius = 0;
-            loadedGeoms.forEach((g) => {
-              g.geometry.computeBoundingBox();
-              const c = new THREE.Vector3();
-              g.geometry.boundingBox.getCenter(c);
-              g.geometry.translate(-c.x, -c.y, -c.z);
-              g.geometry.computeBoundingSphere();
-              maxRadius = Math.max(maxRadius, g.geometry.boundingSphere.radius);
-            });
-            const s = 1 / (maxRadius || 1);
-            loadedGeoms.forEach((g, idx) => {
-              g.geometry.scale(s, s, s);
-              stages[idx] = buildStage(g.geometry, g.color);
-            });
-            selectSegment(0);
-          }
+          loaded[i] = geometry;
+          if (++loadedCount === segs.length) setup();
         });
       });
+
+      function setup() {
+        const [src, def, tgt] = loaded;
+        src.computeBoundingBox(); def.computeBoundingBox(); tgt.computeBoundingBox();
+        const cs = new THREE.Vector3(); src.boundingBox.getCenter(cs);
+        const cd = new THREE.Vector3(); def.boundingBox.getCenter(cd);
+        const ct = new THREE.Vector3(); tgt.boundingBox.getCenter(ct);
+        // Source & deformed get one shared center (their midpoint) so the morph
+        // shows pure deformation; the target is centered on its own centroid.
+        const cMid = cs.clone().add(cd).multiplyScalar(0.5);
+        src.translate(-cMid.x, -cMid.y, -cMid.z);
+        def.translate(-cMid.x, -cMid.y, -cMid.z);
+        tgt.translate(-ct.x, -ct.y, -ct.z);
+        src.computeBoundingSphere(); def.computeBoundingSphere(); tgt.computeBoundingSphere();
+        const s = 1 / Math.max(src.boundingSphere.radius, def.boundingSphere.radius, tgt.boundingSphere.radius);
+        src.scale(s, s, s); def.scale(s, s, s); tgt.scale(s, s, s);
+
+        morph = buildMorph(src, def);
+        targetStage = buildStatic(tgt, 'target');
+        selectSegment(0);
+      }
 
       function resize() {
         const w = container.clientWidth;
@@ -1697,8 +1771,7 @@
 
       function animate() {
         requestAnimationFrame(animate);
-        // OrbitControls.update() returns true while the camera is moving
-        // (auto-rotation or damping); render on demand to spare the GPU.
+        // update() returns true while a drag is still settling (damping).
         const moved = controls.update();
         if (moved || needsRender) {
           renderer.render(scene, camera);
