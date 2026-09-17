@@ -1,0 +1,55 @@
+{
+  "_note": "Main references shown on the page. paper.tex cites bibliography.bib, which is not in the repo, so these were written out by hand -- CHECK THEM AGAINST YOUR .bib BEFORE PUBLISHING. Order here is the order shown.",
+  "refs": [
+    {
+      "key": "ref_voxelmorph",
+      "text": "G. Balakrishnan, A. Zhao, M. R. Sabuncu, J. Guttag, A. V. Dalca. VoxelMorph: A Learning Framework for Deformable Medical Image Registration. IEEE Transactions on Medical Imaging, 2019.",
+      "url": "https://doi.org/10.1109/TMI.2019.2897538"
+    },
+    {
+      "key": "deformetrica",
+      "text": "A. Bône, M. Louis, B. Martin, S. Durrleman. Deformetrica 4: An Open-Source Software for Statistical Shape Analysis. ShapeMI @ MICCAI, 2018.",
+      "url": "https://doi.org/10.1007/978-3-030-04747-4_1"
+    },
+    {
+      "key": "ref_classical_lddmm",
+      "text": "M. F. Beg, M. I. Miller, A. Trouvé, L. Younes. Computing Large Deformation Metric Mappings via Geodesic Flows of Diffeomorphisms. International Journal of Computer Vision, 2005.",
+      "url": "https://doi.org/10.1023/B:VISI.0000043755.93987.aa"
+    },
+    {
+      "key": "charon2013varifold",
+      "text": "N. Charon, A. Trouvé. The Varifold Representation of Nonoriented Shapes for Diffeomorphic Registration. SIAM Journal on Imaging Sciences, 2013.",
+      "url": "https://doi.org/10.1137/130918885"
+    },
+    {
+      "key": "ref_fpfh",
+      "text": "R. B. Rusu, N. Blodow, M. Beetz. Fast Point Feature Histograms (FPFH) for 3D Registration. IEEE ICRA, 2009.",
+      "url": "https://doi.org/10.1109/ROBOT.2009.5152473"
+    },
+    {
+      "key": "ref_sinkhorn",
+      "text": "M. Cuturi. Sinkhorn Distances: Lightspeed Computation of Optimal Transport. NeurIPS, 2013.",
+      "url": "https://papers.nips.cc/paper/2013/hash/af21d0c97db2e27e13572cbf59eb343d-Abstract.html"
+    },
+    {
+      "key": "ref_keops",
+      "text": "B. Charlier, J. Feydy, J. A. Glaunès, F.-D. Collin, G. Durif. Kernel Operations on the GPU, with Autodiff, without Memory Overflows. Journal of Machine Learning Research, 2021.",
+      "url": "https://www.jmlr.org/papers/v22/20-275.html"
+    },
+    {
+      "key": "sekuboyina2021verse",
+      "text": "A. Sekuboyina et al. VerSe: A Vertebrae Labelling and Segmentation Benchmark for Multi-detector CT Images. Medical Image Analysis, 2021.",
+      "url": "https://doi.org/10.1016/j.media.2021.102166"
+    },
+    {
+      "key": "falta2023lung250m",
+      "text": "F. Falta et al. Lung250M-4B: A Combined 3D Dataset for CT- and Point Cloud-Based Intra-Patient Lung Registration. NeurIPS Datasets and Benchmarks, 2023.",
+      "url": "https://papers.nips.cc/paper_files/paper/2023/hash/abf37695a4562ac4c05194d717d47eec-Abstract-Datasets_and_Benchmarks.html"
+    },
+    {
+      "key": "myronenko2010point",
+      "text": "A. Myronenko, X. Song. Point Set Registration: Coherent Point Drift. IEEE Transactions on Pattern Analysis and Machine Intelligence, 2010.",
+      "url": "https://doi.org/10.1109/TPAMI.2010.46"
+    }
+  ]
+}

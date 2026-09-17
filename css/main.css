@@ -4072,3 +4072,19 @@ body {
 ::view-transition-new(root) {
   z-index: 9999;
 }
+
+/* Companion-page links on the MICCAI publication card. */
+.pub-links {
+  display: flex;
+  gap: 16px;
+  margin-top: 8px;
+  font-size: 13px;
+}
+
+body.night .pub-links a {
+  color: #C8C8C9;
+}
+
+body.day .pub-links a {
+  color: #6b6870;
+}

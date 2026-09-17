@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>Optimal Steps for Fast Diffeomorphic Shape Registration &mdash; MICCAI 2026</title>
+  <meta name="description"
+    content="Interactive companion to 'Optimal Steps for Fast Diffeomorphic Shape Registration', MICCAI 2026. Explore the 16 registration steps, the vertebral atlas and the lung results in 3D.">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+
+  <meta property="og:title" content="Optimal Steps for Fast Diffeomorphic Shape Registration">
+  <meta property="og:description" content="MICCAI 2026 — interactive companion page.">
+  <meta property="og:type" content="article">
+
+  <link rel="icon" type="image/png" href="../images/favicon.png">
+  <link rel="stylesheet" href="../css/normalize.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500&display=swap">
+  <link rel="stylesheet" href="css/paper.css?v=48">
+
+  <script>
+    // Same key and classes as the main site, so the theme carries across.
+    (function () {
+      var t = localStorage.getItem('theme') || 'day';
+      document.documentElement.classList.add('pre-' + t);
+    })();
+  </script>
+</head>
+
+<body>
+
+  <a id="back-link" href="../index.html" aria-label="Back to hadrienbigoballand.com">
+    <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.1"
+      stroke-linecap="square" stroke-linejoin="miter" aria-hidden="true">
+      <path d="M21 12H3.5M10.5 19 3.5 12l7-7" />
+    </svg>
+  </a>
+
+  <button id="theme-btn" aria-label="Toggle theme">
+    <img src="../images/moon.svg" alt="" class="icon-moon">
+    <img src="../images/sun.svg" alt="" class="icon-sun">
+  </button>
+
+  <main id="deck">
+
+    <!-- ------------------------------------------------------------ 1 hero -->
+    <section class="screen" id="hero" data-title="Overview">
+
+      <!-- The loop is a full-bleed layer, not a block in the text column: it
+           spans the page and is free to run under the logos. It carries its own
+           alpha, so it sits on the page itself in either theme.
+
+           The sources are picked HERE, in script, rather than left to the
+           browser's own <source> walk. WebKit can play VP9 -- so it takes the
+           webm and is happy -- but it ignores the alpha that rides alongside it
+           in Matroska BlockAdditions, and plays the colour plane on its own: a
+           black rectangle, on every browser on iOS, since they are all WebKit.
+           No ordering of <source> elements fixes that, because the browser is
+           not failing, and the same walk that would push Safari past the webm
+           would push Chrome past the file meant for it. So: WebKit gets the
+           HEVC, which it decodes with alpha intact; everything else gets the
+           webm; and hero.mp4, H.264 flattened onto the light background, stays
+           as the floor for anything that can play neither. -->
+      <div class="hero-video" id="hero-stage" aria-hidden="false">
+        <video autoplay loop muted playsinline preload="auto"
+          aria-label="A cloud of vertebrae gathers into one mean shape, which becomes a vertebra of a whole spine">
+        </video>
+      </div>
+      <script type="module">
+        import { assetURL } from './js/asset-base.js';
+        (function () {
+          var v = document.querySelector('#hero-stage video');
+          // Not "is this Safari". iOS Chrome and iOS Firefox are WebKit too --
+          // their UA says CriOS and FxiOS, never Chrome -- and they have the
+          // same missing alpha. The test is the engine, not the brand.
+          var ua = navigator.userAgent;
+          var webkit = /AppleWebKit/.test(ua) && !/Chrome|Chromium|Edg\//.test(ua);
+          var srcs = webkit
+            ? [['assets/hero.hevc.mp4?v=1', 'video/mp4; codecs=hvc1'],
+               ['assets/hero.mp4?v=6', 'video/mp4']]
+            : [['assets/hero.webm?v=6', 'video/webm'],
+               ['assets/hero.mp4?v=6', 'video/mp4']];
+          srcs.forEach(function (s) {
+            var el = document.createElement('source');
+            el.src = assetURL(s[0]);
+            el.type = s[1];
+            v.appendChild(el);
+          });
+          v.load();
+        })();
+      </script>
+
+      <div class="hero-grid">
+        <div class="hero-main">
+          <h1>Optimal Steps for Fast Diffeomorphic Shape Registration</h1>
+          <p class="authors">
+            <strong>Hadrien Bigo-Balland</strong><sup>1</sup>,
+            <a href="https://scholar.google.com/citations?user=oGQn_xMAAAAJ" target="_blank" rel="noopener">Tom
+              Boeken</a><sup>1,2</sup>,
+            <a href="https://www.jeanfeydy.com/" target="_blank" rel="noopener">Jean Feydy</a><sup>1</sup>
+          </p>
+          <p class="affil">
+            <sup>1</sup> Inria, Université Paris Cité, Inserm, HeKA, Paris &nbsp;&nbsp;
+            <sup>2</sup> Hôpital Européen Georges Pompidou, AP-HP, Paris
+          </p>
+        </div>
+      </div>
+
+      <!-- Direct child of the section, so the bottom band is the logos and the
+           loop is free to run over them. -->
+      <div class="logos" id="logos"></div>
+    </section>
+
+    <!-- -------------------------------------------------------- contents -- -->
+
+    <!-- The contents list, as a screen of its own.
+         On a wide window this section has no box at all -- `display: contents`
+         -- and #rail is position:fixed, so it goes on being the rail down the
+         left margin, unfolded on the hero and folded elsewhere, exactly as
+         before. Nothing about the wide layout changes.
+         On a phone there is no margin to put a rail in, so the list becomes
+         what it is: a page of its own, second, right after the title. That is
+         also what gives the hero its screen back -- with the list out of it the
+         logos come up to the bottom of the first screen instead of being pushed
+         a hundred and sixty pixels past it. -->
+    <section class="screen contents-screen" id="contents" data-title="Contents">
+      <nav id="rail" aria-label="Section navigation" data-expanded="true"></nav>
+    </section>
+
+    <!-- ---------------------------------------------------------- 2 method -->
+    <section class="screen" id="method" data-title="Method">
+      <p class="method-text">
+        Deep learning performs well on registration tasks, with fast inference. But three constraints
+        limit its use in clinical studies: it requires a training corpus, which small clinical cohorts
+        rarely provide; its accuracy degrades on anatomical variations absent from the training set; and
+        each new anatomy carries a substantial retraining cost. Optimization-based methods are free of
+        all three, but they remain substantially slower. That is the gap we address, with ideas drawn
+        from <a href="#cite">the computer vision literature</a>: a learning-free registration model that
+        is diffeomorphic and roughly forty times faster than the geometric state of the art. The code
+        will ship in scikit-shapes under an MIT licence.
+      </p>
+    </section>
+
+    <!-- ----------------------------------------------------------- 3 steps -->
+    <section class="screen viewer-screen" id="steps" data-title="The 16 steps">
+      <div class="steps-layout">
+        <div class="stage" id="vertebra-stage"></div>
+        <div class="spine-selector" id="spine-selector">
+          <div class="spine-label mono" id="spine-label"></div>
+        </div>
+      </div>
+
+      <div class="viewer-controls">
+        <button class="linkish" id="kernel-toggle" aria-pressed="false">Show the kernel under the mouse pointer</button>
+        <button class="linkish" id="feature-toggle" aria-pressed="false">Colour by the features</button>
+        <button class="linkish" id="feature-mode" hidden></button>
+        <span class="mono" id="kernel-radius"></span>
+      </div>
+
+      <div class="timeline" id="timeline">
+        <button class="play linkish" id="timeline-play" aria-label="Play the registration">Play</button>
+        <div class="filmstrip" id="timeline-ticks" role="slider" aria-label="Registration step" aria-valuemin="0"
+          aria-valuemax="16" aria-valuenow="0" tabindex="0"></div>
+      </div>
+    </section>
+
+    <!-- --------------------------------------------------------- 4 metrics -->
+    <section class="screen" id="metrics" data-title="Results">
+      <div class="table-wrap">
+        <table class="metrics" id="metrics-table"></table>
+      </div>
+      <p class="caption table-caption">
+        <b>Table 1.</b> Quantitative comparison on 757 vertebrae from the VerSe dataset. Our method achieves
+        the highest surface alignment accuracy and preserves topological structure, without requiring access
+        to a training dataset or the related computational overhead.
+      </p>
+    </section>
+
+    <!-- ----------------------------------------------------------- 5 atlas -->
+    <section class="screen viewer-screen" id="atlas" data-title="Atlas">
+      <div class="stage stage-wide" id="atlas-stage">
+        <div class="hover-label mono" id="atlas-label" hidden></div>
+      </div>
+      <p class="figure-note">
+        Being fast changes what is feasible. Computing an
+        <span class="term" tabindex="0">atlas<span class="term-def" role="tooltip">A mean shape: the geometry
+            that minimises the total deformation needed to reach every subject in the population.</span></span>
+        from 978 vertebrae took 17 minutes on a single workstation.
+      </p>
+    </section>
+
+    <!-- ----------------------------------------------------------- 6 lungs -->
+    <section class="screen viewer-screen" id="lungs" data-title="Lungs">
+      <div class="stage stage-wide" id="lungs-stage"></div>
+      <p class="figure-note">
+        The same pipeline, unchanged, on intra-patient lung vascular trees: inspiration registered to
+        expiration. Out of the box, with no tuning and 20 seconds per pair, it reaches a mean landmark
+        error of 3.08 mm, against 2 mm for the state of the art.
+      </p>
+      <div class="slider-row">
+        <label class="mono" for="lungs-slider">source</label>
+        <input type="range" id="lungs-slider" min="0" max="1000" value="1000">
+        <label class="mono" for="lungs-slider">registered</label>
+      </div>
+    </section>
+
+    <!-- ------------------------------------------------------------ 7 cite -->
+    <section class="screen" id="cite" data-title="References &amp; contact">
+      <div class="cite-grid">
+        <div>
+          <h3 class="first">Cite this work</h3>
+          <pre class="bibtex mono" id="bibtex"></pre>
+          <button class="linkish" id="copy-bibtex">Copy BibTeX</button>
+
+          <h3>Code</h3>
+          <p>
+            The method ships in
+            <a href="https://scikit-shapes.github.io" target="_blank" rel="noopener">scikit-shapes</a>,
+            our open-source library for shape analysis &mdash; point clouds, curves and surface meshes,
+            under the MIT license.
+          </p>
+
+          <h3>Contact</h3>
+          <p>
+            <a href="mailto:hadrien.bigo-balland@inria.fr">hadrien.bigo-balland@inria.fr</a><br>
+            <a href="../index.html">hadrienbigoballand.com</a>
+          </p>
+        </div>
+
+        <div>
+          <h3 class="first">Main references</h3>
+          <ol class="refs" id="refs"></ol>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- The end of the page needs a snap point of its own.
+         Every screen is aligned `start`, which is the only anchor a screen has
+         -- and the last one is taller than the window, so its start sits 783 px
+         ABOVE the bottom of the document. Under mandatory snapping that made
+         the true bottom an invalid resting place: flinging to the end of the
+         page threw you back to the top of the references, and the BibTeX and
+         the contact line could not be reached that way at all. Measured on
+         WebKit: a hard scroll to the end landed on 4746 of a possible 5529.
+         A zero-height area aligned `end` gives the bottom a legal position.
+         With it, the same scroll lands on 5529. -->
+    <div id="snap-end" aria-hidden="true"></div>
+  </main>
+
+  <noscript>
+    <style>
+      .stage {
+        display: none
+      }
+    </style>
+  </noscript>
+
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://unpkg.com/three@0.170.0/build/three.module.js",
+        "three/addons/": "https://unpkg.com/three@0.170.0/examples/jsm/"
+      }
+    }
+  </script>
+  <script type="module" src="js/paper.js?v=30"></script>
+</body>
+
+</html>

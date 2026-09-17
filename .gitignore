@@ -1,0 +1,17 @@
+# macOS
+.DS_Store
+
+# Heavy MICCAI 2026 binaries: published as assets of the GitHub release
+# miccai-2026-assets-v1 and fetched from there (see miccai-2026/js/asset-base.js).
+# They stay on disk for local development, they are just never committed.
+miccai-2026/data/**/*.bin
+miccai-2026/assets/*.exr
+miccai-2026/assets/*.mp4
+miccai-2026/assets/*.webm
+
+# Local render backups, not part of the site
+miccai-2026/assets_backup/
+miccai-2026/assets_cycles_backup/
+
+# Editor / tooling
+.claude/

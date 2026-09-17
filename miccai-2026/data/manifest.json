@@ -1,0 +1,5141 @@
+{
+ "generatedBy": "web_export/export_web.py",
+ "generatedAt": "2026-09-14T15:33:03",
+ "source": "results/video_data_template3_noscale",
+ "realLabel": 3,
+ "nSteps": 16,
+ "progressProfile": [
+  0.0,
+  0.131361,
+  0.218839,
+  0.31294,
+  0.416297,
+  0.482366,
+  0.553733,
+  0.608331,
+  0.677619,
+  0.740849,
+  0.787844,
+  0.839774,
+  0.892792,
+  0.916917,
+  0.947859,
+  0.977649,
+  1.0
+ ],
+ "steps": [
+  {
+   "global_iter": 0,
+   "scale_idx": 0,
+   "outer_idx": 0,
+   "kernel_radius_r": 10.0,
+   "cg_iterations": 4,
+   "cg_residual_rms_final": 0.7097291350364685,
+   "shoot_n_steps": 3,
+   "n_flipped_shooting": 0,
+   "n_flipped_plus_u": 3162,
+   "mean_u_norm": 1.3059948682785034,
+   "sampling_length_ell_mm": 0.7204621219127445
+  },
+  {
+   "global_iter": 1,
+   "scale_idx": 0,
+   "outer_idx": 1,
+   "kernel_radius_r": 10.0,
+   "cg_iterations": 3,
+   "cg_residual_rms_final": 0.794564425945282,
+   "shoot_n_steps": 2,
+   "n_flipped_shooting": 0,
+   "n_flipped_plus_u": 2987,
+   "mean_u_norm": 1.0827306509017944,
+   "sampling_length_ell_mm": 0.7204621219127445
+  },
+  {
+   "global_iter": 2,
+   "scale_idx": 0,
+   "outer_idx": 2,
+   "kernel_radius_r": 10.0,
+   "cg_iterations": 3,
+   "cg_residual_rms_final": 0.7094533443450928,
+   "shoot_n_steps": 2,
+   "n_flipped_shooting": 0,
+   "n_flipped_plus_u": 2893,
+   "mean_u_norm": 0.9635263681411743,
+   "sampling_length_ell_mm": 0.7204621219127445
+  },
+  {
+   "global_iter": 3,
+   "scale_idx": 0,
+   "outer_idx": 3,
+   "kernel_radius_r": 10.0,
+   "cg_iterations": 2,
+   "cg_residual_rms_final": 0.9797992706298828,
+   "shoot_n_steps": 3,
+   "n_flipped_shooting": 0,
+   "n_flipped_plus_u": 2829,
+   "mean_u_norm": 0.8647794723510742,
+   "sampling_length_ell_mm": 0.7204621219127445
+  },
+  {
+   "global_iter": 4,
+   "scale_idx": 1,
+   "outer_idx": 0,
+   "kernel_radius_r": 7.368062997280774,
+   "cg_iterations": 4,
+   "cg_residual_rms_final": 0.6561073064804077,
+   "shoot_n_steps": 2,
+   "n_flipped_shooting": 0,
+   "n_flipped_plus_u": 3278,
+   "mean_u_norm": 1.2951213121414185,
+   "sampling_length_ell_mm": 0.7204621219127445
+  },
+  {
+   "global_iter": 5,
+   "scale_idx": 1,
+   "outer_idx": 1,
+   "kernel_radius_r": 7.368062997280774,
+   "cg_iterations": 3,
+   "cg_residual_rms_final": 0.59766685962677,
+   "shoot_n_steps": 2,
+   "n_flipped_shooting": 0,
+   "n_flipped_plus_u": 3246,
+   "mean_u_norm": 1.2654067277908325,
+   "sampling_length_ell_mm": 0.7204621219127445
+  },
+  {
+   "global_iter": 6,
+   "scale_idx": 1,
+   "outer_idx": 2,
+   "kernel_radius_r": 7.368062997280774,
+   "cg_iterations": 3,
+   "cg_residual_rms_final": 0.5648871064186096,
+   "shoot_n_steps": 2,
+   "n_flipped_shooting": 0,
+   "n_flipped_plus_u": 3205,
+   "mean_u_norm": 1.2222131490707397,
+   "sampling_length_ell_mm": 0.7204621219127445
+  },
+  {
+   "global_iter": 7,
+   "scale_idx": 1,
+   "outer_idx": 3,
+   "kernel_radius_r": 7.368062997280774,
+   "cg_iterations": 2,
+   "cg_residual_rms_final": 0.7087239623069763,
+   "shoot_n_steps": 2,
+   "n_flipped_shooting": 0,
+   "n_flipped_plus_u": 3228,
+   "mean_u_norm": 1.2065000534057617,
+   "sampling_length_ell_mm": 0.7204621219127445
+  },
+  {
+   "global_iter": 8,
+   "scale_idx": 2,
+   "outer_idx": 0,
+   "kernel_radius_r": 5.428835233189814,
+   "cg_iterations": 5,
+   "cg_residual_rms_final": 0.48611554503440857,
+   "shoot_n_steps": 3,
+   "n_flipped_shooting": 0,
+   "n_flipped_plus_u": 1602,
+   "mean_u_norm": 0.7607126235961914,
+   "sampling_length_ell_mm": 0.7204621219127445
+  },
+  {
+   "global_iter": 9,
+   "scale_idx": 2,
+   "outer_idx": 1,
+   "kernel_radius_r": 5.428835233189814,
+   "cg_iterations": 3,
+   "cg_residual_rms_final": 0.5230317115783691,
+   "shoot_n_steps": 2,
+   "n_flipped_shooting": 0,
+   "n_flipped_plus_u": 1470,
+   "mean_u_norm": 0.6517969369888306,
+   "sampling_length_ell_mm": 0.7204621219127445
+  },
+  {
+   "global_iter": 10,
+   "scale_idx": 2,
+   "outer_idx": 2,
+   "kernel_radius_r": 5.428835233189814,
+   "cg_iterations": 3,
+   "cg_residual_rms_final": 0.42686691880226135,
+   "shoot_n_steps": 2,
+   "n_flipped_shooting": 0,
+   "n_flipped_plus_u": 1419,
+   "mean_u_norm": 0.6111226677894592,
+   "sampling_length_ell_mm": 0.7204621219127445
+  },
+  {
+   "global_iter": 11,
+   "scale_idx": 2,
+   "outer_idx": 3,
+   "kernel_radius_r": 5.428835233189814,
+   "cg_iterations": 2,
+   "cg_residual_rms_final": 0.5183604955673218,
+   "shoot_n_steps": 2,
+   "n_flipped_shooting": 0,
+   "n_flipped_plus_u": 1388,
+   "mean_u_norm": 0.578624427318573,
+   "sampling_length_ell_mm": 0.7204621219127445
+  },
+  {
+   "global_iter": 12,
+   "scale_idx": 3,
+   "outer_idx": 0,
+   "kernel_radius_r": 4.0,
+   "cg_iterations": 4,
+   "cg_residual_rms_final": 0.22038859128952026,
+   "shoot_n_steps": 1,
+   "n_flipped_shooting": 0,
+   "n_flipped_plus_u": 1407,
+   "mean_u_norm": 0.5348244905471802,
+   "sampling_length_ell_mm": 0.7204621219127445
+  },
+  {
+   "global_iter": 13,
+   "scale_idx": 3,
+   "outer_idx": 1,
+   "kernel_radius_r": 4.0,
+   "cg_iterations": 1,
+   "cg_residual_rms_final": 0.366048127412796,
+   "shoot_n_steps": 1,
+   "n_flipped_shooting": 0,
+   "n_flipped_plus_u": 1400,
+   "mean_u_norm": 0.5117061734199524,
+   "sampling_length_ell_mm": 0.7204621219127445
+  },
+  {
+   "global_iter": 14,
+   "scale_idx": 3,
+   "outer_idx": 2,
+   "kernel_radius_r": 4.0,
+   "cg_iterations": 1,
+   "cg_residual_rms_final": 0.37335899472236633,
+   "shoot_n_steps": 1,
+   "n_flipped_shooting": 0,
+   "n_flipped_plus_u": 1392,
+   "mean_u_norm": 0.5052470564842224,
+   "sampling_length_ell_mm": 0.7204621219127445
+  },
+  {
+   "global_iter": 15,
+   "scale_idx": 3,
+   "outer_idx": 3,
+   "kernel_radius_r": 4.0,
+   "cg_iterations": 3,
+   "cg_residual_rms_final": 0.1967153400182724,
+   "shoot_n_steps": 1,
+   "n_flipped_shooting": 0,
+   "n_flipped_plus_u": 1343,
+   "mean_u_norm": 0.47537779808044434,
+   "sampling_length_ell_mm": 0.7204621219127445
+  }
+ ],
+ "aoBake": {
+  "directions": 128,
+  "resolution": 384
+ },
+ "vertebrae": [
+  {
+   "label": 1,
+   "name": "C1",
+   "mode": "lerp",
+   "placeholder": true,
+   "nVerts": 9999,
+   "nFaces": 20006,
+   "nStates": 2,
+   "target": {
+    "nVerts": 9998,
+    "nFaces": 20000
+   },
+   "bboxMin": [
+    29.7006,
+    20.5069,
+    165.4601
+   ],
+   "bboxSize": [
+    82.7731,
+    49.6129,
+    24.3525
+   ],
+   "buffers": {
+    "faces": {
+     "offset": 0,
+     "count": 60018,
+     "type": "uint16"
+    },
+    "positions": {
+     "offset": 120036,
+     "count": 59994,
+     "type": "uint16"
+    },
+    "ao": {
+     "offset": 240024,
+     "count": 19998,
+     "type": "uint8"
+    },
+    "targetFaces": {
+     "offset": 260022,
+     "count": 60000,
+     "type": "uint16"
+    },
+    "targetPositions": {
+     "offset": 380022,
+     "count": 29994,
+     "type": "uint16"
+    },
+    "targetAo": {
+     "offset": 440010,
+     "count": 9998,
+     "type": "uint8"
+    },
+    "fpfhColor": {
+     "offset": 450008,
+     "count": 29997,
+     "type": "uint8"
+    },
+    "targetFpfhColor": {
+     "offset": 480005,
+     "count": 29994,
+     "type": "uint8"
+    },
+    "bothPart": {
+     "offset": 510000,
+     "count": 29997,
+     "type": "float32"
+    },
+    "targetBothPart": {
+     "offset": 629988,
+     "count": 29994,
+     "type": "float32"
+    }
+   },
+   "file": "vertebrae/C1.bin",
+   "hasFeatures": true,
+   "featureFit": {
+    "xyz": {
+     "mu": [
+      71.65710332,
+      41.8542232,
+      176.63381348
+     ],
+     "comps": [
+      [
+       0.99910364,
+       0.02319894,
+       0.03540806
+      ],
+      [
+       -0.01870146,
+       0.99229892,
+       -0.12244632
+      ],
+      [
+       -0.03797601,
+       0.12167438,
+       0.99184332
+      ]
+     ],
+     "lo": [
+      -42.02864265,
+      -21.0195029,
+      -10.62782206
+     ],
+     "hi": [
+      40.72634661,
+      28.51962743,
+      10.73692033
+     ]
+    },
+    "both": {
+     "muPos": [
+      71.65710332,
+      41.8542232,
+      176.63381348
+     ],
+     "muNrm": [
+      0.03113497,
+      0.06756385,
+      0.09171745
+     ],
+     "compsPos": [
+      [
+       0.99854966,
+       0.02263623,
+       0.03547215
+      ],
+      [
+       -0.01578672,
+       0.97394739,
+       -0.11839682
+      ],
+      [
+       -0.01893201,
+       0.13205675,
+       -0.03790358
+      ]
+     ],
+     "compsNrm": [
+      [
+       0.02328025,
+       -0.00027909,
+       0.00032178
+      ],
+      [
+       3.668e-05,
+       0.07087268,
+       -0.00543823
+      ],
+      [
+       0.00390564,
+       -0.0210933,
+       -0.01069396
+      ]
+     ],
+     "lo": [
+      -42.56355902,
+      -20.75248671,
+      -17.93329635
+     ],
+     "hi": [
+      40.56315086,
+      30.41765724,
+      19.57739779
+     ],
+     "wn": 4.884393836522605
+    }
+   },
+   "bytes": 749964
+  },
+  {
+   "label": 2,
+   "name": "C2",
+   "mode": "lerp",
+   "placeholder": true,
+   "nVerts": 10001,
+   "nFaces": 20010,
+   "nStates": 2,
+   "target": {
+    "nVerts": 9998,
+    "nFaces": 20000
+   },
+   "bboxMin": [
+    42.5704,
+    24.7636,
+    146.5041
+   ],
+   "bboxSize": [
+    58.9627,
+    51.0072,
+    40.3702
+   ],
+   "buffers": {
+    "faces": {
+     "offset": 0,
+     "count": 60030,
+     "type": "uint16"
+    },
+    "positions": {
+     "offset": 120060,
+     "count": 60006,
+     "type": "uint16"
+    },
+    "ao": {
+     "offset": 240072,
+     "count": 20002,
+     "type": "uint8"
+    },
+    "targetFaces": {
+     "offset": 260074,
+     "count": 60000,
+     "type": "uint16"
+    },
+    "targetPositions": {
+     "offset": 380074,
+     "count": 29994,
+     "type": "uint16"
+    },
+    "targetAo": {
+     "offset": 440062,
+     "count": 9998,
+     "type": "uint8"
+    },
+    "fpfhColor": {
+     "offset": 450060,
+     "count": 30003,
+     "type": "uint8"
+    },
+    "targetFpfhColor": {
+     "offset": 480063,
+     "count": 29994,
+     "type": "uint8"
+    },
+    "bothPart": {
+     "offset": 510060,
+     "count": 30003,
+     "type": "float32"
+    },
+    "targetBothPart": {
+     "offset": 630072,
+     "count": 29994,
+     "type": "float32"
+    }
+   },
+   "file": "vertebrae/C2.bin",
+   "hasFeatures": true,
+   "featureFit": {
+    "xyz": {
+     "mu": [
+      72.91622887,
+      44.62565647,
+      160.17878426
+     ],
+     "comps": [
+      [
+       0.99989681,
+       -0.01319724,
+       -0.00567435
+      ],
+      [
+       0.01015024,
+       0.92856698,
+       -0.37102606
+      ],
+      [
+       0.01016553,
+       0.37093018,
+       0.92860512
+      ]
+     ],
+     "lo": [
+      -30.28896261,
+      -22.89513402,
+      -17.65221636
+     ],
+     "hi": [
+      28.74316961,
+      33.3572578,
+      21.1345596
+     ]
+    },
+    "both": {
+     "muPos": [
+      72.91622887,
+      44.62565647,
+      160.17878426
+     ],
+     "muNrm": [
+      -0.00043744,
+      0.06453678,
+      -0.0274437
+     ],
+     "compsPos": [
+      [
+       0.99748147,
+       -0.01512096,
+       -0.0039839
+      ],
+      [
+       0.01291538,
+       0.91976919,
+       -0.37302392
+      ],
+      [
+       0.02050703,
+       -0.08084998,
+       -0.23492045
+      ]
+     ],
+     "compsNrm": [
+      [
+       0.06040962,
+       -0.0002275,
+       0.00239589
+      ],
+      [
+       0.0002902,
+       0.05419497,
+       -0.02633257
+      ],
+      [
+       0.00156351,
+       -0.02248929,
+       -0.10084555
+      ]
+     ],
+     "lo": [
+      -30.75718257,
+      -24.00316383,
+      -16.49220736
+     ],
+     "hi": [
+      28.62285589,
+      33.48113462,
+      19.19280265
+     ],
+     "wn": 4.282243345816387
+    }
+   },
+   "bytes": 750048
+  },
+  {
+   "label": 3,
+   "name": "C3",
+   "mode": "steps",
+   "placeholder": false,
+   "nVerts": 10000,
+   "nFaces": 20008,
+   "nStates": 17,
+   "target": {
+    "nVerts": 9998,
+    "nFaces": 20000
+   },
+   "bboxMin": [
+    35.2171,
+    39.1051,
+    68.1267
+   ],
+   "bboxSize": [
+    66.474,
+    64.3619,
+    28.0836
+   ],
+   "buffers": {
+    "faces": {
+     "offset": 0,
+     "count": 60024,
+     "type": "uint16"
+    },
+    "positions": {
+     "offset": 120048,
+     "count": 510000,
+     "type": "uint16"
+    },
+    "ao": {
+     "offset": 1140048,
+     "count": 170000,
+     "type": "uint8"
+    },
+    "targetFaces": {
+     "offset": 1310048,
+     "count": 60000,
+     "type": "uint16"
+    },
+    "targetPositions": {
+     "offset": 1430048,
+     "count": 29994,
+     "type": "uint16"
+    },
+    "targetAo": {
+     "offset": 1490036,
+     "count": 9998,
+     "type": "uint8"
+    },
+    "fpfhColor": {
+     "offset": 1500034,
+     "count": 30000,
+     "type": "uint8"
+    },
+    "targetFpfhColor": {
+     "offset": 1530034,
+     "count": 29994,
+     "type": "uint8"
+    },
+    "bothPart": {
+     "offset": 1560028,
+     "count": 30000,
+     "type": "float32"
+    },
+    "targetBothPart": {
+     "offset": 1680028,
+     "count": 29994,
+     "type": "float32"
+    }
+   },
+   "file": "vertebrae/C3.bin",
+   "hasFeatures": true,
+   "featureFit": {
+    "xyz": {
+     "mu": [
+      68.94656186,
+      62.17846078,
+      82.60596147
+     ],
+     "comps": [
+      [
+       0.99824289,
+       -0.05341936,
+       -0.02564169
+      ],
+      [
+       0.05523183,
+       0.99556656,
+       0.07613589
+      ],
+      [
+       0.02146088,
+       -0.07741835,
+       0.99676769
+      ]
+     ],
+     "lo": [
+      -33.03308217,
+      -22.80851486,
+      -12.94179787
+     ],
+     "hi": [
+      32.98820012,
+      41.36254664,
+      13.03515163
+     ]
+    },
+    "both": {
+     "muPos": [
+      68.94656186,
+      62.17846078,
+      82.60596147
+     ],
+     "muNrm": [
+      0.01078482,
+      -0.0191171,
+      -0.01018199
+     ],
+     "compsPos": [
+      [
+       0.99685035,
+       -0.05563503,
+       -0.02534009
+      ],
+      [
+       0.05792022,
+       0.98870143,
+       0.07354776
+      ],
+      [
+       -0.00129018,
+       0.04894553,
+       -0.10956412
+      ]
+     ],
+     "compsNrm": [
+      [
+       0.04493453,
+       0.00074573,
+       0.00309084
+      ],
+      [
+       0.00377988,
+       0.05360018,
+       -0.00971857
+      ],
+      [
+       -0.00066797,
+       -0.00094814,
+       -0.02433473
+      ]
+     ],
+     "lo": [
+      -33.15464908,
+      -22.47461902,
+      -17.88388112
+     ],
+     "hi": [
+      33.12216224,
+      42.16766724,
+      14.21450759
+     ],
+     "wn": 4.124988960061145
+    }
+   },
+   "bytes": 1800004
+  },
+  {
+   "label": 4,
+   "name": "C4",
+   "mode": "lerp",
+   "placeholder": true,
+   "nVerts": 10000,
+   "nFaces": 20008,
+   "nStates": 2,
+   "target": {
+    "nVerts": 9996,
+    "nFaces": 20000
+   },
+   "bboxMin": [
+    45.2928,
+    30.4208,
+    113.947
+   ],
+   "bboxSize": [
+    57.0902,
+    47.4162,
+    26.888
+   ],
+   "buffers": {
+    "faces": {
+     "offset": 0,
+     "count": 60024,
+     "type": "uint16"
+    },
+    "positions": {
+     "offset": 120048,
+     "count": 60000,
+     "type": "uint16"
+    },
+    "ao": {
+     "offset": 240048,
+     "count": 20000,
+     "type": "uint8"
+    },
+    "targetFaces": {
+     "offset": 260048,
+     "count": 60000,
+     "type": "uint16"
+    },
+    "targetPositions": {
+     "offset": 380048,
+     "count": 29988,
+     "type": "uint16"
+    },
+    "targetAo": {
+     "offset": 440024,
+     "count": 9996,
+     "type": "uint8"
+    },
+    "fpfhColor": {
+     "offset": 450020,
+     "count": 30000,
+     "type": "uint8"
+    },
+    "targetFpfhColor": {
+     "offset": 480020,
+     "count": 29988,
+     "type": "uint8"
+    },
+    "bothPart": {
+     "offset": 510008,
+     "count": 30000,
+     "type": "float32"
+    },
+    "targetBothPart": {
+     "offset": 630008,
+     "count": 29988,
+     "type": "float32"
+    }
+   },
+   "file": "vertebrae/C4.bin",
+   "hasFeatures": true,
+   "featureFit": {
+    "xyz": {
+     "mu": [
+      74.40860462,
+      49.75964114,
+      127.60794947
+     ],
+     "comps": [
+      [
+       0.99836336,
+       -0.05713299,
+       -0.00253581
+      ],
+      [
+       0.05525747,
+       0.97511844,
+       -0.2146873
+      ],
+      [
+       0.01473844,
+       0.21419581,
+       0.97667955
+      ]
+     ],
+     "lo": [
+      -28.83178348,
+      -18.66585764,
+      -16.4380614
+     ],
+     "hi": [
+      28.47325788,
+      30.01260105,
+      12.37375098
+     ]
+    },
+    "both": {
+     "muPos": [
+      74.40860462,
+      49.75964114,
+      127.60794947
+     ],
+     "muNrm": [
+      -0.01130535,
+      -0.01865739,
+      0.03668348
+     ],
+     "compsPos": [
+      [
+       0.9971968,
+       -0.05963921,
+       -0.00197536
+      ],
+      [
+       0.06127373,
+       0.94946043,
+       -0.20893487
+      ],
+      [
+       -0.01108417,
+       0.16812261,
+       -0.08635522
+      ]
+     ],
+     "compsNrm": [
+      [
+       0.03560604,
+       -0.00307937,
+       -0.00028802
+      ],
+      [
+       0.00307721,
+       0.06444779,
+       -0.01624295
+      ],
+      [
+       0.00175254,
+       0.00683638,
+       -0.02320823
+      ]
+     ],
+     "lo": [
+      -28.61826211,
+      -19.88333945,
+      -15.75358566
+     ],
+     "hi": [
+      28.90540771,
+      29.18020469,
+      18.25271748
+     ],
+     "wn": 3.7875551172693296
+    }
+   },
+   "bytes": 749960
+  },
+  {
+   "label": 5,
+   "name": "C5",
+   "mode": "lerp",
+   "placeholder": true,
+   "nVerts": 10001,
+   "nFaces": 20010,
+   "nStates": 2,
+   "target": {
+    "nVerts": 9996,
+    "nFaces": 20000
+   },
+   "bboxMin": [
+    43.0083,
+    32.4374,
+    98.0438
+   ],
+   "bboxSize": [
+    57.9804,
+    54.4692,
+    27.8972
+   ],
+   "buffers": {
+    "faces": {
+     "offset": 0,
+     "count": 60030,
+     "type": "uint16"
+    },
+    "positions": {
+     "offset": 120060,
+     "count": 60006,
+     "type": "uint16"
+    },
+    "ao": {
+     "offset": 240072,
+     "count": 20002,
+     "type": "uint8"
+    },
+    "targetFaces": {
+     "offset": 260074,
+     "count": 60000,
+     "type": "uint16"
+    },
+    "targetPositions": {
+     "offset": 380074,
+     "count": 29988,
+     "type": "uint16"
+    },
+    "targetAo": {
+     "offset": 440050,
+     "count": 9996,
+     "type": "uint8"
+    },
+    "fpfhColor": {
+     "offset": 450046,
+     "count": 30003,
+     "type": "uint8"
+    },
+    "targetFpfhColor": {
+     "offset": 480049,
+     "count": 29988,
+     "type": "uint8"
+    },
+    "bothPart": {
+     "offset": 510040,
+     "count": 30003,
+     "type": "float32"
+    },
+    "targetBothPart": {
+     "offset": 630052,
+     "count": 29988,
+     "type": "float32"
+    }
+   },
+   "file": "vertebrae/C5.bin",
+   "hasFeatures": true,
+   "featureFit": {
+    "xyz": {
+     "mu": [
+      72.37220803,
+      54.12465756,
+      111.55569299
+     ],
+     "comps": [
+      [
+       0.99824729,
+       -0.03525761,
+       -0.04753166
+      ],
+      [
+       0.03018459,
+       0.99416952,
+       -0.10351737
+      ],
+      [
+       0.0509043,
+       0.10190121,
+       0.99349127
+      ]
+     ],
+     "lo": [
+      -29.08901288,
+      -21.96465843,
+      -15.53388064
+     ],
+     "hi": [
+      28.96702944,
+      33.70011369,
+      13.30890873
+     ]
+    },
+    "both": {
+     "muPos": [
+      72.37220803,
+      54.12465756,
+      111.55569299
+     ],
+     "muNrm": [
+      0.01189837,
+      0.00678898,
+      0.03718612
+     ],
+     "compsPos": [
+      [
+       0.99735995,
+       -0.03588715,
+       -0.04746036
+      ],
+      [
+       0.03141247,
+       0.98302721,
+       -0.10116187
+      ],
+      [
+       -0.01286194,
+       0.05517222,
+       -0.17179929
+      ]
+     ],
+     "compsNrm": [
+      [
+       0.04036932,
+       -0.00117744,
+       -0.00078968
+      ],
+      [
+       0.00210479,
+       0.06247196,
+       -0.00939302
+      ],
+      [
+       -0.00775719,
+       -0.0008047,
+       -0.04286979
+      ]
+     ],
+     "lo": [
+      -29.10107385,
+      -23.13561048,
+      -14.88982184
+     ],
+     "hi": [
+      29.22631312,
+      33.05867338,
+      17.29859037
+     ],
+     "wn": 3.950995930068644
+    }
+   },
+   "bytes": 750004
+  },
+  {
+   "label": 6,
+   "name": "C6",
+   "mode": "lerp",
+   "placeholder": true,
+   "nVerts": 9997,
+   "nFaces": 20002,
+   "nStates": 2,
+   "target": {
+    "nVerts": 9996,
+    "nFaces": 20000
+   },
+   "bboxMin": [
+    41.6101,
+    35.4064,
+    83.8509
+   ],
+   "bboxSize": [
+    57.983,
+    59.1525,
+    27.2339
+   ],
+   "buffers": {
+    "faces": {
+     "offset": 0,
+     "count": 60006,
+     "type": "uint16"
+    },
+    "positions": {
+     "offset": 120012,
+     "count": 59982,
+     "type": "uint16"
+    },
+    "ao": {
+     "offset": 239976,
+     "count": 19994,
+     "type": "uint8"
+    },
+    "targetFaces": {
+     "offset": 259970,
+     "count": 60000,
+     "type": "uint16"
+    },
+    "targetPositions": {
+     "offset": 379970,
+     "count": 29988,
+     "type": "uint16"
+    },
+    "targetAo": {
+     "offset": 439946,
+     "count": 9996,
+     "type": "uint8"
+    },
+    "fpfhColor": {
+     "offset": 449942,
+     "count": 29991,
+     "type": "uint8"
+    },
+    "targetFpfhColor": {
+     "offset": 479933,
+     "count": 29988,
+     "type": "uint8"
+    },
+    "bothPart": {
+     "offset": 509924,
+     "count": 29991,
+     "type": "float32"
+    },
+    "targetBothPart": {
+     "offset": 629888,
+     "count": 29988,
+     "type": "float32"
+    }
+   },
+   "file": "vertebrae/C6.bin",
+   "hasFeatures": true,
+   "featureFit": {
+    "xyz": {
+     "mu": [
+      70.92324576,
+      56.61233789,
+      96.63980321
+     ],
+     "comps": [
+      [
+       0.99511453,
+       -0.08114494,
+       -0.05623671
+      ],
+      [
+       0.08229992,
+       0.99643529,
+       0.01853177
+      ],
+      [
+       0.05453248,
+       -0.02306951,
+       0.99824546
+      ]
+     ],
+     "lo": [
+      -28.89698409,
+      -20.72098872,
+      -12.28978215
+     ],
+     "hi": [
+      29.10023508,
+      37.61409482,
+      13.3274213
+     ]
+    },
+    "both": {
+     "muPos": [
+      70.92324576,
+      56.61233789,
+      96.63980321
+     ],
+     "muNrm": [
+      -0.01282805,
+      -0.02780272,
+      -0.02113078
+     ],
+     "compsPos": [
+      [
+       0.99385272,
+       -0.08332372,
+       -0.05606543
+      ],
+      [
+       0.0842541,
+       0.97807621,
+       0.01698454
+      ],
+      [
+       0.00311688,
+       0.06683495,
+       0.00737151
+      ]
+     ],
+     "compsNrm": [
+      [
+       0.04267273,
+       -0.00256708,
+       -0.0027286
+      ],
+      [
+       0.00488267,
+       0.05505159,
+       0.00125128
+      ],
+      [
+       1.455e-05,
+       0.01936407,
+       -0.0095142
+      ]
+     ],
+     "lo": [
+      -29.01313988,
+      -21.26721192,
+      -16.6219164
+     ],
+     "hi": [
+      29.32191926,
+      37.20650167,
+      16.34784145
+     ],
+     "wn": 4.1809808096561225
+    }
+   },
+   "bytes": 749840
+  },
+  {
+   "label": 7,
+   "name": "C7",
+   "mode": "lerp",
+   "placeholder": true,
+   "nVerts": 10000,
+   "nFaces": 20008,
+   "nStates": 2,
+   "target": {
+    "nVerts": 9998,
+    "nFaces": 20000
+   },
+   "bboxMin": [
+    35.3148,
+    39.5202,
+    68.1563
+   ],
+   "bboxSize": [
+    66.5717,
+    64.7103,
+    28.4988
+   ],
+   "buffers": {
+    "faces": {
+     "offset": 0,
+     "count": 60024,
+     "type": "uint16"
+    },
+    "positions": {
+     "offset": 120048,
+     "count": 60000,
+     "type": "uint16"
+    },
+    "ao": {
+     "offset": 240048,
+     "count": 20000,
+     "type": "uint8"
+    },
+    "targetFaces": {
+     "offset": 260048,
+     "count": 60000,
+     "type": "uint16"
+    },
+    "targetPositions": {
+     "offset": 380048,
+     "count": 29994,
+     "type": "uint16"
+    },
+    "targetAo": {
+     "offset": 440036,
+     "count": 9998,
+     "type": "uint8"
+    },
+    "fpfhColor": {
+     "offset": 450034,
+     "count": 30000,
+     "type": "uint8"
+    },
+    "targetFpfhColor": {
+     "offset": 480034,
+     "count": 29994,
+     "type": "uint8"
+    },
+    "bothPart": {
+     "offset": 510028,
+     "count": 30000,
+     "type": "float32"
+    },
+    "targetBothPart": {
+     "offset": 630028,
+     "count": 29994,
+     "type": "float32"
+    }
+   },
+   "file": "vertebrae/C7.bin",
+   "hasFeatures": true,
+   "featureFit": {
+    "xyz": {
+     "mu": [
+      69.01645031,
+      63.2082906,
+      82.51652179
+     ],
+     "comps": [
+      [
+       0.98934659,
+       -0.1421796,
+       -0.03127744
+      ],
+      [
+       0.14251218,
+       0.98975514,
+       0.00866297
+      ],
+      [
+       0.02972531,
+       -0.01302809,
+       0.9994732
+      ]
+     ],
+     "lo": [
+      -32.19528943,
+      -23.7876781,
+      -14.04744146
+     ],
+     "hi": [
+      33.48730385,
+      40.60973425,
+      13.44289706
+     ]
+    },
+    "both": {
+     "muPos": [
+      69.01645031,
+      63.2082906,
+      82.51652179
+     ],
+     "muNrm": [
+      0.01135536,
+      -0.03635538,
+      -0.01558072
+     ],
+     "compsPos": [
+      [
+       0.97880761,
+       -0.19212963,
+       -0.03046147
+      ],
+      [
+       0.19444168,
+       0.97220366,
+       0.00324863
+      ],
+      [
+       0.0022851,
+       -0.0427179,
+       -0.07808571
+      ]
+     ],
+     "compsNrm": [
+      [
+       0.05440108,
+       -0.00699092,
+       0.00180289
+      ],
+      [
+       0.0121556,
+       0.05219853,
+       -0.00016297
+      ],
+      [
+       -0.0024563,
+       -0.00939539,
+       -0.00388146
+      ]
+     ],
+     "lo": [
+      -31.72500679,
+      -24.00814012,
+      -18.01271089
+     ],
+     "hi": [
+      34.01383579,
+      41.10186649,
+      20.04373671
+     ],
+     "wn": 4.795120022912921
+    }
+   },
+   "bytes": 750004
+  },
+  {
+   "label": 8,
+   "name": "T1",
+   "mode": "lerp",
+   "placeholder": true,
+   "nVerts": 10000,
+   "nFaces": 20000,
+   "nStates": 2,
+   "target": {
+    "nVerts": 10000,
+    "nFaces": 20000
+   },
+   "bboxMin": [
+    30.6978,
+    42.9526,
+    50.3699
+   ],
+   "bboxSize": [
+    74.9966,
+    68.9199,
+    31.9599
+   ],
+   "buffers": {
+    "faces": {
+     "offset": 0,
+     "count": 60000,
+     "type": "uint16"
+    },
+    "positions": {
+     "offset": 120000,
+     "count": 60000,
+     "type": "uint16"
+    },
+    "ao": {
+     "offset": 240000,
+     "count": 20000,
+     "type": "uint8"
+    },
+    "targetFaces": {
+     "offset": 260000,
+     "count": 60000,
+     "type": "uint16"
+    },
+    "targetPositions": {
+     "offset": 380000,
+     "count": 30000,
+     "type": "uint16"
+    },
+    "targetAo": {
+     "offset": 440000,
+     "count": 10000,
+     "type": "uint8"
+    },
+    "fpfhColor": {
+     "offset": 450000,
+     "count": 30000,
+     "type": "uint8"
+    },
+    "targetFpfhColor": {
+     "offset": 480000,
+     "count": 30000,
+     "type": "uint8"
+    },
+    "bothPart": {
+     "offset": 510000,
+     "count": 30000,
+     "type": "float32"
+    },
+    "targetBothPart": {
+     "offset": 630000,
+     "count": 30000,
+     "type": "float32"
+    }
+   },
+   "file": "vertebrae/T1.bin",
+   "hasFeatures": true,
+   "featureFit": {
+    "xyz": {
+     "mu": [
+      68.18551468,
+      69.14613211,
+      67.23359708
+     ],
+     "comps": [
+      [
+       0.99897485,
+       0.04517301,
+       -0.00293918
+      ],
+      [
+       -0.04505135,
+       0.99843681,
+       0.03308029
+      ],
+      [
+       0.00442892,
+       -0.03291396,
+       0.99944838
+      ]
+     ],
+     "lo": [
+      -37.53848657,
+      -26.25977208,
+      -16.01722253
+     ],
+     "hi": [
+      37.6694313,
+      42.42657399,
+      14.92165378
+     ]
+    },
+    "both": {
+     "muPos": [
+      68.18551468,
+      69.14613211,
+      67.23359708
+     ],
+     "muNrm": [
+      -0.00898394,
+      0.0217246,
+      0.05840974
+     ],
+     "compsPos": [
+      [
+       0.99716809,
+       0.04805167,
+       -0.00272866
+      ],
+      [
+       -0.04872274,
+       0.98796608,
+       0.03035676
+      ],
+      [
+       0.00199817,
+       -0.00823645,
+       -0.12858431
+      ]
+     ],
+     "compsNrm": [
+      [
+       0.05580564,
+       0.00125232,
+       0.00088137
+      ],
+      [
+       -0.00259798,
+       0.07295305,
+       0.00590496
+      ],
+      [
+       0.00181489,
+       -0.00298406,
+       0.00635601
+      ]
+     ],
+     "lo": [
+      -37.60656103,
+      -26.26401343,
+      -21.29227492
+     ],
+     "hi": [
+      38.0643563,
+      43.03016842,
+      22.04337867
+     ],
+     "wn": 5.2778135472877725
+    }
+   },
+   "bytes": 750000
+  },
+  {
+   "label": 9,
+   "name": "T2",
+   "mode": "lerp",
+   "placeholder": true,
+   "nVerts": 10000,
+   "nFaces": 20000,
+   "nStates": 2,
+   "target": {
+    "nVerts": 10000,
+    "nFaces": 20000
+   },
+   "bboxMin": [
+    33.6016,
+    51.5876,
+    29.8723
+   ],
+   "bboxSize": [
+    68.3238,
+    66.243,
+    39.8682
+   ],
+   "buffers": {
+    "faces": {
+     "offset": 0,
+     "count": 60000,
+     "type": "uint16"
+    },
+    "positions": {
+     "offset": 120000,
+     "count": 60000,
+     "type": "uint16"
+    },
+    "ao": {
+     "offset": 240000,
+     "count": 20000,
+     "type": "uint8"
+    },
+    "targetFaces": {
+     "offset": 260000,
+     "count": 60000,
+     "type": "uint16"
+    },
+    "targetPositions": {
+     "offset": 380000,
+     "count": 30000,
+     "type": "uint16"
+    },
+    "targetAo": {
+     "offset": 440000,
+     "count": 10000,
+     "type": "uint8"
+    },
+    "fpfhColor": {
+     "offset": 450000,
+     "count": 30000,
+     "type": "uint8"
+    },
+    "targetFpfhColor": {
+     "offset": 480000,
+     "count": 30000,
+     "type": "uint8"
+    },
+    "bothPart": {
+     "offset": 510000,
+     "count": 30000,
+     "type": "float32"
+    },
+    "targetBothPart": {
+     "offset": 630000,
+     "count": 30000,
+     "type": "float32"
+    }
+   },
+   "file": "vertebrae/T2.bin",
+   "hasFeatures": true,
+   "featureFit": {
+    "xyz": {
+     "mu": [
+      67.16932952,
+      77.31648548,
+      50.65315658
+     ],
+     "comps": [
+      [
+       0.99883618,
+       0.04759126,
+       -0.0078329
+      ],
+      [
+       -0.04544478,
+       0.98303401,
+       0.17770455
+      ],
+      [
+       0.01615719,
+       -0.17714177,
+       0.98405271
+      ]
+     ],
+     "lo": [
+      -33.36505243,
+      -26.26370304,
+      -19.52372468
+     ],
+     "hi": [
+      34.77565788,
+      39.10715432,
+      18.66947066
+     ]
+    },
+    "both": {
+     "muPos": [
+      67.16932952,
+      77.31648548,
+      50.65315658
+     ],
+     "muNrm": [
+      0.02376443,
+      0.04561212,
+      0.0677421
+     ],
+     "compsPos": [
+      [
+       0.99619075,
+       0.05738997,
+       -0.00281451
+      ],
+      [
+       -0.05961115,
+       0.95116654,
+       0.20635116
+      ],
+      [
+       6.567e-05,
+       -0.27144678,
+       0.60614974
+      ]
+     ],
+     "compsNrm": [
+      [
+       0.05975807,
+       0.0039941,
+       0.00206266
+      ],
+      [
+       -0.00228474,
+       0.07118852,
+       0.01856681
+      ],
+      [
+       -8.429e-05,
+       -0.0228948,
+       0.10335851
+      ]
+     ],
+     "lo": [
+      -33.20036854,
+      -27.25310001,
+      -24.89968568
+     ],
+     "hi": [
+      35.49346056,
+      41.95166308,
+      24.57968173
+     ],
+     "wn": 5.091596443502627
+    }
+   },
+   "bytes": 750000
+  },
+  {
+   "label": 10,
+   "name": "T3",
+   "mode": "lerp",
+   "placeholder": true,
+   "nVerts": 10000,
+   "nFaces": 20000,
+   "nStates": 2,
+   "target": {
+    "nVerts": 10000,
+    "nFaces": 20000
+   },
+   "bboxMin": [
+    33.1075,
+    55.9479,
+    11.9816
+   ],
+   "bboxSize": [
+    66.9839,
+    71.8572,
+    38.2017
+   ],
+   "buffers": {
+    "faces": {
+     "offset": 0,
+     "count": 60000,
+     "type": "uint16"
+    },
+    "positions": {
+     "offset": 120000,
+     "count": 60000,
+     "type": "uint16"
+    },
+    "ao": {
+     "offset": 240000,
+     "count": 20000,
+     "type": "uint8"
+    },
+    "targetFaces": {
+     "offset": 260000,
+     "count": 60000,
+     "type": "uint16"
+    },
+    "targetPositions": {
+     "offset": 380000,
+     "count": 30000,
+     "type": "uint16"
+    },
+    "targetAo": {
+     "offset": 440000,
+     "count": 10000,
+     "type": "uint8"
+    },
+    "fpfhColor": {
+     "offset": 450000,
+     "count": 30000,
+     "type": "uint8"
+    },
+    "targetFpfhColor": {
+     "offset": 480000,
+     "count": 30000,
+     "type": "uint8"
+    },
+    "bothPart": {
+     "offset": 510000,
+     "count": 30000,
+     "type": "float32"
+    },
+    "targetBothPart": {
+     "offset": 630000,
+     "count": 30000,
+     "type": "float32"
+    }
+   },
+   "file": "vertebrae/T3.bin",
+   "hasFeatures": true,
+   "featureFit": {
+    "xyz": {
+     "mu": [
+      66.5509741,
+      86.94577773,
+      31.38093657
+     ],
+     "comps": [
+      [
+       0.78579338,
+       0.61510582,
+       0.06460344
+      ],
+      [
+       -0.61792453,
+       0.78524358,
+       0.03951965
+      ],
+      [
+       -0.02642067,
+       -0.07097433,
+       0.99712817
+      ]
+     ],
+     "lo": [
+      -23.55054373,
+      -25.00222121,
+      -20.69242617
+     ],
+     "hi": [
+      32.57054251,
+      30.60767849,
+      18.93720665
+     ]
+    },
+    "both": {
+     "muPos": [
+      66.5509741,
+      86.94577773,
+      31.38093657
+     ],
+     "muNrm": [
+      0.04452215,
+      0.04729249,
+      0.02466306
+     ],
+     "compsPos": [
+      [
+       0.59005081,
+       0.78242023,
+       0.08684279
+      ],
+      [
+       0.80306136,
+       -0.5838257,
+       -0.02998842
+      ],
+      [
+       -0.03330639,
+       -0.19321016,
+       0.51066773
+      ]
+     ],
+     "compsNrm": [
+      [
+       0.04237671,
+       0.04972667,
+       0.00672741
+      ],
+      [
+       0.05872896,
+       -0.03738825,
+       -0.00104747
+      ],
+      [
+       -0.0047732,
+       -0.02032529,
+       0.07846874
+      ]
+     ],
+     "lo": [
+      -26.41926111,
+      -35.12216385,
+      -24.23809621
+     ],
+     "hi": [
+      35.95045887,
+      23.80611607,
+      26.55835438
+     ],
+     "wn": 5.1430852586766
+    }
+   },
+   "bytes": 750000
+  },
+  {
+   "label": 11,
+   "name": "T4",
+   "mode": "lerp",
+   "placeholder": true,
+   "nVerts": 10001,
+   "nFaces": 20002,
+   "nStates": 2,
+   "target": {
+    "nVerts": 10000,
+    "nFaces": 20000
+   },
+   "bboxMin": [
+    119.4176,
+    523.6216,
+    90.7067
+   ],
+   "bboxSize": [
+    67.6043,
+    36.3516,
+    66.0532
+   ],
+   "buffers": {
+    "faces": {
+     "offset": 0,
+     "count": 60006,
+     "type": "uint16"
+    },
+    "positions": {
+     "offset": 120012,
+     "count": 60006,
+     "type": "uint16"
+    },
+    "ao": {
+     "offset": 240024,
+     "count": 20002,
+     "type": "uint8"
+    },
+    "targetFaces": {
+     "offset": 260026,
+     "count": 60000,
+     "type": "uint16"
+    },
+    "targetPositions": {
+     "offset": 380026,
+     "count": 30000,
+     "type": "uint16"
+    },
+    "targetAo": {
+     "offset": 440026,
+     "count": 10000,
+     "type": "uint8"
+    },
+    "fpfhColor": {
+     "offset": 450026,
+     "count": 30003,
+     "type": "uint8"
+    },
+    "targetFpfhColor": {
+     "offset": 480029,
+     "count": 30000,
+     "type": "uint8"
+    },
+    "bothPart": {
+     "offset": 510032,
+     "count": 30003,
+     "type": "float32"
+    },
+    "targetBothPart": {
+     "offset": 630044,
+     "count": 30000,
+     "type": "float32"
+    }
+   },
+   "file": "vertebrae/T4.bin",
+   "hasFeatures": true,
+   "featureFit": {
+    "xyz": {
+     "mu": [
+      150.61107437,
+      542.24972109,
+      124.10141505
+     ],
+     "comps": [
+      [
+       0.99121911,
+       0.11010226,
+       0.07322678
+      ],
+      [
+       -0.07043611,
+       -0.02903073,
+       0.99709376
+      ],
+      [
+       -0.11190811,
+       0.9934962,
+       0.02102064
+      ]
+     ],
+     "lo": [
+      -31.11780491,
+      -33.84981092,
+      -21.87703138
+     ],
+     "hi": [
+      34.53292107,
+      31.67844481,
+      18.49786614
+     ]
+    },
+    "both": {
+     "muPos": [
+      150.61107437,
+      542.24972109,
+      124.10141505
+     ],
+     "muNrm": [
+      -0.01896291,
+      0.03293819,
+      0.01055763
+     ],
+     "compsPos": [
+      [
+       0.97427148,
+       0.11799493,
+       0.05267192
+      ],
+      [
+       -0.04420293,
+       -0.02879805,
+       0.99468068
+      ],
+      [
+       -0.19101089,
+       0.28870101,
+       0.03278005
+      ]
+     ],
+     "compsNrm": [
+      [
+       0.06380407,
+       0.01485725,
+       0.00699221
+      ],
+      [
+       -0.00345313,
+       -0.00295204,
+       0.07997096
+      ],
+      [
+       -0.0344925,
+       0.04038205,
+       -0.00522403
+      ]
+     ],
+     "lo": [
+      -31.071933,
+      -34.48104897,
+      -24.43466991
+     ],
+     "hi": [
+      36.81560523,
+      31.84373338,
+      22.80653845
+     ],
+     "wn": 5.033900072017868
+    }
+   },
+   "bytes": 750044
+  },
+  {
+   "label": 12,
+   "name": "T5",
+   "mode": "lerp",
+   "placeholder": true,
+   "nVerts": 10000,
+   "nFaces": 20000,
+   "nStates": 2,
+   "target": {
+    "nVerts": 9999,
+    "nFaces": 19998
+   },
+   "bboxMin": [
+    123.6966,
+    498.5956,
+    90.8386
+   ],
+   "bboxSize": [
+    69.5503,
+    39.5706,
+    64.7689
+   ],
+   "buffers": {
+    "faces": {
+     "offset": 0,
+     "count": 60000,
+     "type": "uint16"
+    },
+    "positions": {
+     "offset": 120000,
+     "count": 60000,
+     "type": "uint16"
+    },
+    "ao": {
+     "offset": 240000,
+     "count": 20000,
+     "type": "uint8"
+    },
+    "targetFaces": {
+     "offset": 260000,
+     "count": 59994,
+     "type": "uint16"
+    },
+    "targetPositions": {
+     "offset": 379988,
+     "count": 29997,
+     "type": "uint16"
+    },
+    "targetAo": {
+     "offset": 439982,
+     "count": 9999,
+     "type": "uint8"
+    },
+    "fpfhColor": {
+     "offset": 449981,
+     "count": 30000,
+     "type": "uint8"
+    },
+    "targetFpfhColor": {
+     "offset": 479981,
+     "count": 29997,
+     "type": "uint8"
+    },
+    "bothPart": {
+     "offset": 509980,
+     "count": 30000,
+     "type": "float32"
+    },
+    "targetBothPart": {
+     "offset": 629980,
+     "count": 29997,
+     "type": "float32"
+    }
+   },
+   "file": "vertebrae/T5.bin",
+   "hasFeatures": true,
+   "featureFit": {
+    "xyz": {
+     "mu": [
+      157.67292905,
+      520.95654197,
+      123.62593219
+     ],
+     "comps": [
+      [
+       0.99933321,
+       0.02364237,
+       0.02782401
+      ],
+      [
+       -0.02725606,
+       -0.02401446,
+       0.99933999
+      ],
+      [
+       -0.02429495,
+       0.99943201,
+       0.02335405
+      ]
+     ],
+     "lo": [
+      -33.93124755,
+      -33.2138915,
+      -23.168425
+     ],
+     "hi": [
+      34.61225406,
+      31.51099553,
+      17.01523925
+     ]
+    },
+    "both": {
+     "muPos": [
+      157.67292905,
+      520.95654197,
+      123.62593219
+     ],
+     "muNrm": [
+      -0.03791342,
+      -0.0103421,
+      0.00348841
+     ],
+     "compsPos": [
+      [
+       0.98293747,
+       0.03073193,
+       0.02980044
+      ],
+      [
+       -0.03154355,
+       -0.02358611,
+       0.995179
+      ],
+      [
+       -0.15745616,
+       0.33961967,
+       -0.01307758
+      ]
+     ],
+     "compsNrm": [
+      [
+       0.06487824,
+       0.00685631,
+       0.00048499
+      ],
+      [
+       -0.00233667,
+       -0.00391811,
+       0.08579018
+      ],
+      [
+       -0.02702317,
+       0.03993223,
+       0.00710903
+      ]
+     ],
+     "lo": [
+      -32.70542188,
+      -33.19853086,
+      -21.80894217
+     ],
+     "hi": [
+      36.88734274,
+      32.21328572,
+      23.5632414
+     ],
+     "wn": 5.078868389172866
+    }
+   },
+   "bytes": 749968
+  },
+  {
+   "label": 13,
+   "name": "T6",
+   "mode": "lerp",
+   "placeholder": true,
+   "nVerts": 10000,
+   "nFaces": 20000,
+   "nStates": 2,
+   "target": {
+    "nVerts": 9999,
+    "nFaces": 19998
+   },
+   "bboxMin": [
+    121.525,
+    471.8402,
+    90.8125
+   ],
+   "bboxSize": [
+    74.9066,
+    61.0089,
+    62.4765
+   ],
+   "buffers": {
+    "faces": {
+     "offset": 0,
+     "count": 60000,
+     "type": "uint16"
+    },
+    "positions": {
+     "offset": 120000,
+     "count": 60000,
+     "type": "uint16"
+    },
+    "ao": {
+     "offset": 240000,
+     "count": 20000,
+     "type": "uint8"
+    },
+    "targetFaces": {
+     "offset": 260000,
+     "count": 59994,
+     "type": "uint16"
+    },
+    "targetPositions": {
+     "offset": 379988,
+     "count": 29997,
+     "type": "uint16"
+    },
+    "targetAo": {
+     "offset": 439982,
+     "count": 9999,
+     "type": "uint8"
+    },
+    "fpfhColor": {
+     "offset": 449981,
+     "count": 30000,
+     "type": "uint8"
+    },
+    "targetFpfhColor": {
+     "offset": 479981,
+     "count": 29997,
+     "type": "uint8"
+    },
+    "bothPart": {
+     "offset": 509980,
+     "count": 30000,
+     "type": "float32"
+    },
+    "targetBothPart": {
+     "offset": 629980,
+     "count": 29997,
+     "type": "float32"
+    }
+   },
+   "file": "vertebrae/T6.bin",
+   "hasFeatures": true,
+   "featureFit": {
+    "xyz": {
+     "mu": [
+      162.93787847,
+      501.74629757,
+      123.3727613
+     ],
+     "comps": [
+      [
+       0.99362415,
+       0.10180049,
+       0.04845325
+      ],
+      [
+       -0.04627216,
+       -0.02367979,
+       0.99864816
+      ],
+      [
+       -0.10281023,
+       0.99452297,
+       0.01881828
+      ]
+     ],
+     "lo": [
+      -41.63594955,
+      -33.1979271,
+      -32.29908483
+     ],
+     "hi": [
+      31.72337221,
+      28.8515481,
+      31.0769639
+     ]
+    },
+    "both": {
+     "muPos": [
+      162.93787847,
+      501.74629757,
+      123.3727613
+     ],
+     "muNrm": [
+      -0.00490231,
+      0.01501573,
+      0.06517967
+     ],
+     "compsPos": [
+      [
+       0.97504187,
+       0.0883418,
+       0.04791225
+      ],
+      [
+       -0.04724518,
+       -0.02598533,
+       0.99424298
+      ],
+      [
+       0.00860608,
+       0.85804898,
+       0.02625541
+      ]
+     ],
+     "compsNrm": [
+      [
+       0.06013967,
+       0.00867907,
+       0.00495228
+      ],
+      [
+       -0.00560576,
+       0.00155785,
+       0.08987398
+      ],
+      [
+       -0.00114295,
+       0.11901974,
+       0.0002029
+      ]
+     ],
+     "lo": [
+      -40.08828429,
+      -33.42738895,
+      -32.90956216
+     ],
+     "hi": [
+      34.50910247,
+      29.25713274,
+      26.2625961
+     ],
+     "wn": 5.054724257135542
+    }
+   },
+   "bytes": 749968
+  },
+  {
+   "label": 14,
+   "name": "T7",
+   "mode": "lerp",
+   "placeholder": true,
+   "nVerts": 10000,
+   "nFaces": 20000,
+   "nStates": 2,
+   "target": {
+    "nVerts": 10000,
+    "nFaces": 20000
+   },
+   "bboxMin": [
+    132.0413,
+    441.3207,
+    94.6846
+   ],
+   "bboxSize": [
+    66.6743,
+    55.5098,
+    59.9523
+   ],
+   "buffers": {
+    "faces": {
+     "offset": 0,
+     "count": 60000,
+     "type": "uint16"
+    },
+    "positions": {
+     "offset": 120000,
+     "count": 60000,
+     "type": "uint16"
+    },
+    "ao": {
+     "offset": 240000,
+     "count": 20000,
+     "type": "uint8"
+    },
+    "targetFaces": {
+     "offset": 260000,
+     "count": 60000,
+     "type": "uint16"
+    },
+    "targetPositions": {
+     "offset": 380000,
+     "count": 30000,
+     "type": "uint16"
+    },
+    "targetAo": {
+     "offset": 440000,
+     "count": 10000,
+     "type": "uint8"
+    },
+    "fpfhColor": {
+     "offset": 450000,
+     "count": 30000,
+     "type": "uint8"
+    },
+    "targetFpfhColor": {
+     "offset": 480000,
+     "count": 30000,
+     "type": "uint8"
+    },
+    "bothPart": {
+     "offset": 510000,
+     "count": 30000,
+     "type": "float32"
+    },
+    "targetBothPart": {
+     "offset": 630000,
+     "count": 30000,
+     "type": "float32"
+    }
+   },
+   "file": "vertebrae/T7.bin",
+   "hasFeatures": true,
+   "featureFit": {
+    "xyz": {
+     "mu": [
+      166.70126048,
+      474.15578957,
+      124.99168468
+     ],
+     "comps": [
+      [
+       0.98916562,
+       -0.14048871,
+       0.0425946
+      ],
+      [
+       -0.0442893,
+       -0.00895703,
+       0.99897859
+      ],
+      [
+       0.13996369,
+       0.99004176,
+       0.01508213
+      ]
+     ],
+     "lo": [
+      -35.07162381,
+      -30.81101721,
+      -28.55002354
+     ],
+     "hi": [
+      35.43082174,
+      29.06379936,
+      22.59671035
+     ]
+    },
+    "both": {
+     "muPos": [
+      166.70126048,
+      474.15578957,
+      124.99168468
+     ],
+     "muNrm": [
+      -0.01066355,
+      0.04073131,
+      -0.01797587
+     ],
+     "compsPos": [
+      [
+       0.96607571,
+       -0.12168788,
+       0.04293178
+      ],
+      [
+       -0.04766143,
+       -0.01208481,
+       0.99255387
+      ],
+      [
+       0.00440553,
+       0.86043905,
+       0.00870731
+      ]
+     ],
+     "compsNrm": [
+      [
+       0.05613747,
+       -0.00541852,
+       0.00604846
+      ],
+      [
+       -0.00364042,
+       -0.00127247,
+       0.10850863
+      ],
+      [
+       0.00444649,
+       0.12914314,
+       -0.00356036
+      ]
+     ],
+     "lo": [
+      -35.73372588,
+      -31.00709448,
+      -25.81413242
+     ],
+     "hi": [
+      37.63343863,
+      29.7360921,
+      26.00648487
+     ],
+     "wn": 5.097607944562302
+    }
+   },
+   "bytes": 750000
+  },
+  {
+   "label": 15,
+   "name": "T8",
+   "mode": "lerp",
+   "placeholder": true,
+   "nVerts": 10000,
+   "nFaces": 20000,
+   "nStates": 2,
+   "target": {
+    "nVerts": 10000,
+    "nFaces": 20000
+   },
+   "bboxMin": [
+    134.2206,
+    421.7566,
+    94.8266
+   ],
+   "bboxSize": [
+    66.7551,
+    49.1536,
+    59.4117
+   ],
+   "buffers": {
+    "faces": {
+     "offset": 0,
+     "count": 60000,
+     "type": "uint16"
+    },
+    "positions": {
+     "offset": 120000,
+     "count": 60000,
+     "type": "uint16"
+    },
+    "ao": {
+     "offset": 240000,
+     "count": 20000,
+     "type": "uint8"
+    },
+    "targetFaces": {
+     "offset": 260000,
+     "count": 60000,
+     "type": "uint16"
+    },
+    "targetPositions": {
+     "offset": 380000,
+     "count": 30000,
+     "type": "uint16"
+    },
+    "targetAo": {
+     "offset": 440000,
+     "count": 10000,
+     "type": "uint8"
+    },
+    "fpfhColor": {
+     "offset": 450000,
+     "count": 30000,
+     "type": "uint8"
+    },
+    "targetFpfhColor": {
+     "offset": 480000,
+     "count": 30000,
+     "type": "uint8"
+    },
+    "bothPart": {
+     "offset": 510000,
+     "count": 30000,
+     "type": "float32"
+    },
+    "targetBothPart": {
+     "offset": 630000,
+     "count": 30000,
+     "type": "float32"
+    }
+   },
+   "file": "vertebrae/T8.bin",
+   "hasFeatures": true,
+   "featureFit": {
+    "xyz": {
+     "mu": [
+      168.39041725,
+      449.56469205,
+      126.10700952
+     ],
+     "comps": [
+      [
+       0.98903667,
+       -0.14597923,
+       -0.02228308
+      ],
+      [
+       0.02772818,
+       0.03537237,
+       0.99898946
+      ],
+      [
+       0.1450435,
+       0.98865508,
+       -0.03903231
+      ]
+     ],
+     "lo": [
+      -34.9563865,
+      -30.58779404,
+      -23.10037267
+     ],
+     "hi": [
+      35.82737824,
+      28.56816196,
+      21.55104664
+     ]
+    },
+    "both": {
+     "muPos": [
+      168.39041725,
+      449.56469205,
+      126.10700952
+     ],
+     "muNrm": [
+      -0.02349816,
+      -0.01249831,
+      0.03740678
+     ],
+     "compsPos": [
+      [
+       0.96360995,
+       -0.13169472,
+       -0.02003442
+      ],
+      [
+       0.02194099,
+       0.03859775,
+       0.99270999
+      ],
+      [
+       -0.07200698,
+       0.67414222,
+       -0.03968126
+      ]
+     ],
+     "compsNrm": [
+      [
+       0.05431508,
+       -0.00573398,
+       -0.0061978
+      ],
+      [
+       0.00575941,
+       0.00202043,
+       0.10680677
+      ],
+      [
+       -0.01433113,
+       0.10424632,
+       -0.00293052
+      ]
+     ],
+     "lo": [
+      -35.50729335,
+      -30.76214945,
+      -25.73948981
+     ],
+     "hi": [
+      37.8702399,
+      29.09129553,
+      25.05836521
+     ],
+     "wn": 5.024469701238052
+    }
+   },
+   "bytes": 750000
+  },
+  {
+   "label": 16,
+   "name": "T9",
+   "mode": "lerp",
+   "placeholder": true,
+   "nVerts": 10000,
+   "nFaces": 20000,
+   "nStates": 2,
+   "target": {
+    "nVerts": 10000,
+    "nFaces": 20000
+   },
+   "bboxMin": [
+    132.7721,
+    398.4569,
+    95.0344
+   ],
+   "bboxSize": [
+    69.1552,
+    46.8475,
+    62.6669
+   ],
+   "buffers": {
+    "faces": {
+     "offset": 0,
+     "count": 60000,
+     "type": "uint16"
+    },
+    "positions": {
+     "offset": 120000,
+     "count": 60000,
+     "type": "uint16"
+    },
+    "ao": {
+     "offset": 240000,
+     "count": 20000,
+     "type": "uint8"
+    },
+    "targetFaces": {
+     "offset": 260000,
+     "count": 60000,
+     "type": "uint16"
+    },
+    "targetPositions": {
+     "offset": 380000,
+     "count": 30000,
+     "type": "uint16"
+    },
+    "targetAo": {
+     "offset": 440000,
+     "count": 10000,
+     "type": "uint8"
+    },
+    "fpfhColor": {
+     "offset": 450000,
+     "count": 30000,
+     "type": "uint8"
+    },
+    "targetFpfhColor": {
+     "offset": 480000,
+     "count": 30000,
+     "type": "uint8"
+    },
+    "bothPart": {
+     "offset": 510000,
+     "count": 30000,
+     "type": "float32"
+    },
+    "targetBothPart": {
+     "offset": 630000,
+     "count": 30000,
+     "type": "float32"
+    }
+   },
+   "file": "vertebrae/T9.bin",
+   "hasFeatures": true,
+   "featureFit": {
+    "xyz": {
+     "mu": [
+      168.08059285,
+      424.61570522,
+      127.21518499
+     ],
+     "comps": [
+      [
+       0.99198177,
+       -0.11622171,
+       -0.04964564
+      ],
+      [
+       0.05753,
+       0.06549617,
+       0.99619303
+      ],
+      [
+       0.11252766,
+       0.99106143,
+       -0.07165724
+      ]
+     ],
+     "lo": [
+      -35.59053708,
+      -31.412504,
+      -22.49042506
+     ],
+     "hi": [
+      35.95525607,
+      31.71479142,
+      20.92431293
+     ]
+    },
+    "both": {
+     "muPos": [
+      168.08059285,
+      424.61570522,
+      127.21518499
+     ],
+     "muNrm": [
+      0.00852413,
+      0.00592975,
+      0.01356427
+     ],
+     "compsPos": [
+      [
+       0.95842687,
+       -0.09844214,
+       -0.04293694
+      ],
+      [
+       0.04375818,
+       0.06807403,
+       0.99139109
+      ],
+      [
+       -0.12394428,
+       0.66526314,
+       -0.06164211
+      ]
+     ],
+     "compsNrm": [
+      [
+       0.05407788,
+       -0.00435374,
+       -0.00106355
+      ],
+      [
+       0.00637316,
+       0.00475013,
+       0.09498938
+      ],
+      [
+       -0.01728874,
+       0.11536076,
+       -0.01155465
+      ]
+     ],
+     "lo": [
+      -37.52560034,
+      -31.25924731,
+      -23.56855343
+     ],
+     "hi": [
+      38.46800373,
+      32.49467191,
+      24.0195294
+     ],
+     "wn": 5.010620645413848
+    }
+   },
+   "bytes": 750000
+  },
+  {
+   "label": 17,
+   "name": "T10",
+   "mode": "lerp",
+   "placeholder": true,
+   "nVerts": 10000,
+   "nFaces": 20000,
+   "nStates": 2,
+   "target": {
+    "nVerts": 10000,
+    "nFaces": 20000
+   },
+   "bboxMin": [
+    132.0627,
+    376.2341,
+    99.2169
+   ],
+   "bboxSize": [
+    69.9287,
+    43.0539,
+    53.3021
+   ],
+   "buffers": {
+    "faces": {
+     "offset": 0,
+     "count": 60000,
+     "type": "uint16"
+    },
+    "positions": {
+     "offset": 120000,
+     "count": 60000,
+     "type": "uint16"
+    },
+    "ao": {
+     "offset": 240000,
+     "count": 20000,
+     "type": "uint8"
+    },
+    "targetFaces": {
+     "offset": 260000,
+     "count": 60000,
+     "type": "uint16"
+    },
+    "targetPositions": {
+     "offset": 380000,
+     "count": 30000,
+     "type": "uint16"
+    },
+    "targetAo": {
+     "offset": 440000,
+     "count": 10000,
+     "type": "uint8"
+    },
+    "fpfhColor": {
+     "offset": 450000,
+     "count": 30000,
+     "type": "uint8"
+    },
+    "targetFpfhColor": {
+     "offset": 480000,
+     "count": 30000,
+     "type": "uint8"
+    },
+    "bothPart": {
+     "offset": 510000,
+     "count": 30000,
+     "type": "float32"
+    },
+    "targetBothPart": {
+     "offset": 630000,
+     "count": 30000,
+     "type": "float32"
+    }
+   },
+   "file": "vertebrae/T10.bin",
+   "hasFeatures": true,
+   "featureFit": {
+    "xyz": {
+     "mu": [
+      166.706051,
+      397.65339525,
+      126.99829196
+     ],
+     "comps": [
+      [
+       0.98970311,
+       -0.12833226,
+       -0.06339237
+      ],
+      [
+       0.06590074,
+       0.0153907,
+       0.99770748
+      ],
+      [
+       0.1270624,
+       0.9916118,
+       -0.02368941
+      ]
+     ],
+     "lo": [
+      -34.04074229,
+      -26.60540188,
+      -17.08463897
+     ],
+     "hi": [
+      37.16887581,
+      26.45643502,
+      22.35637322
+     ]
+    },
+    "both": {
+     "muPos": [
+      166.706051,
+      397.65339525,
+      126.99829196
+     ],
+     "muNrm": [
+      -0.00663081,
+      0.04857709,
+      -0.04530729
+     ],
+     "compsPos": [
+      [
+       0.96431515,
+       -0.11860628,
+       -0.06184907
+      ],
+      [
+       0.0653344,
+       0.01443589,
+       0.99066978
+      ],
+      [
+       -0.03004401,
+       0.80107258,
+       -0.00915764
+      ]
+     ],
+     "compsNrm": [
+      [
+       0.05688261,
+       -0.00821557,
+       -0.00313714
+      ],
+      [
+       0.01039542,
+       0.00038304,
+       0.1167352
+      ],
+      [
+       0.00194438,
+       0.14028481,
+       0.00014297
+      ]
+     ],
+     "lo": [
+      -35.2400974,
+      -26.84891535,
+      -18.76296918
+     ],
+     "hi": [
+      39.07370763,
+      26.94773951,
+      26.68729034
+     ],
+     "wn": 4.755429275284015
+    }
+   },
+   "bytes": 750000
+  },
+  {
+   "label": 18,
+   "name": "T11",
+   "mode": "lerp",
+   "placeholder": true,
+   "nVerts": 10000,
+   "nFaces": 20000,
+   "nStates": 2,
+   "target": {
+    "nVerts": 10000,
+    "nFaces": 20000
+   },
+   "bboxMin": [
+    130.7123,
+    345.2481,
+    102.3815
+   ],
+   "bboxSize": [
+    67.8624,
+    45.3353,
+    47.1216
+   ],
+   "buffers": {
+    "faces": {
+     "offset": 0,
+     "count": 60000,
+     "type": "uint16"
+    },
+    "positions": {
+     "offset": 120000,
+     "count": 60000,
+     "type": "uint16"
+    },
+    "ao": {
+     "offset": 240000,
+     "count": 20000,
+     "type": "uint8"
+    },
+    "targetFaces": {
+     "offset": 260000,
+     "count": 60000,
+     "type": "uint16"
+    },
+    "targetPositions": {
+     "offset": 380000,
+     "count": 30000,
+     "type": "uint16"
+    },
+    "targetAo": {
+     "offset": 440000,
+     "count": 10000,
+     "type": "uint8"
+    },
+    "fpfhColor": {
+     "offset": 450000,
+     "count": 30000,
+     "type": "uint8"
+    },
+    "targetFpfhColor": {
+     "offset": 480000,
+     "count": 30000,
+     "type": "uint8"
+    },
+    "bothPart": {
+     "offset": 510000,
+     "count": 30000,
+     "type": "float32"
+    },
+    "targetBothPart": {
+     "offset": 630000,
+     "count": 30000,
+     "type": "float32"
+    }
+   },
+   "file": "vertebrae/T11.bin",
+   "hasFeatures": true,
+   "featureFit": {
+    "xyz": {
+     "mu": [
+      163.06514083,
+      368.37397847,
+      126.68068562
+     ],
+     "comps": [
+      [
+       0.97513904,
+       -0.20550721,
+       -0.08288927
+      ],
+      [
+       0.07920869,
+       -0.02608694,
+       0.99651666
+      ],
+      [
+       0.20695369,
+       0.97830785,
+       0.00916044
+      ]
+     ],
+     "lo": [
+      -32.87172515,
+      -23.02996894,
+      -18.10401885
+     ],
+     "hi": [
+      39.1668353,
+      23.72879853,
+      23.41367277
+     ]
+    },
+    "both": {
+     "muPos": [
+      163.06514083,
+      368.37397847,
+      126.68068562
+     ],
+     "muNrm": [
+      0.01997331,
+      0.03195805,
+      0.03606816
+     ],
+     "compsPos": [
+      [
+       0.94754607,
+       -0.18940768,
+       -0.07722118
+      ],
+      [
+       0.06985057,
+       -0.0188365,
+       0.98789536
+      ],
+      [
+       0.13246963,
+       0.94536301,
+       0.00277984
+      ]
+     ],
+     "compsNrm": [
+      [
+       0.05492463,
+       -0.00863122,
+       -0.0016943
+      ],
+      [
+       0.00819368,
+       -0.00233164,
+       0.13334974
+      ],
+      [
+       0.033189,
+       0.16191996,
+       -0.00030791
+      ]
+     ],
+     "lo": [
+      -34.03356685,
+      -23.32997068,
+      -17.43221212
+     ],
+     "hi": [
+      41.12485238,
+      24.21626365,
+      25.50940744
+     ],
+     "wn": 4.643215241046851
+    }
+   },
+   "bytes": 750000
+  },
+  {
+   "label": 19,
+   "name": "T12",
+   "mode": "lerp",
+   "placeholder": true,
+   "nVerts": 10001,
+   "nFaces": 20002,
+   "nStates": 2,
+   "target": {
+    "nVerts": 10000,
+    "nFaces": 20000
+   },
+   "bboxMin": [
+    125.9833,
+    308.464,
+    101.7492
+   ],
+   "bboxSize": [
+    70.6942,
+    53.2937,
+    47.5658
+   ],
+   "buffers": {
+    "faces": {
+     "offset": 0,
+     "count": 60006,
+     "type": "uint16"
+    },
+    "positions": {
+     "offset": 120012,
+     "count": 60006,
+     "type": "uint16"
+    },
+    "ao": {
+     "offset": 240024,
+     "count": 20002,
+     "type": "uint8"
+    },
+    "targetFaces": {
+     "offset": 260026,
+     "count": 60000,
+     "type": "uint16"
+    },
+    "targetPositions": {
+     "offset": 380026,
+     "count": 30000,
+     "type": "uint16"
+    },
+    "targetAo": {
+     "offset": 440026,
+     "count": 10000,
+     "type": "uint8"
+    },
+    "fpfhColor": {
+     "offset": 450026,
+     "count": 30003,
+     "type": "uint8"
+    },
+    "targetFpfhColor": {
+     "offset": 480029,
+     "count": 30000,
+     "type": "uint8"
+    },
+    "bothPart": {
+     "offset": 510032,
+     "count": 30003,
+     "type": "float32"
+    },
+    "targetBothPart": {
+     "offset": 630044,
+     "count": 30000,
+     "type": "float32"
+    }
+   },
+   "file": "vertebrae/T12.bin",
+   "hasFeatures": true,
+   "featureFit": {
+    "xyz": {
+     "mu": [
+      160.03093813,
+      336.87826614,
+      125.34385994
+     ],
+     "comps": [
+      [
+       0.95732014,
+       -0.26496952,
+       -0.11545261
+      ],
+      [
+       0.07993383,
+       -0.14115295,
+       0.98675551
+      ],
+      [
+       0.2777566,
+       0.95386949,
+       0.11394853
+      ]
+     ],
+     "lo": [
+      -36.8693177,
+      -23.19376117,
+      -23.84891322
+     ],
+     "hi": [
+      40.2672451,
+      23.75568985,
+      27.43511907
+     ]
+    },
+    "both": {
+     "muPos": [
+      160.03093813,
+      336.87826614,
+      125.34385994
+     ],
+     "muNrm": [
+      0.02605912,
+      -0.0013331,
+      0.01295541
+     ],
+     "compsPos": [
+      [
+       0.92431564,
+       -0.23830365,
+       -0.1153059
+      ],
+      [
+       0.09418386,
+       -0.15711777,
+       0.97344222
+      ],
+      [
+       0.20709159,
+       0.93761415,
+       0.13880488
+      ]
+     ],
+     "compsNrm": [
+      [
+       0.05241223,
+       -0.01355971,
+       -0.00481045
+      ],
+      [
+       0.01317801,
+       -0.01802486,
+       0.12506419
+      ],
+      [
+       0.03734742,
+       0.14053065,
+       0.02032052
+      ]
+     ],
+     "lo": [
+      -37.18053177,
+      -24.15850673,
+      -22.51476701
+     ],
+     "hi": [
+      41.94309287,
+      23.52569348,
+      30.00480005
+     ],
+     "wn": 4.914660695779514
+    }
+   },
+   "bytes": 750044
+  },
+  {
+   "label": 20,
+   "name": "L1",
+   "mode": "lerp",
+   "placeholder": true,
+   "nVerts": 10000,
+   "nFaces": 20000,
+   "nStates": 2,
+   "target": {
+    "nVerts": 10000,
+    "nFaces": 19996
+   },
+   "bboxMin": [
+    120.1213,
+    269.3234,
+    88.5786
+   ],
+   "bboxSize": [
+    75.5399,
+    56.2401,
+    72.767
+   ],
+   "buffers": {
+    "faces": {
+     "offset": 0,
+     "count": 60000,
+     "type": "uint16"
+    },
+    "positions": {
+     "offset": 120000,
+     "count": 60000,
+     "type": "uint16"
+    },
+    "ao": {
+     "offset": 240000,
+     "count": 20000,
+     "type": "uint8"
+    },
+    "targetFaces": {
+     "offset": 260000,
+     "count": 59988,
+     "type": "uint16"
+    },
+    "targetPositions": {
+     "offset": 379976,
+     "count": 30000,
+     "type": "uint16"
+    },
+    "targetAo": {
+     "offset": 439976,
+     "count": 10000,
+     "type": "uint8"
+    },
+    "fpfhColor": {
+     "offset": 449976,
+     "count": 30000,
+     "type": "uint8"
+    },
+    "targetFpfhColor": {
+     "offset": 479976,
+     "count": 30000,
+     "type": "uint8"
+    },
+    "bothPart": {
+     "offset": 509976,
+     "count": 30000,
+     "type": "float32"
+    },
+    "targetBothPart": {
+     "offset": 629976,
+     "count": 30000,
+     "type": "float32"
+    }
+   },
+   "file": "vertebrae/L1.bin",
+   "hasFeatures": true,
+   "featureFit": {
+    "xyz": {
+     "mu": [
+      156.86499209,
+      302.1967333,
+      125.43347964
+     ],
+     "comps": [
+      [
+       0.94008311,
+       -0.3339986,
+       -0.06847392
+      ],
+      [
+       0.06898967,
+       -0.01033265,
+       0.99756386
+      ],
+      [
+       0.33389245,
+       0.94251693,
+       -0.0133289
+      ]
+     ],
+     "lo": [
+      -40.36853195,
+      -36.2218931,
+      -25.11916814
+     ],
+     "hi": [
+      45.54356549,
+      36.5207949,
+      27.04832695
+     ]
+    },
+    "both": {
+     "muPos": [
+      156.86499209,
+      302.1967333,
+      125.43347964
+     ],
+     "muNrm": [
+      0.03514934,
+      0.02696545,
+      0.06481428
+     ],
+     "compsPos": [
+      [
+       0.89079063,
+       -0.29922449,
+       -0.06491878
+      ],
+      [
+       0.0678803,
+       -0.01344131,
+       0.98931446
+      ],
+      [
+       0.21837471,
+       0.9268719,
+       -0.00083865
+      ]
+     ],
+     "compsNrm": [
+      [
+       0.05184724,
+       -0.01655936,
+       -0.00155508
+      ],
+      [
+       0.00583836,
+       -0.00298546,
+       0.12586397
+      ],
+      [
+       0.04886076,
+       0.15864527,
+       -0.00153494
+      ]
+     ],
+     "lo": [
+      -41.59197254,
+      -37.0380575,
+      -22.3223161
+     ],
+     "hi": [
+      48.09602865,
+      36.66549926,
+      30.24747815
+     ],
+     "wn": 5.8789976210274055
+    }
+   },
+   "bytes": 749976
+  },
+  {
+   "label": 21,
+   "name": "L2",
+   "mode": "lerp",
+   "placeholder": true,
+   "nVerts": 10000,
+   "nFaces": 20000,
+   "nStates": 2,
+   "target": {
+    "nVerts": 10000,
+    "nFaces": 20000
+   },
+   "bboxMin": [
+    110.848,
+    236.8735,
+    84.5573
+   ],
+   "bboxSize": [
+    82.7327,
+    53.9717,
+    78.781
+   ],
+   "buffers": {
+    "faces": {
+     "offset": 0,
+     "count": 60000,
+     "type": "uint16"
+    },
+    "positions": {
+     "offset": 120000,
+     "count": 60000,
+     "type": "uint16"
+    },
+    "ao": {
+     "offset": 240000,
+     "count": 20000,
+     "type": "uint8"
+    },
+    "targetFaces": {
+     "offset": 260000,
+     "count": 60000,
+     "type": "uint16"
+    },
+    "targetPositions": {
+     "offset": 380000,
+     "count": 30000,
+     "type": "uint16"
+    },
+    "targetAo": {
+     "offset": 440000,
+     "count": 10000,
+     "type": "uint8"
+    },
+    "fpfhColor": {
+     "offset": 450000,
+     "count": 30000,
+     "type": "uint8"
+    },
+    "targetFpfhColor": {
+     "offset": 480000,
+     "count": 30000,
+     "type": "uint8"
+    },
+    "bothPart": {
+     "offset": 510000,
+     "count": 30000,
+     "type": "float32"
+    },
+    "targetBothPart": {
+     "offset": 630000,
+     "count": 30000,
+     "type": "float32"
+    }
+   },
+   "file": "vertebrae/L2.bin",
+   "hasFeatures": true,
+   "featureFit": {
+    "xyz": {
+     "mu": [
+      150.92611535,
+      267.32160115,
+      125.61839602
+     ],
+     "comps": [
+      [
+       0.95688575,
+       -0.27531187,
+       -0.09259069
+      ],
+      [
+       0.09913848,
+       0.0099314,
+       0.99502408
+      ],
+      [
+       0.27302239,
+       0.96130367,
+       -0.03679722
+      ]
+     ],
+     "lo": [
+      -42.37426536,
+      -39.17203765,
+      -25.5081689
+     ],
+     "hi": [
+      46.41788558,
+      39.06977338,
+      27.93361563
+     ]
+    },
+    "both": {
+     "muPos": [
+      150.92611535,
+      267.32160115,
+      125.61839602
+     ],
+     "muNrm": [
+      0.06308034,
+      0.05262726,
+      0.07266039
+     ],
+     "compsPos": [
+      [
+       0.90748714,
+       -0.24593365,
+       -0.08060869
+      ],
+      [
+       0.08182271,
+       0.02244859,
+       0.98868273
+      ],
+      [
+       0.17520813,
+       0.94183714,
+       -0.04365399
+      ]
+     ],
+     "compsNrm": [
+      [
+       0.05839947,
+       -0.01442757,
+       -0.00417786
+      ],
+      [
+       0.00927219,
+       0.0004492,
+       0.11681235
+      ],
+      [
+       0.04659798,
+       0.16403463,
+       -0.00710625
+      ]
+     ],
+     "lo": [
+      -44.74809388,
+      -39.1757967,
+      -23.93921065
+     ],
+     "hi": [
+      48.43389376,
+      39.96243303,
+      31.16615233
+     ],
+     "wn": 6.203144196605948
+    }
+   },
+   "bytes": 750000
+  },
+  {
+   "label": 22,
+   "name": "L3",
+   "mode": "lerp",
+   "placeholder": true,
+   "nVerts": 10000,
+   "nFaces": 20000,
+   "nStates": 2,
+   "target": {
+    "nVerts": 9999,
+    "nFaces": 19998
+   },
+   "bboxMin": [
+    107.2333,
+    203.1496,
+    80.806
+   ],
+   "bboxSize": [
+    84.3963,
+    53.5389,
+    86.4722
+   ],
+   "buffers": {
+    "faces": {
+     "offset": 0,
+     "count": 60000,
+     "type": "uint16"
+    },
+    "positions": {
+     "offset": 120000,
+     "count": 60000,
+     "type": "uint16"
+    },
+    "ao": {
+     "offset": 240000,
+     "count": 20000,
+     "type": "uint8"
+    },
+    "targetFaces": {
+     "offset": 260000,
+     "count": 59994,
+     "type": "uint16"
+    },
+    "targetPositions": {
+     "offset": 379988,
+     "count": 29997,
+     "type": "uint16"
+    },
+    "targetAo": {
+     "offset": 439982,
+     "count": 9999,
+     "type": "uint8"
+    },
+    "fpfhColor": {
+     "offset": 449981,
+     "count": 30000,
+     "type": "uint8"
+    },
+    "targetFpfhColor": {
+     "offset": 479981,
+     "count": 29997,
+     "type": "uint8"
+    },
+    "bothPart": {
+     "offset": 509980,
+     "count": 30000,
+     "type": "float32"
+    },
+    "targetBothPart": {
+     "offset": 629980,
+     "count": 29997,
+     "type": "float32"
+    }
+   },
+   "file": "vertebrae/L3.bin",
+   "hasFeatures": true,
+   "featureFit": {
+    "xyz": {
+     "mu": [
+      146.69727613,
+      232.46514917,
+      125.18800958
+     ],
+     "comps": [
+      [
+       0.96408383,
+       -0.21579528,
+       -0.15483784
+      ],
+      [
+       0.15886635,
+       0.00134018,
+       0.98729919
+      ],
+      [
+       0.212847,
+       0.97643771,
+       -0.03557466
+      ]
+     ],
+     "lo": [
+      -41.95776783,
+      -42.97956034,
+      -23.39582304
+     ],
+     "hi": [
+      47.11022947,
+      44.07813158,
+      26.80778641
+     ]
+    },
+    "both": {
+     "muPos": [
+      146.69727613,
+      232.46514917,
+      125.18800958
+     ],
+     "muNrm": [
+      0.0410509,
+      0.04003582,
+      -0.02134503
+     ],
+     "compsPos": [
+      [
+       0.90608675,
+       -0.17903885,
+       -0.1413231
+      ],
+      [
+       0.15090204,
+       0.00486331,
+       0.98245249
+      ],
+      [
+       -0.02303198,
+       0.85074816,
+       -0.00376115
+      ]
+     ],
+     "compsNrm": [
+      [
+       0.06097359,
+       -0.00890772,
+       -0.00883227
+      ],
+      [
+       0.0177003,
+       0.00040971,
+       0.10635697
+      ],
+      [
+       0.01737553,
+       0.15152329,
+       -0.0052205
+      ]
+     ],
+     "lo": [
+      -46.39735155,
+      -43.57997081,
+      -26.00479587
+     ],
+     "hi": [
+      49.01798127,
+      44.2909882,
+      31.88189692
+     ],
+     "wn": 6.460858399376696
+    }
+   },
+   "bytes": 749968
+  },
+  {
+   "label": 23,
+   "name": "L4",
+   "mode": "lerp",
+   "placeholder": true,
+   "nVerts": 10000,
+   "nFaces": 20000,
+   "nStates": 2,
+   "target": {
+    "nVerts": 10000,
+    "nFaces": 20000
+   },
+   "bboxMin": [
+    104.3788,
+    176.277,
+    63.1175
+   ],
+   "bboxSize": [
+    85.3518,
+    47.027,
+    107.878
+   ],
+   "buffers": {
+    "faces": {
+     "offset": 0,
+     "count": 60000,
+     "type": "uint16"
+    },
+    "positions": {
+     "offset": 120000,
+     "count": 60000,
+     "type": "uint16"
+    },
+    "ao": {
+     "offset": 240000,
+     "count": 20000,
+     "type": "uint8"
+    },
+    "targetFaces": {
+     "offset": 260000,
+     "count": 60000,
+     "type": "uint16"
+    },
+    "targetPositions": {
+     "offset": 380000,
+     "count": 30000,
+     "type": "uint16"
+    },
+    "targetAo": {
+     "offset": 440000,
+     "count": 10000,
+     "type": "uint8"
+    },
+    "fpfhColor": {
+     "offset": 450000,
+     "count": 30000,
+     "type": "uint8"
+    },
+    "targetFpfhColor": {
+     "offset": 480000,
+     "count": 30000,
+     "type": "uint8"
+    },
+    "bothPart": {
+     "offset": 510000,
+     "count": 30000,
+     "type": "float32"
+    },
+    "targetBothPart": {
+     "offset": 630000,
+     "count": 30000,
+     "type": "float32"
+    }
+   },
+   "file": "vertebrae/L4.bin",
+   "hasFeatures": true,
+   "featureFit": {
+    "xyz": {
+     "mu": [
+      145.14716668,
+      198.52200709,
+      121.26799621
+     ],
+     "comps": [
+      [
+       -0.35119947,
+       0.03557774,
+       0.93562447
+      ],
+      [
+       0.9362943,
+       0.01703047,
+       0.3508033
+      ],
+      [
+       -0.00345334,
+       0.99922179,
+       -0.03929233
+      ]
+     ],
+     "lo": [
+      -48.92940431,
+      -37.47358684,
+      -23.0424246
+     ],
+     "hi": [
+      43.77351157,
+      42.54095094,
+      24.35106638
+     ]
+    },
+    "both": {
+     "muPos": [
+      145.14716668,
+      198.52200709,
+      121.26799621
+     ],
+     "muNrm": [
+      0.06681545,
+      -0.02347156,
+      -0.03869883
+     ],
+     "compsPos": [
+      [
+       -0.48744654,
+       0.02105071,
+       0.84349913
+      ],
+      [
+       0.81025406,
+       0.03799523,
+       0.52647406
+      ],
+      [
+       -0.23603364,
+       0.65077326,
+       0.00958282
+      ]
+     ],
+     "compsNrm": [
+      [
+       -0.03049758,
+       -0.00033977,
+       0.06068826
+      ],
+      [
+       0.06272554,
+       0.00593896,
+       0.04186435
+      ],
+      [
+       -0.03031706,
+       0.12446295,
+       -0.00833899
+      ]
+     ],
+     "lo": [
+      -50.84507374,
+      -41.80763581,
+      -27.50929949
+     ],
+     "hi": [
+      43.88928442,
+      50.00957409,
+      31.14026061
+     ],
+     "wn": 6.604621537365874
+    }
+   },
+   "bytes": 750000
+  },
+  {
+   "label": 24,
+   "name": "L5",
+   "mode": "lerp",
+   "placeholder": true,
+   "nVerts": 10000,
+   "nFaces": 20000,
+   "nStates": 2,
+   "target": {
+    "nVerts": 10000,
+    "nFaces": 20000
+   },
+   "bboxMin": [
+    110.9074,
+    143.6994,
+    64.6241
+   ],
+   "bboxSize": [
+    75.4741,
+    50.1864,
+    111.2572
+   ],
+   "buffers": {
+    "faces": {
+     "offset": 0,
+     "count": 60000,
+     "type": "uint16"
+    },
+    "positions": {
+     "offset": 120000,
+     "count": 60000,
+     "type": "uint16"
+    },
+    "ao": {
+     "offset": 240000,
+     "count": 20000,
+     "type": "uint8"
+    },
+    "targetFaces": {
+     "offset": 260000,
+     "count": 60000,
+     "type": "uint16"
+    },
+    "targetPositions": {
+     "offset": 380000,
+     "count": 30000,
+     "type": "uint16"
+    },
+    "targetAo": {
+     "offset": 440000,
+     "count": 10000,
+     "type": "uint8"
+    },
+    "fpfhColor": {
+     "offset": 450000,
+     "count": 30000,
+     "type": "uint8"
+    },
+    "targetFpfhColor": {
+     "offset": 480000,
+     "count": 30000,
+     "type": "uint8"
+    },
+    "bothPart": {
+     "offset": 510000,
+     "count": 30000,
+     "type": "float32"
+    },
+    "targetBothPart": {
+     "offset": 630000,
+     "count": 30000,
+     "type": "float32"
+    }
+   },
+   "file": "vertebrae/L5.bin",
+   "hasFeatures": true,
+   "featureFit": {
+    "xyz": {
+     "mu": [
+      145.74391875,
+      168.74076159,
+      120.65492699
+     ],
+     "comps": [
+      [
+       0.0554019,
+       0.00322691,
+       0.99845892
+      ],
+      [
+       0.97641894,
+       0.20879923,
+       -0.05485378
+      ],
+      [
+       -0.20865446,
+       0.9779532,
+       0.00841706
+      ]
+     ],
+     "lo": [
+      -56.21173672,
+      -34.37123515,
+      -25.02909306
+     ],
+     "hi": [
+      55.62610946,
+      38.57761174,
+      22.91117893
+     ]
+    },
+    "both": {
+     "muPos": [
+      145.74391875,
+      168.74076159,
+      120.65492699
+     ],
+     "muNrm": [
+      -0.0154056,
+      -0.04336679,
+      0.01749987
+     ],
+     "compsPos": [
+      [
+       0.0474316,
+       0.00075957,
+       0.99617831
+      ],
+      [
+       0.82773119,
+       0.17923448,
+       -0.02592272
+      ],
+      [
+       0.47828919,
+       -0.01906152,
+       -0.04562489
+      ]
+     ],
+     "compsNrm": [
+      [
+       0.00263068,
+       -0.00428981,
+       0.06218408
+      ],
+      [
+       0.08929326,
+       0.02773509,
+       -0.00225967
+      ],
+      [
+       0.09219121,
+       -0.00676165,
+       -0.01474048
+      ]
+     ],
+     "lo": [
+      -57.01498096,
+      -38.72554523,
+      -37.95360573
+     ],
+     "hi": [
+      55.23182078,
+      45.92253096,
+      27.9026374
+     ],
+     "wn": 6.944437400983844
+    }
+   },
+   "bytes": 750000
+  }
+ ],
+ "atlas": {
+  "bboxMin": [
+   -44.3257,
+   -115.206,
+   907.7629
+  ],
+  "bboxSize": [
+   88.11,
+   115.4494,
+   575.8703
+  ],
+  "file": "atlas.bin",
+  "vertebrae": [
+   {
+    "label": 1,
+    "name": "C1",
+    "nVerts": 10000,
+    "nFaces": 20008,
+    "centroid": [
+     -0.184,
+     -67.947,
+     1471.82
+    ],
+    "buffers": {
+     "faces": {
+      "offset": 0,
+      "count": 60024,
+      "type": "uint16"
+     },
+     "positions": {
+      "offset": 120048,
+      "count": 30000,
+      "type": "uint16"
+     },
+     "ao": {
+      "offset": 180048,
+      "count": 10000,
+      "type": "uint8"
+     }
+    }
+   },
+   {
+    "label": 2,
+    "name": "C2",
+    "nVerts": 10000,
+    "nFaces": 20008,
+    "centroid": [
+     -0.45,
+     -66.692,
+     1452.131
+    ],
+    "buffers": {
+     "faces": {
+      "offset": 190048,
+      "count": 60024,
+      "type": "uint16"
+     },
+     "positions": {
+      "offset": 310096,
+      "count": 30000,
+      "type": "uint16"
+     },
+     "ao": {
+      "offset": 370096,
+      "count": 10000,
+      "type": "uint8"
+     }
+    }
+   },
+   {
+    "label": 3,
+    "name": "C3",
+    "nVerts": 10000,
+    "nFaces": 20008,
+    "centroid": [
+     -0.567,
+     -68.55,
+     1434.749
+    ],
+    "buffers": {
+     "faces": {
+      "offset": 380096,
+      "count": 60024,
+      "type": "uint16"
+     },
+     "positions": {
+      "offset": 500144,
+      "count": 30000,
+      "type": "uint16"
+     },
+     "ao": {
+      "offset": 560144,
+      "count": 10000,
+      "type": "uint8"
+     }
+    }
+   },
+   {
+    "label": 4,
+    "name": "C4",
+    "nVerts": 10000,
+    "nFaces": 20008,
+    "centroid": [
+     -0.552,
+     -70.836,
+     1420.491
+    ],
+    "buffers": {
+     "faces": {
+      "offset": 570144,
+      "count": 60024,
+      "type": "uint16"
+     },
+     "positions": {
+      "offset": 690192,
+      "count": 30000,
+      "type": "uint16"
+     },
+     "ao": {
+      "offset": 750192,
+      "count": 10000,
+      "type": "uint8"
+     }
+    }
+   },
+   {
+    "label": 5,
+    "name": "C5",
+    "nVerts": 10000,
+    "nFaces": 20008,
+    "centroid": [
+     -0.685,
+     -72.895,
+     1406.402
+    ],
+    "buffers": {
+     "faces": {
+      "offset": 760192,
+      "count": 60024,
+      "type": "uint16"
+     },
+     "positions": {
+      "offset": 880240,
+      "count": 30000,
+      "type": "uint16"
+     },
+     "ao": {
+      "offset": 940240,
+      "count": 10000,
+      "type": "uint8"
+     }
+    }
+   },
+   {
+    "label": 6,
+    "name": "C6",
+    "nVerts": 10000,
+    "nFaces": 20008,
+    "centroid": [
+     -0.627,
+     -71.689,
+     1392.16
+    ],
+    "buffers": {
+     "faces": {
+      "offset": 950240,
+      "count": 60024,
+      "type": "uint16"
+     },
+     "positions": {
+      "offset": 1070288,
+      "count": 30000,
+      "type": "uint16"
+     },
+     "ao": {
+      "offset": 1130288,
+      "count": 10000,
+      "type": "uint8"
+     }
+    }
+   },
+   {
+    "label": 7,
+    "name": "C7",
+    "nVerts": 10000,
+    "nFaces": 20008,
+    "centroid": [
+     -0.681,
+     -64.983,
+     1377.527
+    ],
+    "buffers": {
+     "faces": {
+      "offset": 1140288,
+      "count": 60024,
+      "type": "uint16"
+     },
+     "positions": {
+      "offset": 1260336,
+      "count": 30000,
+      "type": "uint16"
+     },
+     "ao": {
+      "offset": 1320336,
+      "count": 10000,
+      "type": "uint8"
+     }
+    }
+   },
+   {
+    "label": 8,
+    "name": "T1",
+    "nVerts": 10000,
+    "nFaces": 20000,
+    "centroid": [
+     -0.79,
+     -60.486,
+     1361.196
+    ],
+    "buffers": {
+     "faces": {
+      "offset": 1330336,
+      "count": 60000,
+      "type": "uint16"
+     },
+     "positions": {
+      "offset": 1450336,
+      "count": 30000,
+      "type": "uint16"
+     },
+     "ao": {
+      "offset": 1510336,
+      "count": 10000,
+      "type": "uint8"
+     }
+    }
+   },
+   {
+    "label": 9,
+    "name": "T2",
+    "nVerts": 10000,
+    "nFaces": 20000,
+    "centroid": [
+     -0.631,
+     -54.866,
+     1344.12
+    ],
+    "buffers": {
+     "faces": {
+      "offset": 1520336,
+      "count": 60000,
+      "type": "uint16"
+     },
+     "positions": {
+      "offset": 1640336,
+      "count": 30000,
+      "type": "uint16"
+     },
+     "ao": {
+      "offset": 1700336,
+      "count": 10000,
+      "type": "uint8"
+     }
+    }
+   },
+   {
+    "label": 10,
+    "name": "T3",
+    "nVerts": 10000,
+    "nFaces": 20000,
+    "centroid": [
+     -0.601,
+     -45.482,
+     1322.808
+    ],
+    "buffers": {
+     "faces": {
+      "offset": 1710336,
+      "count": 60000,
+      "type": "uint16"
+     },
+     "positions": {
+      "offset": 1830336,
+      "count": 30000,
+      "type": "uint16"
+     },
+     "ao": {
+      "offset": 1890336,
+      "count": 10000,
+      "type": "uint8"
+     }
+    }
+   },
+   {
+    "label": 11,
+    "name": "T4",
+    "nVerts": 10000,
+    "nFaces": 20000,
+    "centroid": [
+     -0.66,
+     -37.548,
+     1300.137
+    ],
+    "buffers": {
+     "faces": {
+      "offset": 1900336,
+      "count": 60000,
+      "type": "uint16"
+     },
+     "positions": {
+      "offset": 2020336,
+      "count": 30000,
+      "type": "uint16"
+     },
+     "ao": {
+      "offset": 2080336,
+      "count": 10000,
+      "type": "uint8"
+     }
+    }
+   },
+   {
+    "label": 12,
+    "name": "T5",
+    "nVerts": 10000,
+    "nFaces": 20000,
+    "centroid": [
+     -0.836,
+     -32.761,
+     1274.077
+    ],
+    "buffers": {
+     "faces": {
+      "offset": 2090336,
+      "count": 60000,
+      "type": "uint16"
+     },
+     "positions": {
+      "offset": 2210336,
+      "count": 30000,
+      "type": "uint16"
+     },
+     "ao": {
+      "offset": 2270336,
+      "count": 10000,
+      "type": "uint8"
+     }
+    }
+   },
+   {
+    "label": 13,
+    "name": "T6",
+    "nVerts": 10000,
+    "nFaces": 20000,
+    "centroid": [
+     -0.91,
+     -30.303,
+     1246.81
+    ],
+    "buffers": {
+     "faces": {
+      "offset": 2280336,
+      "count": 60000,
+      "type": "uint16"
+     },
+     "positions": {
+      "offset": 2400336,
+      "count": 30000,
+      "type": "uint16"
+     },
+     "ao": {
+      "offset": 2460336,
+      "count": 10000,
+      "type": "uint8"
+     }
+    }
+   },
+   {
+    "label": 14,
+    "name": "T7",
+    "nVerts": 10000,
+    "nFaces": 20000,
+    "centroid": [
+     -0.716,
+     -31.012,
+     1218.44
+    ],
+    "buffers": {
+     "faces": {
+      "offset": 2470336,
+      "count": 60000,
+      "type": "uint16"
+     },
+     "positions": {
+      "offset": 2590336,
+      "count": 30000,
+      "type": "uint16"
+     },
+     "ao": {
+      "offset": 2650336,
+      "count": 10000,
+      "type": "uint8"
+     }
+    }
+   },
+   {
+    "label": 15,
+    "name": "T8",
+    "nVerts": 10000,
+    "nFaces": 20000,
+    "centroid": [
+     -0.608,
+     -34.973,
+     1190.662
+    ],
+    "buffers": {
+     "faces": {
+      "offset": 2660336,
+      "count": 60000,
+      "type": "uint16"
+     },
+     "positions": {
+      "offset": 2780336,
+      "count": 30000,
+      "type": "uint16"
+     },
+     "ao": {
+      "offset": 2840336,
+      "count": 10000,
+      "type": "uint8"
+     }
+    }
+   },
+   {
+    "label": 16,
+    "name": "T9",
+    "nVerts": 10000,
+    "nFaces": 20000,
+    "centroid": [
+     -0.69,
+     -39.679,
+     1164.035
+    ],
+    "buffers": {
+     "faces": {
+      "offset": 2850336,
+      "count": 60000,
+      "type": "uint16"
+     },
+     "positions": {
+      "offset": 2970336,
+      "count": 30000,
+      "type": "uint16"
+     },
+     "ao": {
+      "offset": 3030336,
+      "count": 10000,
+      "type": "uint8"
+     }
+    }
+   },
+   {
+    "label": 17,
+    "name": "T10",
+    "nVerts": 10000,
+    "nFaces": 20000,
+    "centroid": [
+     -0.701,
+     -45.21,
+     1135.678
+    ],
+    "buffers": {
+     "faces": {
+      "offset": 3040336,
+      "count": 60000,
+      "type": "uint16"
+     },
+     "positions": {
+      "offset": 3160336,
+      "count": 30000,
+      "type": "uint16"
+     },
+     "ao": {
+      "offset": 3220336,
+      "count": 10000,
+      "type": "uint8"
+     }
+    }
+   },
+   {
+    "label": 18,
+    "name": "T11",
+    "nVerts": 10000,
+    "nFaces": 20000,
+    "centroid": [
+     -0.434,
+     -54.198,
+     1108.232
+    ],
+    "buffers": {
+     "faces": {
+      "offset": 3230336,
+      "count": 60000,
+      "type": "uint16"
+     },
+     "positions": {
+      "offset": 3350336,
+      "count": 30000,
+      "type": "uint16"
+     },
+     "ao": {
+      "offset": 3410336,
+      "count": 10000,
+      "type": "uint8"
+     }
+    }
+   },
+   {
+    "label": 19,
+    "name": "T12",
+    "nVerts": 10000,
+    "nFaces": 20000,
+    "centroid": [
+     -0.508,
+     -63.656,
+     1079.661
+    ],
+    "buffers": {
+     "faces": {
+      "offset": 3420336,
+      "count": 60000,
+      "type": "uint16"
+     },
+     "positions": {
+      "offset": 3540336,
+      "count": 30000,
+      "type": "uint16"
+     },
+     "ao": {
+      "offset": 3600336,
+      "count": 10000,
+      "type": "uint8"
+     }
+    }
+   },
+   {
+    "label": 20,
+    "name": "L1",
+    "nVerts": 10000,
+    "nFaces": 20000,
+    "centroid": [
+     -0.463,
+     -70.77,
+     1048.754
+    ],
+    "buffers": {
+     "faces": {
+      "offset": 3610336,
+      "count": 60000,
+      "type": "uint16"
+     },
+     "positions": {
+      "offset": 3730336,
+      "count": 30000,
+      "type": "uint16"
+     },
+     "ao": {
+      "offset": 3790336,
+      "count": 10000,
+      "type": "uint8"
+     }
+    }
+   },
+   {
+    "label": 21,
+    "name": "L2",
+    "nVerts": 10000,
+    "nFaces": 20000,
+    "centroid": [
+     -0.462,
+     -75.648,
+     1019.49
+    ],
+    "buffers": {
+     "faces": {
+      "offset": 3800336,
+      "count": 60000,
+      "type": "uint16"
+     },
+     "positions": {
+      "offset": 3920336,
+      "count": 30000,
+      "type": "uint16"
+     },
+     "ao": {
+      "offset": 3980336,
+      "count": 10000,
+      "type": "uint8"
+     }
+    }
+   },
+   {
+    "label": 22,
+    "name": "L3",
+    "nVerts": 10000,
+    "nFaces": 20000,
+    "centroid": [
+     -0.043,
+     -75.726,
+     990.031
+    ],
+    "buffers": {
+     "faces": {
+      "offset": 3990336,
+      "count": 60000,
+      "type": "uint16"
+     },
+     "positions": {
+      "offset": 4110336,
+      "count": 30000,
+      "type": "uint16"
+     },
+     "ao": {
+      "offset": 4170336,
+      "count": 10000,
+      "type": "uint8"
+     }
+    }
+   },
+   {
+    "label": 23,
+    "name": "L4",
+    "nVerts": 10000,
+    "nFaces": 20000,
+    "centroid": [
+     0.017,
+     -70.567,
+     961.49
+    ],
+    "buffers": {
+     "faces": {
+      "offset": 4180336,
+      "count": 60000,
+      "type": "uint16"
+     },
+     "positions": {
+      "offset": 4300336,
+      "count": 30000,
+      "type": "uint16"
+     },
+     "ao": {
+      "offset": 4360336,
+      "count": 10000,
+      "type": "uint8"
+     }
+    }
+   },
+   {
+    "label": 24,
+    "name": "L5",
+    "nVerts": 10000,
+    "nFaces": 20000,
+    "centroid": [
+     -0.481,
+     -61.474,
+     931.58
+    ],
+    "buffers": {
+     "faces": {
+      "offset": 4370336,
+      "count": 60000,
+      "type": "uint16"
+     },
+     "positions": {
+      "offset": 4490336,
+      "count": 30000,
+      "type": "uint16"
+     },
+     "ao": {
+      "offset": 4550336,
+      "count": 10000,
+      "type": "uint8"
+     }
+    }
+   }
+  ],
+  "bytes": 4560336
+ },
+ "lungs": {
+  "bboxMin": [
+   25.0,
+   25.5,
+   27.5
+  ],
+  "bboxSize": [
+   293.5,
+   189.5,
+   268.0
+  ],
+  "file": "lungs.bin",
+  "buffers": {
+   "sourcePoints": {
+    "offset": 0,
+    "count": 129528,
+    "type": "uint16"
+   },
+   "deformedPoints": {
+    "offset": 259056,
+    "count": 129528,
+    "type": "uint16"
+   },
+   "deformedAv": {
+    "offset": 518112,
+    "count": 43176,
+    "type": "uint8"
+   },
+   "deformedDistance": {
+    "offset": 561288,
+    "count": 43176,
+    "type": "uint8"
+   },
+   "targetPoints": {
+    "offset": 604464,
+    "count": 105384,
+    "type": "uint16"
+   },
+   "targetAv": {
+    "offset": 815232,
+    "count": 35128,
+    "type": "uint8"
+   },
+   "targetDistance": {
+    "offset": 850360,
+    "count": 35128,
+    "type": "uint8"
+   },
+   "sourceTreePoints": {
+    "offset": 885488,
+    "count": 129528,
+    "type": "uint16"
+   },
+   "sourceTreeIndex": {
+    "offset": 1144544,
+    "count": 86322,
+    "type": "uint16"
+   },
+   "sourceTreeAv": {
+    "offset": 1317188,
+    "count": 43176,
+    "type": "uint8"
+   },
+   "deformedTreePoints": {
+    "offset": 1360364,
+    "count": 129528,
+    "type": "uint16"
+   },
+   "deformedTreeIndex": {
+    "offset": 1619420,
+    "count": 86322,
+    "type": "uint16"
+   },
+   "deformedTreeAv": {
+    "offset": 1792064,
+    "count": 43176,
+    "type": "uint8"
+   },
+   "targetTreePoints": {
+    "offset": 1835240,
+    "count": 105384,
+    "type": "uint16"
+   },
+   "targetTreeIndex": {
+    "offset": 2046008,
+    "count": 70236,
+    "type": "uint16"
+   },
+   "targetTreeAv": {
+    "offset": 2186480,
+    "count": 35128,
+    "type": "uint8"
+   }
+  },
+  "deformedDistanceMax": 4.47213595499958,
+  "targetDistanceMax": 4.898979485566356,
+  "sourceTreeSegments": 43161,
+  "sourceTreeVerts": 43176,
+  "deformedTreeSegments": 43161,
+  "deformedTreeVerts": 43176,
+  "targetTreeSegments": 35118,
+  "targetTreeVerts": 35128,
+  "sourcePointCount": 43176,
+  "deformedPointCount": 43176,
+  "targetPointCount": 35128,
+  "bytes": 2221608
+ }
+}
