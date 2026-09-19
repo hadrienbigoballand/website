@@ -77,10 +77,10 @@
           var ua = navigator.userAgent;
           var webkit = /AppleWebKit/.test(ua) && !/Chrome|Chromium|Edg\//.test(ua);
           var srcs = webkit
-            ? [['assets/hero.hevc.mp4?v=1', 'video/mp4; codecs=hvc1'],
-               ['assets/hero.mp4?v=6', 'video/mp4']]
-            : [['assets/hero.webm?v=6', 'video/webm'],
-               ['assets/hero.mp4?v=6', 'video/mp4']];
+            ? [['assets/hero.hevc.mp4?v=2', 'video/mp4; codecs=hvc1'],
+               ['assets/hero.mp4?v=7', 'video/mp4']]
+            : [['assets/hero.webm?v=7', 'video/webm'],
+               ['assets/hero.mp4?v=7', 'video/mp4']];
           srcs.forEach(function (s) {
             var el = document.createElement('source');
             el.src = assetURL(s[0]);

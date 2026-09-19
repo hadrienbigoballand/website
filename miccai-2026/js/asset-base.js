@@ -11,7 +11,7 @@
  *                The tag (not a branch name) makes jsDelivr's cache permanent.
  *
  *   videos       loaded by <video>, which needs no CORS, so they are assets of
- *                the GitHub release miccai-2026-assets-v1.  Release assets are
+ *                the GitHub release miccai-2026-assets-v2.  Release assets are
  *                a flat namespace: assets/hero.mp4 is uploaded as
  *                assets__hero.mp4 and mapped back below.
  *
@@ -24,7 +24,7 @@
  */
 
 const ASSETS_TAG = 'assets-v1';
-const RELEASE_TAG = 'miccai-2026-assets-v1';
+const RELEASE_TAG = 'miccai-2026-assets-v2';
 
 const CDN_BASE = `https://cdn.jsdelivr.net/gh/hadrienbigoballand/website@${ASSETS_TAG}/`;
 const RELEASE_BASE = `https://github.com/hadrienbigoballand/website/releases/download/${RELEASE_TAG}/`;
