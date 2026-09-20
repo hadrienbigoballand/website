@@ -4062,15 +4062,35 @@ body {
   z-index: 1000;
 }
 
-/* View Transition API */
-::view-transition-old(root),
-::view-transition-new(root) {
+/* View Transition API -- the day/night wipe.
+   The @keyframes themselves are written by the toggle handler in index.html,
+   with the clicked icon's centre baked in as literal pixels: custom properties
+   set on :root are not reliably inherited into the ::view-transition pseudo
+   tree, and when they are dropped the circle falls back to the centre of the
+   window instead of the icon. Only the timing lives here. */
+
+/* The outgoing theme stays put underneath while the incoming one is revealed
+   by the growing circle above it. */
+::view-transition-old(root) {
   animation: none;
   mix-blend-mode: normal;
+  z-index: 1;
 }
 
 ::view-transition-new(root) {
+  /* Fast out of the icon, easing off as it reaches the far corner, so the wipe
+     reads as travelling the whole screen rather than crawling then snapping. */
+  animation: theme-wipe 650ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  mix-blend-mode: normal;
   z-index: 9999;
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation: none;
+  }
 }
 
 /* Companion-page links on the MICCAI publication card. */

@@ -21,7 +21,9 @@
 
   <link rel="stylesheet" href="css/normalize.css">
   <link rel="stylesheet" href="css/skeleton.css">
-  <link rel="stylesheet" href="css/main.css">
+  <!-- Versioned so a cached copy of the stylesheet cannot keep serving the old
+       theme-wipe animation; bump on every main.css change. -->
+  <link rel="stylesheet" href="css/main.css?v=3">
   <link rel="stylesheet" href="css/animate.css">
 
   <link rel="icon" type="image/png" href="images/dot.png">
@@ -32,35 +34,93 @@
 
   <script>
     $(document).ready(function () {
-      // Theme toggling with Circular Transition
-      function toggleTheme(newTheme, event) {
-        if (!document.startViewTransition) {
+      // Theme toggling with Circular Transition.
+      // The circle is anchored on the toggle icon itself (not the pointer), so
+      // the new theme always appears to pour out of the sun/moon, and it is
+      // grown to the distance of the farthest viewport corner so it sweeps all
+      // the way off-screen instead of stopping short.
+      // The wipe is a CSS animation on ::view-transition-new(root) (timing in
+      // main.css, keyframes written below). It used to be started from JS in
+      // transition.ready.then(), which is one frame late: whenever that frame
+      // was missed -- a slow click, a busy main thread, a second toggle landing
+      // on the first -- the new theme was already painted unclipped and the
+      // circle never showed. As CSS, the reveal is part of the transition from
+      // its very first frame, so it cannot be raced.
+      let themeTransition = null;
+      let themeWipeStyle = null;
+
+      // The <style> element holding the wipe's keyframes, appended after
+      // main.css so its definition is the one that wins.
+      function wipeStyle() {
+        if (!themeWipeStyle) {
+          themeWipeStyle = document.createElement('style');
+          document.head.appendChild(themeWipeStyle);
+        }
+        return themeWipeStyle;
+      }
+
+      function toggleTheme(newTheme, icon) {
+        const reduceMotion =
+          window.matchMedia &&
+          window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+        if (!document.startViewTransition || reduceMotion) {
           updateThemeClasses(newTheme);
           return;
         }
-        const x = event.clientX;
-        const y = event.clientY;
-        const endRadius = Math.hypot(
+
+        // A toggle landing mid-wipe replaces the running one rather than
+        // falling back to an abrupt switch.
+        if (themeTransition) {
+          themeTransition.skipTransition();
+        }
+
+        // Origin: the centre of the icon that was clicked.
+        const rect = icon.getBoundingClientRect();
+        const x = rect.left + rect.width / 2;
+        const y = rect.top + rect.height / 2;
+
+        // Radius: the farthest viewport corner from that centre, so the circle
+        // sweeps the whole screen instead of stopping short. The 1.05 is slack
+        // for a scrollbar, a safe-area inset or plain rounding -- without it a
+        // thin crescent of the old theme can survive in the far corner.
+        const endRadius = 1.05 * Math.hypot(
           Math.max(x, innerWidth - x),
           Math.max(y, innerHeight - y)
         );
+
+        // Everything is expressed in percentages of the snapshot, never in
+        // pixels. ::view-transition-new(root) is not guaranteed to be a box the
+        // size of the viewport -- browsers differ, and where it is not, pixel
+        // coordinates land somewhere else entirely (a circle drifting to the
+        // top of the window, stopping before it reaches the edges). A
+        // percentage is resolved against whatever box the snapshot actually
+        // has, so the circle stays on the icon and still clears the corner.
+        // A percentage radius resolves against sqrt(w^2 + h^2) / sqrt(2).
+        const cx = (x / innerWidth) * 100;
+        const cy = (y / innerHeight) * 100;
+        const reference = Math.hypot(innerWidth, innerHeight) / Math.SQRT2;
+        const r = (endRadius / reference) * 100;
+
+        // The keyframes are written here rather than in main.css: custom
+        // properties set on :root are not reliably inherited into the
+        // ::view-transition pseudo tree, and when they get dropped the circle
+        // silently falls back to the middle of the window.
+        wipeStyle().textContent =
+          '@keyframes theme-wipe {' +
+          `from { clip-path: circle(0% at ${cx}% ${cy}%); }` +
+          `to { clip-path: circle(${r}% at ${cx}% ${cy}%); }` +
+          '}';
+
         const transition = document.startViewTransition(() => {
           updateThemeClasses(newTheme);
         });
-        transition.ready.then(() => {
-          document.documentElement.animate(
-            {
-              clipPath: [
-                `circle(0px at ${x}px ${y}px)`,
-                `circle(${endRadius}px at ${x}px ${y}px)`,
-              ],
-            },
-            {
-              duration: 500,
-              easing: "ease-in",
-              pseudoElement: "::view-transition-new(root)",
-            }
-          );
+        themeTransition = transition;
+        // A skipped transition (hidden tab, or a toggle landing on this one)
+        // rejects these; the theme classes are applied either way.
+        transition.ready.catch(() => { });
+        transition.finished.catch(() => { }).finally(() => {
+          if (themeTransition === transition) themeTransition = null;
         });
       }
 
@@ -75,11 +135,11 @@
         localStorage.setItem('theme', theme);
       }
 
-      $("#moon").click(function (e) {
-        toggleTheme('day', e);
+      $("#moon").click(function () {
+        toggleTheme('day', this);
       });
-      $("#sun").click(function (e) {
-        toggleTheme('night', e);
+      $("#sun").click(function () {
+        toggleTheme('night', this);
       });
 
       const storedTheme = localStorage.getItem('theme');
