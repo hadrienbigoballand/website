@@ -136,9 +136,9 @@
         rarely provide; its accuracy degrades on anatomical variations absent from the training set; and
         each new anatomy carries a substantial retraining cost. Optimization-based methods are free of
         all three, but they remain substantially slower. That is the gap we address, with ideas drawn
-        from <a href="#cite">the computer vision literature</a>: a learning-free registration model that
-        is diffeomorphic and roughly forty times faster than the geometric state of the art. The code
-        will ship in scikit-shapes under an MIT licence.
+        from <a href="#cite">the computer vision literature</a>: <strong>a learning-free registration
+          model that is diffeomorphic and roughly forty times faster than the geometric state of the
+          art.</strong>
       </p>
     </section>
 
@@ -183,10 +183,7 @@
         <div class="hover-label mono" id="atlas-label" hidden></div>
       </div>
       <p class="figure-note">
-        Being fast changes what is feasible. Computing an
-        <span class="term" tabindex="0">atlas<span class="term-def" role="tooltip">A mean shape: the geometry
-            that minimises the total deformation needed to reach every subject in the population.</span></span>
-        from 978 vertebrae took 17 minutes on a single workstation.
+        Computing this atlas from 978 vertebrae took 17 minutes on a single workstation.
       </p>
     </section>
 
@@ -194,9 +191,10 @@
     <section class="screen viewer-screen" id="lungs" data-title="Lungs">
       <div class="stage stage-wide" id="lungs-stage"></div>
       <p class="figure-note">
-        The same pipeline, unchanged, on intra-patient lung vascular trees: inspiration registered to
-        expiration. Out of the box, with no tuning and 20 seconds per pair, it reaches a mean landmark
-        error of 3.08 mm, against 2 mm for the state of the art.
+        The same pipeline also performs remarkably well out of the box on a completely different
+        anatomy. We tested it on intra-patient lung vascular trees, registering inspiration to
+        expiration. Without any tuning, and in just 20 seconds per pair for 40k points, it achieves a
+        mean landmark error of 3.08 mm, compared to 2 mm for the state of the art.
       </p>
       <div class="slider-row">
         <label class="mono" for="lungs-slider">source</label>
@@ -215,10 +213,9 @@
 
           <h3>Code</h3>
           <p>
-            The method ships in
+            We make our code available in
             <a href="https://scikit-shapes.github.io" target="_blank" rel="noopener">scikit-shapes</a>,
-            our open-source library for shape analysis &mdash; point clouds, curves and surface meshes,
-            under the MIT license.
+            the open-source library for shape analysis, under MIT license. Feel free to try it yourself!
           </p>
 
           <h3>Contact</h3>
