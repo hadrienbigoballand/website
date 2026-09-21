@@ -869,7 +869,7 @@ body.night .logos img {
     display: flex;
     flex-direction: row;
     gap: 26px;
-    margin: 26px 0 10px;
+    margin: 18px 0 6px;
   }
 
   /* Equal columns, and stretched to the taller of the two: the code label
@@ -1523,12 +1523,40 @@ ol.refs li::before {
      that pull put the first logo 2 px from the edge of the phone. */
   #hero .logos {
     margin-left: 0;
+    /* 6 px back into the hero's budget; the row is two lines here and the air
+       above it was set for the one-line desktop row. */
+    margin-top: 16px;
   }
 
-  /* The loop is the one thing on this screen worth looking at; 188 px of it
-     was a thumbnail. It keeps its 16:9 but gets a floor to stand on. */
+  /* The first screen is the only one with a fixed budget, and it is tighter
+     than it looks. The box is 100lvh, the content is held in the top 100svh
+     of it (see .screen above), so everything in the hero has to come out of
+     100svh - 128px -- and on a 667 px phone with Safari's bar showing that is
+     about 457 px, not 667.
+
+     Four things want a share of it: the title block, the loop, the two
+     buttons and the logo row. Three of them are intrinsic; the loop is the
+     only elastic one, so it takes the REMAINDER instead of claiming a figure
+     of its own. It used to ask for 34vh -- 227 px on that phone -- which was
+     fine until the buttons arrived and then pushed the logo row 67 px past
+     the bottom of the content box. Pinning the height and letting the loop
+     absorb the difference makes the screen fit by construction, at every
+     phone height, rather than at the ones that happened to be measured.
+
+     min-height is the floor below which the loop stops being worth looking
+     at; under it the screen does overflow, which is the honest failure. The
+     floor is what sets how big a browser chrome the screen survives: at 96 px
+     the hero still fits a bar of about 110 px, which covers Safari's 82 and
+     Chrome for iOS. */
+  #hero {
+    height: 100lvh;
+  }
+
   .hero-video {
-    min-height: 34vh;
+    flex: 1 1 0;
+    min-height: 96px;
+    aspect-ratio: auto;
+    margin-top: 16px;
   }
 
   /* The viewer had 229 x 240 px to work in, beside a 88 px spine. Give it the
