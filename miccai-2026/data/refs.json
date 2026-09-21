@@ -1,38 +1,83 @@
 {
-  "_note": "Main references shown on the page. paper.tex cites bibliography.bib, which is not in the repo, so these were written out by hand -- CHECK THEM AGAINST YOUR .bib BEFORE PUBLISHING. Order here is the order shown.",
+  "_note": "Main references of the paper, selected from the camera-ready bibliography (38 entries). Amberg et al. (optimal step non-rigid ICP) and Mansi et al. (iLogDemons) head the list: they are the two main sources of inspiration for the method. Order here is the order shown.",
   "refs": [
     {
-      "key": "ref_voxelmorph",
-      "text": "G. Balakrishnan, A. Zhao, M. R. Sabuncu, J. Guttag, A. V. Dalca. VoxelMorph: A Learning Framework for Deformable Medical Image Registration. IEEE Transactions on Medical Imaging, 2019.",
-      "url": "https://doi.org/10.1109/TMI.2019.2897538"
+      "key": "amberg2007optimal",
+      "text": "B. Amberg, S. Romdhani, T. Vetter. Optimal Step Nonrigid ICP Algorithms for Surface Registration. IEEE CVPR, 2007.",
+      "url": "https://doi.org/10.1109/CVPR.2007.383165"
     },
     {
-      "key": "deformetrica",
-      "text": "A. Bône, M. Louis, B. Martin, S. Durrleman. Deformetrica 4: An Open-Source Software for Statistical Shape Analysis. ShapeMI @ MICCAI, 2018.",
-      "url": "https://doi.org/10.1007/978-3-030-04747-4_1"
+      "key": "mansi2011ilogdemons",
+      "text": "T. Mansi, X. Pennec, M. Sermesant, H. Delingette, N. Ayache. iLogDemons: A Demons-Based Registration Algorithm for Tracking Incompressible Elastic Biological Tissues. International Journal of Computer Vision, 2011.",
+      "url": "https://doi.org/10.1007/s11263-010-0405-z"
     },
     {
-      "key": "ref_classical_lddmm",
+      "key": "thirion1998demons",
+      "text": "J.-P. Thirion. Image Matching as a Diffusion Process: An Analogy with Maxwell's Demons. Medical Image Analysis, 1998.",
+      "url": "https://doi.org/10.1016/S1361-8415(98)80022-4"
+    },
+    {
+      "key": "vercauteren2008symmetric",
+      "text": "T. Vercauteren, X. Pennec, A. Perchant, N. Ayache. Symmetric Log-Domain Diffeomorphic Registration: A Demons-Based Approach. MICCAI, 2008.",
+      "url": "https://doi.org/10.1007/978-3-540-85990-1_90"
+    },
+    {
+      "key": "beg2005lddmm",
       "text": "M. F. Beg, M. I. Miller, A. Trouvé, L. Younes. Computing Large Deformation Metric Mappings via Geodesic Flows of Diffeomorphisms. International Journal of Computer Vision, 2005.",
       "url": "https://doi.org/10.1023/B:VISI.0000043755.93987.aa"
     },
     {
-      "key": "charon2013varifold",
-      "text": "N. Charon, A. Trouvé. The Varifold Representation of Nonoriented Shapes for Diffeomorphic Registration. SIAM Journal on Imaging Sciences, 2013.",
-      "url": "https://doi.org/10.1137/130918885"
+      "key": "bone2018deformetrica",
+      "text": "A. Bône, M. Louis, B. Martin, S. Durrleman. Deformetrica 4: An Open-Source Software for Statistical Shape Analysis. ShapeMI @ MICCAI, 2018.",
+      "url": "https://doi.org/10.1007/978-3-030-04747-4_1"
     },
     {
-      "key": "ref_fpfh",
+      "key": "myronenko2010cpd",
+      "text": "A. Myronenko, X. Song. Point Set Registration: Coherent Point Drift. IEEE Transactions on Pattern Analysis and Machine Intelligence, 2010.",
+      "url": "https://doi.org/10.1109/TPAMI.2010.46"
+    },
+    {
+      "key": "segal2009gicp",
+      "text": "A. Segal, D. Haehnel, S. Thrun. Generalized-ICP. Robotics: Science and Systems, 2009.",
+      "url": "https://www.roboticsproceedings.org/rss05/p21.html"
+    },
+    {
+      "key": "rusu2009fpfh",
       "text": "R. B. Rusu, N. Blodow, M. Beetz. Fast Point Feature Histograms (FPFH) for 3D Registration. IEEE ICRA, 2009.",
       "url": "https://doi.org/10.1109/ROBOT.2009.5152473"
     },
     {
-      "key": "ref_sinkhorn",
-      "text": "M. Cuturi. Sinkhorn Distances: Lightspeed Computation of Optimal Transport. NeurIPS, 2013.",
-      "url": "https://papers.nips.cc/paper/2013/hash/af21d0c97db2e27e13572cbf59eb343d-Abstract.html"
+      "key": "bookstein1989tps",
+      "text": "F. L. Bookstein. Principal Warps: Thin-Plate Splines and the Decomposition of Deformations. IEEE Transactions on Pattern Analysis and Machine Intelligence, 1989.",
+      "url": "https://doi.org/10.1109/34.24792"
     },
     {
-      "key": "ref_keops",
+      "key": "kessler2025normalizing",
+      "text": "N. Kessler, R. Magnet, J. Feydy. Normalizing Diffusion Kernels with Optimal Transport. arXiv:2507.06161, 2025.",
+      "url": "https://arxiv.org/abs/2507.06161"
+    },
+    {
+      "key": "shen2021robustot",
+      "text": "Z. Shen, J. Feydy, P. Liu, A. H. Curiale, R. San José Estépar, R. San José Estépar, M. Niethammer. Accurate Point Cloud Registration with Robust Optimal Transport. NeurIPS, 2021.",
+      "url": "https://arxiv.org/abs/2110.15263"
+    },
+    {
+      "key": "ovsjanikov2012functional",
+      "text": "M. Ovsjanikov, M. Ben-Chen, J. Solomon, A. Butscher, L. Guibas. Functional Maps: A Flexible Representation of Maps Between Shapes. ACM Transactions on Graphics, 2012.",
+      "url": "https://doi.org/10.1145/2185520.2185526"
+    },
+    {
+      "key": "sassen2024repulsive",
+      "text": "J. Sassen, H. Schumacher, M. Rumpf, K. Crane. Repulsive Shells. ACM Transactions on Graphics, 2024.",
+      "url": "https://doi.org/10.1145/3658174"
+    },
+    {
+      "key": "balakrishnan2019voxelmorph",
+      "text": "G. Balakrishnan, A. Zhao, M. R. Sabuncu, J. Guttag, A. V. Dalca. VoxelMorph: A Learning Framework for Deformable Medical Image Registration. IEEE Transactions on Medical Imaging, 2019.",
+      "url": "https://doi.org/10.1109/TMI.2019.2897538"
+    },
+    {
+      "key": "charlier2021keops",
       "text": "B. Charlier, J. Feydy, J. A. Glaunès, F.-D. Collin, G. Durif. Kernel Operations on the GPU, with Autodiff, without Memory Overflows. Journal of Machine Learning Research, 2021.",
       "url": "https://www.jmlr.org/papers/v22/20-275.html"
     },
@@ -47,9 +92,9 @@
       "url": "https://papers.nips.cc/paper_files/paper/2023/hash/abf37695a4562ac4c05194d717d47eec-Abstract-Datasets_and_Benchmarks.html"
     },
     {
-      "key": "myronenko2010point",
-      "text": "A. Myronenko, X. Song. Point Set Registration: Coherent Point Drift. IEEE Transactions on Pattern Analysis and Machine Intelligence, 2010.",
-      "url": "https://doi.org/10.1109/TPAMI.2010.46"
+      "key": "mitsuhashi2009bodyparts3d",
+      "text": "N. Mitsuhashi, K. Fujieda, T. Tamura, S. Kawamoto, T. Takagi, K. Okubo. BodyParts3D: 3D Structure Database for Anatomical Concepts. Nucleic Acids Research, 2009.",
+      "url": "https://doi.org/10.1093/nar/gkn613"
     }
   ]
 }
