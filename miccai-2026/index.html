@@ -17,7 +17,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500&display=swap">
-  <link rel="stylesheet" href="css/paper.css?v=48">
+  <link rel="stylesheet" href="css/paper.css?v=58">
 
   <script>
     // Same key and classes as the main site, so the theme carries across.
@@ -105,6 +105,30 @@
             <sup>2</sup> Hôpital Européen Georges Pompidou, AP-HP, Paris
           </p>
         </div>
+      </div>
+
+      <!-- The two ways out of this page. A direct child of the section, like
+           the logo row, rather than a cell of .hero-grid: it is pinned to the
+           right gutter and centred on the window, which is a position in the
+           section, not a position in the title's grid. Each sits on its own
+           halo -- one big soft ellipse of a single pastel, in a ::before, not a
+           border or a shadow, so the edge stays undefined and the thing reads
+           as light on the page rather than as a chrome button. -->
+      <div class="hero-cta">
+        <a class="cta cta-code" href="https://scikit-shapes.github.io" target="_blank" rel="noopener">
+          Try our code on your&nbsp;data!
+        </a>
+        <!-- The PDF is an asset of the same release as the hero videos, not a
+             file in the repo: it is 6 MB and has no business in main's
+             history. No target="_blank" and no assetURL() here -- GitHub
+             serves release assets as application/octet-stream, so the click
+             downloads the file and the page is never navigated away from.
+             (The `download` attribute is ignored cross-origin; it is left in
+             as the filename hint for anything that saves by other means.) -->
+        <a class="cta cta-paper" download="OptimalStepsFastDiffeo.pdf"
+          href="https://github.com/hadrienbigoballand/website/releases/download/miccai-2026-assets-v2/OptimalStepsFastDiffeo.pdf">
+          Read our paper
+        </a>
       </div>
 
       <!-- Direct child of the section, so the bottom band is the logos and the
