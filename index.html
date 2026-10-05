@@ -1043,6 +1043,26 @@
       color: #C8C8C9;
     }
 
+    /* Intro header with profile photo */
+    .intro-header {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      padding-bottom: 48px;
+    }
+    body.day .intro-header h1,
+    body.night .intro-header h1 {
+      padding-bottom: 0;
+      margin-bottom: 0;
+    }
+    .profile-photo {
+      width: 96px;
+      height: 96px;
+      border-radius: 50%;
+      object-fit: cover;
+      flex-shrink: 0;
+    }
+
     /* Bio links */
     .bio-links {
       display: flex;
@@ -1102,7 +1122,10 @@
       <div class="row group">
 
         <div class="six columns">
-          <h1 id="intro" class="night" data-i18n="intro-title">Hi, I'm Hadrien.</h1>
+          <div class="intro-header">
+            <img src="images/profile.jpg" alt="Portrait of Hadrien Bigo--Balland" class="profile-photo" width="96" height="96">
+            <h1 id="intro" class="night" data-i18n="intro-title">Hi, I'm Hadrien.</h1>
+          </div>
 
           <div class="animated fadeIn two" id="bio">
             <p data-i18n="bio-phd">I am currently pursuing a PhD at <a href="https://myfit-solutions.com/"
