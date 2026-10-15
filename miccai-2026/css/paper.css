@@ -860,24 +860,31 @@ body.night .logos img {
     margin: 18px 0 6px;
   }
 
-  /* Equal columns, side by side; the overhang comes in so the right-hand
-     button is not cut by #deck's horizontal clip. */
-  .hero-cta .cta {
-    flex: 1 1 0;
-    min-width: 0;
-    max-width: 150px;
-  }
-
+  /* No room for the pictures beside the loop on a narrow screen: they
+     squeezed the video down to a sliver. Only the two buttons stay, side by
+     side, the same height, the pictures coming back once the window is wide. */
   .hero-cta {
     justify-content: center;
+    align-items: stretch;
+    gap: 14px;
+  }
+
+  .cta-thumb {
+    display: none;
+  }
+
+  .hero-cta .cta {
+    display: flex;
   }
 
   .cta-btn {
-    right: -6px;
-    bottom: 10px;
-    padding: 5px 9px 6px;
-    border-radius: 10px;
-    font-size: 12px;
+    position: static;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 7px 14px 8px;
+    font-size: 14px;
+    text-align: center;
   }
 
   .hero-video {
