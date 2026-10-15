@@ -603,130 +603,118 @@ body.night .icon-moon {
   top: 50%;
   transform: translateY(-50%);
   z-index: 2;
-  width: clamp(190px, 16vw, 232px);
+  width: clamp(150px, 12.5vw, 190px);
   display: flex;
   flex-direction: column;
-  /* Each halo bleeds ~52 px past its plate before the blur, so anything much
-     under 90 px lets the two ellipses overlap and the pastels mix into a dull
-     mauve. */
-  gap: 92px;
+  gap: 34px;
 }
 
+/* Each way out is a picture of where it goes -- the first page of the paper,
+   the GitHub mark -- with its label as a button pinned to the bottom-right
+   corner, overhanging the edge a little so it reads as laid on the card. */
 .cta {
   position: relative;
   display: block;
-  padding: 15px 16px;
-  border-radius: 16px;
-  text-align: center;
-  font-family: var(--sans-md);
-  font-size: 14.5px;
-  line-height: 1.32;
-  /* NOT --strong. That is #000 in the day theme, and the labels were then the
-     only pure black anywhere on the page, in a medium weight, sitting on the
-     softest and least contrasted thing on it: a hard edge at maximum contrast
-     over a blurred wash, two drawings that do not belong together. The ink is
-     the halo's own hue taken right down in lightness instead, so the words
-     read as the dense centre of the blob rather than as something laid on top
-     of it. Contrast against the middle of each ellipse stays above 7:1. */
-  color: var(--ink);
+  color: inherit;
   text-decoration: none;
-  /* No plate. A panel behind the words punched the middle out of the ellipse
-     and left a ring of colour round a pill -- the halo has to be the thing the
-     words are written ON. The pastel is light enough in the day theme, and
-     dimmed enough at night, to carry them on its own. */
-  background: none;
   transition: transform .3s cubic-bezier(.2, .7, .3, 1);
 }
 
-/* The halo: ONE ellipse, one colour, fading to nothing well inside its own
-   box. blur() on top of a gradient that already fades out is not redundant --
-   it is what kills the banding the gradient leaves on a flat cream field,
-   where eight-bit steps across a wide, low-contrast ramp are plainly visible.
-   The box is wider than it is tall so the ellipse follows the pill rather than
-   sitting on it as a disc. */
-.cta::before {
-  content: "";
-  position: absolute;
-  inset: -52px -66px;
-  z-index: -1;
-  background: radial-gradient(ellipse 50% 50% at 50% 50%,
-      var(--halo) 0%,
-      color-mix(in srgb, var(--halo) 62%, transparent) 50%,
-      transparent 76%);
-  filter: blur(24px);
-  transition: opacity .3s ease, transform .3s cubic-bezier(.2, .7, .3, 1);
-  pointer-events: none;
+/* No card behind either picture: the page and the mark stand on the page
+   itself, lifted by a drop shadow alone. */
+.cta-thumb {
+  display: block;
+  width: 100%;
+  height: auto;
 }
 
-/* The pair. Same saturation and same lightness, hues 200 degrees apart -- the
-   near-complementary pastel scheme any harmony tool lands on, built here in
-   HSL so the two carry exactly the same weight and neither reads as the louder
-   one. They are also the page's own two accents, --src and --tgt, taken down
-   to a pastel: peach is #ff343a desaturated and lifted, powder blue is
-   #1f77b4. So the buttons agree with the renders without shouting like them.
+img.cta-thumb {
+  aspect-ratio: 720 / 932;
+  object-fit: cover;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, .16);
+}
 
-   Lightness is 72 %, not the 80 % a pastel usually sits at: the page is
-   #f8f7f4, and at 80 % the two halos were all but invisible on it -- a pastel
-   only reads as a pastel where there is something for it to be pale AGAINST.
+/* The mark is drawn, not boxed, so its shadow follows the silhouette. */
+.cta-thumb-code {
+  display: flex;
+  justify-content: center;
+  padding-bottom: 30px;
+  color: var(--fg);
+}
 
-   --ink is the same hue at the other end of the scale: lightness 22 % rather
-   than 72 %, so the label and its halo are one colour seen twice. */
-.cta-code {
-  /* hsl(14 78% 72%) / hsl(14 59% 22%) */
-  --halo: #f09a80;
-  --ink: #5a2418;
+.cta-thumb-code svg {
+  width: 72%;
+  height: auto;
+  filter: drop-shadow(0 6px 10px rgba(0, 0, 0, .22));
+}
+
+/* The label: a solid plate with a darker rim of the same hue, white type. The
+   two hues are the page's own accents, --tgt and --src, taken a step softer so
+   they sit with the cream rather than shout on it. */
+.cta-btn {
+  position: absolute;
+  right: -12px;
+  bottom: 14px;
+  width: max-content;
+  white-space: nowrap;
+  padding: 6px 11px 7px;
+  border-radius: 12px;
+  border: 2.5px solid var(--btn-rim);
+  background: var(--btn);
+  color: #fff;
+  font-family: var(--sans-md);
+  font-size: 14px;
+  line-height: 1.25;
+  text-align: right;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, .14);
+  transition: background-color .2s ease, transform .3s cubic-bezier(.2, .7, .3, 1);
 }
 
 .cta-paper {
-  /* hsl(214 78% 72%) / hsl(210 67% 21%) */
-  --halo: #80b0f0;
-  --ink: #12365c;
+  --btn: #3f7fc4;
+  --btn-rim: #1f548c;
+}
+
+.cta-code {
+  --btn: #e0584b;
+  --btn-rim: #a3322a;
 }
 
 .cta:hover {
   transform: translateY(-2px);
 }
 
-.cta:hover::before {
-  transform: scale(1.08);
+.cta:hover .cta-btn {
+  background: var(--btn-rim);
 }
 
 .cta:focus-visible {
   outline: 2px solid var(--fg);
-  outline-offset: 3px;
+  outline-offset: 4px;
+  border-radius: 6px;
 }
 
-/* On #18181a a pastel is a light source rather than a wash: at full strength
-   the two ellipses lit the whole right third of the screen, and white type on
-   a bright peach cleared only about 3:1. Taken to .45 the halo settles to a
-   muted version of itself against the dark and the labels clear 6:1. */
-body.night .cta::before,
-html.pre-night body .cta::before {
-  opacity: .45;
+/* A white page is a lamp on #18181a; taken down a little it sits with the
+   rest of the night theme, and the shadows go deeper to read on the dark. */
+body.night img.cta-thumb,
+html.pre-night body img.cta-thumb {
+  filter: brightness(.86);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, .5);
 }
 
-/* The ink flips end for end with the theme: the same two hues, now at the
-   light end, so they still belong to their halo rather than being generic
-   white. */
-body.night .cta-code,
-html.pre-night body .cta-code {
-  --ink: #ffe3d8;
-}
-
-body.night .cta-paper,
-html.pre-night body .cta-paper {
-  --ink: #d8e6ff;
+body.night .cta-thumb-code svg,
+html.pre-night body .cta-thumb-code svg {
+  filter: drop-shadow(0 6px 10px rgba(0, 0, 0, .6));
 }
 
 @media (prefers-reduced-motion: reduce) {
 
   .cta,
-  .cta::before {
+  .cta-btn {
     transition: none;
   }
 
-  .cta:hover,
-  .cta:hover::before {
+  .cta:hover {
     transform: none;
   }
 }
@@ -872,27 +860,24 @@ body.night .logos img {
     margin: 18px 0 6px;
   }
 
-  /* Equal columns, and stretched to the taller of the two: the code label
-     takes three lines in ~135 px and the paper label two, and two halos of
-     different heights side by side look like a mistake. */
+  /* Equal columns, side by side; the overhang comes in so the right-hand
+     button is not cut by #deck's horizontal clip. */
   .hero-cta .cta {
     flex: 1 1 0;
     min-width: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 13px 10px;
-    font-size: 13px;
+    max-width: 150px;
   }
 
-  /* The bleed has to come in on both axes now. Sideways, because #deck clips
-     overflow on x and a halo run off the side of a 375 px screen is cut by a
-     straight vertical line -- the one edge this thing must not have -- and
-     because two ellipses 26 px apart mix into a mauve if they overlap.
-     Vertically, because the logo row is 22 px below. */
-  .cta::before {
-    inset: -30px -11px;
-    filter: blur(18px);
+  .hero-cta {
+    justify-content: center;
+  }
+
+  .cta-btn {
+    right: -6px;
+    bottom: 10px;
+    padding: 5px 9px 6px;
+    border-radius: 10px;
+    font-size: 12px;
   }
 
   .hero-video {
