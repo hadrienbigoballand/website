@@ -8,6 +8,11 @@
  *   mat_contour() inverted hull    -> BackSide shell pushed along the normal
  *   ortho cam, 20 deg tilt         -> OrthographicCamera, same default pose
  *
+ * Lighting is the exception: surfaces are shaded by a matcap that follows the
+ * view. The matcap is not drawn by hand, it is BAKED from the lighting above
+ * (see bakeMatcap), so at each figure's opening pose the colours are exactly
+ * what the HDRI and the key gave; only orbiting no longer changes them.
+ *
  * The one honest divergence: Cycles bounces light between parts and we do not,
  * so there is no colour bleeding.  On roughness-0.7 dielectrics under an HDRI
  * that is invisible.  The AO term is what carries the read, and it is baked.
@@ -273,6 +278,22 @@ vec3 haloRamp(float t) {
  *
  * Reimplementing the projection here instead would let the page and the film
  * drift apart on the one figure whose argument is that the two agree. */
+/* The matcap lookup. `normal` is view space, and with an orthographic camera
+ * its x and y are exactly where that normal sits on the baked sphere. The
+ * bake keeps diffuse and specular apart (white base, then black base), so the
+ * base colour tints only the diffuse part, as it does in the Principled BSDF. */
+const MATCAP_LOOKUP = `
+uniform sampler2D uMatcapWhite;
+uniform sampler2D uMatcapBlack;
+uniform vec3 emissive;
+vec3 matcapShade(vec3 base, vec3 n) {
+  vec2 muv = n.xy * 0.49 + 0.5;
+  vec3 white = texture2D(uMatcapWhite, muv).rgb;
+  vec3 black = texture2D(uMatcapBlack, muv).rgb;
+  return base * (white - black) + black;
+}
+`;
+
 const FEATURE_UNIFORMS = [
   'uFeatMix', 'uFeatMode', 'uXyzComps', 'uXyzMu', 'uXyzLo', 'uXyzHi',
   'uBothPos', 'uBothNrm', 'uBothMuPos', 'uBothMuNrm', 'uBothLo', 'uBothHi',
@@ -331,10 +352,8 @@ vec3 bothColour(vec3 posMm, vec3 nrm) {
 export function surfaceMaterial({
   color, opacity = 1, roughness = ROUGHNESS, kernel = false, features = false,
 }) {
-  const mat = new THREE.MeshStandardMaterial({
+  const mat = new THREE.MeshMatcapMaterial({
     color,
-    roughness,
-    metalness: 0.0,
     transparent: opacity < 1,
     opacity,
     side: THREE.FrontSide,
@@ -361,6 +380,11 @@ export function surfaceMaterial({
   }` : '';
 
   mat.onBeforeCompile = (shader) => {
+    shader.uniforms.uMatcapWhite = mat.userData.uMatcapWhite;
+    shader.uniforms.uMatcapBlack = mat.userData.uMatcapBlack;
+    // Under three's own name: seeing `material.emissive`, the renderer
+    // refreshes this uniform itself, from emissive * emissiveIntensity.
+    shader.uniforms.emissive = { value: new THREE.Color() };
     if (kernel) {
       shader.uniforms.uKernelCentre = mat.userData.uKernelCentre;
       shader.uniforms.uKernelRadius = mat.userData.uKernelRadius;
@@ -403,6 +427,15 @@ uniform float uKernelMix;
 float vKernelShaped;
 ${HALO_RAMP}` : ''}`)
       // Blender MixRGB MULTIPLY at factor f: A*(1-f) + A*B*f = A*(1-f+f*B).
+      .replace('#include <normal_pars_fragment>', `#include <normal_pars_fragment>
+${MATCAP_LOOKUP}`)
+      // A matcap has no emissive stage: `emissive` (the atlas hover) and the
+      // halo's glow are added here instead.
+      .replace(
+        'vec3 outgoingLight = diffuseColor.rgb * matcapColor.rgb;',
+        `vec3 outgoingLight = matcapShade(diffuseColor.rgb, normal) + emissive;${kernel ? `
+  outgoingLight += haloRamp(vKernelShaped) * (vKernelShaped * 1.1);` : ''}`,
+      )
       .replace(
         '#include <color_fragment>',
         `#include <color_fragment>${featureBlock}${haloColour}
@@ -420,7 +453,15 @@ ${HALO_RAMP}` : ''}`)
   // Distinct key, or three reuses another material's compiled program -- and
   // the two variants here differ, so the key has to say which one this is.
   mat.customProgramCacheKey = () =>
-    `miccai-ao-surface${kernel ? '-kernel' : ''}${features ? '-feat' : ''}`;
+    `miccai-ao-matcap${kernel ? '-kernel' : ''}${features ? '-feat' : ''}`;
+
+  // MeshStandardMaterial had one, and callers still write to it.
+  mat.emissive = new THREE.Color(0x000000);
+  mat.emissiveIntensity = 1;
+
+  // Filled in by syncMatcap() once the stage's lights exist.
+  mat.userData.uMatcapWhite = { value: null };
+  mat.userData.uMatcapBlack = { value: null };
 
   if (kernel) {
     // Held on the material so the caller can write to them before the program
@@ -442,6 +483,82 @@ ${HALO_RAMP}` : ''}`)
     mat.userData.uBothWn = { value: 1.0 };
   }
   return mat;
+}
+
+/* ---------------------------------------------------------------- matcap -- */
+
+const MATCAP_PX = 256;
+
+/**
+ * Bake the scene's own lighting into a matcap.
+ *
+ * A unit sphere in the Principled material is rendered under the scene's
+ * lights and HDRI, from the camera's orientation, by an orthographic camera
+ * that it exactly fills: each pixel is then the colour a surface with that
+ * view-space normal had in the original render. Twice -- white base, then
+ * black base -- so diffuse and specular can be separated at lookup. Rendered
+ * to a float target, before tone mapping; AgX is still applied on screen.
+ */
+function bakeMatcap(renderer, scene, camera) {
+  const bake = new THREE.Scene();
+  bake.environment = scene.environment;
+  bake.environmentIntensity = scene.environmentIntensity;
+  scene.traverse((o) => {
+    if (!o.isLight) return;
+    const l = o.clone();
+    o.getWorldPosition(l.position);
+    bake.add(l);
+  });
+
+  const mat = new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: ROUGHNESS, metalness: 0 });
+  const sphere = new THREE.Mesh(new THREE.SphereGeometry(1, 128, 64), mat);
+  bake.add(sphere);
+
+  const cam = new THREE.OrthographicCamera(-1, 1, 1, -1, 0.1, 10);
+  camera.updateMatrixWorld();
+  camera.getWorldQuaternion(cam.quaternion);
+  cam.position.set(0, 0, 5).applyQuaternion(cam.quaternion);
+  cam.updateMatrixWorld();
+
+  const target = () => new THREE.WebGLRenderTarget(MATCAP_PX, MATCAP_PX, {
+    type: THREE.HalfFloatType, samples: 4,
+  });
+  const white = target(), black = target();
+  const prev = renderer.getRenderTarget();
+  renderer.setRenderTarget(white);
+  renderer.clear();
+  renderer.render(bake, cam);
+  mat.color.setRGB(0, 0, 0);
+  renderer.setRenderTarget(black);
+  renderer.clear();
+  renderer.render(bake, cam);
+  renderer.setRenderTarget(prev);
+
+  sphere.geometry.dispose();
+  mat.dispose();
+  return { white: white.texture, black: black.texture };
+}
+
+/**
+ * Hand the scene's matcap to every surface in it, baking it on first use.
+ * Waits for the lights: until loadEnvironment() resolves there are none, and
+ * a bake then would be black.
+ */
+export function syncMatcap(renderer, scene, camera) {
+  let matcap = scene.userData.matcap;
+  if (!matcap) {
+    let lit = false;
+    scene.traverse((o) => { if (o.isLight) lit = true; });
+    if (!lit) return;
+    matcap = scene.userData.matcap = bakeMatcap(renderer, scene, camera);
+  }
+  scene.traverse((o) => {
+    const u = o.material && o.material.userData;
+    if (u && u.uMatcapWhite && u.uMatcapWhite.value !== matcap.white) {
+      u.uMatcapWhite.value = matcap.white;
+      u.uMatcapBlack.value = matcap.black;
+    }
+  });
 }
 
 /** mat_contour(): backfaces of a shell pushed out along the normal. */
@@ -632,6 +749,7 @@ export function createStage(container, { onFrame, onResize, radius = 1 } = {}) {
     const moved = controls.update();
     const wants = onFrame ? onFrame(dt) : false;
     if (stage.dirty || moved || wants) {
+      syncMatcap(renderer, stage.scene, stage.camera);
       renderer.render(stage.scene, stage.camera);
       stage.dirty = false;
     }

@@ -21,7 +21,7 @@
 
 import {
   THREE, createScene, loadEnvironment, surfaceMaterial, outlineMaterial,
-  refreshOutlineColor, computeNormals, srcColor, boneColor, OUTLINE_FRACTION,
+  refreshOutlineColor, computeNormals, srcColor, boneColor, OUTLINE_FRACTION, syncMatcap,
 } from './viewer-core.js';
 
 // The vertical selector's viewpoint: offset along +X, +Z up. Copied here so a
@@ -193,12 +193,14 @@ export function createFilmstrip({ container, manifest, viewer, onSeek }) {
       // Same grammar AND the same material state as the vertical selector:
       // unselected bone at 0.72, the pick at full opacity.
       mesh.material.color.copy(bone);
+      syncMatcap(renderer, scene, camera);
       renderer.render(scene, camera);
       if (idle.width !== w) { idle.width = w; idle.height = w; }
       idleCtx.clearRect(0, 0, w, w);
       idleCtx.drawImage(renderer.domElement, 0, 0, w, w);
 
       mesh.material.color.copy(src);
+      syncMatcap(renderer, scene, camera);
       renderer.render(scene, camera);
       if (live.width !== w) { live.width = w; live.height = w; }
       liveCtx.clearRect(0, 0, w, w);
