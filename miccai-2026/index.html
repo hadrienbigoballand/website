@@ -26,6 +26,17 @@
       document.documentElement.classList.add('pre-' + t);
     })();
   </script>
+
+  <!-- Before any module script: Firefox ignores an import map added after
+       the first module load has started, and then cannot resolve "three". -->
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://unpkg.com/three@0.170.0/build/three.module.js",
+        "three/addons/": "https://unpkg.com/three@0.170.0/examples/jsm/"
+      }
+    }
+  </script>
 </head>
 
 <body>
@@ -291,14 +302,6 @@
     </style>
   </noscript>
 
-  <script type="importmap">
-    {
-      "imports": {
-        "three": "https://unpkg.com/three@0.170.0/build/three.module.js",
-        "three/addons/": "https://unpkg.com/three@0.170.0/examples/jsm/"
-      }
-    }
-  </script>
   <script type="module" src="js/paper.js?v=30"></script>
 </body>
 
