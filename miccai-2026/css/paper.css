@@ -547,9 +547,18 @@ h3.first {
   display: none;
 }
 
-body.day .icon-sun,
-body.night .icon-moon {
+/* Through #theme-btn, not bare: `#theme-btn img` above carries an id, and a
+   rule without one lost to it wherever it sat -- both icons stayed hidden and
+   the button was an invisible 16 px square in the corner. */
+body.day #theme-btn .icon-sun,
+body.night #theme-btn .icon-moon {
   display: block;
+}
+
+/* The colouring, as an icon in the chrome. A phone only: see the phone block. */
+#colour-btn,
+#colour-menu {
+  display: none;
 }
 
 /* ------------------------------------------------------------------ hero -- */
@@ -1591,23 +1600,13 @@ ol.refs li::before {
     row-gap: 10px;
   }
 
-  /* The steps screen as one instrument: the colour toggles in the top right
-     corner, the viewer and the spine taking all the height between, and the
-     strip that drives them running along the bottom edge. The toggles are an
-     occasional switch, so they go out of the way of both; stacked and
-     right-aligned, so the mode cycler that appears under "Back to the
-     registration" lines up with it instead of wrapping. */
+  /* The steps screen as one instrument: the viewer and the spine taking all
+     the height, and the strip that drives them running along the bottom edge.
+     The colour toggles are not on the screen at all here: they are the palette
+     icon in the chrome (#colour-btn), level with the back arrow. As two lines
+     of text they held a 48 px band under it for an occasional switch. */
   #steps .viewer-controls {
-    order: -1;
-    flex-direction: column;
-    align-items: flex-end;
-    gap: 2px;
-    margin: 0 0 4px;
-    /* Room for both lines from the start: the mode cycler appears under the
-       toggle when the colouring is on, and without this the viewer and the
-       spine jumped down a line at that moment. */
-    min-height: 3em;
-    justify-content: flex-start;
+    display: none;
   }
 
   #steps .viewer-controls + .timeline {
@@ -1616,8 +1615,10 @@ ol.refs li::before {
 
   /* Less air under the strip than the other screens keep: it is the bottom
      of this one, and the difference term still clears the browser's bar. */
+  /* The 28 px under the strip are the strip's own padding (see .filmstrip),
+     not the section's: the thumb lands there as often as on the frames. */
   #steps {
-    padding-bottom: calc(100lvh - 100svh + 28px);
+    padding-bottom: calc(100lvh - 100svh);
   }
 
   /* No Play on a phone: the strip below is scrolled through instead, and the
@@ -1648,7 +1649,10 @@ ol.refs li::before {
      is the smallest comfortable target. Padded by half its own width less half
      a frame, so the first slot and the last frame can both reach the centre.
      pan-x: a vertical swipe on the strip neither scrolls the page nor the
-     strip; the page scrolls from outside the figure. */
+     strip; the page scrolls from outside the figure.
+     The bottom padding runs down to the bottom of the screen, so the empty
+     band under the frames scrolls the strip too -- the browser's own scroll,
+     momentum and snapping included, rather than touches forwarded by hand. */
   .filmstrip {
     position: relative;
     overflow-x: auto;
@@ -1657,7 +1661,7 @@ ol.refs li::before {
     scrollbar-width: none;
     touch-action: pan-x;
     cursor: default;
-    padding: 0 calc(50% - 22px) 4px;
+    padding: 0 calc(50% - 22px) 32px;
     /* The ends fade out, so the strip reads as a wheel running on past the
        screen rather than as a row that was cut off. On the box, not on the
        content, so the fade stays put while the frames scroll through it. */
@@ -1772,5 +1776,98 @@ ol.refs li::before {
 
   #rail button .t {
     align-self: center;
+  }
+
+  /* The palette: same box and stroke as the back arrow, on the same line,
+     just left of the theme toggle. Only while the steps screen is the one on
+     show (body[data-screen-steps], set in paper.js): it acts on that viewer
+     alone, and anywhere else it would be a button for something off screen. */
+  #colour-btn {
+    display: block;
+    position: fixed;
+    top: 20px;
+    right: 56px;
+    z-index: 60;
+    padding: 8px;
+    border: 0;
+    background: none;
+    line-height: 0;
+    color: var(--strong);
+    cursor: pointer;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity .2s, visibility 0s .2s, color .18s;
+  }
+
+  body[data-screen-steps] #colour-btn {
+    opacity: 1;
+    visibility: visible;
+    transition: opacity .2s, color .18s;
+  }
+
+  /* On: the red of the current step, so the state shows without opening it. */
+  #colour-btn[data-on="true"] {
+    color: var(--src);
+  }
+
+  #colour-menu {
+    position: fixed;
+    top: 64px;
+    right: 18px;
+    z-index: 61;
+    min-width: 200px;
+    padding: 6px 0;
+    background: var(--panel);
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
+    border: 1px solid var(--hair);
+    border-radius: 4px;
+  }
+
+  #colour-menu:not([hidden]) {
+    display: block;
+  }
+
+  #colour-menu button {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    /* 44 px rows: the smallest comfortable target. */
+    min-height: 44px;
+    padding: 0 16px;
+    border: 0;
+    background: none;
+    font: 14px var(--sans);
+    color: var(--fg);
+    text-align: left;
+    cursor: pointer;
+  }
+
+  /* The pick is marked by a dot in the step's red, not by weight or a tick:
+     the same mark the strip's caret uses. */
+  #colour-menu button::before {
+    content: "";
+    flex: none;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: transparent;
+  }
+
+  #colour-menu button[aria-checked="true"]::before {
+    background: var(--src);
+  }
+
+  #colour-menu button:disabled {
+    color: var(--dim);
+    cursor: default;
+  }
+
+  #colour-menu .note {
+    margin: 4px 16px 6px 32px;
+    font: 11px/1.4 var(--mono);
+    letter-spacing: .02em;
+    color: var(--dim);
   }
 }

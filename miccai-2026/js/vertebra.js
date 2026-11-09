@@ -624,6 +624,15 @@ export function createVertebraViewer({ container, manifest, ui }) {
       stage.invalidate();
     },
     get featureMode() { return FEATURE_MODES[featMode]; },
+    get featureModeIndex() { return featMode; },
+    setFeatureMode(i) {
+      featMode = Math.max(0, Math.min(FEATURE_MODES.length - 1, i));
+      if (mesh && mesh.material.userData.uFeatMode) {
+        mesh.material.userData.uFeatMode.value = featMode;
+        targetMesh.material.userData.uFeatMode.value = featMode;
+      }
+      stage.invalidate();
+    },
     cycleFeatureMode() {
       featMode = (featMode + 1) % FEATURE_MODES.length;
       if (mesh && mesh.material.userData.uFeatMode) {

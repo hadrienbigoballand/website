@@ -289,6 +289,7 @@ function buildTimeline(manifest, viewer) {
      placeholders rather than doing nothing when pressed. */
   const featBtn = document.getElementById('feature-toggle');
   let featOn = false;
+  let colour = null;   // the phone's palette menu, wired below
 
   const setKernel = (on) => {
     kernelOn = on;
@@ -311,6 +312,7 @@ function buildTimeline(manifest, viewer) {
     featBtn.textContent = on ? 'Back to the registration' : 'Colour by the features';
     featBtn.setAttribute('aria-pressed', String(on));
     showMode();
+    colour?.sync();
   };
   if (modeBtn) {
     // Video 1's own order, and its own argument: coordinates match what is
@@ -333,9 +335,28 @@ function buildTimeline(manifest, viewer) {
     });
   }
 
+  colour = wireColourMenu({
+    isOn: () => featOn,
+    // From the menu: off, or on in mode `i`. Through setFeatures so the text
+    // toggles of the wide layout stay in step if the window is turned.
+    pick: (i) => {
+      if (i < 0) { if (featOn) setFeatures(false); return; }
+      viewer.setFeatureMode?.(i);
+      if (!featOn) {
+        if (kernelOn) setKernel(false);
+        setFeatures(true);
+      } else {
+        showMode();
+      }
+    },
+    modeIndex: () => viewer.featureModeIndex ?? 2,
+    canFeature: () => viewer.hasFeatures,
+  });
+
   /** Called when a vertebra finishes loading: the placeholders have no run
    *  behind them and so no features to show. */
   function syncFeatureAvailability() {
+    colour?.sync();
     if (!featBtn) return;
     const can = viewer.hasFeatures;
     featBtn.disabled = !can;
@@ -413,6 +434,75 @@ function buildTimeline(manifest, viewer) {
 
   syncFeatureAvailability();
   return { render, setPlaying, strip, onVertebraLoaded };
+}
+
+/* The colouring on a phone: a palette icon level with the back arrow, and a
+ * menu of the four ways to colour the bone -- the registration itself, or the
+ * features by coordinates, FPFH or both. One pick replaces the toggle and the
+ * mode cycler of the wide layout, which needed two taps to reach the third
+ * mode and two lines of screen to say so.
+ *
+ * The icon only shows while the steps screen is the one in view: it acts on
+ * that viewer alone. "In view" is the screen spanning the middle of the
+ * window, which the snap makes true of exactly one screen at a time.
+ */
+function wireColourMenu({ isOn, pick, modeIndex, canFeature }) {
+  const btn = document.getElementById('colour-btn');
+  const menu = document.getElementById('colour-menu');
+  const screen = document.getElementById('steps');
+  if (!btn || !menu || !screen) return null;
+  const items = [...menu.querySelectorAll('[data-mode]')];
+  const note = menu.querySelector('.note');
+
+  function sync() {
+    const on = isOn();
+    const current = on ? modeIndex() : -1;
+    const can = canFeature();
+    btn.dataset.on = String(on);
+    items.forEach((it) => {
+      const m = Number(it.dataset.mode);
+      it.setAttribute('aria-checked', String(m === current));
+      it.disabled = m >= 0 && !can;
+    });
+    if (note) note.hidden = can;
+  }
+
+  const isOpen = () => !menu.hidden;
+  function open() {
+    sync();
+    menu.hidden = false;
+    btn.setAttribute('aria-expanded', 'true');
+  }
+  function close() {
+    if (!isOpen()) return;
+    menu.hidden = true;
+    btn.setAttribute('aria-expanded', 'false');
+  }
+
+  btn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    if (isOpen()) close(); else open();
+  });
+  items.forEach((it) => it.addEventListener('click', () => {
+    if (it.disabled) return;
+    pick(Number(it.dataset.mode));
+    sync();
+    close();
+  }));
+  // Pointerdown, not click: a tap on the 3D stage is taken by its own touch
+  // handling and never becomes a click, and the menu has to close all the same.
+  document.addEventListener('pointerdown', (e) => {
+    if (isOpen() && !menu.contains(e.target) && !btn.contains(e.target)) close();
+  });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') close(); });
+
+  new IntersectionObserver(([e]) => {
+    if (e.isIntersecting) document.body.dataset.screenSteps = '';
+    else { delete document.body.dataset.screenSteps; close(); }
+  }, { rootMargin: '-50% 0px -50% 0px' }).observe(screen);
+
+  sync();
+  return { sync };
 }
 
 /* The strip as a dial, on a phone.

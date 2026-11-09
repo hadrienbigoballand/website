@@ -53,6 +53,27 @@
     <img src="../images/sun.svg" alt="" class="icon-sun">
   </button>
 
+  <!-- A phone only: the colouring of the steps viewer, as an icon level with
+       the back arrow. The text toggles under the viewer do this on a wide
+       window. -->
+  <button id="colour-btn" aria-label="Colouring" aria-haspopup="menu" aria-expanded="false"
+    aria-controls="colour-menu">
+    <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.1"
+      stroke-linejoin="round" aria-hidden="true">
+      <path d="M12 3.5a8.5 8.5 0 1 0 0 17c1.1 0 1.7-.7 1.7-1.6 0-1-.9-1.5-.9-2.5 0-.9.7-1.6 1.7-1.6h2.2c2.1 0 3.8-1.7 3.8-3.9C20.5 6.7 16.7 3.5 12 3.5Z" />
+      <circle cx="7.6" cy="12" r="1.1" fill="currentColor" stroke="none" />
+      <circle cx="9.4" cy="7.9" r="1.1" fill="currentColor" stroke="none" />
+      <circle cx="14.4" cy="7.6" r="1.1" fill="currentColor" stroke="none" />
+    </svg>
+  </button>
+  <div id="colour-menu" role="menu" aria-label="Colouring" hidden>
+    <button role="menuitemradio" data-mode="-1" aria-checked="true">Registration</button>
+    <button role="menuitemradio" data-mode="0" aria-checked="false">By coordinates</button>
+    <button role="menuitemradio" data-mode="1" aria-checked="false">By FPFH</button>
+    <button role="menuitemradio" data-mode="2" aria-checked="false">By the full feature vector</button>
+    <p class="note" hidden>Only the fully registered vertebra carries the features.</p>
+  </div>
+
   <main id="deck">
 
     <!-- ------------------------------------------------------------ 1 hero -->
@@ -302,7 +323,7 @@
     </style>
   </noscript>
 
-  <script type="module" src="js/paper.js?v=35"></script>
+  <script type="module" src="js/paper.js?v=36"></script>
 </body>
 
 </html>
