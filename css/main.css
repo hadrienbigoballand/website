@@ -4038,6 +4038,12 @@ body {
   /* On mobile, make the nav fully opaque so iOS Safari's safe-area /
      status-bar region never shows page content scrolling underneath. */
   .top-nav {
+    /* Safari's compact browser UI can expose content above the fixed
+       viewport even when safe-area-inset-top is zero. Extend the nav's
+       own background into that region; matching padding keeps its
+       controls and bottom edge in exactly the same position. */
+    top: -100px;
+    padding-top: calc(100px + env(safe-area-inset-top, 0px));
     background-color: #FAFAFA;
     backdrop-filter: none;
     -webkit-backdrop-filter: none;
