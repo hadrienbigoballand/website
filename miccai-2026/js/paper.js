@@ -22,9 +22,12 @@ function applyTheme(theme) {
   window.dispatchEvent(new CustomEvent('themechange'));
 }
 
+/* No toggle of its own: the page follows the theme chosen on the main site,
+   under the same key. Read at load, and again whenever another tab changes it
+   -- the 'storage' event fires only in the OTHER tabs, so this cannot loop. */
 applyTheme(localStorage.getItem('theme') || 'day');
-document.getElementById('theme-btn').addEventListener('click', () => {
-  applyTheme(document.body.classList.contains('night') ? 'day' : 'night');
+window.addEventListener('storage', (e) => {
+  if (e.key === 'theme') applyTheme(e.newValue || 'day');
 });
 
 /* ------------------------------------------------------------ contents -- */
@@ -505,6 +508,45 @@ function wireColourMenu({ isOn, pick, modeIndex, canFeature }) {
   return { sync };
 }
 
+/* The spine toggle, on a phone: the selector takes a third of an already
+ * narrow screen, and with it gone the vertebra has the whole width. Visible by
+ * default -- it is how the other twenty-three are reached -- and not
+ * remembered, so every visit starts with it there. The layout itself is in
+ * the sheet (body[data-spine-hidden]); the viewer reframes on its own resize.
+ */
+function wireSpineToggle(viewer) {
+  const btn = document.getElementById('spine-btn');
+  const spineEl = document.getElementById('spine-selector');
+  const stageEl = document.getElementById('vertebra-stage');
+  if (!btn || !spineEl || !stageEl) return;
+
+  /* How much of the stage the spine covers. On a phone the stage runs under
+     it; on a wide window they sit side by side and the answer is zero.
+     Measured from the layout boxes (offset*, which ignore the transform), so
+     it is right even while the spine is mid-slide. */
+  const cover = () => {
+    if ('spineHidden' in document.body.dataset) return 0;
+    const over = stageEl.offsetLeft + stageEl.offsetWidth - spineEl.offsetLeft;
+    if (over <= 0) return 0;
+    return over + parseFloat(getComputedStyle(stageEl.parentElement).columnGap || 0);
+  };
+  const sync = (animate) => viewer.setRightInset?.(cover(), animate);
+
+  btn.addEventListener('click', () => {
+    const show = btn.getAttribute('aria-pressed') !== 'true';
+    btn.setAttribute('aria-pressed', String(show));
+    btn.setAttribute('aria-label', show ? 'Hide the spine' : 'Show the spine');
+    if (show) delete document.body.dataset.spineHidden;
+    else document.body.dataset.spineHidden = '';
+    sync(true);
+  });
+
+  // Layout changes -- a rotation, the wide layout taking over -- are not a
+  // gesture to animate: the inset just follows.
+  new ResizeObserver(() => sync(false)).observe(stageEl);
+  sync(false);
+}
+
 /* The strip as a dial, on a phone.
  *
  * Swiping the strip sideways IS moving through the registration: whatever sits
@@ -736,6 +778,7 @@ async function boot() {
 
     if (spine) {
       window.__miccai.spine = spine;
+      wireSpineToggle(viewer);
       await spine.load();
       spine.select(first.label);
       window.addEventListener('themechange', () => spine.refreshTheme());

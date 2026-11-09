@@ -516,8 +516,7 @@ h3.first {
 
 /* ---------------------------------------------------------------- chrome -- */
 
-#back-link,
-#theme-btn {
+#back-link {
   position: fixed;
   top: 20px;
   z-index: 60;
@@ -537,27 +536,11 @@ h3.first {
   opacity: 1;
 }
 
-#theme-btn {
-  right: 18px;
-}
-
-#theme-btn img {
-  width: 18px;
-  height: 18px;
-  display: none;
-}
-
-/* Through #theme-btn, not bare: `#theme-btn img` above carries an id, and a
-   rule without one lost to it wherever it sat -- both icons stayed hidden and
-   the button was an invisible 16 px square in the corner. */
-body.day #theme-btn .icon-sun,
-body.night #theme-btn .icon-moon {
-  display: block;
-}
-
-/* The colouring, as an icon in the chrome. A phone only: see the phone block. */
+/* The colouring and the spine toggle, as icons in the chrome. A phone only:
+   see the phone block. */
 #colour-btn,
-#colour-menu {
+#colour-menu,
+#spine-btn {
   display: none;
 }
 
@@ -1778,15 +1761,17 @@ ol.refs li::before {
     align-self: center;
   }
 
-  /* The palette: same box and stroke as the back arrow, on the same line,
-     just left of the theme toggle. Only while the steps screen is the one on
-     show (body[data-screen-steps], set in paper.js): it acts on that viewer
-     alone, and anywhere else it would be a button for something off screen. */
-  #colour-btn {
+  /* The palette and the spine toggle: same box and stroke as the back arrow,
+     on the same line, the spine toggle the same 14 px from its edge as the
+     arrow is from its own. Only while the steps screen is the one on show
+     (body[data-screen-steps], set in paper.js): they act on that viewer alone,
+     and anywhere else they would be buttons for something off screen. */
+  #colour-btn,
+  #spine-btn {
     display: block;
     position: fixed;
     top: 20px;
-    right: 56px;
+    right: 14px;
     z-index: 60;
     padding: 8px;
     border: 0;
@@ -1796,18 +1781,56 @@ ol.refs li::before {
     cursor: pointer;
     opacity: 0;
     visibility: hidden;
-    transition: opacity .2s, visibility 0s .2s, color .18s;
+    transition: opacity .2s, visibility 0s .2s;
   }
 
-  body[data-screen-steps] #colour-btn {
+  #colour-btn {
+    right: 56px;
+  }
+
+  body[data-screen-steps] #colour-btn,
+  body[data-screen-steps] #spine-btn {
     opacity: 1;
     visibility: visible;
-    transition: opacity .2s, color .18s;
+    transition: opacity .2s;
   }
 
-  /* On: the red of the current step, so the state shows without opening it. */
-  #colour-btn[data-on="true"] {
-    color: var(--src);
+  /* Off: the same column in outline -- solid while the spine is on screen,
+     a wireframe of it while it is away. Same ink either way. CSS beats the
+     SVG's own presentation attributes, so the drawing stays in the HTML. */
+  #spine-btn[aria-pressed="false"] rect {
+    fill: none;
+    stroke: currentColor;
+    stroke-width: .9px;
+  }
+
+  #spine-btn[aria-pressed="false"] path {
+    stroke-width: .9px;
+  }
+
+  /* The stage runs the whole width, under the spine, which lies over its
+     right edge. Nothing is ever resized when the spine is hidden: it slides
+     off to the right, a transform the compositor does on its own, and the
+     viewer eases the bone into the freed width with its camera
+     (setRightInset() in vertebra.js). Closing the grid column instead resized
+     both canvases on every frame of the move, and stuttered. */
+  .steps-layout .stage {
+    grid-column: 1 / -1;
+    grid-row: 1;
+  }
+
+  .spine-selector {
+    grid-column: 2;
+    grid-row: 1;
+    z-index: 2;
+    transition: transform .38s cubic-bezier(.45, 0, .55, 1), visibility 0s;
+  }
+
+  /* Its own width, the gutter, and a little more: clear of the screen. */
+  body[data-spine-hidden] .spine-selector {
+    transform: translateX(calc(100% + var(--gutter) + 8px));
+    visibility: hidden;
+    transition: transform .38s cubic-bezier(.45, 0, .55, 1), visibility 0s .38s;
   }
 
   #colour-menu {
@@ -1831,12 +1854,15 @@ ol.refs li::before {
   #colour-menu button {
     display: flex;
     align-items: center;
-    gap: 10px;
-    width: 100%;
+    /* Inset, so the pick's band sits inside the panel instead of touching
+       its edges. */
+    width: calc(100% - 12px);
+    margin: 0 6px;
     /* 44 px rows: the smallest comfortable target. */
     min-height: 44px;
-    padding: 0 16px;
+    padding: 0 10px;
     border: 0;
+    border-radius: 3px;
     background: none;
     font: 14px var(--sans);
     color: var(--fg);
@@ -1844,19 +1870,10 @@ ol.refs li::before {
     cursor: pointer;
   }
 
-  /* The pick is marked by a dot in the step's red, not by weight or a tick:
-     the same mark the strip's caret uses. */
-  #colour-menu button::before {
-    content: "";
-    flex: none;
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background: transparent;
-  }
-
-  #colour-menu button[aria-checked="true"]::before {
-    background: var(--src);
+  /* The pick is a darker band behind its row, in the page's own ink, so it
+     reads the same in either theme. */
+  #colour-menu button[aria-checked="true"] {
+    background: color-mix(in srgb, var(--fg) 12%, transparent);
   }
 
   #colour-menu button:disabled {
@@ -1865,7 +1882,7 @@ ol.refs li::before {
   }
 
   #colour-menu .note {
-    margin: 4px 16px 6px 32px;
+    margin: 4px 16px 6px;
     font: 11px/1.4 var(--mono);
     letter-spacing: .02em;
     color: var(--dim);

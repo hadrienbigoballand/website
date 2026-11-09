@@ -17,7 +17,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500&display=swap">
-  <link rel="stylesheet" href="css/paper.css?v=70">
+  <link rel="stylesheet" href="css/paper.css?v=77">
 
   <script>
     // Same key and classes as the main site, so the theme carries across.
@@ -48,11 +48,6 @@
     </svg>
   </a>
 
-  <button id="theme-btn" aria-label="Toggle theme">
-    <img src="../images/moon.svg" alt="" class="icon-moon">
-    <img src="../images/sun.svg" alt="" class="icon-sun">
-  </button>
-
   <!-- A phone only: the colouring of the steps viewer, as an icon level with
        the back arrow. The text toggles under the viewer do this on a wide
        window. -->
@@ -64,6 +59,38 @@
       <circle cx="7.6" cy="12" r="1.1" fill="currentColor" stroke="none" />
       <circle cx="9.4" cy="7.9" r="1.1" fill="currentColor" stroke="none" />
       <circle cx="14.4" cy="7.6" r="1.1" fill="currentColor" stroke="none" />
+    </svg>
+  </button>
+  <!-- A phone only, beside the palette: hides the spine selector so the
+       vertebra can take the whole width. Shown by default. The icon is the
+       column the button hides, as the selector shows it: in profile, five
+       vertebrae down its S curve, bodies in front and growing towards the
+       lumbar end, each with its spinous process behind -- short at the neck,
+       long and steep in the thorax, thick and nearly level at the bottom. -->
+  <button id="spine-btn" aria-label="Hide the spine" aria-pressed="true" aria-controls="spine-selector">
+    <svg viewBox="0 0 24 24" width="26" height="26" fill="currentColor" stroke="none" aria-hidden="true">
+      <g stroke="currentColor" stroke-linecap="round">
+      <g transform="translate(9.39 3.32) rotate(-16.09)">
+        <rect stroke="none" x="-1.85" y="-1.32" width="3.7" height="2.64" rx="0.63" />
+        <path d="M1.7 -0.48L3.36 0.34" stroke-width="1.16" />
+      </g>
+      <g transform="translate(10.57 7.07) rotate(-9.49)">
+        <rect stroke="none" x="-2.06" y="-1.47" width="4.12" height="2.94" rx="0.71" />
+        <path d="M1.91 -0.53L4.44 2.44" stroke-width="1.06" />
+      </g>
+      <g transform="translate(10.76 11.11) rotate(4.65)">
+        <rect stroke="none" x="-2.27" y="-1.62" width="4.53" height="3.24" rx="0.78" />
+        <path d="M2.12 -0.58L4.85 3.35" stroke-width="1.11" />
+      </g>
+      <g transform="translate(9.78 15.45) rotate(15)">
+        <rect stroke="none" x="-2.48" y="-1.77" width="4.95" height="3.54" rx="0.85" />
+        <path d="M2.33 -0.64L5.19 1.64" stroke-width="1.41" />
+      </g>
+      <g transform="translate(8.35 20.08) rotate(14.06)">
+        <rect stroke="none" x="-2.68" y="-1.92" width="5.37" height="3.83" rx="0.92" />
+        <path d="M2.53 -0.69L4.95 0.49" stroke-width="1.69" />
+      </g>
+      </g>
     </svg>
   </button>
   <div id="colour-menu" role="menu" aria-label="Colouring" hidden>
@@ -323,7 +350,7 @@
     </style>
   </noscript>
 
-  <script type="module" src="js/paper.js?v=36"></script>
+  <script type="module" src="js/paper.js?v=39"></script>
 </body>
 
 </html>

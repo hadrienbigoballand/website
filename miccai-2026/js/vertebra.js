@@ -226,7 +226,7 @@ export function createVertebraViewer({ container, manifest, ui }) {
     // loses its transverse processes off both sides. Divide by the aspect when
     // it is under 1 and the fit covers whichever dimension is tighter. On a
     // wide canvas this is exactly the old value.
-    const aspectNow = (container.clientWidth || 1) / (container.clientHeight || 1);
+    const aspectNow = freeAspect();
     let r = Math.max(...entry.bboxSize) * 0.62 / Math.min(1, aspectNow);
     if (t > 0) {
       // Recentre between the two, then widen only if the pair does not already
@@ -234,7 +234,7 @@ export function createVertebraViewer({ container, manifest, ui }) {
       // would shrink both bones to buy margin nothing needs.
       const dx = entry.bboxSize[0] * FEATURE_GAP * t;
       c.x += dx / 2;
-      const aspect0 = (container.clientWidth || 1) / (container.clientHeight || 1);
+      const aspect0 = freeAspect();
       const need = (dx + entry.bboxSize[0]) / 2 * 1.06;
       r = Math.max(r, need / aspect0);
     }
@@ -243,14 +243,63 @@ export function createVertebraViewer({ container, manifest, ui }) {
     stage.camera.position.copy(c).addScaledVector(dir, r * 8);
     stage.camera.near = 0.01;
     stage.camera.far = r * 40;
-    const aspect = (container.clientWidth || 1) / (container.clientHeight || 1);
-    stage.camera.top = r;
-    stage.camera.bottom = -r;
-    stage.camera.left = -r * aspect;
-    stage.camera.right = r * aspect;
     stage.camera.zoom = 1;
-    stage.camera.updateProjectionMatrix();
+    setFrustum(r);
     stage.controls.update();
+  }
+
+  /* The right inset: a strip of the canvas, in CSS pixels, that something
+   * else is drawn over -- on a phone the spine selector lies on top of the
+   * stage's right edge. The bone is fitted to, and centred in, what is left.
+   *
+   * It is a property of the camera rather than of the layout so that it can
+   * move: hiding the spine eases the inset to zero and the bone grows into
+   * the freed width frame by frame. Doing the same by resizing the canvas
+   * reallocated the drawing buffer on every frame of the transition, and
+   * that is what stuttered. */
+  let inset = 0;
+  let insetFrom = 0, insetTo = 0, insetT = 1;
+  const INSET_MOVE_S = 0.38;
+
+  /** Aspect of the part of the canvas the bone actually has. */
+  function freeAspect() {
+    const w = Math.max(1, (container.clientWidth || 1) - inset);
+    return w / (container.clientHeight || 1);
+  }
+
+  /** The base fit for `entry`, before the feature view widens it. */
+  function setFrustum(r) {
+    const w = container.clientWidth || 1, h = container.clientHeight || 1;
+    const cam = stage.camera;
+    cam.top = r;
+    cam.bottom = -r;
+    cam.left = -r * (w / h);
+    cam.right = r * (w / h);
+    // Shifting the view, not the target: the orbit still turns about the
+    // bone's own centre, it is only drawn half an inset to the left.
+    if (inset > 0.5) cam.setViewOffset(w, h, inset / 2, 0, w, h);
+    else cam.clearViewOffset();
+    cam.updateProjectionMatrix();
+  }
+
+  /** Refit to the current inset without touching the orientation or the
+   *  zoom: centreOn() would put the camera back on its opening pose. */
+  function refit() {
+    if (!asset) return;
+    const t = spread * spread * (3 - 2 * spread);
+    let r;
+    if (STACKED.matches) {
+      r = Math.max(...asset.bboxSize) * 0.62 / Math.min(1, freeAspect());
+      if (t > 0) r = Math.max(r, (screenHeight(asset) * FEATURE_GAP * t + screenHeight(asset)) / 2 * 1.06);
+    } else {
+      r = Math.max(...asset.bboxSize) * 0.62 / Math.min(1, freeAspect());
+      if (t > 0) {
+        const dx = asset.bboxSize[0] * FEATURE_GAP * t;
+        r = Math.max(r, (dx + asset.bboxSize[0]) / 2 * 1.06 / freeAspect());
+      }
+    }
+    setFrustum(r);
+    stage.invalidate();
   }
 
   /* Stacked, for a phone: the stage there is portrait, so the pair goes one
@@ -274,8 +323,7 @@ export function createVertebraViewer({ container, manifest, ui }) {
       entry.bboxMin[1] + entry.bboxSize[1] / 2,
       entry.bboxMin[2] + entry.bboxSize[2] / 2,
     );
-    const aspect = (container.clientWidth || 1) / (container.clientHeight || 1);
-    let r = Math.max(...entry.bboxSize) * 0.62 / Math.min(1, aspect);
+    let r = Math.max(...entry.bboxSize) * 0.62 / Math.min(1, freeAspect());
     if (t > 0) {
       const h = screenHeight(entry);
       const dy = h * FEATURE_GAP * t;
@@ -287,12 +335,8 @@ export function createVertebraViewer({ container, manifest, ui }) {
     stage.camera.position.copy(c).addScaledVector(dir, r * 8);
     stage.camera.near = 0.01;
     stage.camera.far = r * 40;
-    stage.camera.top = r;
-    stage.camera.bottom = -r;
-    stage.camera.left = -r * aspect;
-    stage.camera.right = r * aspect;
     stage.camera.zoom = 1;
-    stage.camera.updateProjectionMatrix();
+    setFrustum(r);
     stage.controls.update();
   }
 
@@ -510,6 +554,15 @@ export function createVertebraViewer({ container, manifest, ui }) {
   function onFrame(dt) {
     let busy = false;
 
+    if (insetT < 1) {
+      insetT = Math.min(1, insetT + dt / INSET_MOVE_S);
+      // Ease in and out, like the spine sliding beside it.
+      const k = insetT * insetT * (3 - 2 * insetT);
+      inset = insetFrom + (insetTo - insetFrom) * k;
+      refit();
+      busy = true;
+    }
+
     const spreadWant = featureView ? 1 : 0;
     if (spread !== spreadWant) {
       const step = dt / FEATURE_MOVE_S;
@@ -621,6 +674,21 @@ export function createVertebraViewer({ container, manifest, ui }) {
       // The orbit would swing the camera around the pair; here the bones turn
       // and the camera holds still.
       stage.controls.enabled = !v;
+      stage.invalidate();
+    },
+    /** Reserve `px` CSS pixels on the right of the canvas; see `inset`. */
+    setRightInset(px, animate = true) {
+      px = Math.max(0, px);
+      if (px === insetTo) return;
+      insetFrom = inset;
+      insetTo = px;
+      if (animate && asset) {
+        insetT = 0;
+      } else {
+        insetT = 1;
+        inset = px;
+        refit();
+      }
       stage.invalidate();
     },
     get featureMode() { return FEATURE_MODES[featMode]; },
