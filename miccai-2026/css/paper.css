@@ -45,7 +45,7 @@
 
 body.day,
 html.pre-day body {
-  --bg: #f8f7f4;
+  --bg: #FAFAFA;   /* same off-white as the main site (css/main.css, body.day) */
   --fg: #403e43;
   --dim: #8a8790;
   --hair: rgba(64, 62, 67, .16);
