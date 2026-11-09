@@ -3377,8 +3377,12 @@ body.night .mobile-nav::before {
   }
 }
 
-/* Add loading indicator for page transitions */
-body::after {
+/* Add loading indicator for page transitions.
+   Only generated while body.loading is set: a permanent full-screen fixed
+   layer above the nav (even a transparent one) stops iOS Safari 26 from
+   extending the nav's colour into the status-bar area, so page content
+   shows through above the header while scrolling. */
+body.loading::after {
   content: "";
   position: fixed;
   top: 0;
@@ -4038,12 +4042,6 @@ body {
   /* On mobile, make the nav fully opaque so iOS Safari's safe-area /
      status-bar region never shows page content scrolling underneath. */
   .top-nav {
-    /* Safari's compact browser UI can expose content above the fixed
-       viewport even when safe-area-inset-top is zero. Extend the nav's
-       own background into that region; matching padding keeps its
-       controls and bottom edge in exactly the same position. */
-    top: -100px;
-    padding-top: calc(100px + env(safe-area-inset-top, 0px));
     background-color: #FAFAFA;
     backdrop-filter: none;
     -webkit-backdrop-filter: none;
