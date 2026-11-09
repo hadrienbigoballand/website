@@ -225,8 +225,37 @@ export function createFilmstrip({ container, manifest, viewer, onSeek }) {
     queued = requestAnimationFrame(() => { queued = 0; draw(); });
   }
 
-  // Rotating the big vertebra rotates the strip with it.
-  viewer.stage.controls.addEventListener('change', schedule);
+  /* Rotating the big vertebra rotates the strip with it.
+   *
+   * With a mouse, live: the 32 draws cost about a millisecond. On a phone they
+   * do not -- copying a WebGL canvas into a 2D one makes the GPU finish its
+   * frame first, and doing that 32 times per frame of a drag made the big view
+   * stutter on an iPhone. There the strip holds still while the finger is down
+   * and catches up the moment it lifts. The controls are damped, so the bone
+   * then coasts on a little: one more redraw once it has come to rest, not one
+   * per frame of the glide. */
+  const LIVE = matchMedia('(hover: hover) and (pointer: fine)');
+  const SETTLE_MS = 120;
+  const controls = viewer.stage.controls;
+  let gesture = false;
+  let settle = null;
+
+  controls.addEventListener('start', () => {
+    if (LIVE.matches) return;
+    gesture = true;
+    clearTimeout(settle);
+  });
+  controls.addEventListener('end', () => {
+    if (!gesture) return;
+    gesture = false;
+    schedule();                                  // on release, straight away
+  });
+  controls.addEventListener('change', () => {
+    if (LIVE.matches) { schedule(); return; }
+    if (gesture) return;                         // finger down: wait for it
+    clearTimeout(settle);                        // coasting, or set by code
+    settle = setTimeout(schedule, SETTLE_MS);
+  });
   window.addEventListener('themechange', () => {
     if (outline) refreshOutlineColor(outline.material);
     schedule();
@@ -264,6 +293,7 @@ export function createFilmstrip({ container, manifest, viewer, onSeek }) {
     dispose() {
       resize.disconnect();
       cancelAnimationFrame(queued);
+      clearTimeout(settle);
       dispose();
       renderer.dispose();
     },
