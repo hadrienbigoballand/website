@@ -12,6 +12,7 @@ const TYPES = {
 };
 
 const cache = new Map();
+const loaded = new Set();
 
 export async function loadManifest(base = 'data') {
   if (!cache.has('__manifest')) {
@@ -23,14 +24,24 @@ export async function loadManifest(base = 'data') {
   return cache.get('__manifest');
 }
 
-export async function loadBlob(file, base = 'data') {
+export async function loadBlob(file, base = 'data', init) {
   if (!cache.has(file)) {
-    cache.set(file, fetch(assetURL(`${base}/${file}`)).then(async (r) => {
+    cache.set(file, fetch(assetURL(`${base}/${file}`), init).then(async (r) => {
       if (!r.ok) throw new Error(`${file}: HTTP ${r.status}`);
-      return r.arrayBuffer();
+      const buffer = await r.arrayBuffer();
+      loaded.add(file);
+      return buffer;
+    }).catch((err) => {
+      cache.delete(file);   // a failed fetch is retried by the next request
+      throw err;
     }));
   }
   return cache.get(file);
+}
+
+/** Whether `file` is already in memory, so that using it costs no wait. */
+export function isLoaded(file) {
+  return loaded.has(file);
 }
 
 /** A typed view on one named buffer, without copying. */

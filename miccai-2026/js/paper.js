@@ -1,6 +1,11 @@
 /* Page controller: chrome, contents, the results table, and the WebGL stages. */
 
-import { loadManifest } from './binio.js';
+import { loadManifest, loadBlob } from './binio.js';
+// As a namespace, not by name: only paper.js carries a ?v= cache buster, so for
+// a few minutes after a deploy a browser can pair this file with the binio.js
+// it cached earlier. A named import the old copy lacks is a SyntaxError that
+// takes the whole page down; a missing property is only "not ready yet".
+import * as binio from './binio.js';
 import { createVertebraViewer } from './vertebra.js';
 import { createSpineSelector } from './spine.js';
 import { createAtlasViewer } from './atlas.js';
@@ -557,6 +562,36 @@ function createHaptic() {
 
 /* ----------------------------------------------------------------- boot -- */
 
+/* Download every vertebra ahead of the click.
+ *
+ * Each one is its own ~750 kB file, and fetching it only once it is picked put
+ * the whole download between the click and the bone. So once the reader gets
+ * near the selector the rest are fetched in the background, two at a time and
+ * outwards from the vertebra on show, since its neighbours are the likeliest
+ * next pick. A picked vertebra that is still on its way is not delayed by
+ * this: loadBlob hands back the request already in flight.
+ *
+ * Not on a connection that asked to save data: the set is ~18 MB.
+ */
+function prefetchVertebrae(vertebrae, fromLabel, nearEl) {
+  if (navigator.connection?.saveData || !nearEl) return;
+  const queue = vertebrae
+    .slice()
+    .sort((a, b) => Math.abs(a.label - fromLabel) - Math.abs(b.label - fromLabel));
+  const next = () => {
+    const entry = queue.shift();
+    if (!entry) return;
+    loadBlob(entry.file, 'data', { priority: 'low' }).catch(() => {}).then(next);
+  };
+  const near = new IntersectionObserver(([e]) => {
+    if (!e.isIntersecting) return;
+    near.disconnect();
+    next();
+    next();
+  }, { rootMargin: '800px' });
+  near.observe(nearEl);
+}
+
 async function boot() {
   buildMetrics();
   buildCite();
@@ -602,10 +637,12 @@ async function boot() {
       atlas: manifest.atlas,
       labelEl: document.getElementById('spine-label'),
       onSelect: (label) => { const e = byLabel.get(label); if (e) viewer.load(e); },
+      isReady: (label) => { const e = byLabel.get(label); return !!e && !!binio.isLoaded?.(e.file); },
     });
 
     const first = byLabel.get(manifest.realLabel) || manifest.vertebrae[0];
     viewer.load(first);
+    if (spine) prefetchVertebrae(manifest.vertebrae, first.label, document.getElementById('spine-selector'));
 
     if (spine) {
       window.__miccai.spine = spine;

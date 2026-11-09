@@ -17,6 +17,12 @@
  * moving anything that lights it. Rotating the camera and counter-rotating the
  * environment was the first attempt; a probe sphere showed the shading still
  * swinging by 60% across angles, so it went.
+ *
+ * The strip follows the big view live, frame for frame. What made that too
+ * slow to do was never the 32 draws -- at this size they cost about a
+ * millisecond -- but decoding the 16 states and recomputing their normals on
+ * every pass. Those depend on the vertebra alone, not on the angle, so they are
+ * built once per load and a redraw is then only a rotation and the draws.
  */
 
 import {
@@ -30,7 +36,6 @@ const REF_OFFSET = new THREE.Vector3(1, 0, 0);
 const REF_UP = new THREE.Vector3(0, 0, 1);
 
 const RENDER_PX = 192;   // offscreen square, downsampled into each thumbnail
-const REDRAW_DELAY = 140; // ms of camera stillness before the strip re-renders
 
 
 export function createFilmstrip({ container, manifest, viewer, onSeek }) {
@@ -90,27 +95,38 @@ export function createFilmstrip({ container, manifest, viewer, onSeek }) {
 
   /* ------------------------------------------------------------ geometry -- */
 
-  let geometry, mesh, outline, pivot, positions, normals, ao;
+  let mesh, outline, pivot;
+  let states = [];      // { geometry, thickness } per step, built once per load
+  let builtFor = null;  // the index array the states were built from
 
-  function ensureGeometry(nVerts, index) {
-    if (geometry && positions.length === nVerts * 3 && geometry.index.array === index) return;
+  /** Decode every step of the loaded vertebra into its own static geometry.
+   *  The viewer makes a fresh index view on each load, so its identity is the
+   *  "has the vertebra changed" test. */
+  function ensureStates(data) {
+    if (builtFor === data.index) return;
     dispose();
+    builtFor = data.index;
 
-    positions = new Float32Array(nVerts * 3);
-    normals = new Float32Array(nVerts * 3);
-    ao = new Float32Array(nVerts);
+    const index = new THREE.BufferAttribute(data.index, 1);
+    for (let i = 0; i < frames.length; i++) {
+      const positions = new Float32Array(data.nVerts * 3);
+      const normals = new Float32Array(data.nVerts * 3);
+      const ao = new Float32Array(data.nVerts);
+      viewer.sampleState(i + 1, positions, ao);
+      computeNormals(positions, data.index, normals);
 
-    geometry = new THREE.BufferGeometry();
-    geometry.setIndex(new THREE.BufferAttribute(index, 1));
-    const p = new THREE.BufferAttribute(positions, 3); p.setUsage(THREE.DynamicDrawUsage);
-    const n = new THREE.BufferAttribute(normals, 3); n.setUsage(THREE.DynamicDrawUsage);
-    const a = new THREE.BufferAttribute(ao, 1); a.setUsage(THREE.DynamicDrawUsage);
-    geometry.setAttribute('position', p);
-    geometry.setAttribute('normal', n);
-    geometry.setAttribute('aAo', a);
+      const geometry = new THREE.BufferGeometry();
+      geometry.setIndex(index);
+      geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+      geometry.setAttribute('normal', new THREE.BufferAttribute(normals, 3));
+      geometry.setAttribute('aAo', new THREE.BufferAttribute(ao, 1));
+      geometry.computeBoundingSphere();
+      // Same fraction of the mesh as the column's clamped rule.
+      states.push({ geometry, thickness: OUTLINE_FRACTION * geometry.boundingSphere.radius });
+    }
 
-    mesh = new THREE.Mesh(geometry, surfaceMaterial({ color: boneColor() }));
-    outline = new THREE.Mesh(geometry, outlineMaterial(0.2));
+    mesh = new THREE.Mesh(states[0].geometry, surfaceMaterial({ color: boneColor() }));
+    outline = new THREE.Mesh(states[0].geometry, outlineMaterial(0.2));
     // The geometry sits in patient coordinates, so it is shifted back to the
     // origin before the pivot can spin it about its own centre.
     pivot = new THREE.Group();
@@ -121,8 +137,10 @@ export function createFilmstrip({ container, manifest, viewer, onSeek }) {
   function dispose() {
     [mesh, outline].forEach((m) => { if (m) m.material.dispose(); });
     if (pivot) scene.remove(pivot);
-    if (geometry) geometry.dispose();
-    geometry = mesh = outline = pivot = null;
+    states.forEach(({ geometry }) => geometry.dispose());
+    states = [];
+    builtFor = null;
+    mesh = outline = pivot = null;
   }
 
   /* -------------------------------------------------------------- render -- */
@@ -168,24 +186,17 @@ export function createFilmstrip({ container, manifest, viewer, onSeek }) {
     const data = viewer.frameData;
     if (!ready || !data) return;
 
-    ensureGeometry(data.nVerts, data.index);
+    ensureStates(data);
     aimCamera(data);
+    syncMatcap(renderer, scene, camera);
 
     const dpr = Math.min(window.devicePixelRatio, 2);
     const bone = boneColor();
     const src = srcColor();
 
     for (let i = 0; i < frames.length; i++) {
-      viewer.sampleState(i + 1, positions, ao);
-      computeNormals(positions, data.index, normals);
-      geometry.attributes.position.needsUpdate = true;
-      geometry.attributes.normal.needsUpdate = true;
-      geometry.attributes.aAo.needsUpdate = true;
-      geometry.computeBoundingSphere();
-      // Set once the sphere exists -- in aimCamera() it is still null on the
-      // first pass. Same fraction of the mesh as the column's clamped rule.
-      outline.material.uniforms.uThickness.value =
-        OUTLINE_FRACTION * geometry.boundingSphere.radius;
+      mesh.geometry = outline.geometry = states[i].geometry;
+      outline.material.uniforms.uThickness.value = states[i].thickness;
 
       const { btn, idle, idleCtx, live, liveCtx } = frames[i];
       const w = Math.max(1, Math.round(btn.clientWidth * dpr));
@@ -193,14 +204,12 @@ export function createFilmstrip({ container, manifest, viewer, onSeek }) {
       // Same grammar AND the same material state as the vertical selector:
       // unselected bone at 0.72, the pick at full opacity.
       mesh.material.color.copy(bone);
-      syncMatcap(renderer, scene, camera);
       renderer.render(scene, camera);
       if (idle.width !== w) { idle.width = w; idle.height = w; }
       idleCtx.clearRect(0, 0, w, w);
       idleCtx.drawImage(renderer.domElement, 0, 0, w, w);
 
       mesh.material.color.copy(src);
-      syncMatcap(renderer, scene, camera);
       renderer.render(scene, camera);
       if (live.width !== w) { live.width = w; live.height = w; }
       liveCtx.clearRect(0, 0, w, w);
@@ -208,13 +217,15 @@ export function createFilmstrip({ container, manifest, viewer, onSeek }) {
     }
   }
 
-  let timer = null;
+  // At most one redraw per displayed frame, however many 'change' events the
+  // controls fire in between: a drag sends one per pointer event.
+  let queued = 0;
   function schedule() {
-    clearTimeout(timer);
-    timer = setTimeout(draw, REDRAW_DELAY);
+    if (queued) return;
+    queued = requestAnimationFrame(() => { queued = 0; draw(); });
   }
 
-  // Rotating the big vertebra rotates the strip, once the camera settles.
+  // Rotating the big vertebra rotates the strip with it.
   viewer.stage.controls.addEventListener('change', schedule);
   window.addEventListener('themechange', () => {
     if (outline) refreshOutlineColor(outline.material);
@@ -252,7 +263,7 @@ export function createFilmstrip({ container, manifest, viewer, onSeek }) {
     redraw: schedule,
     dispose() {
       resize.disconnect();
-      clearTimeout(timer);
+      cancelAnimationFrame(queued);
       dispose();
       renderer.dispose();
     },

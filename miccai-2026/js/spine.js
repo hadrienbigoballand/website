@@ -12,13 +12,14 @@ import { buildAtlasGeometries, atlasCentre } from './atlas-data.js';
 /** Per-second rate of the colour blend; the highlight travels, never snaps. */
 const HIGHLIGHT_EASE = 13;
 
-/** ms of stillness on one vertebra before a drag actually loads it. */
+/** ms of stillness on one vertebra before a drag loads it, when its file still
+ *  has to be downloaded. One that is already in memory loads at once. */
 const COMMIT_DELAY = 90;
 
 /** How far to either side of the column still counts as pointing at it. */
 const BAND_MARGIN_PX = 30;
 
-export function createSpineSelector({ container, atlas, labelEl, onSelect }) {
+export function createSpineSelector({ container, atlas, labelEl, onSelect, isReady }) {
   // 'none': it is a picker with its own drag, so a vertical swipe on the
   // column picks a vertebra instead of scrolling the page.
   const stage = createStage(container, { onFrame, onResize, radius: 300, touch: 'none' });
@@ -257,20 +258,23 @@ export function createSpineSelector({ container, atlas, labelEl, onSelect }) {
   container.addEventListener('pointercancel', endDrag);
 
   /**
-   * Point at a vertebra: highlight and label move at once, the asset load
-   * waits.
+   * Point at a vertebra: highlight and label move at once, and so does the
+   * big view whenever the file is already in memory (isReady) -- the page
+   * downloads them all in the background, so that is the usual case and the
+   * viewer then follows the drag vertebra by vertebra.
    *
-   * Every vertebra is its own ~1 MB file, so committing on each one crossed
-   * would fire two dozen fetches for a single sweep of the column. The delay
-   * means a slow drag loads as it goes and a fast one loads only where it
-   * stops -- and the release always commits, so nothing is ever left pointing
-   * at something it did not load.
+   * Until a file has arrived the load waits instead. Every vertebra is its own
+   * ~1 MB file, so committing on each one crossed would fire two dozen fetches
+   * for a single sweep of the column. The delay means a slow drag loads as it
+   * goes and a fast one loads only where it stops -- and the release always
+   * commits, so nothing is ever left pointing at something it did not load.
    */
   function aim(entry) {
     if (!entry) return;
     setSelection(entry.item.label);
     clearTimeout(commitTimer);
-    commitTimer = setTimeout(commitNow, COMMIT_DELAY);
+    if (isReady?.(entry.item.label)) commitNow();
+    else commitTimer = setTimeout(commitNow, COMMIT_DELAY);
   }
 
   function setSelection(label) {
