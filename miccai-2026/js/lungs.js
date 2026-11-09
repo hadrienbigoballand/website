@@ -54,7 +54,7 @@ function dotMaterial(color, { size, opacity }) {
 }
 
 export function createLungsViewer({ container, lungs }) {
-  const stage = createStage(container, { onFrame, onResize, radius: 200 });
+  const stage = createStage(container, { onFrame, onResize, radius: 200, touch: 'direct' });
   if (!stage) return null;
 
   let sourcePos, deformedPos, targetPos, livePos, geometry;

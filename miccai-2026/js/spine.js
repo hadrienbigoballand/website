@@ -19,7 +19,9 @@ const COMMIT_DELAY = 90;
 const BAND_MARGIN_PX = 30;
 
 export function createSpineSelector({ container, atlas, labelEl, onSelect }) {
-  const stage = createStage(container, { onFrame, onResize, radius: 300 });
+  // 'none': it is a picker with its own drag, so a vertical swipe on the
+  // column picks a vertebra instead of scrolling the page.
+  const stage = createStage(container, { onFrame, onResize, radius: 300, touch: 'none' });
   if (!stage) return null;
 
   const entries = [];

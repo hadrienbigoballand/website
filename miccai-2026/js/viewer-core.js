@@ -227,6 +227,29 @@ export function armTouch(container, controls) {
   return { release: () => set(false) };
 }
 
+/* The other two touch policies a stage can have on a phone.
+ *
+ * 'direct': the stage IS the gesture. One finger turns the model from the
+ * first touch, two fingers zoom, and the page scrolls only from outside the
+ * figure. Used by every 3D viewer on the page (steps, atlas, lungs); the
+ * screen around each figure is what scrolls the page.
+ *
+ * 'none': the element handles its own pointer events (the spine picker), so
+ * the browser must not claim a vertical drag to scroll the page. Written
+ * inline for the same reason as in armTouch(): OrbitControls has already set
+ * an inline touch-action, and no rule in the sheet can outrank it. */
+function directTouch(container, controls) {
+  controls.touches = { ONE: THREE.TOUCH.ROTATE, TWO: THREE.TOUCH.DOLLY_ROTATE };
+  controls.domElement.style.touchAction = 'none';
+  container.dataset.touch = 'direct';
+  return null;
+}
+
+function ownTouch(controls) {
+  controls.domElement.style.touchAction = 'none';
+  return null;
+}
+
 /* ------------------------------------------------------------ materials -- */
 
 /** Principled + the baked AO multiply.  Needs an `aAo` float attribute. */
@@ -682,7 +705,7 @@ export function projectedBounds(geometry, camera, container) {
  * is on screen, and torn down cleanly.  `onFrame(dt)` may return true to ask
  * for another frame when nothing else changed.
  */
-export function createStage(container, { onFrame, onResize, radius = 1 } = {}) {
+export function createStage(container, { onFrame, onResize, radius = 1, touch: touchMode = 'arm' } = {}) {
   let renderer;
   try {
     renderer = createRenderer(container);
@@ -695,9 +718,14 @@ export function createStage(container, { onFrame, onResize, radius = 1 } = {}) {
   const scene = new THREE.Scene();
   const camera = createCamera(1, radius);
   const controls = createControls(camera, renderer.domElement);
-  const touch = matchMedia('(max-width: 820px)').matches
-    ? armTouch(container, controls)
-    : null;
+  // Phones only: with a mouse every stage keeps OrbitControls' own defaults.
+  const phone = matchMedia('(max-width: 820px)').matches;
+  let touch = null;
+  if (phone) {
+    if (touchMode === 'direct') touch = directTouch(container, controls);
+    else if (touchMode === 'none') touch = ownTouch(controls);
+    else touch = armTouch(container, controls);
+  }
 
   const stage = {
     renderer, scene, camera, controls,

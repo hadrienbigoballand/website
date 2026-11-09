@@ -338,18 +338,28 @@ function buildTimeline(manifest, viewer) {
     if (!can && featOn) setFeatures(false);
   }
 
+  // On a phone the strip is a scroller, and its scroll position IS the step:
+  // see wireScrollScrub() below. With a mouse it is scrubbed by pointer.
+  // Asked live, never cached: the layout follows the same query in the sheet,
+  // and a phone turned to landscape is wider than 820 px, so the two modes have
+  // to swap with the CSS or the strip goes dead in whichever one it missed.
+  const phoneMQ = matchMedia('(max-width: 820px)');
+  let scrub = null;
+  const scrolling = () => !!scrub && phoneMQ.matches;
+
   const strip = createFilmstrip({
     container: stripEl,
     manifest,
     viewer,
-    onSeek: (step) => viewer.goTo(step),
+    onSeek: (step) => (scrolling() ? scrub.scrollToStep(step) : viewer.goTo(step)),
   });
+  if (strip) scrub = wireScrollScrub(stripEl, manifest, viewer, phoneMQ);
 
   /* ----------------------------------------------------------- scrubbing -- */
 
   let scrubbing = false;
   stripEl.addEventListener('pointerdown', (e) => {
-    if (!strip) return;
+    if (!strip || scrolling()) return;
     scrubbing = true;
     stripEl.setPointerCapture(e.pointerId);
     viewer.goTo(strip.stepAt(e.clientX));
@@ -366,8 +376,13 @@ function buildTimeline(manifest, viewer) {
   stripEl.addEventListener('pointercancel', endScrub);
 
   stripEl.addEventListener('keydown', (e) => {
-    if (e.key === 'ArrowRight') { viewer.goTo(Math.round(viewer.position) + 1); e.preventDefault(); }
-    if (e.key === 'ArrowLeft') { viewer.goTo(Math.round(viewer.position) - 1); e.preventDefault(); }
+    const d = e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : 0;
+    if (!d) return;
+    e.preventDefault();
+    // Through the scroller where it is the source of truth, or the next
+    // scroll event would put the vertebra straight back where the strip is.
+    if (scrolling()) scrub.scrollToStep(scrub.current() + d);
+    else viewer.goTo(Math.round(viewer.position) + d);
   });
 
   playBtn.addEventListener('click', () => viewer.togglePlay());
@@ -385,8 +400,159 @@ function buildTimeline(manifest, viewer) {
     playBtn.setAttribute('aria-label', on ? 'Pause' : 'Play the registration');
   }
 
+  /** A new vertebra starts at its rest pose, so the strip goes back to it. */
+  function onVertebraLoaded() {
+    syncFeatureAvailability();
+    if (scrolling()) scrub.scrollToStep(0, true);
+  }
+
   syncFeatureAvailability();
-  return { render, setPlaying, strip, onVertebraLoaded: syncFeatureAvailability };
+  return { render, setPlaying, strip, onVertebraLoaded };
+}
+
+/* The strip as a dial, on a phone.
+ *
+ * Swiping the strip sideways IS moving through the registration: whatever sits
+ * under the centre of the strip is where the vertebra is, continuously, so the
+ * bone morphs under the thumb instead of jumping when a frame is tapped. The
+ * scroll is the browser's own, so it keeps its momentum, and it snaps to a
+ * whole step when it comes to rest, so it always settles on a state the
+ * algorithm actually produced.
+ *
+ * A leading slot stands for step 0, the source before any step: without it
+ * the first frame would be the furthest left the strip could go, and the rest
+ * pose -- the one a vertebra loads in -- could not be scrolled back to.
+ *
+ * Wired whatever the width, but only acts while the phone query matches, so it
+ * follows the layout across a rotation. Returns scrollToStep(step, instant),
+ * used by a tap on a frame (which centres that frame, the scroll then driving
+ * the vertebra there), the arrow keys and a new load; and current(), the step
+ * under the caret.
+ */
+function wireScrollScrub(stripEl, manifest, viewer, phoneMQ) {
+  // Always in the strip, shown by the phone block of the sheet only.
+  const rest = document.createElement('span');
+  rest.className = 'frame-rest';
+  rest.setAttribute('aria-hidden', 'true');
+  stripEl.prepend(rest);
+
+  // Slot k is step k: slot 0 the rest pose, slot i + 1 the frame of step i + 1.
+  const slots = () => [rest, ...stripEl.querySelectorAll('.frame')];
+  // Measured from the rendered boxes, not offsetLeft: those are rounded to
+  // whole pixels while the snap lands on the fractional layout, and half a
+  // pixel of disagreement put the resting step at 5.01 -- which the strip
+  // reads as "on the way to 6" and marks the wrong frame red.
+  const centreOf = (el) => {
+    const r = el.getBoundingClientRect();
+    return r.left + r.width / 2 - stripEl.getBoundingClientRect().left + stripEl.scrollLeft;
+  };
+
+  function stepAtScroll() {
+    const c = slots().map(centreOf);
+    const x = stripEl.scrollLeft + stripEl.clientWidth / 2;
+    let s = c.length - 1;
+    if (x <= c[0]) s = 0;
+    else {
+      for (let k = 0; k < c.length - 1; k++) {
+        if (x <= c[k + 1]) { s = k + (x - c[k]) / (c[k + 1] - c[k] || 1); break; }
+      }
+    }
+    // A resting strip is on a whole step; what is left is layout rounding.
+    const whole = Math.round(s);
+    return Math.min(manifest.nSteps, Math.abs(s - whole) < 0.04 ? whole : s);
+  }
+
+  // One tick each time a step crosses the caret, like a picker wheel.
+  const haptic = createHaptic();
+  let ticked = 0;
+  const tickAt = (s) => {
+    const whole = Math.round(s);
+    if (whole !== ticked) { ticked = whole; haptic.tick(); }
+  };
+
+  // iOS plays its haptic only inside a user gesture, and a scroll callback is
+  // not one -- ticking from there was silent. So on iOS the tick is taken in
+  // the touchmove itself, synchronously, while the finger is moving the
+  // strip. The momentum after a flick has no finger and so no tick.
+  if (haptic.needsGesture) {
+    stripEl.addEventListener('touchmove', () => {
+      if (phoneMQ.matches) tickAt(stepAtScroll());
+    }, { passive: true });
+  }
+
+  let frame = 0;
+  stripEl.addEventListener('scroll', () => {
+    if (!phoneMQ.matches || frame) return;
+    // Once per frame is all the viewer can show, and a fling fires more.
+    frame = requestAnimationFrame(() => {
+      frame = 0;
+      if (!phoneMQ.matches) return;
+      const s = stepAtScroll();
+      viewer.goTo(s);
+      if (!haptic.needsGesture) tickAt(s);
+    });
+  }, { passive: true });
+
+  function scrollToStep(step, instant = false) {
+    const k = Math.max(0, Math.min(manifest.nSteps, Math.round(step)));
+    const el = slots()[k];
+    if (!el) return;
+    // A jump the reader did not make (a new vertebra) should not buzz.
+    if (instant) ticked = k;
+    stripEl.scrollTo({
+      left: centreOf(el) - stripEl.clientWidth / 2,
+      behavior: instant ? 'auto' : 'smooth',
+    });
+  }
+
+  rest.addEventListener('click', () => scrollToStep(0));
+
+  // Turned back to portrait: the strip has just become a scroller again, still
+  // at whatever offset it had, so bring it to the step the vertebra is on.
+  phoneMQ.addEventListener('change', () => {
+    if (!phoneMQ.matches) return;
+    requestAnimationFrame(() => scrollToStep(Math.round(viewer.position), true));
+  });
+
+  return { scrollToStep, current: () => Math.round(stepAtScroll()) };
+}
+
+/* A light haptic tick, where the platform has one.
+ *
+ * Android and other browsers with the Vibration API get a very short pulse.
+ * Safari has never implemented that API, but since iOS 18 it gives the native
+ * switch control -- <input type="checkbox" switch> -- the system's own
+ * selection haptic when it toggles, and a click on its label toggles it from
+ * script. So a hidden switch is kept and its label clicked once per tick.
+ * Where neither exists (desktop, older iOS) this is a no-op, and it is only
+ * ever called from the phone strip.
+ */
+function createHaptic() {
+  const ios = /iPhone|iPad|iPod/.test(navigator.userAgent)
+    || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+  if (!ios && typeof navigator.vibrate === 'function') {
+    return { needsGesture: false, tick: () => { try { navigator.vibrate(6); } catch { /* blocked */ } } };
+  }
+  if (!ios) return { needsGesture: false, tick: () => {} };
+  // A fresh switch each time, in the head and never rendered: the same recipe
+  // the ios-haptics package uses.
+  return {
+    needsGesture: true,
+    tick() {
+      try {
+        const label = document.createElement('label');
+        label.setAttribute('aria-hidden', 'true');
+        label.style.display = 'none';
+        const input = document.createElement('input');
+        input.type = 'checkbox';
+        input.setAttribute('switch', '');
+        label.appendChild(input);
+        document.head.appendChild(label);
+        label.click();
+        label.remove();
+      } catch { /* no haptics here */ }
+    },
+  };
 }
 
 /* ----------------------------------------------------------------- boot -- */

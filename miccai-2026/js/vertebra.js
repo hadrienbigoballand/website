@@ -17,7 +17,16 @@ export function createVertebraViewer({ container, manifest, ui }) {
   const stage = createStage(container, {
     onFrame,
     radius: 40,
-    onResize: () => { if (asset) centreOn(asset); },
+    // applySpread, not centreOn alone: it also places the target, which sits
+    // beside the source or below it depending on the width (STACKED).
+    onResize: () => {
+      if (!asset) return;
+      if (targetMesh) applySpread(spread * spread * (3 - 2 * spread));
+      else centreOn(asset);
+    },
+    // On a phone one finger turns the bone straight away; the page scrolls
+    // from the screen around the viewer, the spine and the strip.
+    touch: 'direct',
   });
   if (!stage) return null;
 
@@ -206,6 +215,7 @@ export function createVertebraViewer({ container, manifest, ui }) {
   /** `t` is the separation, 0 superimposed to 1 fully apart, so the reframing
    *  travels with the move instead of cutting at either end. */
   function centreOn(entry, t = spread) {
+    if (STACKED.matches) { centreOnStacked(entry, t); return; }
     const c = new THREE.Vector3(
       entry.bboxMin[0] + entry.bboxSize[0] / 2,
       entry.bboxMin[1] + entry.bboxSize[1] / 2,
@@ -234,6 +244,49 @@ export function createVertebraViewer({ container, manifest, ui }) {
     stage.camera.near = 0.01;
     stage.camera.far = r * 40;
     const aspect = (container.clientWidth || 1) / (container.clientHeight || 1);
+    stage.camera.top = r;
+    stage.camera.bottom = -r;
+    stage.camera.left = -r * aspect;
+    stage.camera.right = r * aspect;
+    stage.camera.zoom = 1;
+    stage.camera.updateProjectionMatrix();
+    stage.controls.update();
+  }
+
+  /* Stacked, for a phone: the stage there is portrait, so the pair goes one
+   * above the other -- source on top, target below -- instead of side by side,
+   * where each bone would get less than half of an already narrow width.
+   * "Down" is the camera's screen-down, which is fixed: the camera is parked
+   * on (0, sin 20, cos 20) with +Y up, and does not move in the feature view. */
+  // Live, like the sheet: a phone turned to landscape goes back side by side.
+  const STACKED = matchMedia('(max-width: 820px)');
+  const TILT = THREE.MathUtils.degToRad(20);
+  const SCREEN_UP = new THREE.Vector3(0, Math.cos(TILT), -Math.sin(TILT));
+
+  /** The bone's extent along the screen's vertical, from its bounding box. */
+  function screenHeight(entry) {
+    return entry.bboxSize[1] * Math.cos(TILT) + entry.bboxSize[2] * Math.sin(TILT);
+  }
+
+  function centreOnStacked(entry, t) {
+    const c = new THREE.Vector3(
+      entry.bboxMin[0] + entry.bboxSize[0] / 2,
+      entry.bboxMin[1] + entry.bboxSize[1] / 2,
+      entry.bboxMin[2] + entry.bboxSize[2] / 2,
+    );
+    const aspect = (container.clientWidth || 1) / (container.clientHeight || 1);
+    let r = Math.max(...entry.bboxSize) * 0.62 / Math.min(1, aspect);
+    if (t > 0) {
+      const h = screenHeight(entry);
+      const dy = h * FEATURE_GAP * t;
+      c.addScaledVector(SCREEN_UP, -dy / 2);
+      r = Math.max(r, (dy + h) / 2 * 1.06);
+    }
+    stage.controls.target.copy(c);
+    const dir = new THREE.Vector3(0, Math.sin(TILT), Math.cos(TILT));
+    stage.camera.position.copy(c).addScaledVector(dir, r * 8);
+    stage.camera.near = 0.01;
+    stage.camera.far = r * 40;
     stage.camera.top = r;
     stage.camera.bottom = -r;
     stage.camera.left = -r * aspect;
@@ -293,8 +346,13 @@ export function createVertebraViewer({ container, manifest, ui }) {
    *  a frame, which is the one thing the move is meant to avoid. */
   function applySpread(t) {
     if (!targetMesh || !asset) return;
-    const dx = asset.bboxSize[0] * FEATURE_GAP;
-    tgtPivot.position.x = tgtCentre.x + dx * t;
+    if (STACKED.matches) {
+      tgtPivot.position.copy(tgtCentre)
+        .addScaledVector(SCREEN_UP, -screenHeight(asset) * FEATURE_GAP * t);
+    } else {
+      const dx = asset.bboxSize[0] * FEATURE_GAP;
+      tgtPivot.position.x = tgtCentre.x + dx * t;
+    }
     const m = targetMesh.material;
     m.opacity = 0.42 + 0.58 * t;
     const solid = t > 0.35;
@@ -321,18 +379,23 @@ export function createVertebraViewer({ container, manifest, ui }) {
    * subject rather than its camera: a fixed camera keeps the lighting fixed, so
    * the same facet does not change brightness as it comes round. */
   let turning = false;
+  let turnId = null;          // the one finger the turn follows
   const turnAt = { x: 0, y: 0 };
 
   function onTurnDown(ev) {
     if (!featureView || !srcPivot) return;
+    // A second finger would feed its own positions into the same deltas and
+    // flail the pair between the two; it is ignored instead.
+    if (turning) return;
     turning = true;
+    turnId = ev.pointerId;
     turnAt.x = ev.clientX;
     turnAt.y = ev.clientY;
     try { stage.renderer.domElement.setPointerCapture(ev.pointerId); } catch { /* none */ }
   }
 
   function onTurnMove(ev) {
-    if (!turning || !srcPivot) return;
+    if (!turning || !srcPivot || ev.pointerId !== turnId) return;
     const dx = ev.clientX - turnAt.x;
     const dy = ev.clientY - turnAt.y;
     turnAt.x = ev.clientX;
@@ -350,8 +413,9 @@ export function createVertebraViewer({ container, manifest, ui }) {
   }
 
   function onTurnUp(ev) {
-    if (!turning) return;
+    if (!turning || ev.pointerId !== turnId) return;
     turning = false;
+    turnId = null;
     try { stage.renderer.domElement.releasePointerCapture(ev.pointerId); } catch { /* gone */ }
   }
 
@@ -458,7 +522,7 @@ export function createVertebraViewer({ container, manifest, ui }) {
       busy = true;
     }
     // Coming back together, the two rotations unwind to the opening pose.
-    if (!featureView && srcPivot && srcPivot.quaternion.w < 0.99999) {
+    if (!featureView && srcPivot && Math.abs(srcPivot.quaternion.w) < 0.99999) {
       const k = Math.min(1, dt * 6);
       srcPivot.quaternion.slerp(IDENTITY_Q, k);
       tgtPivot.quaternion.copy(srcPivot.quaternion);

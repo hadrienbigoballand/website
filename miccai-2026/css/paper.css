@@ -1198,15 +1198,31 @@ body.night .logos img {
 }
 
 /* Hovering previews the step in red -- the same signal a click will make
-   permanent. */
-.filmstrip .frame:hover .c-idle,
+   permanent. Only where there is a real hover: iOS leaves :hover stuck on the
+   last frame tapped, which then stayed red after the strip had moved on. */
 .filmstrip .frame[aria-current="true"] .c-idle {
   opacity: 0;
 }
 
-.filmstrip .frame:hover .c-live,
 .filmstrip .frame[aria-current="true"] .c-live {
   opacity: 1;
+}
+
+@media (hover: hover) {
+  .filmstrip .frame:hover .c-idle {
+    opacity: 0;
+  }
+
+  .filmstrip .frame:hover .c-live {
+    opacity: 1;
+  }
+}
+
+/* The rest slot of the phone's scrolling strip (paper.js, wireScrollScrub).
+   It is in the DOM at every width so a rotation can bring it back; only the
+   phone block shows it. */
+.filmstrip .frame-rest {
+  display: none;
 }
 
 /* --------------------------------------------------------------- metrics -- */
@@ -1575,22 +1591,106 @@ ol.refs li::before {
     row-gap: 10px;
   }
 
+  /* The steps screen as one instrument: the colour toggles in the top right
+     corner, the viewer and the spine taking all the height between, and the
+     strip that drives them running along the bottom edge. The toggles are an
+     occasional switch, so they go out of the way of both; stacked and
+     right-aligned, so the mode cycler that appears under "Back to the
+     registration" lines up with it instead of wrapping. */
+  #steps .viewer-controls {
+    order: -1;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 2px;
+    margin: 0 0 4px;
+    /* Room for both lines from the start: the mode cycler appears under the
+       toggle when the colouring is on, and without this the viewer and the
+       spine jumped down a line at that moment. */
+    min-height: 3em;
+    justify-content: flex-start;
+  }
+
+  #steps .viewer-controls + .timeline {
+    margin-top: 12px;
+  }
+
+  /* Less air under the strip than the other screens keep: it is the bottom
+     of this one, and the difference term still clears the browser's bar. */
+  #steps {
+    padding-bottom: calc(100lvh - 100svh + 28px);
+  }
+
+  /* No Play on a phone: the strip below is scrolled through instead, and the
+     registration follows the thumb (wireScrollScrub() in paper.js). */
   .timeline .play {
-    justify-self: start;
+    display: none;
+  }
+
+  .timeline {
+    position: relative;
+  }
+
+  /* The strip is a dial: whatever sits under its centre is the step shown.
+     The caret marks that centre. Red, the colour of the current step. */
+  .timeline::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 0;
+    transform: translateX(-50%);
+    border: 5px solid transparent;
+    border-top-color: var(--src);
+    border-bottom-width: 0;
+    pointer-events: none;
   }
 
   /* A scrolling strip of touchable frames rather than sixteen slivers. 44 px
-     is the smallest comfortable target. */
+     is the smallest comfortable target. Padded by half its own width less half
+     a frame, so the first slot and the last frame can both reach the centre.
+     pan-x: a vertical swipe on the strip neither scrolls the page nor the
+     strip; the page scrolls from outside the figure. */
   .filmstrip {
+    position: relative;
     overflow-x: auto;
     overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    touch-action: pan-x;
     cursor: default;
-    padding-bottom: 4px;
+    padding: 0 calc(50% - 22px) 4px;
+    /* The ends fade out, so the strip reads as a wheel running on past the
+       screen rather than as a row that was cut off. On the box, not on the
+       content, so the fade stays put while the frames scroll through it. */
+    -webkit-mask-image: linear-gradient(to right, transparent, #000 22%, #000 78%, transparent);
+    mask-image: linear-gradient(to right, transparent, #000 22%, #000 78%, transparent);
   }
 
-  .filmstrip .frame {
+  .filmstrip::-webkit-scrollbar {
+    display: none;
+  }
+
+  .filmstrip .frame,
+  .filmstrip .frame-rest {
     flex: 0 0 44px;
+    scroll-snap-align: center;
     cursor: pointer;
+  }
+
+  /* Step 0, the source before any step: a slot with no thumbnail, since the
+     viewer above already shows that pose whenever the strip rests here. */
+  .filmstrip .frame-rest {
+    align-self: stretch;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: .04em;
+    color: var(--dim);
+  }
+
+  .filmstrip .frame-rest::before {
+    content: "start";
   }
 
   /* The two touch states of a 3D stage. Idle is the page's: one finger scrolls
@@ -1614,6 +1714,7 @@ ol.refs li::before {
   .stage[data-touch="idle"]::after {
     content: "Tap to rotate";
   }
+
 
   .stage[data-touch="armed"]::after {
     content: "Tap outside to scroll";

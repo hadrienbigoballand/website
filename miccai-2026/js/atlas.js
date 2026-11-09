@@ -11,7 +11,7 @@ import { loadBlob } from './binio.js';
 import { buildAtlasGeometries, atlasCentre, regionColor } from './atlas-data.js';
 
 export function createAtlasViewer({ container, atlas, labelEl }) {
-  const stage = createStage(container, { onFrame, onResize, radius: 300 });
+  const stage = createStage(container, { onFrame, onResize, radius: 300, touch: 'direct' });
   if (!stage) return null;
 
   const meshes = [];
