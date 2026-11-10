@@ -465,6 +465,44 @@ h3.first {
   background: currentColor;
 }
 
+/* The progress line. Each entry's .n is one segment of a single 2 px line,
+   with no gap between them: the buttons are 22 px tall (the titles' pitch) and
+   the rail's gap is 0. Segments up to and including the current screen
+   (data-past, set in paper.js) are full ink, the rest a faint track. The
+   button's colour drives only the segment -- the titles carry their own. */
+#rail {
+  gap: 0;
+}
+
+#rail button.top {
+  margin-bottom: 10px;
+}
+
+#rail button:not(.top) {
+  display: block;
+  width: 13px;
+  height: 22px;
+  color: color-mix(in srgb, var(--fg) 18%, var(--bg));
+}
+
+#rail button:not(.top) .n {
+  display: block;
+  width: 2px;
+  height: 100%;
+  margin-left: 5.5px;
+  background: currentColor;
+  transition: background-color .25s;
+}
+
+#rail:hover button:not(.top) {
+  color: color-mix(in srgb, var(--fg) 30%, var(--bg));
+}
+
+#rail button[data-past]:not(.top),
+#rail:hover button[data-past]:not(.top) {
+  color: var(--fg);
+}
+
 /* On a phone the rail is not a rail: it is the contents list, in the flow of
    the first screen, always unfolded. Folding it would make the titles vanish
    under the reader's own scrolling, halfway down a page that does not snap. */
@@ -478,11 +516,20 @@ h3.first {
     margin-top: 24px;
   }
 
-  #rail button {
+  #rail button,
+  #rail button:not(.top) {
     display: flex;
+    width: auto;
+    height: auto;
   }
 
   #rail button.top {
+    display: none;
+  }
+
+  /* Titles only on a phone: no line, no marker. */
+  #rail button .n,
+  #rail button:not(.top) .n {
     display: none;
   }
 
@@ -509,9 +556,6 @@ h3.first {
     font-size: 17px;
   }
 
-  .contents-screen #rail button .n {
-    font-size: 11px;
-  }
 }
 
 /* ---------------------------------------------------------------- chrome -- */
@@ -1742,7 +1786,7 @@ ol.refs li::before {
     pointer-events: auto;
     background: none;
     padding: 0;
-    margin-left: 10px;
+    margin-left: 0;
     line-height: 1.3;
     transition: none;
   }

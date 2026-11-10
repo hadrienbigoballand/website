@@ -38,7 +38,7 @@ window.addEventListener('storage', (e) => {
 // with the hero's, which is the one thing this numbering was aligned to avoid.
 const screens = [...document.querySelectorAll('.screen:not(.contents-screen)')];
 const rail = document.getElementById('rail');
-// A plain dot above the numbers: back to the first screen. It is deliberately
+// A plain dot above the line: back to the first screen. It is deliberately
 // NOT numbered. The hero is not an entry in this list -- neither here nor in
 // its own contents list, which does not name the screen you are standing on --
 // and giving it an 01 would push every other number one step out of step with
@@ -64,12 +64,11 @@ screens.forEach((section, i) => {
   // half-match that costs more than either choice alone.
   if (i === 0) return;
 
-  // The number, not a dot. The hero has just taught the reader this list as
-  // "01 Method, 02 The 16 steps"; a rail of identical circles throws that
-  // vocabulary away and has to teach a new one, by hover, to someone who does
-  // not yet know there is anything to hover over.
+  // No number. On a wide window the empty .n is one segment of a thin vertical
+  // line, filled down to the screen you are on; hovering the rail spells the
+  // titles out beside it. On a phone the list is just the titles.
   const dot = document.createElement('button');
-  dot.innerHTML = `<span class="n">${String(i).padStart(2, '0')}</span>`
+  dot.innerHTML = '<span class="n"></span>'
     + `<span class="t">${title}</span>`;
   dot.setAttribute('aria-label', title);
   dot.addEventListener('click', () => section.scrollIntoView({ behavior: 'smooth' }));
@@ -82,7 +81,10 @@ const spy = new IntersectionObserver((entries) => {
   entries.forEach((e) => {
     if (!e.isIntersecting) return;
     const i = screens.indexOf(e.target);
-    dots.forEach((d, j) => d.setAttribute('aria-current', String(j === i - 1)));
+    dots.forEach((d, j) => {
+      d.setAttribute('aria-current', String(j === i - 1));
+      d.toggleAttribute('data-past', j <= i - 1);
+    });
     topDot.setAttribute('aria-current', String(i === 0));
     // On the hero the rail is the contents list, spelled out beside the title;
     // everywhere else it is that same list folded back to its numbers. Same
